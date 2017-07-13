@@ -40,7 +40,7 @@ public class NewsActivityFragment extends Fragment
         mBinding = FragmentNewsBinding.inflate(inflater, container, false);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new NewsAdapter();
+        mAdapter = new NewsAdapter(getContext());
 
         mBinding.rvItemList.setLayoutManager(layoutManager);
         mBinding.rvItemList.setAdapter(mAdapter);
@@ -58,7 +58,7 @@ public class NewsActivityFragment extends Fragment
     @Override
     public void onSuccess(List<Long> data) {
         hideProgressBar();
-        
+
         mAdapter.clearData();
         mItems = data;
 
@@ -119,7 +119,9 @@ public class NewsActivityFragment extends Fragment
             HackerNewsApi.with(getActivity()).getItem(itemId, new HackerNewsApi.RestCallback<Item>() {
                 @Override
                 public void onSuccess(Item data) {
-                    mAdapter.addData(data);
+                    if (!data.isDeleted() && !data.isDead()) {
+                        mAdapter.addData(data);
+                    }
                 }
 
                 @Override

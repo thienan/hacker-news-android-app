@@ -18,7 +18,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/view_margin"
         android:elevation="@dimen/card_elevation"
-        android:orientation="vertical"
         android:padding="@dimen/view_margin"
         app:cardCornerRadius="@dimen/card_radius">
 
