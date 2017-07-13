@@ -12,7 +12,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
-public class RetrofitModule {
+class RetrofitModule {
 
     private static final String BASE_URL = "https://hacker-news.firebaseio.com/v0/";
 

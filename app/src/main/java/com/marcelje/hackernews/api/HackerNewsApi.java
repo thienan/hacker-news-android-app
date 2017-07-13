@@ -20,6 +20,7 @@ public final class HackerNewsApi {
     private static volatile HackerNewsApi instance;
 
     @Inject
+    @SuppressWarnings("WeakerAccess")
     HackerNewsResource resource;
 
     public interface RestCallback<T> {
