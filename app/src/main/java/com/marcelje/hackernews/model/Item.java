@@ -35,6 +35,10 @@ public class Item {
         return deleted;
     }
 
+    public boolean isNotDeleted() {
+        return !deleted;
+    }
+
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
@@ -73,6 +77,10 @@ public class Item {
 
     public boolean isDead() {
         return dead;
+    }
+
+    public boolean isNotDead() {
+        return !dead;
     }
 
     public void setDead(boolean dead) {

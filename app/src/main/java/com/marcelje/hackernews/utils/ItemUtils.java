@@ -16,10 +16,13 @@ import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.model.User;
 
-public class ItemUtils {
+@SuppressWarnings("WeakerAccess")
+public final class ItemUtils {
 
     private static final String BRACKET_OPEN = " (";
     private static final String BRACKET_CLOSE = ")";
+
+    private ItemUtils() {}
 
     public static CharSequence getRelativeDate(Context context, Item item) {
         if (context == null || item == null) return "";

@@ -17,65 +17,63 @@
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/view_margin">
+        android:background="?attr/selectableItemBackground">
 
-        <android.support.constraint.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:visibility="@{item.deleted || item.dead ? View.GONE : View.VISIBLE}">
 
-            <TextView
-                android:id="@+id/tv_user"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/layout_user"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/view_margin"
-                android:text="@{item.by}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:background="?attr/selectableItemBackground"
+                android:orientation="horizontal"
+                android:padding="@dimen/view_margin">
 
-            <TextView
-                android:id="@+id/tv_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/view_margin"
-                android:text="@{ItemUtils.getRelativeDate(context, item)}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                app:layout_constraintLeft_toRightOf="@+id/tv_user"
-                app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/tv_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/view_margin"
+                    android:text="@{item.by}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{ItemUtils.getRelativeDate(context, item)}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_text"
-                android:layout_width="@dimen/layout_stretch"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/view_margin"
-                android:layout_marginTop="@dimen/view_margin"
                 android:ellipsize="end"
                 android:maxLines="10"
+                android:padding="@dimen/view_margin"
                 android:text='@{TextUtils.isEmpty(item.text) ? "" : Html.fromHtml(item.text)}'
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_user" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
             <TextView
                 android:id="@+id/tv_kids"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/view_margin"
-                android:layout_marginTop="@dimen/view_margin"
+                android:padding="@dimen/view_margin"
                 android:text="@{@plurals/total_replies(item.kids.size, item.kids.size)}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                app:layout_constraintLeft_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_text" />
-        </android.support.constraint.ConstraintLayout>
+                android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="@dimen/view_margin"
             android:text="@string/text_deleted"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:visibility="@{item.deleted ? View.VISIBLE : View.GONE}" />
@@ -83,6 +81,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="@dimen/view_margin"
             android:text="@string/text_dead"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:visibility="@{item.dead ? View.VISIBLE : View.GONE}" />

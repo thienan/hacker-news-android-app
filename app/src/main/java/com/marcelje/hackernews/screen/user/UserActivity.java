@@ -32,6 +32,8 @@ public class UserActivity extends AppCompatActivity {
         if (intent.hasExtra(EXTRA_USER_ID)) {
             String userId = intent.getStringExtra(EXTRA_USER_ID);
 
+            setTitle(String.format(getString(R.string.title_profile), userId));
+
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.user_container, UserActivityFragment.newInstance(userId))
                     .commit();

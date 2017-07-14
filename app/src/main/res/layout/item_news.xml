@@ -21,79 +21,69 @@
         android:padding="@dimen/view_margin"
         app:cardCornerRadius="@dimen/card_radius">
 
-        <android.support.constraint.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_user"
-                android:layout_width="@dimen/layout_stretch"
+            <LinearLayout
+                android:id="@+id/layout_user"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/view_margin"
-                android:layout_marginRight="@dimen/view_margin"
-                android:layout_marginTop="@dimen/view_margin"
-                android:text="@{item.by}"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:background="?attr/selectableItemBackground"
+                android:orientation="vertical"
+                android:padding="@dimen/view_margin">
 
-            <TextView
-                android:id="@+id/tv_time"
-                android:layout_width="@dimen/layout_stretch"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/view_margin"
-                android:layout_marginRight="@dimen/view_margin"
-                android:text="@{ItemUtils.getRelativeDate(context, item)}"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_user" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{item.by}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{ItemUtils.getRelativeDate(context, item)}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+            </LinearLayout>
 
             <View
-                android:id="@+id/separator"
-                android:layout_width="@dimen/layout_stretch"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_margin="@dimen/view_margin"
                 android:background="@android:color/darker_gray"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_time" />
+                android:padding="@dimen/view_margin" />
 
             <TextView
                 android:id="@+id/tv_text"
-                android:layout_width="@dimen/layout_stretch"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/view_margin"
+                android:background="?attr/selectableItemBackground"
+                android:padding="@dimen/view_margin"
                 android:text="@{ItemUtils.getTitle(context, item)}"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/separator" />
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
 
-            <TextView
-                android:id="@+id/tv_score"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/view_margin"
-                android:text="@{@plurals/total_scores(item.score, item.score)}"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_text" />
+                android:background="?attr/selectableItemBackground"
+                android:orientation="horizontal"
+                android:padding="@dimen/view_margin">
 
-            <TextView
-                android:id="@+id/tv_comments"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/view_margin"
-                android:text="@{@plurals/total_comments(item.descendants, item.descendants)}"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                android:visibility="@{item.descendants > 0 ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/tv_score"
-                app:layout_constraintTop_toBottomOf="@+id/tv_text" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/view_margin"
+                    android:text="@{@plurals/total_scores(item.score, item.score)}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
 
-        </android.support.constraint.ConstraintLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@plurals/total_comments(item.descendants, item.descendants)}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                    android:visibility="@{item.descendants > 0 ? View.VISIBLE : View.GONE}" />
+            </LinearLayout>
+
+        </LinearLayout>
     </android.support.v7.widget.CardView>
 </layout>

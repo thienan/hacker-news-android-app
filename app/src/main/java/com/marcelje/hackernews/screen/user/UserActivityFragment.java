@@ -37,7 +37,6 @@ public class UserActivityFragment extends Fragment implements View.OnClickListen
         Bundle args = getArguments();
         if (args.containsKey(ARG_USER_ID)) {
             mUserId = args.getString(ARG_USER_ID);
-            getActivity().setTitle(mUserId);
         }
     }
 

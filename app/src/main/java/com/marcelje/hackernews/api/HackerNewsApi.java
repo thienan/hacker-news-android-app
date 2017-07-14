@@ -24,6 +24,7 @@ public final class HackerNewsApi {
     @SuppressWarnings("WeakerAccess")
     HackerNewsResource resource;
 
+    @SuppressWarnings("UnusedParameters")
     public interface RestCallback<T> {
         void onSuccess(T data);
 

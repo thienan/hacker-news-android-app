@@ -24,6 +24,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         mContext = context;
         mParent = parent;
         mPoster = poster;
+
         mData = new ArrayList<>();
     }
 
@@ -58,18 +59,19 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             super(binding.getRoot());
             this.binding = binding;
 
-            binding.tvUser.setOnClickListener(new View.OnClickListener() {
+            binding.layoutUser.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    UserActivity.startActivity(mContext, mData.get(getAdapterPosition()).getBy());
+                    Item data = mData.get(getAdapterPosition());
+                    UserActivity.startActivity(mContext, data.getBy());
                 }
             });
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Item item = mData.get(getAdapterPosition());
-                    CommentActivity.startActivity(mContext, item, mParent, mPoster);
+                    Item data = mData.get(getAdapterPosition());
+                    CommentActivity.startActivity(mContext, data, mParent, mPoster);
                 }
             });
         }

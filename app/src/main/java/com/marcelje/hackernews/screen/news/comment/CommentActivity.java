@@ -23,6 +23,7 @@ public class CommentActivity extends AppCompatActivity {
         if (item != null) intent.putExtra(EXTRA_ITEM, Parcels.wrap(item));
         if (!TextUtils.isEmpty(parent)) intent.putExtra(EXTRA_PARENT, parent);
         if (!TextUtils.isEmpty(poster)) intent.putExtra(EXTRA_POSTER, poster);
+
         context.startActivity(intent);
     }
 

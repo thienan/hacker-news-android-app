@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.marcelje.hackernews.api.HackerNewsApi;
 import com.marcelje.hackernews.databinding.FragmentCommentBinding;
 import com.marcelje.hackernews.model.Item;
+import com.marcelje.hackernews.screen.user.UserActivity;
 
 import org.parceler.Parcels;
 
@@ -69,11 +70,18 @@ public class CommentActivityFragment extends Fragment {
         mBinding.setParent(mParent);
         mBinding.setPoster(mPoster);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new CommentAdapter(getContext(), mItem.getBy(), mPoster);
+        mBinding.sectionCommentMain.layoutUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserActivity.startActivity(getContext(), mItem.getBy());
+            }
+        });
 
         // TODO: find a better way to remove maxLines
         mBinding.sectionCommentMain.tvText.setMaxLines(Integer.MAX_VALUE);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        mAdapter = new CommentAdapter(getContext(), mItem.getBy(), mPoster);
 
         mBinding.sectionCommentList.rvCommentList.setLayoutManager(layoutManager);
         mBinding.sectionCommentList.rvCommentList.setAdapter(mAdapter);
@@ -88,9 +96,9 @@ public class CommentActivityFragment extends Fragment {
     }
 
     private void retrieveComments() {
-        showProgressBar();
-
         if (mItem.getKids() == null) return;
+
+        showProgressBar();
 
         for (long itemId : mItem.getKids()) {
             HackerNewsApi.with(getActivity()).getItem(itemId, new HackerNewsApi.RestCallback<Item>() {

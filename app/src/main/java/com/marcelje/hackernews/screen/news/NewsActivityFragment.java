@@ -119,7 +119,7 @@ public class NewsActivityFragment extends Fragment
             HackerNewsApi.with(getActivity()).getItem(itemId, new HackerNewsApi.RestCallback<Item>() {
                 @Override
                 public void onSuccess(Item data) {
-                    if (!data.isDeleted() && !data.isDead()) {
+                    if (data.isNotDeleted() && data.isNotDead()) {
                         mAdapter.addData(data);
                     }
                 }

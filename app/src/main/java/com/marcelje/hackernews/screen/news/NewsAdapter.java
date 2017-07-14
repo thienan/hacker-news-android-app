@@ -2,6 +2,7 @@ package com.marcelje.hackernews.screen.news;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import com.marcelje.hackernews.databinding.ItemNewsBinding;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.screen.news.details.NewsDetailsActivity;
 import com.marcelje.hackernews.screen.user.UserActivity;
+import com.marcelje.hackernews.screen.web.WebActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,17 +62,32 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
             super(binding.getRoot());
             this.binding = binding;
 
-            binding.tvUser.setOnClickListener(new View.OnClickListener() {
+            binding.layoutUser.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    UserActivity.startActivity(mContext, mData.get(getAdapterPosition()).getBy());
+                    Item data = mData.get(getAdapterPosition());
+                    UserActivity.startActivity(mContext, data.getBy());
+                }
+            });
+
+            binding.tvText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Item data = mData.get(getAdapterPosition());
+
+                    if (TextUtils.isEmpty(data.getUrl())) {
+                        NewsDetailsActivity.startActivity(mContext, data);
+                    } else {
+                        WebActivity.startActivity(mContext, data.getUrl());
+                    }
                 }
             });
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    NewsDetailsActivity.startActivity(mContext, mData.get(getAdapterPosition()));
+                    Item data = mData.get(getAdapterPosition());
+                    NewsDetailsActivity.startActivity(mContext, data);
                 }
             });
         }

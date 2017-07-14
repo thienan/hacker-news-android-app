@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.screen.news.comment.CommentAdapter;
 import com.marcelje.hackernews.screen.news.details.text.DetailsTextActivity;
 import com.marcelje.hackernews.screen.user.UserActivity;
+import com.marcelje.hackernews.screen.web.WebActivity;
 
 import org.parceler.Parcels;
 
@@ -55,15 +57,21 @@ public class NewsDetailsActivityFragment extends Fragment {
         mBinding = FragmentNewsDetailsBinding.inflate(inflater, container, false);
         mBinding.setItem(mItem);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new CommentAdapter(getContext(), null, mItem.getBy());
-
-        mBinding.sectionNews.tvUser.setOnClickListener(new View.OnClickListener() {
+        mBinding.sectionNews.layoutUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 UserActivity.startActivity(getContext(), mItem.getBy());
             }
         });
+
+        if (!TextUtils.isEmpty(mItem.getUrl())) {
+            mBinding.sectionNews.tvText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    WebActivity.startActivity(getContext(), mItem.getUrl());
+                }
+            });
+        }
 
         mBinding.sectionNewsDetails.tvNewsDetails.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +79,9 @@ public class NewsDetailsActivityFragment extends Fragment {
                 DetailsTextActivity.startActivity(getContext(), mItem.getText());
             }
         });
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        mAdapter = new CommentAdapter(getContext(), null, mItem.getBy());
 
         mBinding.sectionCommentList.rvCommentList.setLayoutManager(layoutManager);
         mBinding.sectionCommentList.rvCommentList.setAdapter(mAdapter);
@@ -85,9 +96,9 @@ public class NewsDetailsActivityFragment extends Fragment {
     }
 
     private void retrieveComments() {
-        showProgressBar();
-
         if (mItem.getKids() == null) return;
+
+        showProgressBar();
 
         for (long itemId : mItem.getKids()) {
             HackerNewsApi.with(getActivity()).getItem(itemId, new HackerNewsApi.RestCallback<Item>() {

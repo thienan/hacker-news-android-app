@@ -60,6 +60,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.marcelje.hackernews.screen.news.NewsActivity" />
         </activity>
+        <activity
+            android:name=".screen.web.WebActivity"
+            android:label="@string/title_activity_web"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

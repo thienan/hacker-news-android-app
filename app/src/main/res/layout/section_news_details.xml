@@ -39,9 +39,10 @@
                 android:id="@+id/tv_news_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/view_margin"
+                android:background="?attr/selectableItemBackground"
                 android:ellipsize="end"
                 android:maxLines="5"
+                android:padding="@dimen/view_margin"
                 android:text='@{TextUtils.isEmpty(text) ? "" : Html.fromHtml(text)}'
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
