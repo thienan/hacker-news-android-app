@@ -2,16 +2,20 @@ package com.marcelje.hackernews.screen.news;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.databinding.ItemNewsBinding;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.screen.news.details.NewsDetailsActivity;
 import com.marcelje.hackernews.screen.user.UserActivity;
 import com.marcelje.hackernews.screen.web.WebActivity;
+import com.marcelje.hackernews.utils.MenuUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +65,22 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
         public ItemViewHolder(ItemNewsBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+
+            binding.layoutUser.inflateMenu(R.menu.menu_news_item);
+
+            binding.layoutUser.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.action_share:
+                            Item data = mData.get(getAdapterPosition());
+                            MenuUtils.openShareChooser(mContext, data);
+                            return true;
+                    }
+
+                    return false;
+                }
+            });
 
             binding.layoutUser.setOnClickListener(new View.OnClickListener() {
                 @Override

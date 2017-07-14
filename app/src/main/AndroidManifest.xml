@@ -63,7 +63,7 @@
         <activity
             android:name=".screen.web.WebActivity"
             android:label="@string/title_activity_web"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
