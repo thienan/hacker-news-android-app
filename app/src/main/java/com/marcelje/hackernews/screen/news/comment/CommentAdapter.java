@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.marcelje.hackernews.databinding.ItemCommentBinding;
 import com.marcelje.hackernews.model.Item;
+import com.marcelje.hackernews.screen.user.UserActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         public CommentViewHolder(ItemCommentBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+
+            binding.tvUser.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    UserActivity.startActivity(mContext, mData.get(getAdapterPosition()).getBy());
+                }
+            });
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

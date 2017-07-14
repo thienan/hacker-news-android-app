@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.marcelje.hackernews.databinding.ItemNewsBinding;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.screen.news.details.NewsDetailsActivity;
+import com.marcelje.hackernews.screen.user.UserActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,13 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
         public ItemViewHolder(ItemNewsBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+
+            binding.tvUser.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    UserActivity.startActivity(mContext, mData.get(getAdapterPosition()).getBy());
+                }
+            });
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

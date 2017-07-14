@@ -14,6 +14,7 @@ import android.text.style.StyleSpan;
 
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.model.Item;
+import com.marcelje.hackernews.model.User;
 
 public class ItemUtils {
 
@@ -21,14 +22,27 @@ public class ItemUtils {
     private static final String BRACKET_CLOSE = ")";
 
     public static CharSequence getRelativeDate(Context context, Item item) {
+        if (context == null || item == null) return "";
+
         return DateUtils.getRelativeDateTimeString(context,
                 item.getTime() * 1000,
                 DateUtils.SECOND_IN_MILLIS,
                 DateUtils.WEEK_IN_MILLIS, 0);
     }
 
+    public static CharSequence getRelativeDate(Context context, User user) {
+        if (context == null || user == null) return "";
+
+        return DateUtils.getRelativeDateTimeString(context,
+                user.getCreated() * 1000,
+                DateUtils.SECOND_IN_MILLIS,
+                DateUtils.YEAR_IN_MILLIS, 0);
+    }
+
     public static SpannableStringBuilder getTitle(Context context, Item item) {
         SpannableStringBuilder title = new SpannableStringBuilder();
+
+        if (context == null || item == null) return title;
 
         title.append(item.getTitle());
 

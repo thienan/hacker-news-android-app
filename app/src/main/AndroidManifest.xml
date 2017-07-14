@@ -51,6 +51,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.marcelje.hackernews.screen.news.details.NewsDetailsActivity" />
         </activity>
+        <activity
+            android:name=".screen.user.UserActivity"
+            android:label="@string/title_activity_user"
+            android:parentActivityName=".screen.news.NewsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.marcelje.hackernews.screen.news.NewsActivity" />
+        </activity>
     </application>
 
 </manifest>

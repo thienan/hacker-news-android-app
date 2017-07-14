@@ -23,6 +23,7 @@
             tools:showIn="@layout/activity_news_details">
 
             <include
+                android:id="@+id/section_news"
                 layout="@layout/item_news"
                 app:item="@{item}" />
 

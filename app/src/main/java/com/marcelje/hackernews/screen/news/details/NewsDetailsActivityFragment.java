@@ -14,6 +14,7 @@ import com.marcelje.hackernews.databinding.FragmentNewsDetailsBinding;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.screen.news.comment.CommentAdapter;
 import com.marcelje.hackernews.screen.news.details.text.DetailsTextActivity;
+import com.marcelje.hackernews.screen.user.UserActivity;
 
 import org.parceler.Parcels;
 
@@ -56,6 +57,13 @@ public class NewsDetailsActivityFragment extends Fragment {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mAdapter = new CommentAdapter(getContext(), null, mItem.getBy());
+
+        mBinding.sectionNews.tvUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserActivity.startActivity(getContext(), mItem.getBy());
+            }
+        });
 
         mBinding.sectionNewsDetails.tvNewsDetails.setOnClickListener(new View.OnClickListener() {
             @Override

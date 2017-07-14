@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.marcelje.hackernews.HackerNewsApplication;
 import com.marcelje.hackernews.model.Item;
+import com.marcelje.hackernews.model.User;
 
 import java.io.IOException;
 import java.util.List;
@@ -47,6 +48,11 @@ public final class HackerNewsApi {
         }
 
         return result;
+    }
+
+    public void getUser(String id, final RestCallback<User> callback) {
+        Timber.d("getUser(id=%s)", id);
+        resource.getUser(id).enqueue(getCallback(callback));
     }
 
     public void getItem(long id, final RestCallback<Item> callback) {
