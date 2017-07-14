@@ -1,36 +1,41 @@
-package com.marcelje.hackernews.screen.news.details;
+package com.marcelje.hackernews.screen.news.comment;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.marcelje.hackernews.api.HackerNewsApi;
-import com.marcelje.hackernews.databinding.FragmentNewsDetailsBinding;
+import com.marcelje.hackernews.databinding.FragmentCommentBinding;
 import com.marcelje.hackernews.model.Item;
-import com.marcelje.hackernews.screen.news.comment.CommentAdapter;
-import com.marcelje.hackernews.screen.news.details.text.DetailsTextActivity;
 
 import org.parceler.Parcels;
 
-public class NewsDetailsActivityFragment extends Fragment {
+public class CommentActivityFragment extends Fragment {
 
-    private static final String ARG_ITEM = "com.marcelje.hackernews.screen.news.details.arg.ITEM";
+    private static final String ARG_ITEM = "com.marcelje.hackernews.screen.news.comment.arg.ITEM";
+    private static final String ARG_PARENT = "com.marcelje.hackernews.screen.news.comment.arg.PARENT";
+    private static final String ARG_POSTER = "com.marcelje.hackernews.screen.news.comment.arg.POSTER";
 
-    private FragmentNewsDetailsBinding mBinding;
+    private FragmentCommentBinding mBinding;
     private CommentAdapter mAdapter;
 
     private Item mItem;
+    private String mParent;
+    private String mPoster;
 
-    public static NewsDetailsActivityFragment newInstance(Item item) {
-        NewsDetailsActivityFragment fragment = new NewsDetailsActivityFragment();
+    public static CommentActivityFragment newInstance(Item item, String parent, String poster) {
+        CommentActivityFragment fragment = new CommentActivityFragment();
 
         Bundle args = new Bundle();
-        args.putParcelable(ARG_ITEM, Parcels.wrap(item));
+        if (item != null) args.putParcelable(ARG_ITEM, Parcels.wrap(item));
+        if (!TextUtils.isEmpty(parent)) args.putString(ARG_PARENT, parent);
+        if (!TextUtils.isEmpty(poster)) args.putString(ARG_POSTER, poster);
 
         fragment.setArguments(args);
 
@@ -46,23 +51,29 @@ public class NewsDetailsActivityFragment extends Fragment {
         if (args.containsKey(ARG_ITEM)) {
             mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
         }
+
+        if (args.containsKey(ARG_PARENT)) {
+            mParent = args.getString(ARG_PARENT);
+        }
+
+        if (args.containsKey(ARG_POSTER)) {
+            mPoster = args.getString(ARG_POSTER);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mBinding = FragmentNewsDetailsBinding.inflate(inflater, container, false);
+        mBinding = FragmentCommentBinding.inflate(inflater, container, false);
         mBinding.setItem(mItem);
+        mBinding.setParent(mParent);
+        mBinding.setPoster(mPoster);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new CommentAdapter(getContext(), null, mItem.getBy());
+        mAdapter = new CommentAdapter(getContext(), mItem.getBy(), mPoster);
 
-        mBinding.sectionNewsDetails.tvNewsDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DetailsTextActivity.startActivity(getContext(), mItem.getText());
-            }
-        });
+        // TODO: find a better way to remove maxLines
+        mBinding.sectionCommentMain.tvText.setMaxLines(Integer.MAX_VALUE);
 
         mBinding.sectionCommentList.rvCommentList.setLayoutManager(layoutManager);
         mBinding.sectionCommentList.rvCommentList.setAdapter(mAdapter);

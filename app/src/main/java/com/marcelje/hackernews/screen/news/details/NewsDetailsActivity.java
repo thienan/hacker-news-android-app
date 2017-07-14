@@ -36,7 +36,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
             Item item = Parcels.unwrap(intent.getParcelableExtra(EXTRA_ITEM));
 
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.comment_container, NewsDetailsActivityFragment.newInstance(item))
+                    .add(R.id.news_details_container, NewsDetailsActivityFragment.newInstance(item))
                     .commit();
         }
     }

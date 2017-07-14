@@ -2,6 +2,9 @@ package com.marcelje.hackernews.model;
 
 import org.parceler.Parcel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Parcel(Parcel.Serialization.BEAN)
 public class Item {
     private long id;
@@ -13,11 +16,11 @@ public class Item {
     private boolean dead;
     private long parent;
     private long poll;
-    private long[] kids;
+    private List<Long> kids = new ArrayList<>();
     private String url;
     private int score;
     private String title;
-    private long[] parts;
+    private List<Long> parts = new ArrayList<>();
     private int descendants;
 
     public long getId() {
@@ -92,11 +95,11 @@ public class Item {
         this.poll = poll;
     }
 
-    public long[] getKids() {
+    public List<Long> getKids() {
         return kids;
     }
 
-    public void setKids(long[] kids) {
+    public void setKids(List<Long> kids) {
         this.kids = kids;
     }
 
@@ -124,11 +127,11 @@ public class Item {
         this.title = title;
     }
 
-    public long[] getParts() {
+    public List<Long> getParts() {
         return parts;
     }
 
-    public void setParts(long[] parts) {
+    public void setParts(List<Long> parts) {
         this.parts = parts;
     }
 

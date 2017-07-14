@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Hacker News</string>
+    <string name="title_activity_comment">Comment</string>
+    <string name="title_activity_details_text">Details</string>
     <string name="title_activity_news">Hacker News</string>
     <string name="title_activity_news_details">News</string>
     <string name="action_retry">Retry</string>
     <string name="error_retrieve_data">Failed to retrieve data from server.</string>
     <string name="title_details">Details</string>
     <string name="title_comments">Comments</string>
+    <string name="text_deleted">&lt;&lt;deleted&gt;&gt;</string>
+    <string name="text_dead">&lt;&lt;dead&gt;&gt;</string>
 </resources>

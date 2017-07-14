@@ -1,5 +1,6 @@
 package com.marcelje.hackernews.factory;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,11 +17,18 @@ public class SpinnerFactory {
     public static Spinner createSpinner(AppCompatActivity activity,
                                         AdapterView.OnItemSelectedListener listener) {
 
-        Spinner spinner = new Spinner(activity.getSupportActionBar().getThemedContext());
+        Context context;
+
+        if (activity.getSupportActionBar() != null) {
+            context = activity.getSupportActionBar().getThemedContext();
+        } else {
+            context = activity.getApplicationContext();
+        }
+
+        Spinner spinner = new Spinner(context);
 
         ArrayAdapter<CharSequence> adapter =
-                new ArrayAdapter<>(activity.getApplicationContext(),
-                        R.layout.item_spinner, createList());
+                new ArrayAdapter<>(context, R.layout.item_spinner, createList());
 
         adapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
         spinner.setAdapter(adapter);

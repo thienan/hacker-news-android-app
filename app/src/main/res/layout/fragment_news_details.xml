@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:padding="@dimen/view_margin"
             tools:context="com.marcelje.hackernews.screen.news.details.NewsDetailsActivityFragment"
             tools:showIn="@layout/activity_news_details">
 
@@ -26,13 +27,14 @@
                 app:item="@{item}" />
 
             <include
+                android:id="@+id/section_news_details"
                 layout="@layout/section_news_details"
-                app:item="@{item}" />
+                app:text="@{item.text}" />
 
             <include
                 android:id="@+id/section_comment_list"
                 layout="@layout/section_comment_list"
-                app:item="@{item}" />
+                app:total="@{item.kids.size}" />
         </LinearLayout>
     </ScrollView>
 

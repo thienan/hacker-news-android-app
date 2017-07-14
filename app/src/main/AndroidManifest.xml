@@ -26,11 +26,30 @@
         <activity
             android:name=".screen.news.details.NewsDetailsActivity"
             android:label="@string/title_activity_news_details"
+            android:launchMode="singleTop"
             android:parentActivityName=".screen.news.NewsActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.marcelje.hackernews.screen.news.NewsActivity" />
+        </activity>
+        <activity
+            android:name=".screen.news.comment.CommentActivity"
+            android:label="@string/title_activity_comment"
+            android:parentActivityName=".screen.news.details.NewsDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.marcelje.hackernews.screen.news.details.NewsDetailsActivity" />
+        </activity>
+        <activity
+            android:name=".screen.news.details.text.DetailsTextActivity"
+            android:label="@string/title_activity_details_text"
+            android:parentActivityName=".screen.news.details.NewsDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.marcelje.hackernews.screen.news.details.NewsDetailsActivity" />
         </activity>
     </application>
 

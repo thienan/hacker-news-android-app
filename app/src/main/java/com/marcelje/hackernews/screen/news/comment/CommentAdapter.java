@@ -1,8 +1,9 @@
-package com.marcelje.hackernews.screen.news.details;
+package com.marcelje.hackernews.screen.news.comment;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.marcelje.hackernews.databinding.ItemCommentBinding;
@@ -11,13 +12,17 @@ import com.marcelje.hackernews.model.Item;
 import java.util.ArrayList;
 import java.util.List;
 
-class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
+public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
 
     private final Context mContext;
+    private final String mParent;
+    private final String mPoster;
     private final List<Item> mData;
 
-    public CommentAdapter(Context context) {
+    public CommentAdapter(Context context, String parent, String poster) {
         mContext = context;
+        mParent = parent;
+        mPoster = poster;
         mData = new ArrayList<>();
     }
 
@@ -51,6 +56,14 @@ class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHold
         public CommentViewHolder(ItemCommentBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Item item = mData.get(getAdapterPosition());
+                    CommentActivity.startActivity(mContext, item, mParent, mPoster);
+                }
+            });
         }
     }
 }

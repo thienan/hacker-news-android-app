@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/view_margin"
+        tools:context="com.marcelje.hackernews.screen.news.details.text.DetailsTextActivityFragment"
+        tools:showIn="@layout/activity_details_text">
+
+        <include
+            android:id="@+id/section_news_details"
+            layout="@layout/section_news_details" />
+
+    </FrameLayout>
+</layout>

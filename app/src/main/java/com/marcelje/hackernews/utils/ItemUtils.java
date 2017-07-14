@@ -1,12 +1,16 @@
 package com.marcelje.hackernews.utils;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.model.Item;
@@ -29,15 +33,35 @@ public class ItemUtils {
         title.append(item.getTitle());
 
         if (!TextUtils.isEmpty(item.getUrl())) {
-            String url = Uri.parse(item.getUrl()).getHost();
-            title.append(BRACKET_OPEN).append(url).append(BRACKET_CLOSE);
-            title.setSpan(
-                    new ForegroundColorSpan(
+            String host = Uri.parse(item.getUrl()).getHost();
+
+            SpannableString url = new SpannableString(BRACKET_OPEN + host + BRACKET_CLOSE);
+            url.setSpan(new ForegroundColorSpan(
                             ContextCompat.getColor(context, R.color.textColorSecondary)),
-                    item.getTitle().length(), title.length(), 0);
+                    0, url.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+
+            title.append(url);
         }
 
         return title;
     }
 
+    public static SpannableStringBuilder getCommentInfo(String parent, String poster) {
+        SpannableStringBuilder commentInfo = new SpannableStringBuilder();
+        commentInfo.append("Replies to ");
+
+        if (!TextUtils.isEmpty(parent)) {
+            SpannableString comment = new SpannableString(String.format("%s's comment on ", parent));
+            comment.setSpan(new StyleSpan(Typeface.BOLD), 0, parent.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            commentInfo.append(comment);
+        }
+
+        if (!TextUtils.isEmpty(poster)) {
+            SpannableString post = new SpannableString(String.format("%s's post", poster));
+            post.setSpan(new StyleSpan(Typeface.BOLD), 0, poster.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            commentInfo.append(post);
+        }
+
+        return commentInfo;
+    }
 }

@@ -6,17 +6,16 @@
         <import type="android.view.View" />
 
         <variable
-            name="item"
-            type="com.marcelje.hackernews.model.Item" />
+            name="total"
+            type="Integer" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/view_margin"
         android:orientation="vertical"
-        android:visibility="@{item.descendants > 0 ? View.VISIBLE : View.GONE}">
+        android:visibility="@{total > 0 ? View.VISIBLE : View.GONE}">
 
         <TextView
             android:layout_width="match_parent"
