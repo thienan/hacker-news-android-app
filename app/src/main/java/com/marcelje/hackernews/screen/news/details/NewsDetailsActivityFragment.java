@@ -68,7 +68,7 @@ public class NewsDetailsActivityFragment extends Fragment {
             mBinding.sectionNews.tvText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    BrowserUtils.openTab(getContext(), mItem.getUrl());
+                    BrowserUtils.openTab(getActivity(), mItem.getUrl());
                 }
             });
         }

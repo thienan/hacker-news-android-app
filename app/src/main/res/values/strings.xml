@@ -23,4 +23,6 @@
     <string name="menu_item_share">Share</string>
     <string name="title_copy">Copy link</string>
     <string name="message_copy">Copied %s</string>
+    <string name="menu_item_copy_link">Copy Link</string>
+    <string name="menu_item_open_in_browser">Open in browser</string>
 </resources>

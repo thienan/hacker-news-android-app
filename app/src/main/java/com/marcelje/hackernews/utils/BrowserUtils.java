@@ -1,5 +1,6 @@
 package com.marcelje.hackernews.utils;
 
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
 import com.marcelje.hackernews.R;
-import com.marcelje.hackernews.receiver.CopyBroadcastReceiver;
+import com.marcelje.hackernews.receiver.CopyReceiver;
 import com.marcelje.hackernews.screen.web.WebActivity;
 
 import java.util.ArrayList;
@@ -30,44 +31,54 @@ public class BrowserUtils {
     private static final String DEV_PACKAGE = "com.chrome.dev";
     private static final String LOCAL_PACKAGE = "com.google.android.apps.chrome";
 
-    public static void openTab(Context context, String url) {
+    public static void openTab(Activity activity, String url) {
+        if (activity == null || TextUtils.isEmpty(url)) return;
+
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
 
         setShowTitle(builder);
-        setToolbarColor(context, builder);
-        setAnimation(context, builder);
-        addCopyMenuItem(context, builder);
+        setToolbarColor(activity, builder);
+        setAnimation(activity, builder);
+        addCopyMenuItem(activity, builder);
         addShareMenuItem(builder);
 
         CustomTabsIntent customTabsIntent = builder.build();
 
-        String packageName = getPackageNameToUse(context);
+        String packageName = getPackageNameToUse(activity);
 
         if (packageName == null) {
-            WebActivity.startActivity(context, url);
+            WebActivity.startActivity(activity, url);
         } else {
             customTabsIntent.intent.setPackage(packageName);
-            customTabsIntent.launchUrl(context, Uri.parse(url));
+            customTabsIntent.launchUrl(activity, Uri.parse(url));
         }
     }
 
     private static void setShowTitle(CustomTabsIntent.Builder builder) {
+        if (builder == null) return;
+
         builder.setShowTitle(true);
     }
 
     private static void setToolbarColor(Context context, CustomTabsIntent.Builder builder) {
+        if (context == null || builder == null) return;
+
         builder.setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary));
     }
 
     private static void setAnimation(Context context, CustomTabsIntent.Builder builder) {
+        if (context == null || builder == null) return;
+
         builder.setStartAnimations(context, R.anim.slide_up, R.anim.no_change);
         builder.setExitAnimations(context, R.anim.no_change, R.anim.slide_down);
     }
 
     private static void addCopyMenuItem(Context context, CustomTabsIntent.Builder builder) {
+        if (context == null || builder == null) return;
+
         String label = context.getString(R.string.title_copy);
 
-        Intent intent = new Intent(context, CopyBroadcastReceiver.class);
+        Intent intent = new Intent(context, CopyReceiver.class);
         PendingIntent pendingIntent =
                 PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -75,10 +86,14 @@ public class BrowserUtils {
     }
 
     private static void addShareMenuItem(CustomTabsIntent.Builder builder) {
+        if (builder == null) return;
+
         builder.addDefaultShareMenuItem();
     }
 
     private static String getPackageNameToUse(Context context) {
+        if (context == null) return null;
+
         String packageNameToUse = null;
 
         PackageManager pm = context.getPackageManager();
@@ -125,6 +140,8 @@ public class BrowserUtils {
     }
 
     private static boolean hasSpecializedHandlerIntents(Context context, Intent intent) {
+        if (context == null || intent == null) return false;
+
         try {
             PackageManager pm = context.getPackageManager();
             List<ResolveInfo> handlers = pm.queryIntentActivities(intent, PackageManager.GET_RESOLVED_FILTER);

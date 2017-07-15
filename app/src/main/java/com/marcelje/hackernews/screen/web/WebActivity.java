@@ -1,6 +1,6 @@
 package com.marcelje.hackernews.screen.web;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
@@ -18,6 +19,9 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.marcelje.hackernews.R;
+import com.marcelje.hackernews.utils.ClipboardUtils;
+import com.marcelje.hackernews.utils.IntentUtils;
+import com.marcelje.hackernews.utils.MenuUtils;
 
 public class WebActivity extends AppCompatActivity {
 
@@ -25,10 +29,11 @@ public class WebActivity extends AppCompatActivity {
 
     private WebView wvWebPage;
 
-    public static void startActivity(Context context, String url) {
-        Intent intent = new Intent(context, WebActivity.class);
+    public static void startActivity(Activity activity, String url) {
+        Intent intent = new Intent(activity, WebActivity.class);
         intent.putExtra(EXTRA_URL, url);
-        context.startActivity(intent);
+        activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.slide_up, R.anim.no_change);
     }
 
     @Override
@@ -79,10 +84,26 @@ public class WebActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_web, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                overridePendingTransition(R.anim.no_change, R.anim.slide_down);
+                return true;
+            case R.id.action_copy:
+                ClipboardUtils.copyLink(this, wvWebPage.getUrl());
+                return true;
+            case R.id.action_share:
+                MenuUtils.openShareChooser(this, wvWebPage.getUrl());
+                return true;
+            case R.id.action_open_in_browser:
+                IntentUtils.openBrowser(this, wvWebPage.getUrl());
                 return true;
             default:
         }

@@ -40,7 +40,7 @@ public class NewsActivityFragment extends Fragment
         mBinding = FragmentNewsBinding.inflate(inflater, container, false);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new NewsAdapter(getContext());
+        mAdapter = new NewsAdapter(getActivity());
 
         mBinding.rvItemList.setLayoutManager(layoutManager);
         mBinding.rvItemList.setAdapter(mAdapter);

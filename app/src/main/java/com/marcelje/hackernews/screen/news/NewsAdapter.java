@@ -1,6 +1,6 @@
 package com.marcelje.hackernews.screen.news;
 
-import android.content.Context;
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -22,11 +22,11 @@ import java.util.List;
 
 class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
 
-    private final Context mContext;
+    private final Activity mActivity;
     private final List<Item> mData;
 
-    public NewsAdapter(Context context) {
-        mContext = context;
+    public NewsAdapter(Activity activity) {
+        mActivity = activity;
         mData = new ArrayList<>();
     }
 
@@ -74,7 +74,7 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
                     switch (item.getItemId()) {
                         case R.id.action_share:
                             Item data = mData.get(getAdapterPosition());
-                            MenuUtils.openShareChooser(mContext, data);
+                            MenuUtils.openShareChooser(mActivity, data);
                             return true;
                     }
 
@@ -86,7 +86,7 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
                 @Override
                 public void onClick(View view) {
                     Item data = mData.get(getAdapterPosition());
-                    UserActivity.startActivity(mContext, data.getBy());
+                    UserActivity.startActivity(mActivity, data.getBy());
                 }
             });
 
@@ -96,9 +96,9 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
                     Item data = mData.get(getAdapterPosition());
 
                     if (TextUtils.isEmpty(data.getUrl())) {
-                        NewsDetailsActivity.startActivity(mContext, data);
+                        NewsDetailsActivity.startActivity(mActivity, data);
                     } else {
-                        BrowserUtils.openTab(mContext, data.getUrl());
+                        BrowserUtils.openTab(mActivity, data.getUrl());
                     }
                 }
             });
@@ -107,7 +107,7 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
                 @Override
                 public void onClick(View view) {
                     Item data = mData.get(getAdapterPosition());
-                    NewsDetailsActivity.startActivity(mContext, data);
+                    NewsDetailsActivity.startActivity(mActivity, data);
                 }
             });
         }
