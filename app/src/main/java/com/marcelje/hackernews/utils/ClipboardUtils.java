@@ -8,8 +8,10 @@ import android.widget.Toast;
 
 import com.marcelje.hackernews.R;
 
-@SuppressWarnings("WeakerAccess")
-public class ClipboardUtils {
+@SuppressWarnings({"WeakerAccess", "SameParameterValue"})
+public final class ClipboardUtils {
+
+    private ClipboardUtils() {}
 
     public static void copyLink(Context context, String url) {
         if (context == null || TextUtils.isEmpty(url)) return;

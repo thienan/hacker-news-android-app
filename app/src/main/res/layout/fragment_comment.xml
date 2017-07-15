@@ -10,6 +10,10 @@
             type="com.marcelje.hackernews.model.Item" />
 
         <variable
+            name="activity"
+            type="android.app.Activity" />
+
+        <variable
             name="parent"
             type="String" />
 
@@ -33,10 +37,11 @@
             tools:showIn="@layout/activity_comment">
 
             <TextView
+                android:id="@+id/tv_comment_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/view_margin"
-                android:text="@{ItemUtils.getCommentInfo(parent, poster)}"
+                android:text="@{ItemUtils.getCommentInfo(activity, parent, poster)}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
             <android.support.v7.widget.CardView

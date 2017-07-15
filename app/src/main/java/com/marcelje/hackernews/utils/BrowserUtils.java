@@ -21,7 +21,9 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public class BrowserUtils {
+public final class BrowserUtils {
+
+    private BrowserUtils() {}
 
     private static final String ACTION_CUSTOM_TABS_CONNECTION =
             "android.support.customtabs.action.CustomTabsService";

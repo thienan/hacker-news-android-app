@@ -7,7 +7,9 @@ import android.text.TextUtils;
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.model.Item;
 
-public class MenuUtils {
+public final class MenuUtils {
+
+    private MenuUtils() {}
 
     public static void openShareChooser(Context context, Item item) {
         if (context == null || item == null) return;

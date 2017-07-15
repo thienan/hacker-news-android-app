@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,8 +68,11 @@ public class CommentActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         mBinding = FragmentCommentBinding.inflate(inflater, container, false);
         mBinding.setItem(mItem);
+        mBinding.setActivity(getActivity());
         mBinding.setParent(mParent);
         mBinding.setPoster(mPoster);
+
+        mBinding.tvCommentInfo.setMovementMethod(LinkMovementMethod.getInstance());
 
         mBinding.sectionCommentMain.layoutUser.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 
-public class IntentUtils {
+public final class IntentUtils {
+
+    private IntentUtils() {}
 
     public static void openBrowser(Context context, String url) {
         if (context == null || TextUtils.isEmpty(url)) return;
