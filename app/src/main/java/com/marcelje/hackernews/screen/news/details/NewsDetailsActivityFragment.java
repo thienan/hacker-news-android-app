@@ -60,7 +60,7 @@ public class NewsDetailsActivityFragment extends Fragment {
         mBinding.sectionNews.layoutUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UserActivity.startActivity(getContext(), mItem.getBy());
+                UserActivity.startActivity(getActivity(), mItem.getBy());
             }
         });
 
@@ -76,12 +76,12 @@ public class NewsDetailsActivityFragment extends Fragment {
         mBinding.sectionNewsDetails.tvNewsDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DetailsTextActivity.startActivity(getContext(), mItem.getText());
+                DetailsTextActivity.startActivity(getActivity(), mItem.getText());
             }
         });
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new CommentAdapter(getContext(), null, mItem.getBy());
+        mAdapter = new CommentAdapter(getActivity(), null, mItem.getBy());
 
         mBinding.sectionCommentList.rvCommentList.setLayoutManager(layoutManager);
         mBinding.sectionCommentList.rvCommentList.setAdapter(mAdapter);

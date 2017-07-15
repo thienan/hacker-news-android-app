@@ -1,5 +1,6 @@
 package com.marcelje.hackernews.screen.news.comment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,13 +16,13 @@ import java.util.List;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
 
-    private final Context mContext;
+    private final Activity mActivity;
     private final String mParent;
     private final String mPoster;
     private final List<Item> mData;
 
-    public CommentAdapter(Context context, String parent, String poster) {
-        mContext = context;
+    public CommentAdapter(Activity activity, String parent, String poster) {
+        mActivity = activity;
         mParent = parent;
         mPoster = poster;
 
@@ -63,7 +64,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 @Override
                 public void onClick(View view) {
                     Item data = mData.get(getAdapterPosition());
-                    UserActivity.startActivity(mContext, data.getBy());
+                    UserActivity.startActivity(mActivity, data.getBy());
                 }
             });
 
@@ -71,7 +72,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 @Override
                 public void onClick(View view) {
                     Item data = mData.get(getAdapterPosition());
-                    CommentActivity.startActivity(mContext, data, mParent, mPoster);
+                    CommentActivity.startActivity(mActivity, data, mParent, mPoster);
                 }
             });
         }

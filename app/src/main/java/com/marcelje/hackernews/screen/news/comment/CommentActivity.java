@@ -1,11 +1,13 @@
 package com.marcelje.hackernews.screen.news.comment;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.model.Item;
@@ -18,13 +20,14 @@ public class CommentActivity extends AppCompatActivity {
     private static final String EXTRA_PARENT = "com.marcelje.hackernews.screen.news.comment.extra.PARENT";
     private static final String EXTRA_POSTER = "com.marcelje.hackernews.screen.news.comment.extra.POSTER";
 
-    public static void startActivity(Context context, Item item, String parent, String poster) {
-        Intent intent = new Intent(context, CommentActivity.class);
+    public static void startActivity(Activity activity, Item item, String parent, String poster) {
+        Intent intent = new Intent(activity, CommentActivity.class);
         if (item != null) intent.putExtra(EXTRA_ITEM, Parcels.wrap(item));
         if (!TextUtils.isEmpty(parent)) intent.putExtra(EXTRA_PARENT, parent);
         if (!TextUtils.isEmpty(poster)) intent.putExtra(EXTRA_POSTER, poster);
 
-        context.startActivity(intent);
+        activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.slide_left, R.anim.no_change);
     }
 
     @Override
@@ -59,4 +62,22 @@ public class CommentActivity extends AppCompatActivity {
                 .commit();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                overridePendingTransition(R.anim.no_change, R.anim.slide_right);
+                return true;
+            default:
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.no_change, R.anim.slide_right);
+    }
 }

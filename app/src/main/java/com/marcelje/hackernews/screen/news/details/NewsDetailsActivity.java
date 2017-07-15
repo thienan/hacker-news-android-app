@@ -1,8 +1,10 @@
 package com.marcelje.hackernews.screen.news.details;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -21,10 +23,11 @@ public class NewsDetailsActivity extends AppCompatActivity {
 
     private Item mItem;
 
-    public static void startActivity(Context context, Item item) {
-        Intent intent = new Intent(context, NewsDetailsActivity.class);
+    public static void startActivity(Activity activity, Item item) {
+        Intent intent = new Intent(activity, NewsDetailsActivity.class);
         intent.putExtra(EXTRA_ITEM, Parcels.wrap(item));
-        context.startActivity(intent);
+        activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.slide_left, R.anim.no_change);
     }
 
     @Override
@@ -57,11 +60,22 @@ public class NewsDetailsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                overridePendingTransition(R.anim.no_change, R.anim.slide_right);
+                return true;
             case R.id.action_share:
                 MenuUtils.openShareChooser(this, mItem);
                 return true;
+            default:
         }
 
         return super.onOptionsItemSelected(menuItem);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.no_change, R.anim.slide_right);
     }
 }

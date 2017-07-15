@@ -73,7 +73,7 @@ public class CommentActivityFragment extends Fragment {
         mBinding.sectionCommentMain.layoutUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UserActivity.startActivity(getContext(), mItem.getBy());
+                UserActivity.startActivity(getActivity(), mItem.getBy());
             }
         });
 
@@ -81,7 +81,7 @@ public class CommentActivityFragment extends Fragment {
         mBinding.sectionCommentMain.tvText.setMaxLines(Integer.MAX_VALUE);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new CommentAdapter(getContext(), mItem.getBy(), mPoster);
+        mAdapter = new CommentAdapter(getActivity(), mItem.getBy(), mPoster);
 
         mBinding.sectionCommentList.rvCommentList.setLayoutManager(layoutManager);
         mBinding.sectionCommentList.rvCommentList.setAdapter(mAdapter);
