@@ -48,6 +48,7 @@ public class WebActivity extends AppCompatActivity {
 
         wvWebPage = (WebView) findViewById(R.id.wv_web_page);
 
+        wvWebPage.getSettings().setJavaScriptEnabled(true);
         wvWebPage.getSettings().setLoadWithOverviewMode(true);
         wvWebPage.getSettings().setUseWideViewPort(true);
         wvWebPage.setWebViewClient(new WebViewClient() {

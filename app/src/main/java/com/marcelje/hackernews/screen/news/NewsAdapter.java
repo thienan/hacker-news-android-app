@@ -14,7 +14,7 @@ import com.marcelje.hackernews.databinding.ItemNewsBinding;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.screen.news.details.NewsDetailsActivity;
 import com.marcelje.hackernews.screen.user.UserActivity;
-import com.marcelje.hackernews.screen.web.WebActivity;
+import com.marcelje.hackernews.utils.BrowserUtils;
 import com.marcelje.hackernews.utils.MenuUtils;
 
 import java.util.ArrayList;
@@ -98,7 +98,7 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
                     if (TextUtils.isEmpty(data.getUrl())) {
                         NewsDetailsActivity.startActivity(mContext, data);
                     } else {
-                        WebActivity.startActivity(mContext, data.getUrl());
+                        BrowserUtils.openTab(mContext, data.getUrl());
                     }
                 }
             });

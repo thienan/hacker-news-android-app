@@ -16,7 +16,7 @@ import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.screen.news.comment.CommentAdapter;
 import com.marcelje.hackernews.screen.news.details.text.DetailsTextActivity;
 import com.marcelje.hackernews.screen.user.UserActivity;
-import com.marcelje.hackernews.screen.web.WebActivity;
+import com.marcelje.hackernews.utils.BrowserUtils;
 
 import org.parceler.Parcels;
 
@@ -68,7 +68,7 @@ public class NewsDetailsActivityFragment extends Fragment {
             mBinding.sectionNews.tvText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    WebActivity.startActivity(getContext(), mItem.getUrl());
+                    BrowserUtils.openTab(getContext(), mItem.getUrl());
                 }
             });
         }

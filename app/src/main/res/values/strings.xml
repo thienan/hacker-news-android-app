@@ -21,4 +21,6 @@
     <string name="title_share">Share via</string>
     <string name="url_hackernews_item">https://news.ycombinator.com/item?id=%d</string>
     <string name="menu_item_share">Share</string>
+    <string name="title_copy">Copy link</string>
+    <string name="message_copy">Copied %s</string>
 </resources>
