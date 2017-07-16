@@ -26,9 +26,14 @@ public class WebActivity extends AppCompatActivity {
 
     private WebView wvWebPage;
 
+    private String mUrl;
+
     public static void startActivity(Activity activity, String url) {
         Intent intent = new Intent(activity, WebActivity.class);
-        intent.putExtra(EXTRA_URL, url);
+
+        Bundle extras = createExtras(url);
+        intent.putExtras(extras);
+
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_up, R.anim.no_change);
     }
@@ -56,12 +61,10 @@ public class WebActivity extends AppCompatActivity {
         wvWebPage.getSettings().setUseWideViewPort(true);
         wvWebPage.setWebViewClient(new WebActivityClient(this));
 
-        Intent intent = getIntent();
-        if (intent.hasExtra(EXTRA_URL)) {
-            String url = intent.getStringExtra(EXTRA_URL);
-            wvWebPage.loadUrl(url);
-            setTitle(url);
-        }
+        extractExtras();
+
+        wvWebPage.loadUrl(mUrl);
+        setTitle(mUrl);
     }
 
     @Override
@@ -100,5 +103,20 @@ public class WebActivity extends AppCompatActivity {
         }
 
         return super.onKeyDown(keyCode, event);
+    }
+
+    private static Bundle createExtras(String url) {
+        Bundle extras = new Bundle();
+        extras.putString(EXTRA_URL, url);
+
+        return extras;
+    }
+
+    private void extractExtras() {
+        Intent intent = getIntent();
+
+        if (intent.hasExtra(EXTRA_URL)) {
+            mUrl = intent.getStringExtra(EXTRA_URL);
+        }
     }
 }

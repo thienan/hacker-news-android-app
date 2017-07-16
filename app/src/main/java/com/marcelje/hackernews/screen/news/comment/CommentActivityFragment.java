@@ -34,11 +34,7 @@ public class CommentActivityFragment extends Fragment {
     public static CommentActivityFragment newInstance(Item item, String parent, String poster) {
         CommentActivityFragment fragment = new CommentActivityFragment();
 
-        Bundle args = new Bundle();
-        if (item != null) args.putParcelable(ARG_ITEM, Parcels.wrap(item));
-        if (!TextUtils.isEmpty(parent)) args.putString(ARG_PARENT, parent);
-        if (!TextUtils.isEmpty(poster)) args.putString(ARG_POSTER, poster);
-
+        Bundle args = createArguments(item, parent, poster);
         fragment.setArguments(args);
 
         return fragment;
@@ -47,20 +43,7 @@ public class CommentActivityFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Bundle args = getArguments();
-
-        if (args.containsKey(ARG_ITEM)) {
-            mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
-        }
-
-        if (args.containsKey(ARG_PARENT)) {
-            mParent = args.getString(ARG_PARENT);
-        }
-
-        if (args.containsKey(ARG_POSTER)) {
-            mPoster = args.getString(ARG_POSTER);
-        }
+        extractArguments();
     }
 
     @Override
@@ -91,6 +74,31 @@ public class CommentActivityFragment extends Fragment {
         }
 
         return mBinding.getRoot();
+    }
+
+    private static Bundle createArguments(Item item, String parent, String poster) {
+        Bundle args = new Bundle();
+        if (item != null) args.putParcelable(ARG_ITEM, Parcels.wrap(item));
+        if (!TextUtils.isEmpty(parent)) args.putString(ARG_PARENT, parent);
+        if (!TextUtils.isEmpty(poster)) args.putString(ARG_POSTER, poster);
+
+        return args;
+    }
+
+    private void extractArguments() {
+        Bundle args = getArguments();
+
+        if (args.containsKey(ARG_ITEM)) {
+            mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
+        }
+
+        if (args.containsKey(ARG_PARENT)) {
+            mParent = args.getString(ARG_PARENT);
+        }
+
+        if (args.containsKey(ARG_POSTER)) {
+            mPoster = args.getString(ARG_POSTER);
+        }
     }
 
     private void retrieveComments() {

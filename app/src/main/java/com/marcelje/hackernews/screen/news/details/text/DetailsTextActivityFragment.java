@@ -18,9 +18,7 @@ public class DetailsTextActivityFragment extends Fragment {
     public static DetailsTextActivityFragment newInstance(String text) {
         DetailsTextActivityFragment fragment = new DetailsTextActivityFragment();
 
-        Bundle args = new Bundle();
-        args.putString(ARG_TEXT, text);
-
+        Bundle args = createArguments(text);
         fragment.setArguments(args);
 
         return fragment;
@@ -29,12 +27,7 @@ public class DetailsTextActivityFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Bundle args = getArguments();
-
-        if (args.containsKey(ARG_TEXT)) {
-            mText = args.getString(ARG_TEXT);
-        }
+        extractArguments();
     }
 
     @Override
@@ -47,5 +40,20 @@ public class DetailsTextActivityFragment extends Fragment {
         binding.sectionNewsDetails.setText(mText);
 
         return binding.getRoot();
+    }
+
+    private static Bundle createArguments(String text) {
+        Bundle args = new Bundle();
+        args.putString(ARG_TEXT, text);
+
+        return args;
+    }
+
+    private void extractArguments() {
+        Bundle args = getArguments();
+
+        if (args.containsKey(ARG_TEXT)) {
+            mText = args.getString(ARG_TEXT);
+        }
     }
 }

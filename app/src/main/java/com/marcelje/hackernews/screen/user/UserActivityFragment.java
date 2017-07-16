@@ -22,9 +22,7 @@ public class UserActivityFragment extends Fragment implements View.OnClickListen
     public static UserActivityFragment newInstance(String userId) {
         UserActivityFragment fragment = new UserActivityFragment();
 
-        Bundle args = new Bundle();
-        args.putString(ARG_USER_ID, userId);
-
+        Bundle args = createArguments(userId);
         fragment.setArguments(args);
 
         return fragment;
@@ -33,11 +31,7 @@ public class UserActivityFragment extends Fragment implements View.OnClickListen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Bundle args = getArguments();
-        if (args.containsKey(ARG_USER_ID)) {
-            mUserId = args.getString(ARG_USER_ID);
-        }
+        extractArguments();
     }
 
     @Override
@@ -55,6 +49,21 @@ public class UserActivityFragment extends Fragment implements View.OnClickListen
     @Override
     public void onClick(View view) {
         retrieveUser();
+    }
+
+    private static Bundle createArguments(String userId) {
+        Bundle args = new Bundle();
+        args.putString(ARG_USER_ID, userId);
+
+        return args;
+    }
+
+    private void extractArguments() {
+        Bundle args = getArguments();
+
+        if (args.containsKey(ARG_USER_ID)) {
+            mUserId = args.getString(ARG_USER_ID);
+        }
     }
 
     private void retrieveUser() {

@@ -14,9 +14,13 @@ public class DetailsTextActivity extends AppCompatActivity {
 
     private static final String EXTRA_TEXT = "com.marcelje.hackernews.screen.news.details.text.extra.TEXT";
 
+    private String mText;
+
     public static void startActivity(Activity activity, String text) {
         Intent intent = new Intent(activity, DetailsTextActivity.class);
-        intent.putExtra(EXTRA_TEXT, text);
+
+        Bundle extras = createExtras(text);
+        intent.putExtras(extras);
 
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_left, R.anim.no_change);
@@ -32,14 +36,11 @@ public class DetailsTextActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        Intent intent = getIntent();
-        if (intent.hasExtra(EXTRA_TEXT)) {
-            String text = intent.getStringExtra(EXTRA_TEXT);
+        extractExtras();
 
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.details_text_container, DetailsTextActivityFragment.newInstance(text))
-                    .commit();
-        }
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.details_text_container, DetailsTextActivityFragment.newInstance(mText))
+                .commit();
     }
 
     @Override
@@ -59,5 +60,20 @@ public class DetailsTextActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.no_change, R.anim.slide_right);
+    }
+
+    private static Bundle createExtras(String text) {
+        Bundle extras = new Bundle();
+        extras.putString(EXTRA_TEXT, text);
+
+        return extras;
+    }
+
+    private void extractExtras() {
+        Intent intent = getIntent();
+
+        if (intent.hasExtra(EXTRA_TEXT)) {
+            mText = intent.getStringExtra(EXTRA_TEXT);
+        }
     }
 }

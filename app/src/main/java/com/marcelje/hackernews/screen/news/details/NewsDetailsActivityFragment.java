@@ -32,9 +32,7 @@ public class NewsDetailsActivityFragment extends Fragment {
     public static NewsDetailsActivityFragment newInstance(Item item) {
         NewsDetailsActivityFragment fragment = new NewsDetailsActivityFragment();
 
-        Bundle args = new Bundle();
-        args.putParcelable(ARG_ITEM, Parcels.wrap(item));
-
+        Bundle args = createArguments(item);
         fragment.setArguments(args);
 
         return fragment;
@@ -43,12 +41,7 @@ public class NewsDetailsActivityFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Bundle args = getArguments();
-
-        if (args.containsKey(ARG_ITEM)) {
-            mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
-        }
+        extractArguments();
     }
 
     @Override
@@ -78,6 +71,21 @@ public class NewsDetailsActivityFragment extends Fragment {
         }
 
         return mBinding.getRoot();
+    }
+
+    private static Bundle createArguments(Item item) {
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_ITEM, Parcels.wrap(item));
+
+        return args;
+    }
+
+    private void extractArguments() {
+        Bundle args = getArguments();
+
+        if (args.containsKey(ARG_ITEM)) {
+            mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
+        }
     }
 
     private void retrieveComments() {

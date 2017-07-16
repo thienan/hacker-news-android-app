@@ -2,7 +2,6 @@ package com.marcelje.hackernews.handlers;
 
 import android.app.Activity;
 import android.text.TextUtils;
-import android.view.View;
 
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.screen.news.details.NewsDetailsActivity;

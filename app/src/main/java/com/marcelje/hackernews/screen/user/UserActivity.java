@@ -14,9 +14,13 @@ public class UserActivity extends AppCompatActivity {
 
     private static final String EXTRA_USER_ID = "com.marcelje.hackernews.screen.user.extra.USER_ID";
 
+    private String mUserId;
+
     public static void startActivity(Activity activity, String userId) {
         Intent intent = new Intent(activity, UserActivity.class);
-        intent.putExtra(EXTRA_USER_ID, userId);
+
+        Bundle extras = createExtras(userId);
+        intent.putExtras(extras);
 
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_left, R.anim.no_change);
@@ -32,16 +36,13 @@ public class UserActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        Intent intent = getIntent();
-        if (intent.hasExtra(EXTRA_USER_ID)) {
-            String userId = intent.getStringExtra(EXTRA_USER_ID);
+        extractExtras();
 
-            setTitle(String.format(getString(R.string.title_profile), userId));
+        setTitle(String.format(getString(R.string.title_profile), mUserId));
 
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.user_container, UserActivityFragment.newInstance(userId))
-                    .commit();
-        }
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.user_container, UserActivityFragment.newInstance(mUserId))
+                .commit();
     }
 
     @Override
@@ -61,5 +62,20 @@ public class UserActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.no_change, R.anim.slide_right);
+    }
+
+    private static Bundle createExtras(String userId) {
+        Bundle extras = new Bundle();
+        extras.putString(EXTRA_USER_ID, userId);
+
+        return extras;
+    }
+
+    private void extractExtras() {
+        Intent intent = getIntent();
+
+        if (intent.hasExtra(EXTRA_USER_ID)) {
+            mUserId = intent.getStringExtra(EXTRA_USER_ID);
+        }
     }
 }

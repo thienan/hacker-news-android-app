@@ -60,7 +60,8 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
         notifyItemInserted(mData.size());
     }
 
-    class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, Toolbar.OnMenuItemClickListener {
+    class ItemViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener, Toolbar.OnMenuItemClickListener {
         final ItemNewsBinding binding;
 
         public ItemViewHolder(ItemNewsBinding binding) {

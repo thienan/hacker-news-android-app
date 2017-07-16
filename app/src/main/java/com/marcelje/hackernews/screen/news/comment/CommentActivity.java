@@ -29,9 +29,9 @@ public class CommentActivity extends AppCompatActivity {
 
     public static void startActivity(Activity activity, Item item, String parent, String poster) {
         Intent intent = new Intent(activity, CommentActivity.class);
-        if (item != null) intent.putExtra(EXTRA_ITEM, Parcels.wrap(item));
-        if (!TextUtils.isEmpty(parent)) intent.putExtra(EXTRA_PARENT, parent);
-        if (!TextUtils.isEmpty(poster)) intent.putExtra(EXTRA_POSTER, poster);
+
+        Bundle extras = createExtras(item, parent, poster);
+        intent.putExtras(extras);
 
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_left, R.anim.no_change);
@@ -47,18 +47,7 @@ public class CommentActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        Intent intent = getIntent();
-        if (intent.hasExtra(EXTRA_ITEM)) {
-            mItem = Parcels.unwrap(intent.getParcelableExtra(EXTRA_ITEM));
-        }
-
-        if (intent.hasExtra(EXTRA_PARENT)) {
-            mParent = intent.getStringExtra(EXTRA_PARENT);
-        }
-
-        if (intent.hasExtra(EXTRA_POSTER)) {
-            mPoster = intent.getStringExtra(EXTRA_POSTER);
-        }
+        extractExtras();
 
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.comment_container, CommentActivityFragment.newInstance(mItem, mParent, mPoster))
@@ -92,5 +81,30 @@ public class CommentActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.no_change, R.anim.slide_right);
+    }
+
+    private static Bundle createExtras(Item item, String parent, String poster) {
+        Bundle extras = new Bundle();
+        if (item != null) extras.putParcelable(EXTRA_ITEM, Parcels.wrap(item));
+        if (!TextUtils.isEmpty(parent)) extras.putString(EXTRA_PARENT, parent);
+        if (!TextUtils.isEmpty(poster)) extras.putString(EXTRA_POSTER, poster);
+
+        return extras;
+    }
+
+    private void extractExtras() {
+        Intent intent = getIntent();
+
+        if (intent.hasExtra(EXTRA_ITEM)) {
+            mItem = Parcels.unwrap(intent.getParcelableExtra(EXTRA_ITEM));
+        }
+
+        if (intent.hasExtra(EXTRA_PARENT)) {
+            mParent = intent.getStringExtra(EXTRA_PARENT);
+        }
+
+        if (intent.hasExtra(EXTRA_POSTER)) {
+            mPoster = intent.getStringExtra(EXTRA_POSTER);
+        }
     }
 }

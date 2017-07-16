@@ -24,7 +24,9 @@ public class NewsDetailsActivity extends AppCompatActivity {
 
     public static void startActivity(Activity activity, Item item) {
         Intent intent = new Intent(activity, NewsDetailsActivity.class);
-        intent.putExtra(EXTRA_ITEM, Parcels.wrap(item));
+
+        Bundle extras = createExtras(item);
+        intent.putExtras(extras);
 
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_left, R.anim.no_change);
@@ -40,14 +42,11 @@ public class NewsDetailsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        Intent intent = getIntent();
-        if (intent.hasExtra(EXTRA_ITEM)) {
-            mItem = Parcels.unwrap(intent.getParcelableExtra(EXTRA_ITEM));
+        extractExtras();
 
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.news_details_container, NewsDetailsActivityFragment.newInstance(mItem))
-                    .commit();
-        }
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.news_details_container, NewsDetailsActivityFragment.newInstance(mItem))
+                .commit();
     }
 
     @Override
@@ -77,5 +76,20 @@ public class NewsDetailsActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.no_change, R.anim.slide_right);
+    }
+
+    private static Bundle createExtras(Item item) {
+        Bundle extras = new Bundle();
+        extras.putParcelable(EXTRA_ITEM, Parcels.wrap(item));
+
+        return extras;
+    }
+
+    private void extractExtras() {
+        Intent intent = getIntent();
+
+        if (intent.hasExtra(EXTRA_ITEM)) {
+            mItem = Parcels.unwrap(intent.getParcelableExtra(EXTRA_ITEM));
+        }
     }
 }
