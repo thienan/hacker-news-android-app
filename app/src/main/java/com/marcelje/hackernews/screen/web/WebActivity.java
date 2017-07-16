@@ -81,7 +81,7 @@ public class WebActivity extends AppCompatActivity {
                 ClipboardUtils.copyLink(this, wvWebPage.getUrl());
                 return true;
             case R.id.action_share:
-                MenuUtils.openShareChooser(this, wvWebPage.getUrl());
+                MenuUtils.openShareTextChooser(this, wvWebPage.getUrl());
                 return true;
             case R.id.action_open_in_browser:
                 IntentUtils.openBrowser(this, wvWebPage.getUrl());

@@ -11,7 +11,7 @@ public final class MenuUtils {
 
     private MenuUtils() {}
 
-    public static void openShareChooser(Context context, Item item) {
+    public static void openShareHackerNewsLinkChooser(Context context, Item item) {
         if (context == null || item == null) return;
 
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -25,7 +25,7 @@ public final class MenuUtils {
         context.startActivity(chooserIntent);
     }
 
-    public static void openShareChooser(Context context, String text) {
+    public static void openShareTextChooser(Context context, String text) {
         if (context == null || TextUtils.isEmpty(text)) return;
 
         Intent intent = new Intent(Intent.ACTION_SEND);

@@ -53,7 +53,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_news_item, menu);
+        inflater.inflate(R.menu.menu_item, menu);
         return true;
     }
 
@@ -65,7 +65,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.no_change, R.anim.slide_right);
                 return true;
             case R.id.action_share:
-                MenuUtils.openShareChooser(this, mItem);
+                MenuUtils.openShareHackerNewsLinkChooser(this, mItem);
                 return true;
             default:
         }

@@ -67,7 +67,7 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
             super(binding.getRoot());
             this.binding = binding;
 
-            binding.layoutUser.inflateMenu(R.menu.menu_news_item);
+            binding.layoutUser.inflateMenu(R.menu.menu_item);
             binding.layoutUser.setOnMenuItemClickListener(this);
 
             itemView.setOnClickListener(this);
@@ -84,7 +84,7 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
             switch (item.getItemId()) {
                 case R.id.action_share:
                     Item data = mData.get(getAdapterPosition());
-                    MenuUtils.openShareChooser(mActivity, data);
+                    MenuUtils.openShareHackerNewsLinkChooser(mActivity, data);
                     return true;
                 default:
             }
