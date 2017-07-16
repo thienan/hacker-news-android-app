@@ -12,6 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.ToolbarActivity" />
+        <activity android:name=".activity.WebToolbarActivity" />
+
         <activity
             android:name=".screen.news.NewsActivity"
             android:label="@string/title_activity_news"
@@ -23,6 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".screen.news.details.NewsDetailsActivity"
             android:label="@string/title_activity_news_details"
@@ -33,6 +37,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.marcelje.hackernews.screen.news.NewsActivity" />
         </activity>
+
         <activity
             android:name=".screen.news.comment.CommentActivity"
             android:label="@string/title_activity_comment"
@@ -42,6 +47,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.marcelje.hackernews.screen.news.details.NewsDetailsActivity" />
         </activity>
+
         <activity
             android:name=".screen.news.details.text.DetailsTextActivity"
             android:label="@string/title_activity_details_text"
@@ -51,6 +57,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.marcelje.hackernews.screen.news.details.NewsDetailsActivity" />
         </activity>
+
         <activity
             android:name=".screen.user.UserActivity"
             android:label="@string/title_activity_user"
@@ -60,6 +67,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.marcelje.hackernews.screen.news.NewsActivity" />
         </activity>
+
         <activity
             android:name=".screen.web.WebActivity"
             android:label="@string/title_activity_web"

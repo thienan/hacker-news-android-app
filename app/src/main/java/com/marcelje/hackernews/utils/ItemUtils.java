@@ -1,6 +1,5 @@
 package com.marcelje.hackernews.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -17,6 +16,7 @@ import android.text.style.StyleSpan;
 import android.view.View;
 
 import com.marcelje.hackernews.R;
+import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.model.User;
 import com.marcelje.hackernews.screen.user.UserActivity;
@@ -68,7 +68,7 @@ public final class ItemUtils {
         return title;
     }
 
-    public static SpannableStringBuilder getCommentInfo(final Activity activity, final String parent, final String poster) {
+    public static SpannableStringBuilder getCommentInfo(final ToolbarActivity activity, final String parent, final String poster) {
         SpannableStringBuilder commentInfo = new SpannableStringBuilder();
         commentInfo.append("Reply of ");
 
@@ -91,10 +91,10 @@ public final class ItemUtils {
 
     private static class UserClickableSpan extends ClickableSpan {
 
-        private final Activity mActivity;
+        private final ToolbarActivity mActivity;
         private final String mUserId;
 
-        public UserClickableSpan(Activity activity, String userId) {
+        public UserClickableSpan(ToolbarActivity activity, String userId) {
             mActivity = activity;
             mUserId = userId;
         }

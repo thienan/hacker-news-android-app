@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.api.HackerNewsApi;
 import com.marcelje.hackernews.databinding.FragmentNewsDetailsBinding;
 import com.marcelje.hackernews.handlers.ItemTextClickHandlers;
@@ -23,6 +24,8 @@ import org.parceler.Parcels;
 public class NewsDetailsActivityFragment extends Fragment {
 
     private static final String ARG_ITEM = "com.marcelje.hackernews.screen.news.details.arg.ITEM";
+
+    private ToolbarActivity mActivity;
 
     private FragmentNewsDetailsBinding mBinding;
     private CommentAdapter mAdapter;
@@ -42,6 +45,8 @@ public class NewsDetailsActivityFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         extractArguments();
+
+        mActivity = ToolbarActivity.getActivity(getActivity());
     }
 
     @Override
@@ -50,16 +55,16 @@ public class NewsDetailsActivityFragment extends Fragment {
         mBinding = FragmentNewsDetailsBinding.inflate(inflater, container, false);
         mBinding.setActivity(getActivity());
         mBinding.setItem(mItem);
-        mBinding.setItemUserClickHandlers(new ItemUserClickHandlers(getActivity()));
-        mBinding.setItemTextClickHandlers(new ItemTextClickHandlers(getActivity()));
-        mBinding.setItemTextDetailsClickHandlers(new ItemTextDetailsClickHandlers(getActivity()));
+        mBinding.setItemUserClickHandlers(new ItemUserClickHandlers(mActivity));
+        mBinding.setItemTextClickHandlers(new ItemTextClickHandlers(mActivity));
+        mBinding.setItemTextDetailsClickHandlers(new ItemTextDetailsClickHandlers(mActivity));
 
         if (TextUtils.isEmpty(mItem.getUrl())) {
             mBinding.sectionNews.tvText.setBackground(null);
         }
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new CommentAdapter(getActivity(), null, mItem.getBy());
+        mAdapter = new CommentAdapter(mActivity, null, mItem.getBy());
 
         mBinding.sectionCommentList.rvCommentList.setLayoutManager(layoutManager);
         mBinding.sectionCommentList.rvCommentList.setAdapter(mAdapter);

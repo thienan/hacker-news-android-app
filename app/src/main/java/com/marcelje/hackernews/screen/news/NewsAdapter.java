@@ -1,6 +1,5 @@
 package com.marcelje.hackernews.screen.news;
 
-import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -9,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.marcelje.hackernews.R;
+import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.databinding.ItemNewsBinding;
 import com.marcelje.hackernews.handlers.ItemTextClickHandlers;
 import com.marcelje.hackernews.handlers.ItemUserClickHandlers;
@@ -21,10 +21,10 @@ import java.util.List;
 
 class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
 
-    private final Activity mActivity;
+    private final ToolbarActivity mActivity;
     private final List<Item> mData;
 
-    public NewsAdapter(Activity activity) {
+    public NewsAdapter(ToolbarActivity activity) {
         mActivity = activity;
         mData = new ArrayList<>();
     }

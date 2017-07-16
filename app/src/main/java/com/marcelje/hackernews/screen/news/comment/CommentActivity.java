@@ -1,9 +1,8 @@
 package com.marcelje.hackernews.screen.news.comment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,14 +25,13 @@ public class CommentActivity extends ToolbarActivity {
     private String mParent;
     private String mPoster;
 
-    public static void startActivity(Activity activity, Item item, String parent, String poster) {
+    public static void startActivity(ToolbarActivity activity, Item item, String parent, String poster) {
         Intent intent = new Intent(activity, CommentActivity.class);
 
         Bundle extras = createExtras(item, parent, poster);
         intent.putExtras(extras);
 
         activity.startActivity(intent);
-        activity.overridePendingTransition(R.anim.slide_left, R.anim.no_change);
     }
 
     @Override
@@ -42,10 +40,7 @@ public class CommentActivity extends ToolbarActivity {
         setContentView(R.layout.activity_comment);
         setDisplayHomeAsUpEnabled(true);
         extractExtras();
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.comment_container, CommentActivityFragment.newInstance(mItem, mParent, mPoster))
-                .commit();
+        attachFragment();
     }
 
     @Override
@@ -58,10 +53,6 @@ public class CommentActivity extends ToolbarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                overridePendingTransition(R.anim.no_change, R.anim.slide_right);
-                return true;
             case R.id.action_share:
                 MenuUtils.openShareHackerNewsLinkChooser(this, mItem);
                 return true;
@@ -69,12 +60,6 @@ public class CommentActivity extends ToolbarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(R.anim.no_change, R.anim.slide_right);
     }
 
     private static Bundle createExtras(Item item, String parent, String poster) {
@@ -100,5 +85,13 @@ public class CommentActivity extends ToolbarActivity {
         if (intent.hasExtra(EXTRA_POSTER)) {
             mPoster = intent.getStringExtra(EXTRA_POSTER);
         }
+    }
+
+    private void attachFragment() {
+        Fragment fragment = CommentActivityFragment.newInstance(mItem, mParent, mPoster);
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.comment_container, fragment)
+                .commit();
     }
 }

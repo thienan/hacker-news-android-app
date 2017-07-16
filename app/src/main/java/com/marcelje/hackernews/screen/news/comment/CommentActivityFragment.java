@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.api.HackerNewsApi;
 import com.marcelje.hackernews.databinding.FragmentCommentBinding;
 import com.marcelje.hackernews.handlers.ItemUserClickHandlers;
@@ -23,6 +24,8 @@ public class CommentActivityFragment extends Fragment {
     private static final String ARG_ITEM = "com.marcelje.hackernews.screen.news.comment.arg.ITEM";
     private static final String ARG_PARENT = "com.marcelje.hackernews.screen.news.comment.arg.PARENT";
     private static final String ARG_POSTER = "com.marcelje.hackernews.screen.news.comment.arg.POSTER";
+
+    private ToolbarActivity mActivity;
 
     private FragmentCommentBinding mBinding;
     private CommentAdapter mAdapter;
@@ -44,6 +47,8 @@ public class CommentActivityFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         extractArguments();
+
+        mActivity = ToolbarActivity.getActivity(getActivity());
     }
 
     @Override
@@ -51,10 +56,10 @@ public class CommentActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         mBinding = FragmentCommentBinding.inflate(inflater, container, false);
         mBinding.setItem(mItem);
-        mBinding.setActivity(getActivity());
+        mBinding.setActivity(mActivity);
         mBinding.setParent(mParent);
         mBinding.setPoster(mPoster);
-        mBinding.setItemUserClickHandlers(new ItemUserClickHandlers(getActivity()));
+        mBinding.setItemUserClickHandlers(new ItemUserClickHandlers(mActivity));
 
         mBinding.tvCommentInfo.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -62,7 +67,7 @@ public class CommentActivityFragment extends Fragment {
         mBinding.sectionCommentMain.tvText.setMaxLines(Integer.MAX_VALUE);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new CommentAdapter(getActivity(), mItem.getBy(), mPoster);
+        mAdapter = new CommentAdapter(mActivity, mItem.getBy(), mPoster);
 
         mBinding.sectionCommentList.rvCommentList.setLayoutManager(layoutManager);
         mBinding.sectionCommentList.rvCommentList.setAdapter(mAdapter);

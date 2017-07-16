@@ -5,6 +5,7 @@
     <string name="title_activity_details_text">Details</string>
     <string name="title_activity_news">Hacker News</string>
     <string name="title_activity_news_details">News</string>
+    <string name="title_activity_user">User Profile</string>
     <string name="title_activity_web">Web</string>
     <string name="action_retry">Retry</string>
     <string name="error_retrieve_data">Failed to retrieve data from server.</string>
@@ -12,7 +13,6 @@
     <string name="title_comments">Comments</string>
     <string name="text_deleted">&lt;&lt;deleted&gt;&gt;</string>
     <string name="text_dead">&lt;&lt;dead&gt;&gt;</string>
-    <string name="title_activity_user">UserActivity</string>
     <string name="text_user">User:</string>
     <string name="text_created">Created:</string>
     <string name="text_karma">Karma:</string>

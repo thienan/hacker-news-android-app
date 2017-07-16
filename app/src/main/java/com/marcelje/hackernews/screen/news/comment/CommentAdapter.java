@@ -1,11 +1,11 @@
 package com.marcelje.hackernews.screen.news.comment;
 
-import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.databinding.ItemCommentBinding;
 import com.marcelje.hackernews.handlers.ItemUserClickHandlers;
 import com.marcelje.hackernews.model.Item;
@@ -15,12 +15,12 @@ import java.util.List;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
 
-    private final Activity mActivity;
+    private final ToolbarActivity mActivity;
     private final String mParent;
     private final String mPoster;
     private final List<Item> mData;
 
-    public CommentAdapter(Activity activity, String parent, String poster) {
+    public CommentAdapter(ToolbarActivity activity, String parent, String poster) {
         mActivity = activity;
         mParent = parent;
         mPoster = poster;

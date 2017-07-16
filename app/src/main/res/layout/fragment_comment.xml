@@ -15,7 +15,7 @@
 
         <variable
             name="activity"
-            type="android.app.Activity" />
+            type="com.marcelje.hackernews.activity.ToolbarActivity" />
 
         <variable
             name="parent"

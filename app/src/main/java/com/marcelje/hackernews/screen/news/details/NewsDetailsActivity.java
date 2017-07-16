@@ -1,9 +1,8 @@
 package com.marcelje.hackernews.screen.news.details;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
+import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,14 +20,13 @@ public class NewsDetailsActivity extends ToolbarActivity {
 
     private Item mItem;
 
-    public static void startActivity(Activity activity, Item item) {
+    public static void startActivity(ToolbarActivity activity, Item item) {
         Intent intent = new Intent(activity, NewsDetailsActivity.class);
 
         Bundle extras = createExtras(item);
         intent.putExtras(extras);
 
         activity.startActivity(intent);
-        activity.overridePendingTransition(R.anim.slide_left, R.anim.no_change);
     }
 
     @Override
@@ -37,10 +35,7 @@ public class NewsDetailsActivity extends ToolbarActivity {
         setContentView(R.layout.activity_news_details);
         setDisplayHomeAsUpEnabled(true);
         extractExtras();
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.news_details_container, NewsDetailsActivityFragment.newInstance(mItem))
-                .commit();
+        attachFragment();
     }
 
     @Override
@@ -53,10 +48,6 @@ public class NewsDetailsActivity extends ToolbarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                overridePendingTransition(R.anim.no_change, R.anim.slide_right);
-                return true;
             case R.id.action_share:
                 MenuUtils.openShareHackerNewsLinkChooser(this, mItem);
                 return true;
@@ -64,12 +55,6 @@ public class NewsDetailsActivity extends ToolbarActivity {
         }
 
         return super.onOptionsItemSelected(menuItem);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(R.anim.no_change, R.anim.slide_right);
     }
 
     private static Bundle createExtras(Item item) {
@@ -85,5 +70,13 @@ public class NewsDetailsActivity extends ToolbarActivity {
         if (intent.hasExtra(EXTRA_ITEM)) {
             mItem = Parcels.unwrap(intent.getParcelableExtra(EXTRA_ITEM));
         }
+    }
+
+    private void attachFragment() {
+        Fragment fragment = NewsDetailsActivityFragment.newInstance(mItem);
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.news_details_container, fragment)
+                .commit();
     }
 }

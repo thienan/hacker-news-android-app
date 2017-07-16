@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.marcelje.hackernews.R;
@@ -29,28 +30,17 @@ public class WebActivity extends WebToolbarActivity {
         Bundle extras = createExtras(url);
         intent.putExtras(extras);
 
-        activity.startActivity(intent);
-        activity.overridePendingTransition(R.anim.slide_up, R.anim.no_change);
+        WebActivity.startActivity(activity, intent);
     }
 
     @Override
-    @SuppressLint("SetJavaScriptEnabled")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
         setDisplayHomeAsCloseEnabled(true);
-
-        wvWebPage = (WebView) findViewById(R.id.wv_web_page);
-
-        wvWebPage.getSettings().setJavaScriptEnabled(true);
-        wvWebPage.getSettings().setLoadWithOverviewMode(true);
-        wvWebPage.getSettings().setUseWideViewPort(true);
-        wvWebPage.setWebViewClient(new WebActivityClient(this));
-
         extractExtras();
-
-        wvWebPage.loadUrl(mUrl);
-        setTitle(mUrl);
+        updateTitle();
+        setUpWebView();
     }
 
     @Override
@@ -62,10 +52,6 @@ public class WebActivity extends WebToolbarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                overridePendingTransition(R.anim.no_change, R.anim.slide_down);
-                return true;
             case R.id.action_copy:
                 ClipboardUtils.copyLink(this, wvWebPage.getUrl());
                 return true;
@@ -104,5 +90,21 @@ public class WebActivity extends WebToolbarActivity {
         if (intent.hasExtra(EXTRA_URL)) {
             mUrl = intent.getStringExtra(EXTRA_URL);
         }
+    }
+
+    private void updateTitle() {
+        setTitle(mUrl);
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private void setUpWebView() {
+        wvWebPage = (WebView) findViewById(R.id.wv_web_page);
+
+        WebSettings webSettings = wvWebPage.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setLoadWithOverviewMode(true);
+        webSettings.setUseWideViewPort(true);
+
+        wvWebPage.setWebViewClient(new WebActivityClient(this));
     }
 }

@@ -1,14 +1,13 @@
 package com.marcelje.hackernews.handlers;
 
-import android.app.Activity;
-
+import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.screen.user.UserActivity;
 
 public class ItemUserClickHandlers {
 
-    private final Activity mActivity;
+    private final ToolbarActivity mActivity;
 
-    public ItemUserClickHandlers(Activity activity) {
+    public ItemUserClickHandlers(ToolbarActivity activity) {
         mActivity = activity;
     }
 

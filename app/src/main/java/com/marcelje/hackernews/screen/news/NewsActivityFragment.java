@@ -1,5 +1,6 @@
 package com.marcelje.hackernews.screen.news;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.marcelje.hackernews.R;
+import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.api.HackerNewsApi;
 import com.marcelje.hackernews.databinding.FragmentNewsBinding;
 import com.marcelje.hackernews.factory.SnackbarFactory;
@@ -28,6 +30,8 @@ public class NewsActivityFragment extends Fragment
     public static final String TYPE_ASK = "Ask";
     public static final String TYPE_JOB = "Jobs";
 
+    private ToolbarActivity mActivity;
+
     private FragmentNewsBinding mBinding;
     private NewsAdapter mAdapter;
 
@@ -35,12 +39,19 @@ public class NewsActivityFragment extends Fragment
     private List<Long> mItems;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mActivity = ToolbarActivity.getActivity(getActivity());
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = FragmentNewsBinding.inflate(inflater, container, false);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new NewsAdapter(getActivity());
+        mAdapter = new NewsAdapter(mActivity);
 
         mBinding.rvItemList.setLayoutManager(layoutManager);
         mBinding.rvItemList.setAdapter(mAdapter);
