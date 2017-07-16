@@ -38,6 +38,10 @@ public class NewsActivityFragment extends Fragment
     private String mType = TYPE_TOP;
     private List<Long> mItems;
 
+    public static NewsActivityFragment newInstance() {
+        return new NewsActivityFragment();
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

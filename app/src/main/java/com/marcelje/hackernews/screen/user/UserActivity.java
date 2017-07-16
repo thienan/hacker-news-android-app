@@ -25,7 +25,7 @@ public class UserActivity extends ToolbarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user);
+        setContentView(R.layout.activity_base);
         setDisplayHomeAsUpEnabled(true);
         extractExtras();
         updateTitle();
@@ -55,7 +55,7 @@ public class UserActivity extends ToolbarActivity {
         Fragment fragment = UserActivityFragment.newInstance(mUserId);
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.user_container, fragment)
+                .add(R.id.fragment_container, fragment)
                 .commit();
     }
 }

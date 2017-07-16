@@ -25,7 +25,7 @@ public class DetailsTextActivity extends ToolbarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details_text);
+        setContentView(R.layout.activity_base);
         setDisplayHomeAsUpEnabled(true);
         extractExtras();
         attachFragment();
@@ -50,7 +50,7 @@ public class DetailsTextActivity extends ToolbarActivity {
         Fragment fragment = DetailsTextActivityFragment.newInstance(mText);
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.details_text_container, fragment)
+                .add(R.id.fragment_container, fragment)
                 .commit();
     }
 }

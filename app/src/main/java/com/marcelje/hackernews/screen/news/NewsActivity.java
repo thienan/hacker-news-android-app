@@ -1,35 +1,54 @@
 package com.marcelje.hackernews.screen.news;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.AdapterView;
 
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.factory.SpinnerFactory;
 import com.marcelje.hackernews.activity.ToolbarActivity;
+import com.marcelje.hackernews.screen.news.details.NewsDetailsActivityFragment;
+import com.marcelje.hackernews.screen.news.details.text.DetailsTextActivityFragment;
 
 public class NewsActivity extends ToolbarActivity implements AdapterView.OnItemSelectedListener {
+
+    private NewsActivityFragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news);
+        setContentView(R.layout.activity_base);
         setDisplayShowTitleEnabled(false);
-        getToolbar().addView(SpinnerFactory.createSpinner(this, this));
+        attachSpinner();
+        attachFragment();
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        NewsActivityFragment fragment =
-                (NewsActivityFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.news_fragment);
-
         String type = (String) parent.getItemAtPosition(pos);
-        fragment.retrieveNews(type);
+        mFragment.retrieveNews(type);
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         //do nothing
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish(); // no animation
+    }
+
+    private void attachSpinner() {
+        getToolbar().addView(SpinnerFactory.createSpinner(this, this));
+    }
+
+    private void attachFragment() {
+        mFragment = NewsActivityFragment.newInstance();
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, mFragment)
+                .commit();
     }
 }

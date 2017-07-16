@@ -32,7 +32,7 @@ public class NewsDetailsActivity extends ToolbarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news_details);
+        setContentView(R.layout.activity_base);
         setDisplayHomeAsUpEnabled(true);
         extractExtras();
         attachFragment();
@@ -76,7 +76,7 @@ public class NewsDetailsActivity extends ToolbarActivity {
         Fragment fragment = NewsDetailsActivityFragment.newInstance(mItem);
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.news_details_container, fragment)
+                .add(R.id.fragment_container, fragment)
                 .commit();
     }
 }

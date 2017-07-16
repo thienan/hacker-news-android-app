@@ -37,7 +37,7 @@ public class CommentActivity extends ToolbarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_comment);
+        setContentView(R.layout.activity_base);
         setDisplayHomeAsUpEnabled(true);
         extractExtras();
         attachFragment();
@@ -91,7 +91,7 @@ public class CommentActivity extends ToolbarActivity {
         Fragment fragment = CommentActivityFragment.newInstance(mItem, mParent, mPoster);
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.comment_container, fragment)
+                .add(R.id.fragment_container, fragment)
                 .commit();
     }
 }
