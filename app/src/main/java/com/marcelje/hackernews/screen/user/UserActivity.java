@@ -4,13 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.marcelje.hackernews.R;
+import com.marcelje.hackernews.activity.ToolbarActivity;
 
-public class UserActivity extends AppCompatActivity {
+public class UserActivity extends ToolbarActivity {
 
     private static final String EXTRA_USER_ID = "com.marcelje.hackernews.screen.user.extra.USER_ID";
 
@@ -30,12 +29,7 @@ public class UserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
+        setDisplayHomeAsUpEnabled(true);
         extractExtras();
 
         setTitle(String.format(getString(R.string.title_profile), mUserId));

@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,11 +11,12 @@ import android.view.MenuItem;
 
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.model.Item;
+import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.utils.MenuUtils;
 
 import org.parceler.Parcels;
 
-public class CommentActivity extends AppCompatActivity {
+public class CommentActivity extends ToolbarActivity {
 
     private static final String EXTRA_ITEM = "com.marcelje.hackernews.screen.news.comment.extra.ITEM";
     private static final String EXTRA_PARENT = "com.marcelje.hackernews.screen.news.comment.extra.PARENT";
@@ -41,12 +40,7 @@ public class CommentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
+        setDisplayHomeAsUpEnabled(true);
         extractExtras();
 
         getSupportFragmentManager().beginTransaction()

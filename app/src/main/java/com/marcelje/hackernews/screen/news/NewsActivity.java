@@ -1,27 +1,21 @@
 package com.marcelje.hackernews.screen.news;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.factory.SpinnerFactory;
+import com.marcelje.hackernews.activity.ToolbarActivity;
 
-public class NewsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class NewsActivity extends ToolbarActivity implements AdapterView.OnItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
-
-        toolbar.addView(SpinnerFactory.createSpinner(this, this));
+        setDisplayShowTitleEnabled(false);
+        getToolbar().addView(SpinnerFactory.createSpinner(this, this));
     }
 
     @Override

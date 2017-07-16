@@ -3,24 +3,19 @@ package com.marcelje.hackernews.screen.web;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
 
 import com.marcelje.hackernews.R;
+import com.marcelje.hackernews.activity.WebToolbarActivity;
 import com.marcelje.hackernews.utils.ClipboardUtils;
 import com.marcelje.hackernews.utils.IntentUtils;
 import com.marcelje.hackernews.utils.MenuUtils;
 
-public class WebActivity extends AppCompatActivity {
+public class WebActivity extends WebToolbarActivity {
 
     private static final String EXTRA_URL = "com.marcelje.hackernews.screen.web.extra.URL";
 
@@ -43,16 +38,7 @@ public class WebActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-            Drawable close = ContextCompat.getDrawable(this, R.drawable.ic_close);
-            close.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
-            getSupportActionBar().setHomeAsUpIndicator(close);
-        }
+        setDisplayHomeAsCloseEnabled(true);
 
         wvWebPage = (WebView) findViewById(R.id.wv_web_page);
 
