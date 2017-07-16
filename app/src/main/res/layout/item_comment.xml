@@ -14,6 +14,10 @@
         <variable
             name="item"
             type="com.marcelje.hackernews.model.Item" />
+
+        <variable
+            name="itemUserClickHandlers"
+            type="com.marcelje.hackernews.handlers.ItemUserClickHandlers" />
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -32,6 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
+                android:onClick="@{() -> itemUserClickHandlers.onClick(item.by)}"
                 android:orientation="horizontal"
                 android:padding="@dimen/view_margin">
 

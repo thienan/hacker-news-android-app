@@ -10,6 +10,10 @@
             type="com.marcelje.hackernews.model.Item" />
 
         <variable
+            name="itemUserClickHandlers"
+            type="com.marcelje.hackernews.handlers.ItemUserClickHandlers" />
+
+        <variable
             name="activity"
             type="android.app.Activity" />
 
@@ -54,7 +58,8 @@
                 <include
                     android:id="@+id/section_comment_main"
                     layout="@layout/item_comment"
-                    app:item="@{item}" />
+                    app:item="@{item}"
+                    app:itemUserClickHandlers="@{itemUserClickHandlers}" />
 
             </android.support.v7.widget.CardView>
 

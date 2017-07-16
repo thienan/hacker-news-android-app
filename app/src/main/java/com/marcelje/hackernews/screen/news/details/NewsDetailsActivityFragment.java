@@ -12,11 +12,11 @@ import android.view.ViewGroup;
 
 import com.marcelje.hackernews.api.HackerNewsApi;
 import com.marcelje.hackernews.databinding.FragmentNewsDetailsBinding;
+import com.marcelje.hackernews.handlers.ItemTextClickHandlers;
+import com.marcelje.hackernews.handlers.ItemTextDetailsClickHandlers;
+import com.marcelje.hackernews.handlers.ItemUserClickHandlers;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.screen.news.comment.CommentAdapter;
-import com.marcelje.hackernews.screen.news.details.text.DetailsTextActivity;
-import com.marcelje.hackernews.screen.user.UserActivity;
-import com.marcelje.hackernews.utils.BrowserUtils;
 
 import org.parceler.Parcels;
 
@@ -55,30 +55,15 @@ public class NewsDetailsActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = FragmentNewsDetailsBinding.inflate(inflater, container, false);
+        mBinding.setActivity(getActivity());
         mBinding.setItem(mItem);
+        mBinding.setItemUserClickHandlers(new ItemUserClickHandlers(getActivity()));
+        mBinding.setItemTextClickHandlers(new ItemTextClickHandlers(getActivity()));
+        mBinding.setItemTextDetailsClickHandlers(new ItemTextDetailsClickHandlers(getActivity()));
 
-        mBinding.sectionNews.layoutUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                UserActivity.startActivity(getActivity(), mItem.getBy());
-            }
-        });
-
-        if (!TextUtils.isEmpty(mItem.getUrl())) {
-            mBinding.sectionNews.tvText.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    BrowserUtils.openTab(getActivity(), mItem.getUrl());
-                }
-            });
+        if (TextUtils.isEmpty(mItem.getUrl())) {
+            mBinding.sectionNews.tvText.setBackground(null);
         }
-
-        mBinding.sectionNewsDetails.tvNewsDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DetailsTextActivity.startActivity(getActivity(), mItem.getText());
-            }
-        });
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mAdapter = new CommentAdapter(getActivity(), null, mItem.getBy());

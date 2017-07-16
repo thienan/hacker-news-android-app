@@ -25,6 +25,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
     public static void startActivity(Activity activity, Item item) {
         Intent intent = new Intent(activity, NewsDetailsActivity.class);
         intent.putExtra(EXTRA_ITEM, Parcels.wrap(item));
+
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_left, R.anim.no_change);
     }

@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 
 import com.marcelje.hackernews.api.HackerNewsApi;
 import com.marcelje.hackernews.databinding.FragmentCommentBinding;
+import com.marcelje.hackernews.handlers.ItemUserClickHandlers;
 import com.marcelje.hackernews.model.Item;
-import com.marcelje.hackernews.screen.user.UserActivity;
 
 import org.parceler.Parcels;
 
@@ -71,15 +71,9 @@ public class CommentActivityFragment extends Fragment {
         mBinding.setActivity(getActivity());
         mBinding.setParent(mParent);
         mBinding.setPoster(mPoster);
+        mBinding.setItemUserClickHandlers(new ItemUserClickHandlers(getActivity()));
 
         mBinding.tvCommentInfo.setMovementMethod(LinkMovementMethod.getInstance());
-
-        mBinding.sectionCommentMain.layoutUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                UserActivity.startActivity(getActivity(), mItem.getBy());
-            }
-        });
 
         // TODO: find a better way to remove maxLines
         mBinding.sectionCommentMain.tvText.setMaxLines(Integer.MAX_VALUE);

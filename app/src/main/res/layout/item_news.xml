@@ -10,6 +10,14 @@
         <variable
             name="item"
             type="com.marcelje.hackernews.model.Item" />
+
+        <variable
+            name="itemUserClickHandlers"
+            type="com.marcelje.hackernews.handlers.ItemUserClickHandlers" />
+
+        <variable
+            name="itemTextClickHandlers"
+            type="com.marcelje.hackernews.handlers.ItemTextClickHandlers" />
     </data>
 
     <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -31,6 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
+                android:onClick="@{() -> itemUserClickHandlers.onClick(item.by)}"
                 android:padding="@dimen/view_margin">
 
                 <LinearLayout
@@ -63,6 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
+                android:onClick="@{() -> itemTextClickHandlers.onClick(item)}"
                 android:padding="@dimen/view_margin"
                 android:text="@{ItemUtils.getTitle(context, item)}"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />

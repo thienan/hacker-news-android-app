@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.marcelje.hackernews.databinding.ItemCommentBinding;
+import com.marcelje.hackernews.handlers.ItemUserClickHandlers;
 import com.marcelje.hackernews.model.Item;
-import com.marcelje.hackernews.screen.user.UserActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +32,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     public CommentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         ItemCommentBinding binding = ItemCommentBinding.inflate(inflater, parent, false);
+        binding.setItemUserClickHandlers(new ItemUserClickHandlers(mActivity));
 
         return new CommentViewHolder(binding);
     }
@@ -52,28 +53,20 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         notifyItemInserted(mData.size());
     }
 
-    class CommentViewHolder extends RecyclerView.ViewHolder {
+    class CommentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final ItemCommentBinding binding;
 
         public CommentViewHolder(ItemCommentBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
 
-            binding.layoutUser.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Item data = mData.get(getAdapterPosition());
-                    UserActivity.startActivity(mActivity, data.getBy());
-                }
-            });
+            itemView.setOnClickListener(this);
+        }
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Item data = mData.get(getAdapterPosition());
-                    CommentActivity.startActivity(mActivity, data, mParent, mPoster);
-                }
-            });
+        @Override
+        public void onClick(View view) {
+            Item data = mData.get(getAdapterPosition());
+            CommentActivity.startActivity(mActivity, data, mParent, mPoster);
         }
     }
 }

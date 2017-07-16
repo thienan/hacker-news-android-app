@@ -17,6 +17,7 @@ public class DetailsTextActivity extends AppCompatActivity {
     public static void startActivity(Activity activity, String text) {
         Intent intent = new Intent(activity, DetailsTextActivity.class);
         intent.putExtra(EXTRA_TEXT, text);
+
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_left, R.anim.no_change);
     }

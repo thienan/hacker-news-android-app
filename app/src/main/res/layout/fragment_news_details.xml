@@ -4,8 +4,24 @@
     <data>
 
         <variable
+            name="activity"
+            type="android.app.Activity" />
+
+        <variable
             name="item"
             type="com.marcelje.hackernews.model.Item" />
+
+        <variable
+            name="itemUserClickHandlers"
+            type="com.marcelje.hackernews.handlers.ItemUserClickHandlers" />
+
+        <variable
+            name="itemTextClickHandlers"
+            type="com.marcelje.hackernews.handlers.ItemTextClickHandlers" />
+
+        <variable
+            name="itemTextDetailsClickHandlers"
+            type="com.marcelje.hackernews.handlers.ItemTextDetailsClickHandlers" />
     </data>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -25,11 +41,14 @@
             <include
                 android:id="@+id/section_news"
                 layout="@layout/item_news"
-                app:item="@{item}" />
+                app:item="@{item}"
+                app:itemUserClickHandlers="@{itemUserClickHandlers}"
+                app:itemTextClickHandlers="@{itemTextClickHandlers}" />
 
             <include
                 android:id="@+id/section_news_details"
                 layout="@layout/section_news_details"
+                app:itemTextDetailsClickHandlers="@{itemTextDetailsClickHandlers}"
                 app:text="@{item.text}" />
 
             <include

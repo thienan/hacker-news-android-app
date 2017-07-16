@@ -10,6 +10,14 @@
         <import type="android.text.TextUtils" />
 
         <variable
+            name="itemTextDetailsClickHandlers"
+            type="com.marcelje.hackernews.handlers.ItemTextDetailsClickHandlers" />
+
+        <variable
+            name="activity"
+            type="android.app.Activity" />
+
+        <variable
             name="text"
             type="String" />
     </data>
@@ -42,6 +50,7 @@
                 android:background="?attr/selectableItemBackground"
                 android:ellipsize="end"
                 android:maxLines="5"
+                android:onClick="@{() -> itemTextDetailsClickHandlers.onClick(text)}"
                 android:padding="@dimen/view_margin"
                 android:text='@{TextUtils.isEmpty(text) ? "" : Html.fromHtml(text)}'
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />

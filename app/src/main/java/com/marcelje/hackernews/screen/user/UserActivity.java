@@ -17,6 +17,7 @@ public class UserActivity extends AppCompatActivity {
     public static void startActivity(Activity activity, String userId) {
         Intent intent = new Intent(activity, UserActivity.class);
         intent.putExtra(EXTRA_USER_ID, userId);
+
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_left, R.anim.no_change);
     }

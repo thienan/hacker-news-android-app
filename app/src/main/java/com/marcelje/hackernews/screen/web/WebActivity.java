@@ -1,8 +1,8 @@
 package com.marcelje.hackernews.screen.web;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -13,10 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.TextView;
 
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.utils.ClipboardUtils;
@@ -37,6 +34,7 @@ public class WebActivity extends AppCompatActivity {
     }
 
     @Override
+    @SuppressLint("SetJavaScriptEnabled")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
@@ -56,24 +54,7 @@ public class WebActivity extends AppCompatActivity {
         wvWebPage.getSettings().setJavaScriptEnabled(true);
         wvWebPage.getSettings().setLoadWithOverviewMode(true);
         wvWebPage.getSettings().setUseWideViewPort(true);
-        wvWebPage.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-                findViewById(R.id.layout_web_title).setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                TextView tvWebTitle = (TextView) findViewById(R.id.tv_web_title);
-                tvWebTitle.setText(view.getTitle());
-
-                TextView tvWebUrl = (TextView) findViewById(R.id.tv_web_url);
-                tvWebUrl.setText(url);
-
-                findViewById(R.id.layout_web_title).setVisibility(View.VISIBLE);
-            }
-        });
+        wvWebPage.setWebViewClient(new WebActivityClient(this));
 
         Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_URL)) {
