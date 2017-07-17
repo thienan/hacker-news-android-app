@@ -15,7 +15,7 @@ public final class MenuUtils {
         if (context == null || item == null) return;
 
         Intent intent = new Intent(Intent.ACTION_SEND);
-        String text = String.format(context.getString(R.string.url_hackernews_item), item.getId());
+        String text = HackerNewsUtils.geItemUrl(item.getId());
         intent.putExtra(Intent.EXTRA_TEXT, text);
         intent.setType("text/plain");
 

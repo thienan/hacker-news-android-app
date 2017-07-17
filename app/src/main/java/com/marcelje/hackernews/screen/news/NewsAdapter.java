@@ -16,6 +16,8 @@ import com.marcelje.hackernews.handlers.ItemTextClickHandlers;
 import com.marcelje.hackernews.handlers.ItemUserClickHandlers;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.screen.news.details.NewsDetailsActivity;
+import com.marcelje.hackernews.utils.BrowserUtils;
+import com.marcelje.hackernews.utils.HackerNewsUtils;
 import com.marcelje.hackernews.utils.MenuUtils;
 
 import java.util.ArrayList;
@@ -116,6 +118,10 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
                         SnackbarFactory.createBookmarkedSuccessSnackBar(binding.tvText).show();
                         item.setTitle(R.string.unbookmark);
                     }
+
+                    return true;
+                case R.id.action_open_page:
+                    BrowserUtils.openTab(mActivity, HackerNewsUtils.geItemUrl(data.getId()));
 
                     return true;
                 default:

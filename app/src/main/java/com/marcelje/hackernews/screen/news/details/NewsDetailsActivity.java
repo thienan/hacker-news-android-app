@@ -11,6 +11,8 @@ import com.marcelje.hackernews.database.HackerNewsDao;
 import com.marcelje.hackernews.factory.SnackbarFactory;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.activity.ToolbarActivity;
+import com.marcelje.hackernews.utils.BrowserUtils;
+import com.marcelje.hackernews.utils.HackerNewsUtils;
 import com.marcelje.hackernews.utils.MenuUtils;
 
 import org.parceler.Parcels;
@@ -81,6 +83,10 @@ public class NewsDetailsActivity extends ToolbarActivity {
                     SnackbarFactory.createBookmarkedSuccessSnackBar(getToolbar()).show();
                     menuItem.setTitle(R.string.unbookmark);
                 }
+
+                return true;
+            case R.id.action_open_page:
+                BrowserUtils.openTab(this, HackerNewsUtils.geItemUrl(mItem.getId()));
 
                 return true;
             default:

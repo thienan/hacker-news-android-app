@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.activity.ToolbarActivity;
+import com.marcelje.hackernews.utils.BrowserUtils;
+import com.marcelje.hackernews.utils.HackerNewsUtils;
 import com.marcelje.hackernews.utils.MenuUtils;
 
 import org.parceler.Parcels;
@@ -65,10 +67,12 @@ public class CommentActivity extends ToolbarActivity {
         switch (item.getItemId()) {
             case R.id.action_refresh:
                 mFragment.refreshComments();
-
                 return true;
             case R.id.action_share:
                 MenuUtils.openShareHackerNewsLinkChooser(this, mItem);
+                return true;
+            case R.id.action_open_page:
+                BrowserUtils.openTab(this, HackerNewsUtils.geItemUrl(mItem.getId()));
                 return true;
             default:
         }
