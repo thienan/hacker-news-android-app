@@ -48,9 +48,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         return mData.size();
     }
 
-    public void addData(Item data) {
-        mData.add(data);
-        notifyItemInserted(mData.size());
+    public void clearData() {
+        mData.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addData(List<Item> data) {
+        mData.addAll(data);
+        notifyItemRangeInserted(mData.size() - data.size(), data.size());
     }
 
     class CommentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

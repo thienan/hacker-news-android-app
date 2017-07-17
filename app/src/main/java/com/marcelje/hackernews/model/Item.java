@@ -160,6 +160,8 @@ public class Item {
     public static class Factory {
         public static ContentValues toValues(Item item) {
             ContentValues values = new ContentValues();
+            if (item == null) return values;
+
             values.put(HackerNewsContract.BookmarkedItemEntry._ID, item.getId());
             values.put(HackerNewsContract.BookmarkedItemEntry.COLUMN_DELETED, item.isDeleted());
             values.put(HackerNewsContract.BookmarkedItemEntry.COLUMN_TYPE, item.getType());
@@ -179,6 +181,7 @@ public class Item {
 
         public static List<Item> fromCursor(Cursor cursor) {
             List<Item> items = new ArrayList<>();
+            if (cursor == null) return items;
 
             while (cursor.moveToNext()) {
                 Item item = new Item();

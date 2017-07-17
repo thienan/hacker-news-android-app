@@ -53,20 +53,14 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
         return mData.size();
     }
 
-    public void swapData(List<Item> items) {
-        mData.clear();
-        mData.addAll(items);
-        notifyDataSetChanged();
-    }
-
     public void clearData() {
         mData.clear();
         notifyDataSetChanged();
     }
 
-    public void addData(Item data) {
-        mData.add(data);
-        notifyItemInserted(mData.size());
+    public void addData(List<Item> data) {
+        mData.addAll(data);
+        notifyItemRangeInserted(mData.size() - data.size(), data.size());
     }
 
     private void setUpBookmarkMenuItem(Toolbar toolbar, long itemId) {

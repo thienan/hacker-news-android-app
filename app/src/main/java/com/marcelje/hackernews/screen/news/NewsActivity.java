@@ -24,7 +24,7 @@ public class NewsActivity extends ToolbarActivity implements AdapterView.OnItemS
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         String type = (String) parent.getItemAtPosition(pos);
-        mFragment.retrieveNews(type);
+        mFragment.changeNewsType(type);
     }
 
     @Override

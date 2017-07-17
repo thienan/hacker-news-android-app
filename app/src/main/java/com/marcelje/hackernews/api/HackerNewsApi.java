@@ -3,6 +3,7 @@ package com.marcelje.hackernews.api;
 import android.app.Activity;
 
 import com.marcelje.hackernews.HackerNewsApplication;
+import com.marcelje.hackernews.loader.HackerNewsResponse;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.model.User;
 
@@ -12,7 +13,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
@@ -23,13 +23,6 @@ public final class HackerNewsApi {
     @Inject
     @SuppressWarnings("WeakerAccess")
     HackerNewsResource resource;
-
-    @SuppressWarnings("UnusedParameters")
-    public interface RestCallback<T> {
-        void onSuccess(T data);
-
-        void onFailure(String message);
-    }
 
     private HackerNewsApi(Activity activity) {
         HackerNewsApplication.getApplication(activity).getServiceComponent().inject(this);
@@ -51,71 +44,60 @@ public final class HackerNewsApi {
         return result;
     }
 
-    public void getUser(String id, final RestCallback<User> callback) {
-        Timber.d("getUser(id=%s)", id);
-        resource.getUser(id).enqueue(getCallback(callback));
+    public HackerNewsResponse<User> getUser(String userId) {
+        Timber.d("getUser(id=%s)", userId);
+        return get(resource.getUser(userId));
     }
 
-    public void getItem(long id, final RestCallback<Item> callback) {
-        Timber.d("getItem(id=%d)", id);
-        resource.getItem(id).enqueue(getCallback(callback));
+    public HackerNewsResponse<Item> getItem(long itemId) {
+        Timber.d("getItem(id=%d)", itemId);
+        return get(resource.getItem(itemId));
     }
 
-    public void getTopStories(final RestCallback<List<Long>> callback) {
+    public HackerNewsResponse<List<Long>> getTopStories() {
         Timber.d("getTopStories");
-        resource.getTopStories().enqueue(getCallback(callback));
+        return get(resource.getTopStories());
     }
 
-    public void getNewStories(final RestCallback<List<Long>> callback) {
+    public HackerNewsResponse<List<Long>> getNewStories() {
         Timber.d("getNewStories");
-        resource.getNewStories().enqueue(getCallback(callback));
+        return get(resource.getNewStories());
     }
 
-    public void getBestStories(final RestCallback<List<Long>> callback) {
+    public HackerNewsResponse<List<Long>> getBestStories() {
         Timber.d("getBestStories");
-        resource.getBestStories().enqueue(getCallback(callback));
+        return get(resource.getBestStories());
     }
 
-    public void getAskStories(final RestCallback<List<Long>> callback) {
+    public HackerNewsResponse<List<Long>> getAskStories() {
         Timber.d("getAskStories");
-        resource.getAskStories().enqueue(getCallback(callback));
+        return get(resource.getAskStories());
     }
 
-    public void getShowStories(final RestCallback<List<Long>> callback) {
+    public HackerNewsResponse<List<Long>> getShowStories() {
         Timber.d("getShowStories");
-        resource.getShowStories().enqueue(getCallback(callback));
+        return get(resource.getShowStories());
     }
 
-    public void getJobStories(final RestCallback<List<Long>> callback) {
+    public HackerNewsResponse<List<Long>> getJobStories() {
         Timber.d("getJobStories");
-        resource.getJobStories().enqueue(getCallback(callback));
+        return get(resource.getJobStories());
     }
 
-    private <T> Callback<T> getCallback(final RestCallback<T> callback) {
-        return new Callback<T>() {
-            @Override
-            public void onResponse(Call<T> call, Response<T> response) {
-                Timber.d(response.raw().toString());
+    private <T> HackerNewsResponse<T> get(Call<T> call) {
+        try {
+            Response<T> response = call.execute();
 
-                if (response.isSuccessful()) {
-                    Timber.d(response.body().toString());
-                    callback.onSuccess(response.body());
-                } else {
-                    try {
-                        Timber.d(response.errorBody().toString());
-                        callback.onFailure(response.errorBody().string());
-                    } catch (IOException e) {
-                        Timber.e(e);
-                        callback.onFailure(e.getMessage());
-                    }
-                }
+            if (response.isSuccessful()) {
+                Timber.d(response.body().toString());
+                return HackerNewsResponse.ok(response.body());
+            } else {
+                Timber.d(response.errorBody().toString());
+                return HackerNewsResponse.error(response.errorBody().toString());
             }
-
-            @Override
-            public void onFailure(Call<T> call, Throwable t) {
-                Timber.e(t);
-                callback.onFailure(t.getMessage());
-            }
-        };
+        } catch (IOException e) {
+            Timber.e(e);
+            return HackerNewsResponse.error(e.getMessage());
+        }
     }
 }

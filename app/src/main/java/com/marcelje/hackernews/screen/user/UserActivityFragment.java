@@ -3,18 +3,24 @@ package com.marcelje.hackernews.screen.user;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.marcelje.hackernews.api.HackerNewsApi;
 import com.marcelje.hackernews.databinding.FragmentUserBinding;
 import com.marcelje.hackernews.factory.SnackbarFactory;
+import com.marcelje.hackernews.loader.HackerNewsResponse;
+import com.marcelje.hackernews.loader.UserLoader;
 import com.marcelje.hackernews.model.User;
 
-public class UserActivityFragment extends Fragment implements View.OnClickListener {
+public class UserActivityFragment extends Fragment
+        implements LoaderManager.LoaderCallbacks<HackerNewsResponse<User>>, View.OnClickListener {
 
     private static final String ARG_USER_ID = "com.marcelje.hackernews.screen.user.arg.USER_ID";
+
+    private static final int LOADER_ID_USER_ITEM = 119;
 
     private FragmentUserBinding mBinding;
     private String mUserId;
@@ -47,6 +53,33 @@ public class UserActivityFragment extends Fragment implements View.OnClickListen
     }
 
     @Override
+    public Loader<HackerNewsResponse<User>> onCreateLoader(int id, Bundle args) {
+        switch (id) {
+            case LOADER_ID_USER_ITEM:
+                return new UserLoader(getActivity(), mUserId);
+            default:
+                return null;
+
+        }
+    }
+
+    @Override
+    public void onLoadFinished(Loader<HackerNewsResponse<User>> loader, HackerNewsResponse<User> response) {
+        if (response.isSuccessful()) {
+            mBinding.setUser(response.getData());
+        } else {
+            SnackbarFactory
+                    .createRetrieveErrorSnackbar(mBinding.getRoot(),
+                            UserActivityFragment.this).show();
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<HackerNewsResponse<User>> loader) {
+
+    }
+
+    @Override
     public void onClick(View view) {
         retrieveUser();
     }
@@ -67,18 +100,6 @@ public class UserActivityFragment extends Fragment implements View.OnClickListen
     }
 
     private void retrieveUser() {
-        HackerNewsApi.with(getActivity()).getUser(mUserId, new HackerNewsApi.RestCallback<User>() {
-            @Override
-            public void onSuccess(User data) {
-                mBinding.setUser(data);
-            }
-
-            @Override
-            public void onFailure(String message) {
-                SnackbarFactory
-                        .createRetrieveErrorSnackbar(mBinding.getRoot(),
-                                UserActivityFragment.this).show();
-            }
-        });
+        getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_USER_ITEM, null, this);
     }
 }
