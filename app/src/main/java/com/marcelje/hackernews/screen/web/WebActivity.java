@@ -106,5 +106,6 @@ public class WebActivity extends WebToolbarActivity {
         webSettings.setUseWideViewPort(true);
 
         wvWebPage.setWebViewClient(new WebActivityClient(this));
+        wvWebPage.loadUrl(mUrl);
     }
 }
