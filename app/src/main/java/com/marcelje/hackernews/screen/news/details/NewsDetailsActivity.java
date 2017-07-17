@@ -2,7 +2,6 @@ package com.marcelje.hackernews.screen.news.details;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,6 +19,7 @@ public class NewsDetailsActivity extends ToolbarActivity {
 
     private static final String EXTRA_ITEM = "com.marcelje.hackernews.screen.news.details.extra.ITEM";
 
+    private NewsDetailsActivityFragment mFragment;
     private Item mItem;
 
     public static void startActivity(ToolbarActivity activity, Item item) {
@@ -52,9 +52,9 @@ public class NewsDetailsActivity extends ToolbarActivity {
         MenuItem menuItem = menu.findItem(R.id.action_bookmark);
 
         if (HackerNewsDao.isItemAvailable(this, mItem.getId())) {
-            menuItem.setTitle(R.string.unbookmarked);
+            menuItem.setTitle(R.string.unbookmark);
         } else {
-            menuItem.setTitle(R.string.bookmarked);
+            menuItem.setTitle(R.string.bookmark);
         }
 
         return super.onPrepareOptionsMenu(menu);
@@ -63,6 +63,10 @@ public class NewsDetailsActivity extends ToolbarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
+            case R.id.action_refresh:
+                mFragment.refreshComments();
+
+                return true;
             case R.id.action_share:
                 MenuUtils.openShareHackerNewsLinkChooser(this, mItem);
 
@@ -71,11 +75,11 @@ public class NewsDetailsActivity extends ToolbarActivity {
                 if (HackerNewsDao.isItemAvailable(this, mItem.getId())) {
                     HackerNewsDao.deleteItem(this, mItem.getId());
                     SnackbarFactory.createUnbookmarkedSuccessSnackBar(getToolbar()).show();
-                    menuItem.setTitle(R.string.bookmarked);
+                    menuItem.setTitle(R.string.bookmark);
                 } else {
                     HackerNewsDao.insertItem(this, mItem);
                     SnackbarFactory.createBookmarkedSuccessSnackBar(getToolbar()).show();
-                    menuItem.setTitle(R.string.unbookmarked);
+                    menuItem.setTitle(R.string.unbookmark);
                 }
 
                 return true;
@@ -101,10 +105,10 @@ public class NewsDetailsActivity extends ToolbarActivity {
     }
 
     private void attachFragment() {
-        Fragment fragment = NewsDetailsActivityFragment.newInstance(mItem);
+        mFragment = NewsDetailsActivityFragment.newInstance(mItem);
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, fragment)
+                .add(R.id.fragment_container, mFragment)
                 .commit();
     }
 }

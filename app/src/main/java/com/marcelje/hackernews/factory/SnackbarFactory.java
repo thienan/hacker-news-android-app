@@ -14,11 +14,11 @@ public class SnackbarFactory {
     }
 
     public static Snackbar createBookmarkedSuccessSnackBar(View view) {
-        return createSnackBar(view, R.string.bookmarked, -1, null);
+        return createSnackBar(view, R.string.bookmark, -1, null);
     }
 
     public static Snackbar createUnbookmarkedSuccessSnackBar(View view) {
-        return createSnackBar(view, R.string.unbookmarked, -1, null);
+        return createSnackBar(view, R.string.unbookmark, -1, null);
     }
 
     public static Snackbar createSnackBar(View view, @StringRes

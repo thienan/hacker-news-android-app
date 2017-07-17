@@ -21,6 +21,8 @@ public class CommentActivity extends ToolbarActivity {
     private static final String EXTRA_PARENT = "com.marcelje.hackernews.screen.news.comment.extra.PARENT";
     private static final String EXTRA_POSTER = "com.marcelje.hackernews.screen.news.comment.extra.POSTER";
 
+    private CommentActivityFragment mFragment;
+
     private Item mItem;
     private String mParent;
     private String mPoster;
@@ -61,6 +63,10 @@ public class CommentActivity extends ToolbarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_refresh:
+                mFragment.refreshComments();
+
+                return true;
             case R.id.action_share:
                 MenuUtils.openShareHackerNewsLinkChooser(this, mItem);
                 return true;
@@ -96,10 +102,10 @@ public class CommentActivity extends ToolbarActivity {
     }
 
     private void attachFragment() {
-        Fragment fragment = CommentActivityFragment.newInstance(mItem, mParent, mPoster);
+        mFragment = CommentActivityFragment.newInstance(mItem, mParent, mPoster);
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, fragment)
+                .add(R.id.fragment_container, mFragment)
                 .commit();
     }
 }

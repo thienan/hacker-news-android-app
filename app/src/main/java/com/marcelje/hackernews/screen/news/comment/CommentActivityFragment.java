@@ -167,7 +167,7 @@ public class CommentActivityFragment extends Fragment
         }
     }
 
-    private void refreshComments() {
+    public void refreshComments() {
         mAdapter.clearData();
         mCurrentPage = 1;
         showProgressBar();

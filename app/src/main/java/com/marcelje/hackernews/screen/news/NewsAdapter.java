@@ -45,7 +45,7 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
     public void onBindViewHolder(ItemViewHolder holder, int position) {
         Item item = mData.get(position);
         holder.binding.setItem(item);
-        setUpBookmarkMenuItem(holder.binding.layoutUser, item.getId());
+        setUpMenuItem(holder.binding.layoutUser, item.getId());
     }
 
     @Override
@@ -63,14 +63,16 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
         notifyItemRangeInserted(mData.size() - data.size(), data.size());
     }
 
-    private void setUpBookmarkMenuItem(Toolbar toolbar, long itemId) {
+    private void setUpMenuItem(Toolbar toolbar, long itemId) {
         MenuItem menuItem = toolbar.getMenu().findItem(R.id.action_bookmark);
 
         if (HackerNewsDao.isItemAvailable(mActivity, itemId)) {
-            menuItem.setTitle(R.string.unbookmarked);
+            menuItem.setTitle(R.string.unbookmark);
         } else {
-            menuItem.setTitle(R.string.bookmarked);
+            menuItem.setTitle(R.string.bookmark);
         }
+
+        toolbar.getMenu().findItem(R.id.action_refresh).setVisible(false);
 
         toolbar.invalidate();
     }
@@ -108,11 +110,11 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
                     if (HackerNewsDao.isItemAvailable(mActivity, data.getId())) {
                         HackerNewsDao.deleteItem(mActivity, data.getId());
                         SnackbarFactory.createUnbookmarkedSuccessSnackBar(binding.tvText).show();
-                        item.setTitle(R.string.bookmarked);
+                        item.setTitle(R.string.bookmark);
                     } else {
                         HackerNewsDao.insertItem(mActivity, data);
                         SnackbarFactory.createBookmarkedSuccessSnackBar(binding.tvText).show();
-                        item.setTitle(R.string.unbookmarked);
+                        item.setTitle(R.string.unbookmark);
                     }
 
                     return true;
