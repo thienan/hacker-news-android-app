@@ -1,10 +1,16 @@
 package com.marcelje.hackernews.model;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+
+import com.marcelje.hackernews.database.HackerNewsContract;
+
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("WeakerAccess")
 @Parcel(Parcel.Serialization.BEAN)
 public class Item {
     private long id;
@@ -149,5 +155,51 @@ public class Item {
 
     public void setDescendants(int descendants) {
         this.descendants = descendants;
+    }
+
+    public static class Factory {
+        public static ContentValues toValues(Item item) {
+            ContentValues values = new ContentValues();
+            values.put(HackerNewsContract.BookmarkedItemEntry._ID, item.getId());
+            values.put(HackerNewsContract.BookmarkedItemEntry.COLUMN_DELETED, item.isDeleted());
+            values.put(HackerNewsContract.BookmarkedItemEntry.COLUMN_TYPE, item.getType());
+            values.put(HackerNewsContract.BookmarkedItemEntry.COLUMN_BY, item.getBy());
+            values.put(HackerNewsContract.BookmarkedItemEntry.COLUMN_TIME, item.getTime());
+            values.put(HackerNewsContract.BookmarkedItemEntry.COLUMN_TEXT, item.getText());
+            values.put(HackerNewsContract.BookmarkedItemEntry.COLUMN_DEAD, item.isDead());
+            values.put(HackerNewsContract.BookmarkedItemEntry.COLUMN_PARENT, item.getParent());
+            values.put(HackerNewsContract.BookmarkedItemEntry.COLUMN_POLL, item.getPoll());
+            values.put(HackerNewsContract.BookmarkedItemEntry.COLUMN_URL, item.getUrl());
+            values.put(HackerNewsContract.BookmarkedItemEntry.COLUMN_SCORE, item.getScore());
+            values.put(HackerNewsContract.BookmarkedItemEntry.COLUMN_TITLE, item.getTitle());
+            values.put(HackerNewsContract.BookmarkedItemEntry.COLUMN_DESCENDANTS, item.getDescendants());
+
+            return values;
+        }
+
+        public static List<Item> fromCursor(Cursor cursor) {
+            List<Item> items = new ArrayList<>();
+
+            while (cursor.moveToNext()) {
+                Item item = new Item();
+                item.setId(cursor.getLong(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry._ID)));
+                item.setDeleted(cursor.getInt(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_DELETED)) == 1);
+                item.setType(cursor.getString(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_TYPE)));
+                item.setBy(cursor.getString(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_BY)));
+                item.setTime(cursor.getLong(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_TIME)));
+                item.setText(cursor.getString(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_TEXT)));
+                item.setDead(cursor.getInt(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_DEAD)) == 1);
+                item.setParent(cursor.getLong(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_PARENT)));
+                item.setPoll(cursor.getLong(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_POLL)));
+                item.setUrl(cursor.getString(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_URL)));
+                item.setScore(cursor.getInt(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_SCORE)));
+                item.setTitle(cursor.getString(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_TITLE)));
+                item.setDescendants(cursor.getInt(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_DESCENDANTS)));
+
+                items.add(item);
+            }
+
+            return items;
+        }
     }
 }

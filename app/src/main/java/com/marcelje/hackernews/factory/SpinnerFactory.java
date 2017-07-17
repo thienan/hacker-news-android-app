@@ -45,6 +45,7 @@ public class SpinnerFactory {
         list.add(NewsActivityFragment.TYPE_SHOW);
         list.add(NewsActivityFragment.TYPE_ASK);
         list.add(NewsActivityFragment.TYPE_JOB);
+        list.add(NewsActivityFragment.TYPE_BOOKMARKED);
 
         return list;
     }

@@ -8,6 +8,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.marcelje.hackernews.R;
+import com.marcelje.hackernews.database.HackerNewsDao;
+import com.marcelje.hackernews.factory.SnackbarFactory;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.utils.MenuUtils;
@@ -46,10 +48,36 @@ public class NewsDetailsActivity extends ToolbarActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem menuItem = menu.findItem(R.id.action_bookmark);
+
+        if (HackerNewsDao.isItemAvailable(this, mItem.getId())) {
+            menuItem.setTitle(R.string.unbookmarked);
+        } else {
+            menuItem.setTitle(R.string.bookmarked);
+        }
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.action_share:
                 MenuUtils.openShareHackerNewsLinkChooser(this, mItem);
+
+                return true;
+            case R.id.action_bookmark:
+                if (HackerNewsDao.isItemAvailable(this, mItem.getId())) {
+                    HackerNewsDao.deleteItem(this, mItem.getId());
+                    SnackbarFactory.createUnbookmarkedSuccessSnackBar(getToolbar()).show();
+                    menuItem.setTitle(R.string.bookmarked);
+                } else {
+                    HackerNewsDao.insertItem(this, mItem);
+                    SnackbarFactory.createBookmarkedSuccessSnackBar(getToolbar()).show();
+                    menuItem.setTitle(R.string.unbookmarked);
+                }
+
                 return true;
             default:
         }

@@ -1,15 +1,12 @@
 package com.marcelje.hackernews.screen.news;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.AdapterView;
 
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.factory.SpinnerFactory;
 import com.marcelje.hackernews.activity.ToolbarActivity;
-import com.marcelje.hackernews.screen.news.details.NewsDetailsActivityFragment;
-import com.marcelje.hackernews.screen.news.details.text.DetailsTextActivityFragment;
 
 public class NewsActivity extends ToolbarActivity implements AdapterView.OnItemSelectedListener {
 

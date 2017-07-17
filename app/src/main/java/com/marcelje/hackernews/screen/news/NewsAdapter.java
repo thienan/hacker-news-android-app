@@ -9,7 +9,9 @@ import android.view.ViewGroup;
 
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.activity.ToolbarActivity;
+import com.marcelje.hackernews.database.HackerNewsDao;
 import com.marcelje.hackernews.databinding.ItemNewsBinding;
+import com.marcelje.hackernews.factory.SnackbarFactory;
 import com.marcelje.hackernews.handlers.ItemTextClickHandlers;
 import com.marcelje.hackernews.handlers.ItemUserClickHandlers;
 import com.marcelje.hackernews.model.Item;
@@ -43,11 +45,18 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
     public void onBindViewHolder(ItemViewHolder holder, int position) {
         Item item = mData.get(position);
         holder.binding.setItem(item);
+        setUpBookmarkMenuItem(holder.binding.layoutUser, item.getId());
     }
 
     @Override
     public int getItemCount() {
         return mData.size();
+    }
+
+    public void swapData(List<Item> items) {
+        mData.clear();
+        mData.addAll(items);
+        notifyDataSetChanged();
     }
 
     public void clearData() {
@@ -58,6 +67,18 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
     public void addData(Item data) {
         mData.add(data);
         notifyItemInserted(mData.size());
+    }
+
+    private void setUpBookmarkMenuItem(Toolbar toolbar, long itemId) {
+        MenuItem menuItem = toolbar.getMenu().findItem(R.id.action_bookmark);
+
+        if (HackerNewsDao.isItemAvailable(mActivity, itemId)) {
+            menuItem.setTitle(R.string.unbookmarked);
+        } else {
+            menuItem.setTitle(R.string.bookmarked);
+        }
+
+        toolbar.invalidate();
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder
@@ -82,10 +103,24 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
 
         @Override
         public boolean onMenuItemClick(MenuItem item) {
+            Item data = mData.get(getAdapterPosition());
+
             switch (item.getItemId()) {
                 case R.id.action_share:
-                    Item data = mData.get(getAdapterPosition());
                     MenuUtils.openShareHackerNewsLinkChooser(mActivity, data);
+
+                    return true;
+                case R.id.action_bookmark:
+                    if (HackerNewsDao.isItemAvailable(mActivity, data.getId())) {
+                        HackerNewsDao.deleteItem(mActivity, data.getId());
+                        SnackbarFactory.createUnbookmarkedSuccessSnackBar(binding.tvText).show();
+                        item.setTitle(R.string.bookmarked);
+                    } else {
+                        HackerNewsDao.insertItem(mActivity, data);
+                        SnackbarFactory.createBookmarkedSuccessSnackBar(binding.tvText).show();
+                        item.setTitle(R.string.unbookmarked);
+                    }
+
                     return true;
                 default:
             }

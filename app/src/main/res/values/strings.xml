@@ -8,7 +8,9 @@
     <string name="title_activity_user">User Profile</string>
     <string name="title_activity_web">Web</string>
     <string name="action_retry">Retry</string>
-    <string name="error_retrieve_data">Failed to retrieve data from server.</string>
+    <string name="error_retrieve_data">Failed to retrieve data from server</string>
+    <string name="bookmarked">Bookmarked</string>
+    <string name="unbookmarked">Unbookmarked</string>
     <string name="title_details">Details</string>
     <string name="title_comments">Comments</string>
     <string name="text_deleted">&lt;&lt;deleted&gt;&gt;</string>
@@ -25,4 +27,5 @@
     <string name="message_copy">Copied %s</string>
     <string name="menu_item_copy_link">Copy Link</string>
     <string name="menu_item_open_in_browser">Open in browser</string>
+    <string name="menu_item_bookmark">Bookmark</string>
 </resources>

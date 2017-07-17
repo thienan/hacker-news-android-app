@@ -1,8 +1,12 @@
 package com.marcelje.hackernews.screen.news;
 
+import android.database.Cursor;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -12,6 +16,7 @@ import android.view.ViewGroup;
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.api.HackerNewsApi;
+import com.marcelje.hackernews.database.HackerNewsContract;
 import com.marcelje.hackernews.databinding.FragmentNewsBinding;
 import com.marcelje.hackernews.factory.SnackbarFactory;
 import com.marcelje.hackernews.model.Item;
@@ -21,7 +26,8 @@ import java.util.List;
 public class NewsActivityFragment extends Fragment
         implements HackerNewsApi.RestCallback<List<Long>>,
         SwipeRefreshLayout.OnRefreshListener,
-        View.OnClickListener {
+        View.OnClickListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String TYPE_TOP = "Top";
     public static final String TYPE_BEST = "Best";
@@ -29,6 +35,9 @@ public class NewsActivityFragment extends Fragment
     public static final String TYPE_SHOW = "Show";
     public static final String TYPE_ASK = "Ask";
     public static final String TYPE_JOB = "Jobs";
+    public static final String TYPE_BOOKMARKED = "Bookmarked";
+
+    private static final int LOADER_BOOKMARKED_ITEM_ID = 111;
 
     private ToolbarActivity mActivity;
 
@@ -77,7 +86,7 @@ public class NewsActivityFragment extends Fragment
         mAdapter.clearData();
         mItems = data;
 
-        retrieveItems();
+        retrieveItems(mType);
     }
 
     @Override
@@ -99,6 +108,24 @@ public class NewsActivityFragment extends Fragment
         retrieveNews(mType);
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(getContext(),
+                HackerNewsContract.BookmarkedItemEntry.CONTENT_URI, null, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        List<Item> items = Item.Factory.fromCursor(data);
+        mAdapter.swapData(items);
+        hideProgressBar();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
     public void retrieveNews(String type) {
         mType = type;
 
@@ -107,21 +134,30 @@ public class NewsActivityFragment extends Fragment
         switch (type) {
             case TYPE_TOP:
                 HackerNewsApi.with(getActivity()).getTopStories(this);
+                getActivity().getSupportLoaderManager().destroyLoader(LOADER_BOOKMARKED_ITEM_ID);
                 break;
             case TYPE_BEST:
                 HackerNewsApi.with(getActivity()).getBestStories(this);
+                getActivity().getSupportLoaderManager().destroyLoader(LOADER_BOOKMARKED_ITEM_ID);
                 break;
             case TYPE_NEW:
                 HackerNewsApi.with(getActivity()).getNewStories(this);
+                getActivity().getSupportLoaderManager().destroyLoader(LOADER_BOOKMARKED_ITEM_ID);
                 break;
             case TYPE_SHOW:
                 HackerNewsApi.with(getActivity()).getShowStories(this);
+                getActivity().getSupportLoaderManager().destroyLoader(LOADER_BOOKMARKED_ITEM_ID);
                 break;
             case TYPE_ASK:
                 HackerNewsApi.with(getActivity()).getAskStories(this);
+                getActivity().getSupportLoaderManager().destroyLoader(LOADER_BOOKMARKED_ITEM_ID);
                 break;
             case TYPE_JOB:
                 HackerNewsApi.with(getActivity()).getJobStories(this);
+                getActivity().getSupportLoaderManager().destroyLoader(LOADER_BOOKMARKED_ITEM_ID);
+                break;
+            case TYPE_BOOKMARKED:
+                getActivity().getSupportLoaderManager().restartLoader(LOADER_BOOKMARKED_ITEM_ID, null, this);
                 break;
             default:
                 hideProgressBar();
@@ -129,13 +165,13 @@ public class NewsActivityFragment extends Fragment
         }
     }
 
-    private void retrieveItems() {
+    private void retrieveItems(final String type) {
         for (long itemId : mItems) {
             HackerNewsApi.with(getActivity()).getItem(itemId, new HackerNewsApi.RestCallback<Item>() {
                 @Override
                 public void onSuccess(Item data) {
                     if (data.isNotDeleted() && data.isNotDead()) {
-                        mAdapter.addData(data);
+                        if (type.equals(mType)) mAdapter.addData(data);
                     }
                 }
 
@@ -149,10 +185,12 @@ public class NewsActivityFragment extends Fragment
 
     private void showProgressBar() {
         mBinding.pbLoading.setVisibility(View.VISIBLE);
+        mBinding.rvItemList.setVisibility(View.GONE);
     }
 
     private void hideProgressBar() {
         mBinding.pbLoading.setVisibility(View.GONE);
+        mBinding.rvItemList.setVisibility(View.VISIBLE);
         mBinding.srlRefresh.setRefreshing(false);
     }
 }
