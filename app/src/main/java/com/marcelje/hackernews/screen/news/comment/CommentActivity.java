@@ -2,7 +2,6 @@ package com.marcelje.hackernews.screen.news.comment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;

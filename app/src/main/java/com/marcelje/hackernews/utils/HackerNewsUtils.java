@@ -1,7 +1,5 @@
 package com.marcelje.hackernews.utils;
 
-import com.marcelje.hackernews.R;
-
 public class HackerNewsUtils {
 
     private static final String URL_HACKER_NEWS_ITEM = "https://news.ycombinator.com/item?id=%d";

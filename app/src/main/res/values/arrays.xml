@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="settings_type_options">
+        <item>@string/settings_type_option_top</item>
+        <item>@string/settings_type_option_best</item>
+        <item>@string/settings_type_option_new</item>
+        <item>@string/settings_type_option_show</item>
+        <item>@string/settings_type_option_ask</item>
+        <item>@string/settings_type_option_jobs</item>
+        <item>@string/settings_type_option_bookmarked</item>
+    </array>
+</resources>

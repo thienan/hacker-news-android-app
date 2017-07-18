@@ -50,8 +50,7 @@ public class NewsActivityFragment extends Fragment
     private NewsAdapter mAdapter;
 
     private List<Long> mItemIds;
-
-    private String mType = TYPE_TOP;
+    private String mType;
 
     public static NewsActivityFragment newInstance() {
         return new NewsActivityFragment();
