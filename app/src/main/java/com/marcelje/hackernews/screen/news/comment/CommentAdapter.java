@@ -40,6 +40,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     @Override
     public void onBindViewHolder(CommentViewHolder holder, int position) {
         Item item = mData.get(position);
+        holder.binding.setActivity(mActivity);
         holder.binding.setItem(item);
     }
 

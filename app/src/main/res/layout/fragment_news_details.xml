@@ -5,7 +5,7 @@
 
         <variable
             name="activity"
-            type="android.app.Activity" />
+            type="com.marcelje.hackernews.activity.ToolbarActivity" />
 
         <variable
             name="item"
@@ -46,6 +46,7 @@
                 android:id="@+id/section_news_details"
                 layout="@layout/section_news_details"
                 app:itemTextDetailsClickHandlers="@{itemTextDetailsClickHandlers}"
+                app:activity="@{activity}"
                 app:text="@{item.text}" />
 
             <include

@@ -79,6 +79,7 @@ public class CommentActivityFragment extends Fragment
 
         // TODO: find a better way to remove maxLines
         mBinding.sectionCommentMain.tvText.setMaxLines(Integer.MAX_VALUE);
+        mBinding.sectionCommentMain.tvText.setMovementMethod(LinkMovementMethod.getInstance());
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mAdapter = new CommentAdapter(mActivity, mItem.getBy(), mPoster);

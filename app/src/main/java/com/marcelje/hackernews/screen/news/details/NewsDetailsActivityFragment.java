@@ -67,7 +67,7 @@ public class NewsDetailsActivityFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = FragmentNewsDetailsBinding.inflate(inflater, container, false);
-        mBinding.setActivity(getActivity());
+        mBinding.setActivity(mActivity);
         mBinding.setItem(mItem);
         mBinding.setItemUserClickHandlers(new ItemUserClickHandlers(mActivity));
         mBinding.setItemTextClickHandlers(new ItemTextClickHandlers(mActivity));

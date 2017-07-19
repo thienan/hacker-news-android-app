@@ -60,6 +60,7 @@
                 <include
                     android:id="@+id/section_comment_main"
                     layout="@layout/item_comment"
+                    app:activity="@{activity}"
                     app:item="@{item}"
                     app:itemUserClickHandlers="@{itemUserClickHandlers}" />
 

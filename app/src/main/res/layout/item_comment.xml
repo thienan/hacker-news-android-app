@@ -12,6 +12,10 @@
         <import type="com.marcelje.hackernews.utils.ItemUtils" />
 
         <variable
+            name="activity"
+            type="com.marcelje.hackernews.activity.ToolbarActivity" />
+
+        <variable
             name="item"
             type="com.marcelje.hackernews.model.Item" />
 
@@ -63,7 +67,7 @@
                 android:ellipsize="end"
                 android:maxLines="10"
                 android:padding="@dimen/view_margin"
-                android:text='@{TextUtils.isEmpty(item.text) ? "" : Html.fromHtml(item.text)}'
+                android:text='@{ItemUtils.fromHtml(activity, item.text)}'
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
             <TextView
