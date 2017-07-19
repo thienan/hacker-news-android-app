@@ -7,6 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.marcelje.hackernews.R;
+import com.marcelje.hackernews.activity.FragmentActivity;
 import com.marcelje.hackernews.database.HackerNewsDao;
 import com.marcelje.hackernews.factory.SnackbarFactory;
 import com.marcelje.hackernews.model.Item;
@@ -17,7 +18,7 @@ import com.marcelje.hackernews.utils.MenuUtils;
 
 import org.parceler.Parcels;
 
-public class NewsDetailsActivity extends ToolbarActivity {
+public class NewsDetailsActivity extends FragmentActivity {
 
     private static final String EXTRA_ITEM = "com.marcelje.hackernews.screen.news.details.extra.ITEM";
 
@@ -36,10 +37,12 @@ public class NewsDetailsActivity extends ToolbarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base);
         setDisplayHomeAsUpEnabled(true);
+
         extractExtras();
-        attachFragment();
+
+        mFragment = NewsDetailsFragment.newInstance(mItem);
+        setFragment(mFragment);
     }
 
     @Override
@@ -108,13 +111,5 @@ public class NewsDetailsActivity extends ToolbarActivity {
         if (intent.hasExtra(EXTRA_ITEM)) {
             mItem = Parcels.unwrap(intent.getParcelableExtra(EXTRA_ITEM));
         }
-    }
-
-    private void attachFragment() {
-        mFragment = NewsDetailsFragment.newInstance(mItem);
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, mFragment)
-                .commit();
     }
 }

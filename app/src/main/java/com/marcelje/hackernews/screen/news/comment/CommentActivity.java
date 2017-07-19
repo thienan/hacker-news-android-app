@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.marcelje.hackernews.R;
+import com.marcelje.hackernews.activity.FragmentActivity;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.utils.BrowserUtils;
@@ -16,7 +17,7 @@ import com.marcelje.hackernews.utils.MenuUtils;
 
 import org.parceler.Parcels;
 
-public class CommentActivity extends ToolbarActivity {
+public class CommentActivity extends FragmentActivity {
 
     private static final String EXTRA_ITEM = "com.marcelje.hackernews.screen.news.comment.extra.ITEM";
     private static final String EXTRA_PARENT = "com.marcelje.hackernews.screen.news.comment.extra.PARENT";
@@ -40,10 +41,12 @@ public class CommentActivity extends ToolbarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base);
         setDisplayHomeAsUpEnabled(true);
+
         extractExtras();
-        attachFragment();
+
+        mFragment = CommentFragment.newInstance(mItem, mParent, mPoster);
+        setFragment(mFragment);
     }
 
     @Override
@@ -102,13 +105,5 @@ public class CommentActivity extends ToolbarActivity {
         if (intent.hasExtra(EXTRA_POSTER)) {
             mPoster = intent.getStringExtra(EXTRA_POSTER);
         }
-    }
-
-    private void attachFragment() {
-        mFragment = CommentFragment.newInstance(mItem, mParent, mPoster);
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, mFragment)
-                .commit();
     }
 }

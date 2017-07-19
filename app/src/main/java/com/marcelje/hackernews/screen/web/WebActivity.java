@@ -38,6 +38,7 @@ public class WebActivity extends WebToolbarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
         setDisplayHomeAsCloseEnabled(true);
+
         extractExtras();
         updateTitle();
         setUpWebView();

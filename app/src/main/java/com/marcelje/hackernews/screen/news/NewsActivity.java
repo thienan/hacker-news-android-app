@@ -10,22 +10,24 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.marcelje.hackernews.R;
+import com.marcelje.hackernews.activity.FragmentActivity;
 import com.marcelje.hackernews.factory.SpinnerFactory;
-import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.screen.settings.SettingsActivity;
 import com.marcelje.hackernews.utils.SettingsUtils;
 
-public class NewsActivity extends ToolbarActivity implements AdapterView.OnItemSelectedListener {
+public class NewsActivity extends FragmentActivity implements AdapterView.OnItemSelectedListener {
 
     private NewsFragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base);
         setDisplayShowTitleEnabled(false);
+
         attachSpinner(savedInstanceState);
-        attachFragment();
+
+        mFragment = NewsFragment.newInstance();
+        setFragment(mFragment);
     }
 
     @Override
@@ -75,13 +77,5 @@ public class NewsActivity extends ToolbarActivity implements AdapterView.OnItemS
         }
 
         getToolbar().addView(spinner);
-    }
-
-    private void attachFragment() {
-        mFragment = NewsFragment.newInstance();
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, mFragment)
-                .commit();
     }
 }

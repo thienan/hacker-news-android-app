@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.activity.ToolbarActivity;
+import com.marcelje.hackernews.activity.FragmentActivity;
 
-public class DetailsTextActivity extends ToolbarActivity {
+public class DetailsTextActivity extends FragmentActivity {
 
     private static final String EXTRA_TEXT = "com.marcelje.hackernews.screen.news.details.text.extra.TEXT";
 
@@ -25,10 +25,12 @@ public class DetailsTextActivity extends ToolbarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base);
         setDisplayHomeAsUpEnabled(true);
+
         extractExtras();
-        attachFragment();
+
+        Fragment fragment = DetailsTextFragment.newInstance(mText);
+        setFragment(fragment);
     }
 
     private static Bundle createExtras(String text) {
@@ -44,13 +46,5 @@ public class DetailsTextActivity extends ToolbarActivity {
         if (intent.hasExtra(EXTRA_TEXT)) {
             mText = intent.getStringExtra(EXTRA_TEXT);
         }
-    }
-
-    private void attachFragment() {
-        Fragment fragment = DetailsTextFragment.newInstance(mText);
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, fragment)
-                .commit();
     }
 }

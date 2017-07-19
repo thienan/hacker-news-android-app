@@ -6,8 +6,9 @@ import android.support.v4.app.Fragment;
 
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.activity.ToolbarActivity;
+import com.marcelje.hackernews.activity.FragmentActivity;
 
-public class UserActivity extends ToolbarActivity {
+public class UserActivity extends FragmentActivity {
 
     private static final String EXTRA_USER_ID = "com.marcelje.hackernews.screen.user.extra.USER_ID";
 
@@ -25,11 +26,14 @@ public class UserActivity extends ToolbarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base);
         setDisplayHomeAsUpEnabled(true);
+
         extractExtras();
-        updateTitle();
-        attachFragment();
+
+        setTitle(String.format(getString(R.string.title_profile), mUserId));
+
+        Fragment fragment = UserFragment.newInstance(mUserId);
+        setFragment(fragment);
     }
 
     private static Bundle createExtras(String userId) {
@@ -45,17 +49,5 @@ public class UserActivity extends ToolbarActivity {
         if (intent.hasExtra(EXTRA_USER_ID)) {
             mUserId = intent.getStringExtra(EXTRA_USER_ID);
         }
-    }
-
-    private void updateTitle() {
-        setTitle(String.format(getString(R.string.title_profile), mUserId));
-    }
-
-    private void attachFragment() {
-        Fragment fragment = UserFragment.newInstance(mUserId);
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, fragment)
-                .commit();
     }
 }
