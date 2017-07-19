@@ -24,7 +24,7 @@ public class NewsActivity extends ToolbarActivity implements AdapterView.OnItemS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
         setDisplayShowTitleEnabled(false);
-        attachSpinner();
+        attachSpinner(savedInstanceState);
         attachFragment();
     }
 
@@ -64,11 +64,15 @@ public class NewsActivity extends ToolbarActivity implements AdapterView.OnItemS
         finish(); // no animation
     }
 
-    private void attachSpinner() {
-        String defaultNews = SettingsUtils.getDefaultNews(this);
+    private void attachSpinner(Bundle savedInstanceState) {
         Spinner spinner = SpinnerFactory.createSpinner(this, this);
-        ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
-        spinner.setSelection(adapter.getPosition(defaultNews));
+        spinner.setId(R.id.spinner_news_type);
+
+        if (savedInstanceState == null) {
+            String defaultNews = SettingsUtils.getDefaultNews(this);
+            ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
+            spinner.setSelection(adapter.getPosition(defaultNews));
+        }
 
         getToolbar().addView(spinner);
     }
