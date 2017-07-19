@@ -75,7 +75,9 @@ public class NewsActivityFragment extends Fragment
         mBinding.rvItemList.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                nextPageNews();
+                if (!TYPE_BOOKMARKED.equals(mType)) {
+                    nextPageNews();
+                }
             }
         });
 
