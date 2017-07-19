@@ -17,7 +17,7 @@ import com.marcelje.hackernews.utils.SettingsUtils;
 
 public class NewsActivity extends ToolbarActivity implements AdapterView.OnItemSelectedListener {
 
-    private NewsActivityFragment mFragment;
+    private NewsFragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +74,7 @@ public class NewsActivity extends ToolbarActivity implements AdapterView.OnItemS
     }
 
     private void attachFragment() {
-        mFragment = NewsActivityFragment.newInstance();
+        mFragment = NewsFragment.newInstance();
 
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, mFragment)

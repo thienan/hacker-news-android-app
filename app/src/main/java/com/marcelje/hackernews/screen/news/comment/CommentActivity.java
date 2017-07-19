@@ -22,7 +22,7 @@ public class CommentActivity extends ToolbarActivity {
     private static final String EXTRA_PARENT = "com.marcelje.hackernews.screen.news.comment.extra.PARENT";
     private static final String EXTRA_POSTER = "com.marcelje.hackernews.screen.news.comment.extra.POSTER";
 
-    private CommentActivityFragment mFragment;
+    private CommentFragment mFragment;
 
     private Item mItem;
     private String mParent;
@@ -105,7 +105,7 @@ public class CommentActivity extends ToolbarActivity {
     }
 
     private void attachFragment() {
-        mFragment = CommentActivityFragment.newInstance(mItem, mParent, mPoster);
+        mFragment = CommentFragment.newInstance(mItem, mParent, mPoster);
 
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, mFragment)

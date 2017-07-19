@@ -23,7 +23,7 @@ import com.marcelje.hackernews.utils.CollectionUtils;
 
 import java.util.List;
 
-public class UserActivityFragment extends Fragment
+public class UserFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<HackerNewsResponse<User>>, View.OnClickListener {
 
     private static final String ARG_USER_ID = "com.marcelje.hackernews.screen.user.arg.USER_ID";
@@ -41,8 +41,8 @@ public class UserActivityFragment extends Fragment
 
     private SubmissionAdapter mAdapter;
 
-    public static UserActivityFragment newInstance(String userId) {
-        UserActivityFragment fragment = new UserActivityFragment();
+    public static UserFragment newInstance(String userId) {
+        UserFragment fragment = new UserFragment();
 
         Bundle args = createArguments(userId);
         fragment.setArguments(args);
@@ -101,7 +101,7 @@ public class UserActivityFragment extends Fragment
         } else {
             SnackbarFactory
                     .createRetrieveErrorSnackbar(mBinding.getRoot(),
-                            UserActivityFragment.this).show();
+                            UserFragment.this).show();
         }
     }
 

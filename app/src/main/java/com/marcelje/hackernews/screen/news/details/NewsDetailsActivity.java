@@ -21,7 +21,7 @@ public class NewsDetailsActivity extends ToolbarActivity {
 
     private static final String EXTRA_ITEM = "com.marcelje.hackernews.screen.news.details.extra.ITEM";
 
-    private NewsDetailsActivityFragment mFragment;
+    private NewsDetailsFragment mFragment;
     private Item mItem;
 
     public static void startActivity(ToolbarActivity activity, Item item) {
@@ -111,7 +111,7 @@ public class NewsDetailsActivity extends ToolbarActivity {
     }
 
     private void attachFragment() {
-        mFragment = NewsDetailsActivityFragment.newInstance(mItem);
+        mFragment = NewsDetailsFragment.newInstance(mItem);
 
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, mFragment)

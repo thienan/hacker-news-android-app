@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.support.v4.content.AsyncTaskLoader;
 
 import com.marcelje.hackernews.api.HackerNewsApi;
-import com.marcelje.hackernews.screen.news.NewsActivityFragment;
+import com.marcelje.hackernews.screen.news.NewsFragment;
 
 import java.util.List;
 
@@ -21,22 +21,22 @@ public class StoriesLoader extends AsyncTaskLoader<HackerNewsResponse<List<Long>
         HackerNewsResponse<List<Long>> itemIds = HackerNewsResponse.error("Unknown type");
 
         switch (mType) {
-            case NewsActivityFragment.TYPE_TOP:
+            case NewsFragment.TYPE_TOP:
                 itemIds = HackerNewsApi.with(mActivity).getTopStories();
                 break;
-            case NewsActivityFragment.TYPE_BEST:
+            case NewsFragment.TYPE_BEST:
                 itemIds = HackerNewsApi.with(mActivity).getBestStories();
                 break;
-            case NewsActivityFragment.TYPE_NEW:
+            case NewsFragment.TYPE_NEW:
                 itemIds = HackerNewsApi.with(mActivity).getNewStories();
                 break;
-            case NewsActivityFragment.TYPE_SHOW:
+            case NewsFragment.TYPE_SHOW:
                 itemIds = HackerNewsApi.with(mActivity).getShowStories();
                 break;
-            case NewsActivityFragment.TYPE_ASK:
+            case NewsFragment.TYPE_ASK:
                 itemIds = HackerNewsApi.with(mActivity).getAskStories();
                 break;
-            case NewsActivityFragment.TYPE_JOB:
+            case NewsFragment.TYPE_JOB:
                 itemIds = HackerNewsApi.with(mActivity).getJobStories();
                 break;
             default:

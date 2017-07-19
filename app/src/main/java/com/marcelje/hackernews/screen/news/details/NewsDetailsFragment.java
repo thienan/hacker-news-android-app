@@ -1,4 +1,4 @@
-package com.marcelje.hackernews.screen.news.comment;
+package com.marcelje.hackernews.screen.news.details;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,31 +8,31 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.marcelje.hackernews.listener.EndlessRecyclerViewScrollListener;
 import com.marcelje.hackernews.activity.ToolbarActivity;
-import com.marcelje.hackernews.databinding.FragmentCommentBinding;
+import com.marcelje.hackernews.databinding.FragmentNewsDetailsBinding;
 import com.marcelje.hackernews.factory.SnackbarFactory;
+import com.marcelje.hackernews.handlers.ItemTextClickHandlers;
+import com.marcelje.hackernews.handlers.ItemTextDetailsClickHandlers;
 import com.marcelje.hackernews.handlers.ItemUserClickHandlers;
-import com.marcelje.hackernews.loader.ItemListLoader;
 import com.marcelje.hackernews.loader.HackerNewsResponse;
+import com.marcelje.hackernews.loader.ItemListLoader;
 import com.marcelje.hackernews.model.Item;
+import com.marcelje.hackernews.screen.news.comment.CommentAdapter;
 import com.marcelje.hackernews.utils.CollectionUtils;
 
 import org.parceler.Parcels;
 
 import java.util.List;
 
-public class CommentActivityFragment extends Fragment
+public class NewsDetailsFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>>, View.OnClickListener {
 
-    private static final String ARG_ITEM = "com.marcelje.hackernews.screen.news.comment.arg.ITEM";
-    private static final String ARG_PARENT = "com.marcelje.hackernews.screen.news.comment.arg.PARENT";
-    private static final String ARG_POSTER = "com.marcelje.hackernews.screen.news.comment.arg.POSTER";
+    private static final String ARG_ITEM = "com.marcelje.hackernews.screen.news.details.arg.ITEM";
 
     private static final int LOADER_ID_COMMENT_ITEM = 118;
 
@@ -41,17 +41,15 @@ public class CommentActivityFragment extends Fragment
 
     private ToolbarActivity mActivity;
 
-    private FragmentCommentBinding mBinding;
+    private FragmentNewsDetailsBinding mBinding;
     private CommentAdapter mAdapter;
 
     private Item mItem;
-    private String mParent;
-    private String mPoster;
 
-    public static CommentActivityFragment newInstance(Item item, String parent, String poster) {
-        CommentActivityFragment fragment = new CommentActivityFragment();
+    public static NewsDetailsFragment newInstance(Item item) {
+        NewsDetailsFragment fragment = new NewsDetailsFragment();
 
-        Bundle args = createArguments(item, parent, poster);
+        Bundle args = createArguments(item);
         fragment.setArguments(args);
 
         return fragment;
@@ -68,21 +66,19 @@ public class CommentActivityFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mBinding = FragmentCommentBinding.inflate(inflater, container, false);
-        mBinding.setItem(mItem);
+        mBinding = FragmentNewsDetailsBinding.inflate(inflater, container, false);
         mBinding.setActivity(mActivity);
-        mBinding.setParent(mParent);
-        mBinding.setPoster(mPoster);
+        mBinding.setItem(mItem);
         mBinding.setItemUserClickHandlers(new ItemUserClickHandlers(mActivity));
+        mBinding.setItemTextClickHandlers(new ItemTextClickHandlers(mActivity));
+        mBinding.setItemTextDetailsClickHandlers(new ItemTextDetailsClickHandlers(mActivity));
 
-        mBinding.tvCommentInfo.setMovementMethod(LinkMovementMethod.getInstance());
-
-        // TODO: find a better way to remove maxLines
-        mBinding.sectionCommentMain.tvText.setMaxLines(Integer.MAX_VALUE);
-        mBinding.sectionCommentMain.tvText.setMovementMethod(LinkMovementMethod.getInstance());
+        if (TextUtils.isEmpty(mItem.getUrl())) {
+            mBinding.sectionNews.tvText.setBackground(null);
+        }
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new CommentAdapter(mActivity, mItem.getBy(), mPoster);
+        mAdapter = new CommentAdapter(mActivity, null, mItem.getBy());
 
         mBinding.sectionCommentList.rvCommentList.setLayoutManager(layoutManager);
         mBinding.sectionCommentList.rvCommentList.setAdapter(mAdapter);
@@ -127,7 +123,7 @@ public class CommentActivityFragment extends Fragment
         } else {
             SnackbarFactory
                     .createRetrieveErrorSnackbar(mBinding.sectionCommentList.getRoot(),
-                            CommentActivityFragment.this).show();
+                            NewsDetailsFragment.this).show();
         }
 
         hideProgressBar();
@@ -143,11 +139,9 @@ public class CommentActivityFragment extends Fragment
         retrieveComments();
     }
 
-    private static Bundle createArguments(Item item, String parent, String poster) {
+    private static Bundle createArguments(Item item) {
         Bundle args = new Bundle();
-        if (item != null) args.putParcelable(ARG_ITEM, Parcels.wrap(item));
-        if (!TextUtils.isEmpty(parent)) args.putString(ARG_PARENT, parent);
-        if (!TextUtils.isEmpty(poster)) args.putString(ARG_POSTER, poster);
+        args.putParcelable(ARG_ITEM, Parcels.wrap(item));
 
         return args;
     }
@@ -157,14 +151,6 @@ public class CommentActivityFragment extends Fragment
 
         if (args.containsKey(ARG_ITEM)) {
             mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
-        }
-
-        if (args.containsKey(ARG_PARENT)) {
-            mParent = args.getString(ARG_PARENT);
-        }
-
-        if (args.containsKey(ARG_POSTER)) {
-            mPoster = args.getString(ARG_POSTER);
         }
     }
 

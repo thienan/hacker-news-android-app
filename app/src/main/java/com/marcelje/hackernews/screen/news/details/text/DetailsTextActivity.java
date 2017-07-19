@@ -47,7 +47,7 @@ public class DetailsTextActivity extends ToolbarActivity {
     }
 
     private void attachFragment() {
-        Fragment fragment = DetailsTextActivityFragment.newInstance(mText);
+        Fragment fragment = DetailsTextFragment.newInstance(mText);
 
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, fragment)

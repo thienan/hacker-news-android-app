@@ -25,7 +25,7 @@ import com.marcelje.hackernews.utils.CollectionUtils;
 
 import java.util.List;
 
-public class NewsActivityFragment extends Fragment
+public class NewsFragment extends Fragment
         implements SwipeRefreshLayout.OnRefreshListener,
         View.OnClickListener, LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> {
 
@@ -52,8 +52,8 @@ public class NewsActivityFragment extends Fragment
     private List<Long> mItemIds;
     private String mType;
 
-    public static NewsActivityFragment newInstance() {
-        return new NewsActivityFragment();
+    public static NewsFragment newInstance() {
+        return new NewsFragment();
     }
 
     @Override
@@ -122,7 +122,7 @@ public class NewsActivityFragment extends Fragment
         } else {
             SnackbarFactory
                     .createRetrieveErrorSnackbar(mBinding.rvItemList,
-                            NewsActivityFragment.this).show();
+                            NewsFragment.this).show();
         }
 
         hideProgressBar();
@@ -209,11 +209,11 @@ public class NewsActivityFragment extends Fragment
                 if (data.isSuccessful()) {
                     mItemIds = data.getData();
                     getActivity().getSupportLoaderManager()
-                            .restartLoader(LOADER_ID_STORIES_ITEM, null, NewsActivityFragment.this);
+                            .restartLoader(LOADER_ID_STORIES_ITEM, null, NewsFragment.this);
                 } else {
                     SnackbarFactory
                             .createRetrieveErrorSnackbar(mBinding.rvItemList,
-                                    NewsActivityFragment.this).show();
+                                    NewsFragment.this).show();
 
                     hideProgressBar();
                 }

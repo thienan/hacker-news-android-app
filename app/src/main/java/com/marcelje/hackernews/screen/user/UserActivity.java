@@ -52,7 +52,7 @@ public class UserActivity extends ToolbarActivity {
     }
 
     private void attachFragment() {
-        Fragment fragment = UserActivityFragment.newInstance(mUserId);
+        Fragment fragment = UserFragment.newInstance(mUserId);
 
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, fragment)

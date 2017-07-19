@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.databinding.FragmentDetailsTextBinding;
 
-public class DetailsTextActivityFragment extends Fragment {
+public class DetailsTextFragment extends Fragment {
 
     private static final String ARG_TEXT = "com.marcelje.hackernews.screen.news.details.arg.TEXT";
 
@@ -19,8 +19,8 @@ public class DetailsTextActivityFragment extends Fragment {
 
     private String mText;
 
-    public static DetailsTextActivityFragment newInstance(String text) {
-        DetailsTextActivityFragment fragment = new DetailsTextActivityFragment();
+    public static DetailsTextFragment newInstance(String text) {
+        DetailsTextFragment fragment = new DetailsTextFragment();
 
         Bundle args = createArguments(text);
         fragment.setArguments(args);
