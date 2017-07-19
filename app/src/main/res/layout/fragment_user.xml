@@ -14,82 +14,119 @@
             type="com.marcelje.hackernews.model.User" />
     </data>
 
-    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/view_margin"
-        android:elevation="@dimen/card_elevation"
-        app:cardCornerRadius="@dimen/card_radius">
+        android:layout_height="wrap_content">
 
-        <GridLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/view_margin"
-            android:columnCount="2"
-            android:rowCount="4">
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/view_margin"
+                android:elevation="@dimen/card_elevation"
+                app:cardCornerRadius="@dimen/card_radius">
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/view_margin"
+                    android:columnCount="2"
+                    android:rowCount="4">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:text="@string/text_user"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginStart="4dp"
+                        android:text="@{user.id}"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:text="@string/text_created"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginStart="4dp"
+                        android:text="@{ItemUtils.getRelativeDate(context, user)}"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:text="@string/text_karma"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginStart="4dp"
+                        android:text="@{String.valueOf(user.karma)}"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:text="@string/text_about"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginStart="4dp"
+                        android:text='@{user == null || TextUtils.isEmpty(user.about) ? "" : Html.fromHtml(user.about)}'
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                </GridLayout>
+            </android.support.v7.widget.CardView>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:text="@string/text_user"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                android:layout_marginBottom="@dimen/view_margin"
+                android:text="@string/label_submissions"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginStart="4dp"
-                android:text="@{user.id}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:text="@string/text_created"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_submission_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="vertical" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginStart="4dp"
-                android:text="@{ItemUtils.getRelativeDate(context, user)}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                <ProgressBar
+                    android:id="@+id/pb_loading"
+                    style="@style/Widget.AppCompat.ProgressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:text="@string/text_karma"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginStart="4dp"
-                android:text="@{String.valueOf(user.karma)}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:text="@string/text_about"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginStart="4dp"
-                android:text='@{user == null || TextUtils.isEmpty(user.about) ? "" : Html.fromHtml(user.about)}'
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-        </GridLayout>
-    </android.support.v7.widget.CardView>
-
+            </FrameLayout>
+        </LinearLayout>
+    </ScrollView>
 </layout>
 

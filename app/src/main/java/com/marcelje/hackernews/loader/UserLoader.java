@@ -2,8 +2,6 @@ package com.marcelje.hackernews.loader;
 
 import android.app.Activity;
 import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.os.CancellationSignal;
-import android.support.v4.os.OperationCanceledException;
 
 import com.marcelje.hackernews.api.HackerNewsApi;
 import com.marcelje.hackernews.model.User;
@@ -14,44 +12,11 @@ public class UserLoader extends AsyncTaskLoader<HackerNewsResponse<User>> {
     private final String mUserId;
 
     private HackerNewsResponse<User> mUser;
-    private CancellationSignal mCancellationSignal;
 
     /* Runs on a worker thread */
     @Override
     public HackerNewsResponse<User> loadInBackground() {
-        synchronized (this) {
-            if (isLoadInBackgroundCanceled()) {
-                throw new OperationCanceledException();
-            }
-            mCancellationSignal = new CancellationSignal();
-        }
-
-        if (mCancellationSignal.isCanceled()) {
-            return null;
-        }
-
-        HackerNewsResponse<User> user = HackerNewsApi.with(mActivity).getUser(mUserId);
-
-        synchronized (this) {
-            mCancellationSignal = null;
-        }
-
-        if (user.isSuccessful()) {
-            return HackerNewsResponse.ok(user);
-        } else {
-            return HackerNewsResponse.error(user.getErrorMessage());
-        }
-    }
-
-    @Override
-    public void cancelLoadInBackground() {
-        super.cancelLoadInBackground();
-
-        synchronized (this) {
-            if (mCancellationSignal != null) {
-                mCancellationSignal.cancel();
-            }
-        }
+        return HackerNewsApi.with(mActivity).getUser(mUserId);
     }
 
     /* Runs on the UI thread */

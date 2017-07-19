@@ -78,7 +78,7 @@ public final class BrowserUtils {
     private static void addCopyMenuItem(Context context, CustomTabsIntent.Builder builder) {
         if (context == null || builder == null) return;
 
-        String label = context.getString(R.string.title_copy);
+        String label = context.getString(R.string.menu_item_copy_link);
 
         Intent intent = new Intent(context, CopyReceiver.class);
         PendingIntent pendingIntent =

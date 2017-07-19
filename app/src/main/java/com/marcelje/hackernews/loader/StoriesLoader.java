@@ -2,8 +2,6 @@ package com.marcelje.hackernews.loader;
 
 import android.app.Activity;
 import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.os.CancellationSignal;
-import android.support.v4.os.OperationCanceledException;
 
 import com.marcelje.hackernews.api.HackerNewsApi;
 import com.marcelje.hackernews.screen.news.NewsActivityFragment;
@@ -16,18 +14,10 @@ public class StoriesLoader extends AsyncTaskLoader<HackerNewsResponse<List<Long>
     private final String mType;
 
     private HackerNewsResponse<List<Long>> mItems;
-    private CancellationSignal mCancellationSignal;
 
     /* Runs on a worker thread */
     @Override
     public HackerNewsResponse<List<Long>> loadInBackground() {
-        synchronized (this) {
-            if (isLoadInBackgroundCanceled()) {
-                throw new OperationCanceledException();
-            }
-            mCancellationSignal = new CancellationSignal();
-        }
-
         HackerNewsResponse<List<Long>> itemIds = HackerNewsResponse.error("Unknown type");
 
         switch (mType) {
@@ -53,26 +43,7 @@ public class StoriesLoader extends AsyncTaskLoader<HackerNewsResponse<List<Long>
                 break;
         }
 
-        synchronized (this) {
-            mCancellationSignal = null;
-        }
-
-        if (itemIds.isSuccessful()) {
-            return HackerNewsResponse.ok(itemIds.getData());
-        } else {
-            return HackerNewsResponse.error(itemIds.getErrorMessage());
-        }
-    }
-
-    @Override
-    public void cancelLoadInBackground() {
-        super.cancelLoadInBackground();
-
-        synchronized (this) {
-            if (mCancellationSignal != null) {
-                mCancellationSignal.cancel();
-            }
-        }
+        return itemIds;
     }
 
     /* Runs on the UI thread */

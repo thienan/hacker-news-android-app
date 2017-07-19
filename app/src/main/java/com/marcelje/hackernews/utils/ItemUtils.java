@@ -70,6 +70,7 @@ public final class ItemUtils {
 
     public static SpannableStringBuilder getCommentInfo(final ToolbarActivity activity, final String parent, final String poster) {
         SpannableStringBuilder commentInfo = new SpannableStringBuilder();
+        if (TextUtils.isEmpty(parent) && TextUtils.isEmpty(poster)) return commentInfo;
         commentInfo.append("Reply of ");
 
         if (!TextUtils.isEmpty(parent)) {

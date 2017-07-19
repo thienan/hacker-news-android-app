@@ -69,9 +69,9 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
         MenuItem menuItem = toolbar.getMenu().findItem(R.id.action_bookmark);
 
         if (HackerNewsDao.isItemAvailable(mActivity, itemId)) {
-            menuItem.setTitle(R.string.unbookmark);
+            menuItem.setTitle(R.string.menu_item_unbookmark);
         } else {
-            menuItem.setTitle(R.string.bookmark);
+            menuItem.setTitle(R.string.menu_item_bookmark);
         }
 
         toolbar.getMenu().findItem(R.id.action_refresh).setVisible(false);
@@ -100,10 +100,10 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
         }
 
         @Override
-        public boolean onMenuItemClick(MenuItem item) {
+        public boolean onMenuItemClick(MenuItem menuItem) {
             Item data = mData.get(getAdapterPosition());
 
-            switch (item.getItemId()) {
+            switch (menuItem.getItemId()) {
                 case R.id.action_share:
                     MenuUtils.openShareHackerNewsLinkChooser(mActivity, data);
 
@@ -112,11 +112,11 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
                     if (HackerNewsDao.isItemAvailable(mActivity, data.getId())) {
                         HackerNewsDao.deleteItem(mActivity, data.getId());
                         SnackbarFactory.createUnbookmarkedSuccessSnackBar(binding.tvText).show();
-                        item.setTitle(R.string.bookmark);
+                        menuItem.setTitle(R.string.menu_item_bookmark);
                     } else {
                         HackerNewsDao.insertItem(mActivity, data);
                         SnackbarFactory.createBookmarkedSuccessSnackBar(binding.tvText).show();
-                        item.setTitle(R.string.unbookmark);
+                        menuItem.setTitle(R.string.menu_item_unbookmark);
                     }
 
                     return true;

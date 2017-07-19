@@ -3,6 +3,10 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <import type="android.text.TextUtils" />
+
         <import type="com.marcelje.hackernews.utils.ItemUtils" />
 
         <variable
@@ -42,6 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/view_margin"
+                android:visibility="@{TextUtils.isEmpty(parent) &amp;&amp; TextUtils.isEmpty(poster) ? View.GONE : View.VISIBLE}"
                 android:text="@{ItemUtils.getCommentInfo(activity, parent, poster)}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 

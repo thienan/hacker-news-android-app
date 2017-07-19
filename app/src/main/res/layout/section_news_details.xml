@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/view_margin"
-            android:text="@string/title_details"
+            android:text="@string/label_details"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2" />
 
         <android.support.v7.widget.CardView

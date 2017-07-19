@@ -10,15 +10,15 @@ import com.marcelje.hackernews.R;
 public class SnackbarFactory {
 
     public static Snackbar createRetrieveErrorSnackbar(View view, View.OnClickListener listener) {
-        return createSnackBar(view, R.string.error_retrieve_data, R.string.action_retry, listener);
+        return createSnackBar(view, R.string.message_error_retrieve_data, R.string.action_retry, listener);
     }
 
     public static Snackbar createBookmarkedSuccessSnackBar(View view) {
-        return createSnackBar(view, R.string.bookmark, -1, null);
+        return createSnackBar(view, R.string.message_bookmarked, -1, null);
     }
 
     public static Snackbar createUnbookmarkedSuccessSnackBar(View view) {
-        return createSnackBar(view, R.string.unbookmark, -1, null);
+        return createSnackBar(view, R.string.message_unbookmarked, -1, null);
     }
 
     public static Snackbar createSnackBar(View view, @StringRes

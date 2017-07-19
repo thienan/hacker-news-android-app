@@ -54,9 +54,9 @@ public class NewsDetailsActivity extends ToolbarActivity {
         MenuItem menuItem = menu.findItem(R.id.action_bookmark);
 
         if (HackerNewsDao.isItemAvailable(this, mItem.getId())) {
-            menuItem.setTitle(R.string.unbookmark);
+            menuItem.setTitle(R.string.menu_item_unbookmark);
         } else {
-            menuItem.setTitle(R.string.bookmark);
+            menuItem.setTitle(R.string.menu_item_bookmark);
         }
 
         return super.onPrepareOptionsMenu(menu);
@@ -77,11 +77,11 @@ public class NewsDetailsActivity extends ToolbarActivity {
                 if (HackerNewsDao.isItemAvailable(this, mItem.getId())) {
                     HackerNewsDao.deleteItem(this, mItem.getId());
                     SnackbarFactory.createUnbookmarkedSuccessSnackBar(getToolbar()).show();
-                    menuItem.setTitle(R.string.bookmark);
+                    menuItem.setTitle(R.string.menu_item_bookmark);
                 } else {
                     HackerNewsDao.insertItem(this, mItem);
                     SnackbarFactory.createBookmarkedSuccessSnackBar(getToolbar()).show();
-                    menuItem.setTitle(R.string.unbookmark);
+                    menuItem.setTitle(R.string.menu_item_unbookmark);
                 }
 
                 return true;
