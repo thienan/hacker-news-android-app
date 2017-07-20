@@ -53,7 +53,7 @@
             app:cardCornerRadius="@dimen/card_radius">
 
             <include
-                android:id="@+id/section_comment_main"
+                android:id="@+id/comment_head"
                 layout="@layout/item_comment"
                 app:activity="@{activity}"
                 app:item="@{item}"

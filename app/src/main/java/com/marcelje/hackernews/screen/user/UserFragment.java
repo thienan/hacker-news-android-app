@@ -1,7 +1,6 @@
 package com.marcelje.hackernews.screen.user;
 
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -10,9 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.databinding.FragmentUserBinding;
 import com.marcelje.hackernews.factory.SnackbarFactory;
+import com.marcelje.hackernews.fragment.ToolbarFragment;
 import com.marcelje.hackernews.listener.EndlessRecyclerViewScrollListener;
 import com.marcelje.hackernews.loader.HackerNewsResponse;
 import com.marcelje.hackernews.loader.ItemListLoader;
@@ -23,18 +22,16 @@ import com.marcelje.hackernews.utils.CollectionUtils;
 
 import java.util.List;
 
-public class UserFragment extends Fragment
+public class UserFragment extends ToolbarFragment
         implements LoaderManager.LoaderCallbacks<HackerNewsResponse<User>>, View.OnClickListener {
 
     private static final String ARG_USER_ID = "com.marcelje.hackernews.screen.user.arg.USER_ID";
 
-    private static final int LOADER_ID_USER_ITEM = 119;
-    private static final int LOADER_ID_SUBMISSIONS = 120;
+    private static final int LOADER_ID_USER_ITEM = 800;
+    private static final int LOADER_ID_SUBMISSIONS = 900;
 
     private static final int ITEM_COUNT = 10;
     private int mCurrentPage = 1;
-
-    private ToolbarActivity mActivity;
 
     private FragmentUserBinding mBinding;
     private String mUserId;
@@ -54,8 +51,6 @@ public class UserFragment extends Fragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         extractArguments();
-
-        mActivity = ToolbarActivity.getActivity(getActivity());
     }
 
     @Override
@@ -64,7 +59,7 @@ public class UserFragment extends Fragment
         mBinding = FragmentUserBinding.inflate(inflater, container, false);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new SubmissionAdapter(mActivity);
+        mAdapter = new SubmissionAdapter(getToolbarActivity());
 
         mBinding.rvSubmissionList.setLayoutManager(layoutManager);
         mBinding.rvSubmissionList.setAdapter(mAdapter);

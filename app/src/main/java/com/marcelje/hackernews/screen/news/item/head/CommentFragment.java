@@ -1,7 +1,6 @@
-package com.marcelje.hackernews.screen.news.item;
+package com.marcelje.hackernews.screen.news.item.head;
 
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -11,28 +10,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.databinding.FragmentCommentBinding;
 import com.marcelje.hackernews.handlers.ItemUserClickHandlers;
 import com.marcelje.hackernews.loader.ItemListLoader;
 import com.marcelje.hackernews.loader.HackerNewsResponse;
 import com.marcelje.hackernews.model.Item;
+import com.marcelje.hackernews.screen.news.item.ItemHeadFragment;
 
 import org.parceler.Parcels;
 
 import java.util.Collections;
 import java.util.List;
 
-public class CommentFragment extends Fragment
+public class CommentFragment extends ItemHeadFragment
         implements LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> {
 
-    private static final String ARG_ITEM = "com.marcelje.hackernews.screen.news.comment.arg.ITEM";
-    private static final String ARG_PARENT = "com.marcelje.hackernews.screen.news.comment.arg.PARENT";
-    private static final String ARG_POSTER = "com.marcelje.hackernews.screen.news.comment.arg.POSTER";
+    private static final String ARG_ITEM = "com.marcelje.hackernews.screen.news.item.head.arg.ITEM";
+    private static final String ARG_PARENT = "com.marcelje.hackernews.screen.news.item.head.arg.PARENT";
+    private static final String ARG_POSTER = "com.marcelje.hackernews.screen.news.item.head.arg.POSTER";
 
-    private static final int LOADER_ID_COMMENT_HEAD = 500;
-
-    private ToolbarActivity mActivity;
+    private static final int LOADER_ID_COMMENT_HEAD = 100;
 
     private FragmentCommentBinding mBinding;
 
@@ -53,8 +50,6 @@ public class CommentFragment extends Fragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         extractArguments();
-
-        mActivity = ToolbarActivity.getActivity(getActivity());
     }
 
     @Override
@@ -62,20 +57,24 @@ public class CommentFragment extends Fragment
                              Bundle savedInstanceState) {
         mBinding = FragmentCommentBinding.inflate(inflater, container, false);
         mBinding.setItem(mItem);
-        mBinding.setActivity(mActivity);
+        mBinding.setActivity(getToolbarActivity());
         mBinding.setParent(mParent);
         mBinding.setPoster(mPoster);
-        mBinding.setItemUserClickHandlers(new ItemUserClickHandlers(mActivity));
+        mBinding.setItemUserClickHandlers(new ItemUserClickHandlers(getToolbarActivity()));
 
         mBinding.tvCommentInfo.setMovementMethod(LinkMovementMethod.getInstance());
 
         // TODO: find a better way to remove maxLines
-        mBinding.sectionCommentMain.tvText.setMaxLines(Integer.MAX_VALUE);
-        mBinding.sectionCommentMain.tvText.setMovementMethod(LinkMovementMethod.getInstance());
+        mBinding.commentHead.tvText.setMaxLines(Integer.MAX_VALUE);
+        mBinding.commentHead.tvText.setMovementMethod(LinkMovementMethod.getInstance());
 
         refresh();
 
         return mBinding.getRoot();
+    }
+
+    public void refresh() {
+        getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_COMMENT_HEAD, null, this);
     }
 
     @Override
@@ -90,7 +89,8 @@ public class CommentFragment extends Fragment
     }
 
     @Override
-    public void onLoadFinished(Loader<HackerNewsResponse<List<Item>>> loader, HackerNewsResponse<List<Item>> response) {
+    public void onLoadFinished(Loader<HackerNewsResponse<List<Item>>> loader,
+                               HackerNewsResponse<List<Item>> response) {
         if (response.isSuccessful()) {
             switch (loader.getId()) {
                 case LOADER_ID_COMMENT_HEAD:
@@ -99,7 +99,6 @@ public class CommentFragment extends Fragment
                     break;
                 default:
             }
-
         }
     }
 
@@ -131,10 +130,5 @@ public class CommentFragment extends Fragment
         if (args.containsKey(ARG_POSTER)) {
             mPoster = args.getString(ARG_POSTER);
         }
-    }
-
-
-    private void refresh() {
-        getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_COMMENT_HEAD, null, this);
     }
 }

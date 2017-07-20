@@ -1,21 +1,18 @@
 package com.marcelje.hackernews.screen.news.item.text;
 
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.databinding.FragmentDetailsTextBinding;
+import com.marcelje.hackernews.fragment.ToolbarFragment;
 
-public class DetailsTextFragment extends Fragment {
+public class DetailsTextFragment extends ToolbarFragment {
 
-    private static final String ARG_TEXT = "com.marcelje.hackernews.screen.news.details.arg.TEXT";
-
-    private ToolbarActivity mActivity;
+    private static final String ARG_TEXT = "com.marcelje.hackernews.screen.news.item.text.arg.TEXT";
 
     private String mText;
 
@@ -32,15 +29,13 @@ public class DetailsTextFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         extractArguments();
-
-        mActivity = ToolbarActivity.getActivity(getActivity());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentDetailsTextBinding binding = FragmentDetailsTextBinding.inflate(inflater, container, false);
-        binding.setActivity(mActivity);
+        binding.setActivity(getToolbarActivity());
         binding.setText(mText);
 
         // TODO: find a better way to remove maxLines

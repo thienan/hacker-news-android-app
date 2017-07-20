@@ -75,7 +75,6 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
         }
 
         toolbar.getMenu().findItem(R.id.action_refresh).setVisible(false);
-
         toolbar.invalidate();
     }
 

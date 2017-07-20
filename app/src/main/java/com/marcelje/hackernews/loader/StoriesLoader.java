@@ -3,8 +3,8 @@ package com.marcelje.hackernews.loader;
 import android.app.Activity;
 import android.support.v4.content.AsyncTaskLoader;
 
+import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.api.HackerNewsApi;
-import com.marcelje.hackernews.screen.news.NewsFragment;
 
 import java.util.List;
 
@@ -20,27 +20,18 @@ public class StoriesLoader extends AsyncTaskLoader<HackerNewsResponse<List<Long>
     public HackerNewsResponse<List<Long>> loadInBackground() {
         HackerNewsResponse<List<Long>> itemIds = HackerNewsResponse.error("Unknown type");
 
-        switch (mType) {
-            case NewsFragment.TYPE_TOP:
-                itemIds = HackerNewsApi.with(mActivity).getTopStories();
-                break;
-            case NewsFragment.TYPE_BEST:
-                itemIds = HackerNewsApi.with(mActivity).getBestStories();
-                break;
-            case NewsFragment.TYPE_NEW:
-                itemIds = HackerNewsApi.with(mActivity).getNewStories();
-                break;
-            case NewsFragment.TYPE_SHOW:
-                itemIds = HackerNewsApi.with(mActivity).getShowStories();
-                break;
-            case NewsFragment.TYPE_ASK:
-                itemIds = HackerNewsApi.with(mActivity).getAskStories();
-                break;
-            case NewsFragment.TYPE_JOB:
-                itemIds = HackerNewsApi.with(mActivity).getJobStories();
-                break;
-            default:
-                break;
+        if (mActivity.getString(R.string.settings_type_option_top).equals(mType)) {
+            itemIds = HackerNewsApi.with(mActivity).getTopStories();
+        } else if (mActivity.getString(R.string.settings_type_option_best).equals(mType)) {
+            itemIds = HackerNewsApi.with(mActivity).getBestStories();
+        } else if (mActivity.getString(R.string.settings_type_option_new).equals(mType)) {
+            itemIds = HackerNewsApi.with(mActivity).getNewStories();
+        } else if (mActivity.getString(R.string.settings_type_option_show).equals(mType)) {
+            itemIds = HackerNewsApi.with(mActivity).getShowStories();
+        } else if (mActivity.getString(R.string.settings_type_option_ask).equals(mType)) {
+            itemIds = HackerNewsApi.with(mActivity).getAskStories();
+        } else if (mActivity.getString(R.string.settings_type_option_jobs).equals(mType)) {
+            itemIds = HackerNewsApi.with(mActivity).getJobStories();
         }
 
         return itemIds;

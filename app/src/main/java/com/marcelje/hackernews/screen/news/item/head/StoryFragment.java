@@ -1,7 +1,6 @@
-package com.marcelje.hackernews.screen.news.item;
+package com.marcelje.hackernews.screen.news.item.head;
 
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -10,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.databinding.FragmentStoryBinding;
 import com.marcelje.hackernews.handlers.ItemTextClickHandlers;
 import com.marcelje.hackernews.handlers.ItemTextDetailsClickHandlers;
@@ -18,20 +16,19 @@ import com.marcelje.hackernews.handlers.ItemUserClickHandlers;
 import com.marcelje.hackernews.loader.HackerNewsResponse;
 import com.marcelje.hackernews.loader.ItemListLoader;
 import com.marcelje.hackernews.model.Item;
+import com.marcelje.hackernews.screen.news.item.ItemHeadFragment;
 
 import org.parceler.Parcels;
 
 import java.util.Collections;
 import java.util.List;
 
-public class StoryFragment extends Fragment
+public class StoryFragment extends ItemHeadFragment
         implements LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> {
 
-    private static final String ARG_ITEM = "com.marcelje.hackernews.screen.news.details.arg.ITEM";
+    private static final String ARG_ITEM = "com.marcelje.hackernews.screen.news.item.head.arg.ITEM";
 
     private static final int LOADER_ID_STORIES_ITEM = 200;
-
-    private ToolbarActivity mActivity;
 
     private FragmentStoryBinding mBinding;
 
@@ -50,19 +47,17 @@ public class StoryFragment extends Fragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         extractArguments();
-
-        mActivity = ToolbarActivity.getActivity(getActivity());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = FragmentStoryBinding.inflate(inflater, container, false);
-        mBinding.setActivity(mActivity);
+        mBinding.setActivity(getToolbarActivity());
         mBinding.setItem(mItem);
-        mBinding.setItemUserClickHandlers(new ItemUserClickHandlers(mActivity));
-        mBinding.setItemTextClickHandlers(new ItemTextClickHandlers(mActivity));
-        mBinding.setItemTextDetailsClickHandlers(new ItemTextDetailsClickHandlers(mActivity));
+        mBinding.setItemUserClickHandlers(new ItemUserClickHandlers(getToolbarActivity()));
+        mBinding.setItemTextClickHandlers(new ItemTextClickHandlers(getToolbarActivity()));
+        mBinding.setItemTextDetailsClickHandlers(new ItemTextDetailsClickHandlers(getToolbarActivity()));
 
         if (TextUtils.isEmpty(mItem.getUrl())) {
             mBinding.sectionNews.tvText.setBackground(null);
@@ -71,6 +66,11 @@ public class StoryFragment extends Fragment
         refresh();
 
         return mBinding.getRoot();
+    }
+
+    @Override
+    public void refresh() {
+        getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_STORIES_ITEM, null, this);
     }
 
     @Override
@@ -85,7 +85,8 @@ public class StoryFragment extends Fragment
     }
 
     @Override
-    public void onLoadFinished(Loader<HackerNewsResponse<List<Item>>> loader, HackerNewsResponse<List<Item>> response) {
+    public void onLoadFinished(Loader<HackerNewsResponse<List<Item>>> loader,
+                               HackerNewsResponse<List<Item>> response) {
         if (response.isSuccessful()) {
             switch (loader.getId()) {
                 case LOADER_ID_STORIES_ITEM:
@@ -95,7 +96,6 @@ public class StoryFragment extends Fragment
                 default:
             }
         }
-
     }
 
     @Override
@@ -116,9 +116,5 @@ public class StoryFragment extends Fragment
         if (args.containsKey(ARG_ITEM)) {
             mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
         }
-    }
-
-    private void refresh() {
-        getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_STORIES_ITEM, null, this);
     }
 }

@@ -1,7 +1,5 @@
 package com.marcelje.hackernews.screen.news;
 
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -11,9 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.marcelje.hackernews.fragment.ToolbarFragment;
 import com.marcelje.hackernews.listener.EndlessRecyclerViewScrollListener;
 import com.marcelje.hackernews.R;
-import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.databinding.FragmentNewsBinding;
 import com.marcelje.hackernews.factory.SnackbarFactory;
 import com.marcelje.hackernews.loader.BookmarkedItemLoader;
@@ -25,26 +23,24 @@ import com.marcelje.hackernews.utils.CollectionUtils;
 
 import java.util.List;
 
-public class NewsFragment extends Fragment
+public class NewsFragment extends ToolbarFragment
         implements SwipeRefreshLayout.OnRefreshListener,
         View.OnClickListener, LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> {
 
-    public static final String TYPE_TOP = "Top";
-    public static final String TYPE_BEST = "Best";
-    public static final String TYPE_NEW = "New";
-    public static final String TYPE_SHOW = "Show";
-    public static final String TYPE_ASK = "Ask";
-    public static final String TYPE_JOB = "Jobs";
-    public static final String TYPE_BOOKMARKED = "Bookmarked";
+    private static final String TYPE_TOP = "Top";
+    private static final String TYPE_BEST = "Best";
+    private static final String TYPE_NEW = "New";
+    private static final String TYPE_SHOW = "Show";
+    private static final String TYPE_ASK = "Ask";
+    private static final String TYPE_JOB = "Jobs";
+    private static final String TYPE_BOOKMARKED = "Bookmarked";
 
-    private static final int LOADER_ID_STORIES = 100;
-    private static final int LOADER_ID_STORIES_ITEM = 200;
-    private static final int LOADER_ID_BOOKMARKED_ITEM = 300;
+    private static final int LOADER_ID_STORIES = 500;
+    private static final int LOADER_ID_STORIES_ITEM = 600;
+    private static final int LOADER_ID_BOOKMARKED_ITEM = 700;
 
     private static final int ITEM_COUNT = 10;
     private int mCurrentPage = 1;
-
-    private ToolbarActivity mActivity;
 
     private FragmentNewsBinding mBinding;
     private NewsAdapter mAdapter;
@@ -57,18 +53,12 @@ public class NewsFragment extends Fragment
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mActivity = ToolbarActivity.getActivity(getActivity());
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = FragmentNewsBinding.inflate(inflater, container, false);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new NewsAdapter(mActivity);
+        mAdapter = new NewsAdapter(getToolbarActivity());
 
         mBinding.rvItemList.setLayoutManager(layoutManager);
         mBinding.rvItemList.setAdapter(mAdapter);
