@@ -106,7 +106,8 @@ public class NewsFragment extends ToolbarFragment
     }
 
     @Override
-    public void onLoadFinished(Loader<HackerNewsResponse<List<Item>>> loader, HackerNewsResponse<List<Item>> data) {
+    public void onLoadFinished(Loader<HackerNewsResponse<List<Item>>> loader,
+                               HackerNewsResponse<List<Item>> data) {
         if (data.isSuccessful()) {
             mAdapter.addData(data.getData());
         } else {

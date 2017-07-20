@@ -190,7 +190,7 @@ public class ItemActivity extends ToolbarActivity
 
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.item_head_container, mHeadFragment)
-                .add(R.id.item_comments_container, mCommentFragment)
+                .add(R.id.item_comment_container, mCommentFragment)
                 .commitAllowingStateLoss(); //TODO: not a good solution
     }
 

@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.activity.FragmentActivity;
 import com.marcelje.hackernews.factory.SpinnerFactory;
+import com.marcelje.hackernews.screen.about.AboutActivity;
 import com.marcelje.hackernews.screen.settings.SettingsActivity;
 import com.marcelje.hackernews.utils.SettingsUtils;
 
@@ -40,9 +41,11 @@ public class NewsActivity extends FragmentActivity implements AdapterView.OnItem
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
+            case R.id.action_about:
+                AboutActivity.startActivity(this);
+                return true;
             case R.id.action_settings:
                 SettingsActivity.startActivity(this);
-
                 return true;
             default:
         }
