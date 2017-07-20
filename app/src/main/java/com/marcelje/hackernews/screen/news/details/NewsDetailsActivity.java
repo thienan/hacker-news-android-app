@@ -69,28 +69,16 @@ public class NewsDetailsActivity extends FragmentActivity {
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.action_refresh:
-                mFragment.refreshComments();
-
+                mFragment.refreshPage();
                 return true;
             case R.id.action_share:
-                MenuUtils.openShareHackerNewsLinkChooser(this, mItem);
-
+                mFragment.share();
                 return true;
             case R.id.action_bookmark:
-                if (HackerNewsDao.isItemAvailable(this, mItem.getId())) {
-                    HackerNewsDao.deleteItem(this, mItem.getId());
-                    SnackbarFactory.createUnbookmarkedSuccessSnackBar(getToolbar()).show();
-                    menuItem.setTitle(R.string.menu_item_bookmark);
-                } else {
-                    HackerNewsDao.insertItem(this, mItem);
-                    SnackbarFactory.createBookmarkedSuccessSnackBar(getToolbar()).show();
-                    menuItem.setTitle(R.string.menu_item_unbookmark);
-                }
-
+                mFragment.bookmark(menuItem);
                 return true;
             case R.id.action_open_page:
-                BrowserUtils.openTab(this, HackerNewsUtils.geItemUrl(mItem.getId()));
-
+                mFragment.openPage();
                 return true;
             default:
         }

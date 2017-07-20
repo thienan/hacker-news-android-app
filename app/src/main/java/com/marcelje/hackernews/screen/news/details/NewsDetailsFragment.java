@@ -9,9 +9,12 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.marcelje.hackernews.R;
+import com.marcelje.hackernews.database.HackerNewsDao;
 import com.marcelje.hackernews.listener.EndlessRecyclerViewScrollListener;
 import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.databinding.FragmentNewsDetailsBinding;
@@ -23,10 +26,14 @@ import com.marcelje.hackernews.loader.HackerNewsResponse;
 import com.marcelje.hackernews.loader.ItemListLoader;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.screen.news.comment.CommentAdapter;
+import com.marcelje.hackernews.utils.BrowserUtils;
 import com.marcelje.hackernews.utils.CollectionUtils;
+import com.marcelje.hackernews.utils.HackerNewsUtils;
+import com.marcelje.hackernews.utils.MenuUtils;
 
 import org.parceler.Parcels;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class NewsDetailsFragment extends Fragment
@@ -34,6 +41,7 @@ public class NewsDetailsFragment extends Fragment
 
     private static final String ARG_ITEM = "com.marcelje.hackernews.screen.news.details.arg.ITEM";
 
+    private static final int LOADER_ID_STORIES_ITEM = 200;
     private static final int LOADER_ID_COMMENT_ITEM = 118;
 
     private static final int ITEM_COUNT = 10;
@@ -92,7 +100,7 @@ public class NewsDetailsFragment extends Fragment
                     }
                 });
 
-        refreshComments();
+        refreshPage();
 
         return mBinding.getRoot();
     }
@@ -100,6 +108,8 @@ public class NewsDetailsFragment extends Fragment
     @Override
     public Loader<HackerNewsResponse<List<Item>>> onCreateLoader(int id, Bundle args) {
         switch (id) {
+            case LOADER_ID_STORIES_ITEM:
+                return new ItemListLoader(getActivity(), Arrays.asList(mItem.getId()));
             case LOADER_ID_COMMENT_ITEM:
                 List<Long> kids = mItem.getKids();
 
@@ -119,14 +129,25 @@ public class NewsDetailsFragment extends Fragment
     @Override
     public void onLoadFinished(Loader<HackerNewsResponse<List<Item>>> loader, HackerNewsResponse<List<Item>> response) {
         if (response.isSuccessful()) {
-            mAdapter.addData(response.getData());
+            switch (loader.getId()) {
+                case LOADER_ID_STORIES_ITEM:
+                    mItem = response.getData().get(0);
+                    mBinding.setItem(mItem);
+                    break;
+                case LOADER_ID_COMMENT_ITEM:
+                    mAdapter.addData(response.getData());
+                    hideProgressBar();
+                    break;
+                default:
+            }
         } else {
             SnackbarFactory
                     .createRetrieveErrorSnackbar(mBinding.sectionCommentList.getRoot(),
                             NewsDetailsFragment.this).show();
+
+            hideProgressBar();
         }
 
-        hideProgressBar();
     }
 
     @Override
@@ -154,11 +175,37 @@ public class NewsDetailsFragment extends Fragment
         }
     }
 
-    public void refreshComments() {
+    public void share() {
+        MenuUtils.openShareHackerNewsLinkChooser(getContext(), mItem);
+    }
+
+    public void bookmark(MenuItem menuItem) {
+        if (HackerNewsDao.isItemAvailable(getContext(), mItem.getId())) {
+            HackerNewsDao.deleteItem(getContext(), mItem.getId());
+            SnackbarFactory.createUnbookmarkedSuccessSnackBar(mBinding.sectionNews.getRoot()).show();
+            menuItem.setTitle(R.string.menu_item_bookmark);
+        } else {
+            HackerNewsDao.insertItem(getContext(), mItem);
+            SnackbarFactory.createBookmarkedSuccessSnackBar(mBinding.sectionNews.getRoot()).show();
+            menuItem.setTitle(R.string.menu_item_unbookmark);
+        }
+    }
+
+    public void openPage() {
+        BrowserUtils.openTab(getActivity(), HackerNewsUtils.geItemUrl(mItem.getId()));
+    }
+
+    public void refreshPage() {
         mAdapter.clearData();
         mCurrentPage = 1;
         showProgressBar();
+
+        loadNews();
         retrieveComments();
+    }
+
+    private void loadNews() {
+        getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_STORIES_ITEM, null, this);
     }
 
     private void nextPageComments() {

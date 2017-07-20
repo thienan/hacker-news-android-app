@@ -13,21 +13,21 @@ import java.util.List;
 @SuppressWarnings("WeakerAccess")
 @Parcel(Parcel.Serialization.BEAN)
 public class Item {
-    private long id;
-    private boolean deleted;
-    private String type;
-    private String by;
-    private long time;
-    private String text;
-    private boolean dead;
-    private long parent;
-    private long poll;
+    private long id = -1;
+    private boolean deleted = false;
+    private String type = "";
+    private String by = "";
+    private long time = 0;
+    private String text = "";
+    private boolean dead = false;
+    private long parent = -1;
+    private long poll = -1;
     private List<Long> kids = new ArrayList<>();
-    private String url;
-    private int score;
-    private String title;
+    private String url = "";
+    private int score = 0;
+    private String title = "";
     private List<Long> parts = new ArrayList<>();
-    private int descendants;
+    private int descendants = 0;
 
     public long getId() {
         return id;

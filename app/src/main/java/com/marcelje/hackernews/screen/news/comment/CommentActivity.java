@@ -68,13 +68,13 @@ public class CommentActivity extends FragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                mFragment.refreshComments();
+                mFragment.refreshPage();
                 return true;
             case R.id.action_share:
-                MenuUtils.openShareHackerNewsLinkChooser(this, mItem);
+                mFragment.share();
                 return true;
             case R.id.action_open_page:
-                BrowserUtils.openTab(this, HackerNewsUtils.geItemUrl(mItem.getId()));
+                mFragment.openPage();
                 return true;
             default:
         }

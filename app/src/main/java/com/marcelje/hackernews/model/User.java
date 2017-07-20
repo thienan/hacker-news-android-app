@@ -7,11 +7,11 @@ import java.util.List;
 
 @Parcel(Parcel.Serialization.BEAN)
 public class User {
-    private String id;
-    private int delay;
-    private long created;
-    private int karma;
-    private String about;
+    private String id = "";
+    private int delay = 0;
+    private long created = 0;
+    private int karma = 0;
+    private String about = "";
     private List<Long> submitted = new ArrayList<>();
 
     public String getId() {
