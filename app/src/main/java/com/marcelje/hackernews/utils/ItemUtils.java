@@ -3,6 +3,7 @@ package com.marcelje.hackernews.utils;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.SpannableString;
@@ -23,15 +24,14 @@ import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.model.User;
 import com.marcelje.hackernews.screen.user.UserActivity;
 
-import timber.log.Timber;
-
 @SuppressWarnings("WeakerAccess")
 public final class ItemUtils {
 
     private static final String BRACKET_OPEN = " (";
     private static final String BRACKET_CLOSE = ")";
 
-    private ItemUtils() {}
+    private ItemUtils() {
+    }
 
     public static CharSequence getRelativeDate(Context context, Item item) {
         if (context == null || item == null) return "";
@@ -98,7 +98,13 @@ public final class ItemUtils {
         SpannableStringBuilder spannedText = new SpannableStringBuilder();
         if (TextUtils.isEmpty(text)) return spannedText;
 
-        spannedText = (SpannableStringBuilder) Html.fromHtml(text);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            spannedText = (SpannableStringBuilder) Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            //noinspection deprecation
+            spannedText = (SpannableStringBuilder) Html.fromHtml(text);
+        }
+
         URLSpan[] spans = spannedText.getSpans(0, spannedText.length(), URLSpan.class);
         for (URLSpan span : spans) {
             int start = spannedText.getSpanStart(span);

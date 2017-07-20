@@ -1,34 +1,39 @@
-package com.marcelje.hackernews.screen.news.details;
+package com.marcelje.hackernews.screen.news.item;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.activity.FragmentActivity;
-import com.marcelje.hackernews.database.HackerNewsDao;
-import com.marcelje.hackernews.factory.SnackbarFactory;
-import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.activity.ToolbarActivity;
-import com.marcelje.hackernews.utils.BrowserUtils;
-import com.marcelje.hackernews.utils.HackerNewsUtils;
-import com.marcelje.hackernews.utils.MenuUtils;
+import com.marcelje.hackernews.database.HackerNewsDao;
+import com.marcelje.hackernews.model.Item;
 
 import org.parceler.Parcels;
 
-public class NewsDetailsActivity extends FragmentActivity {
+public class ItemActivity extends FragmentActivity {
 
-    private static final String EXTRA_ITEM = "com.marcelje.hackernews.screen.news.details.extra.ITEM";
+    private static final String EXTRA_ITEM = "com.marcelje.hackernews.screen.news.item.extra.ITEM";
+    private static final String EXTRA_PARENT = "com.marcelje.hackernews.screen.news.item.extra.PARENT";
+    private static final String EXTRA_POSTER = "com.marcelje.hackernews.screen.news.item.extra.POSTER";
 
-    private NewsDetailsFragment mFragment;
+    private ItemFragment mFragment;
     private Item mItem;
+    private String mParent;
+    private String mPoster;
 
     public static void startActivity(ToolbarActivity activity, Item item) {
-        Intent intent = new Intent(activity, NewsDetailsActivity.class);
+        startActivity(activity, item, null, null);
+    }
 
-        Bundle extras = createExtras(item);
+    public static void startActivity(ToolbarActivity activity, Item item, String parent, String poster) {
+        Intent intent = new Intent(activity, ItemActivity.class);
+
+        Bundle extras = createExtras(item, parent, poster);
         intent.putExtras(extras);
 
         activity.startActivity(intent);
@@ -41,7 +46,9 @@ public class NewsDetailsActivity extends FragmentActivity {
 
         extractExtras();
 
-        mFragment = NewsDetailsFragment.newInstance(mItem);
+        setTitle(mItem.getType());
+
+        mFragment = ItemFragment.newInstance(mItem, mParent, mPoster);
         setFragment(mFragment);
     }
 
@@ -86,9 +93,11 @@ public class NewsDetailsActivity extends FragmentActivity {
         return super.onOptionsItemSelected(menuItem);
     }
 
-    private static Bundle createExtras(Item item) {
+    private static Bundle createExtras(Item item, String parent, String poster) {
         Bundle extras = new Bundle();
-        extras.putParcelable(EXTRA_ITEM, Parcels.wrap(item));
+        if (item != null) extras.putParcelable(EXTRA_ITEM, Parcels.wrap(item));
+        if (!TextUtils.isEmpty(parent)) extras.putString(EXTRA_PARENT, parent);
+        if (!TextUtils.isEmpty(poster)) extras.putString(EXTRA_POSTER, poster);
 
         return extras;
     }
@@ -99,5 +108,14 @@ public class NewsDetailsActivity extends FragmentActivity {
         if (intent.hasExtra(EXTRA_ITEM)) {
             mItem = Parcels.unwrap(intent.getParcelableExtra(EXTRA_ITEM));
         }
+
+        if (intent.hasExtra(EXTRA_PARENT)) {
+            mParent = intent.getStringExtra(EXTRA_PARENT);
+        }
+
+        if (intent.hasExtra(EXTRA_POSTER)) {
+            mPoster = intent.getStringExtra(EXTRA_POSTER);
+        }
     }
+
 }

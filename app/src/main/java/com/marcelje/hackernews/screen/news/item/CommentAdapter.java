@@ -1,4 +1,4 @@
-package com.marcelje.hackernews.screen.news.comment;
+package com.marcelje.hackernews.screen.news.item;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -72,7 +72,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         @Override
         public void onClick(View view) {
             Item data = mData.get(getAdapterPosition());
-            CommentActivity.startActivity(mActivity, data, mParent, mPoster);
+            ItemActivity.startActivity(mActivity, data, mParent, mPoster);
         }
     }
 }

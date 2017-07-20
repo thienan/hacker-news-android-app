@@ -1,4 +1,4 @@
-package com.marcelje.hackernews.screen.news.details;
+package com.marcelje.hackernews.screen.news.item;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,18 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.marcelje.hackernews.R;
-import com.marcelje.hackernews.database.HackerNewsDao;
-import com.marcelje.hackernews.listener.EndlessRecyclerViewScrollListener;
 import com.marcelje.hackernews.activity.ToolbarActivity;
-import com.marcelje.hackernews.databinding.FragmentNewsDetailsBinding;
+import com.marcelje.hackernews.database.HackerNewsDao;
+import com.marcelje.hackernews.databinding.FragmentItemBinding;
 import com.marcelje.hackernews.factory.SnackbarFactory;
-import com.marcelje.hackernews.handlers.ItemTextClickHandlers;
-import com.marcelje.hackernews.handlers.ItemTextDetailsClickHandlers;
-import com.marcelje.hackernews.handlers.ItemUserClickHandlers;
+import com.marcelje.hackernews.listener.EndlessRecyclerViewScrollListener;
 import com.marcelje.hackernews.loader.HackerNewsResponse;
 import com.marcelje.hackernews.loader.ItemListLoader;
 import com.marcelje.hackernews.model.Item;
-import com.marcelje.hackernews.screen.news.comment.CommentAdapter;
 import com.marcelje.hackernews.utils.BrowserUtils;
 import com.marcelje.hackernews.utils.CollectionUtils;
 import com.marcelje.hackernews.utils.HackerNewsUtils;
@@ -33,15 +29,20 @@ import com.marcelje.hackernews.utils.MenuUtils;
 
 import org.parceler.Parcels;
 
-import java.util.Arrays;
 import java.util.List;
 
-public class NewsDetailsFragment extends Fragment
+public class ItemFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>>, View.OnClickListener {
 
-    private static final String ARG_ITEM = "com.marcelje.hackernews.screen.news.details.arg.ITEM";
+    private static final String ARG_ITEM = "com.marcelje.hackernews.screen.news.item.arg.ITEM";
+    private static final String ARG_PARENT = "com.marcelje.hackernews.screen.news.item.arg.PARENT";
+    private static final String ARG_POSTER = "com.marcelje.hackernews.screen.news.item.arg.POSTER";
 
-    private static final int LOADER_ID_STORIES_ITEM = 200;
+    private static final String ITEM_TYPE_COMMENT = "comment";
+    private static final String ITEM_TYPE_STORY = "story";
+    private static final String ITEM_TYPE_POLL = "poll";
+    private static final String ITEM_TYPE_JOB = "job";
+
     private static final int LOADER_ID_COMMENT_ITEM = 118;
 
     private static final int ITEM_COUNT = 10;
@@ -49,15 +50,17 @@ public class NewsDetailsFragment extends Fragment
 
     private ToolbarActivity mActivity;
 
-    private FragmentNewsDetailsBinding mBinding;
+    private FragmentItemBinding mBinding;
     private CommentAdapter mAdapter;
 
     private Item mItem;
+    private String mParent;
+    private String mPoster;
 
-    public static NewsDetailsFragment newInstance(Item item) {
-        NewsDetailsFragment fragment = new NewsDetailsFragment();
+    public static ItemFragment newInstance(Item item, String parent, String poster) {
+        ItemFragment fragment = new ItemFragment();
 
-        Bundle args = createArguments(item);
+        Bundle args = createArguments(item, parent, poster);
         fragment.setArguments(args);
 
         return fragment;
@@ -74,19 +77,16 @@ public class NewsDetailsFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mBinding = FragmentNewsDetailsBinding.inflate(inflater, container, false);
-        mBinding.setActivity(mActivity);
+        mBinding = FragmentItemBinding.inflate(inflater, container, false);
         mBinding.setItem(mItem);
-        mBinding.setItemUserClickHandlers(new ItemUserClickHandlers(mActivity));
-        mBinding.setItemTextClickHandlers(new ItemTextClickHandlers(mActivity));
-        mBinding.setItemTextDetailsClickHandlers(new ItemTextDetailsClickHandlers(mActivity));
-
-        if (TextUtils.isEmpty(mItem.getUrl())) {
-            mBinding.sectionNews.tvText.setBackground(null);
-        }
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new CommentAdapter(mActivity, null, mItem.getBy());
+
+        if (TextUtils.isEmpty(mParent) && TextUtils.isEmpty(mPoster)) {
+            mAdapter = new CommentAdapter(mActivity, null, mItem.getBy());
+        } else {
+            mAdapter = new CommentAdapter(mActivity, mItem.getBy(), mPoster);
+        }
 
         mBinding.sectionCommentList.rvCommentList.setLayoutManager(layoutManager);
         mBinding.sectionCommentList.rvCommentList.setAdapter(mAdapter);
@@ -100,6 +100,26 @@ public class NewsDetailsFragment extends Fragment
                     }
                 });
 
+        Fragment fragment;
+
+        switch (mItem.getType()) {
+            case ITEM_TYPE_COMMENT:
+                fragment = CommentFragment.newInstance(mItem, mParent, mPoster);
+                break;
+            case ITEM_TYPE_STORY:
+                //fall through
+            case ITEM_TYPE_JOB:
+                //fall through
+            case ITEM_TYPE_POLL:
+                //fall through
+            default:
+                fragment = StoryFragment.newInstance(mItem);
+        }
+
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .add(R.id.item_head_container, fragment)
+                .commit();
+
         refreshPage();
 
         return mBinding.getRoot();
@@ -108,8 +128,6 @@ public class NewsDetailsFragment extends Fragment
     @Override
     public Loader<HackerNewsResponse<List<Item>>> onCreateLoader(int id, Bundle args) {
         switch (id) {
-            case LOADER_ID_STORIES_ITEM:
-                return new ItemListLoader(getActivity(), Arrays.asList(mItem.getId()));
             case LOADER_ID_COMMENT_ITEM:
                 List<Long> kids = mItem.getKids();
 
@@ -130,10 +148,6 @@ public class NewsDetailsFragment extends Fragment
     public void onLoadFinished(Loader<HackerNewsResponse<List<Item>>> loader, HackerNewsResponse<List<Item>> response) {
         if (response.isSuccessful()) {
             switch (loader.getId()) {
-                case LOADER_ID_STORIES_ITEM:
-                    mItem = response.getData().get(0);
-                    mBinding.setItem(mItem);
-                    break;
                 case LOADER_ID_COMMENT_ITEM:
                     mAdapter.addData(response.getData());
                     hideProgressBar();
@@ -141,10 +155,7 @@ public class NewsDetailsFragment extends Fragment
                 default:
             }
         } else {
-            SnackbarFactory
-                    .createRetrieveErrorSnackbar(mBinding.sectionCommentList.getRoot(),
-                            NewsDetailsFragment.this).show();
-
+            SnackbarFactory.createRetrieveErrorSnackbar(mBinding.sectionCommentList.getRoot(), this).show();
             hideProgressBar();
         }
 
@@ -160,21 +171,6 @@ public class NewsDetailsFragment extends Fragment
         retrieveComments();
     }
 
-    private static Bundle createArguments(Item item) {
-        Bundle args = new Bundle();
-        args.putParcelable(ARG_ITEM, Parcels.wrap(item));
-
-        return args;
-    }
-
-    private void extractArguments() {
-        Bundle args = getArguments();
-
-        if (args.containsKey(ARG_ITEM)) {
-            mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
-        }
-    }
-
     public void share() {
         MenuUtils.openShareHackerNewsLinkChooser(getContext(), mItem);
     }
@@ -182,11 +178,11 @@ public class NewsDetailsFragment extends Fragment
     public void bookmark(MenuItem menuItem) {
         if (HackerNewsDao.isItemAvailable(getContext(), mItem.getId())) {
             HackerNewsDao.deleteItem(getContext(), mItem.getId());
-            SnackbarFactory.createUnbookmarkedSuccessSnackBar(mBinding.sectionNews.getRoot()).show();
+            SnackbarFactory.createUnbookmarkedSuccessSnackBar(mBinding.getRoot()).show();
             menuItem.setTitle(R.string.menu_item_bookmark);
         } else {
             HackerNewsDao.insertItem(getContext(), mItem);
-            SnackbarFactory.createBookmarkedSuccessSnackBar(mBinding.sectionNews.getRoot()).show();
+            SnackbarFactory.createBookmarkedSuccessSnackBar(mBinding.getRoot()).show();
             menuItem.setTitle(R.string.menu_item_unbookmark);
         }
     }
@@ -200,12 +196,8 @@ public class NewsDetailsFragment extends Fragment
         mCurrentPage = 1;
         showProgressBar();
 
-        loadNews();
+        //loadNews();
         retrieveComments();
-    }
-
-    private void loadNews() {
-        getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_STORIES_ITEM, null, this);
     }
 
     private void nextPageComments() {
@@ -225,5 +217,30 @@ public class NewsDetailsFragment extends Fragment
 
     private void hideProgressBar() {
         mBinding.sectionCommentList.pbLoading.setVisibility(View.GONE);
+    }
+
+    private static Bundle createArguments(Item item, String parent, String poster) {
+        Bundle args = new Bundle();
+        if (item != null) args.putParcelable(ARG_ITEM, Parcels.wrap(item));
+        if (!TextUtils.isEmpty(parent)) args.putString(ARG_PARENT, parent);
+        if (!TextUtils.isEmpty(poster)) args.putString(ARG_POSTER, poster);
+
+        return args;
+    }
+
+    private void extractArguments() {
+        Bundle args = getArguments();
+
+        if (args.containsKey(ARG_ITEM)) {
+            mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
+        }
+
+        if (args.containsKey(ARG_PARENT)) {
+            mParent = args.getString(ARG_PARENT);
+        }
+
+        if (args.containsKey(ARG_POSTER)) {
+            mPoster = args.getString(ARG_POSTER);
+        }
     }
 }

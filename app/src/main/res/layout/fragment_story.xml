@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="activity"
+            type="com.marcelje.hackernews.activity.ToolbarActivity" />
+
+        <variable
+            name="item"
+            type="com.marcelje.hackernews.model.Item" />
+
+        <variable
+            name="itemUserClickHandlers"
+            type="com.marcelje.hackernews.handlers.ItemUserClickHandlers" />
+
+        <variable
+            name="itemTextClickHandlers"
+            type="com.marcelje.hackernews.handlers.ItemTextClickHandlers" />
+
+        <variable
+            name="itemTextDetailsClickHandlers"
+            type="com.marcelje.hackernews.handlers.ItemTextDetailsClickHandlers" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/section_news"
+            layout="@layout/item_news"
+            app:item="@{item}"
+            app:itemTextClickHandlers="@{itemTextClickHandlers}"
+            app:itemUserClickHandlers="@{itemUserClickHandlers}" />
+
+        <include
+            android:id="@+id/section_news_details"
+            layout="@layout/section_news_details"
+            app:activity="@{activity}"
+            app:itemTextDetailsClickHandlers="@{itemTextDetailsClickHandlers}"
+            app:text="@{item.text}" />
+    </LinearLayout>
+
+</layout>

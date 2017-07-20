@@ -14,7 +14,7 @@ public class FragmentActivity extends ToolbarActivity {
         setContentView(R.layout.activity_base);
     }
 
-    public void setFragment(Fragment fragment) {
+    protected void setFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, fragment)
                 .commit();

@@ -1,7 +1,7 @@
 package com.marcelje.hackernews.handlers;
 
 import com.marcelje.hackernews.activity.ToolbarActivity;
-import com.marcelje.hackernews.screen.news.details.text.DetailsTextActivity;
+import com.marcelje.hackernews.screen.news.item.text.DetailsTextActivity;
 
 public class ItemTextDetailsClickHandlers {
 

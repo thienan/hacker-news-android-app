@@ -1,4 +1,4 @@
-package com.marcelje.hackernews.screen.news.details.text;
+package com.marcelje.hackernews.screen.news.item.text;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;

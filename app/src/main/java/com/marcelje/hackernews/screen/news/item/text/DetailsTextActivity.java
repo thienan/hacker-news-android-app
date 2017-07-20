@@ -1,4 +1,4 @@
-package com.marcelje.hackernews.screen.news.details.text;
+package com.marcelje.hackernews.screen.news.item.text;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +9,7 @@ import com.marcelje.hackernews.activity.FragmentActivity;
 
 public class DetailsTextActivity extends FragmentActivity {
 
-    private static final String EXTRA_TEXT = "com.marcelje.hackernews.screen.news.details.text.extra.TEXT";
+    private static final String EXTRA_TEXT = "com.marcelje.hackernews.screen.news.item.text.extra.TEXT";
 
     private String mText;
 

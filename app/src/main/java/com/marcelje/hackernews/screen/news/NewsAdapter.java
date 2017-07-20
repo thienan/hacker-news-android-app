@@ -15,7 +15,7 @@ import com.marcelje.hackernews.factory.SnackbarFactory;
 import com.marcelje.hackernews.handlers.ItemTextClickHandlers;
 import com.marcelje.hackernews.handlers.ItemUserClickHandlers;
 import com.marcelje.hackernews.model.Item;
-import com.marcelje.hackernews.screen.news.details.NewsDetailsActivity;
+import com.marcelje.hackernews.screen.news.item.ItemActivity;
 import com.marcelje.hackernews.utils.BrowserUtils;
 import com.marcelje.hackernews.utils.HackerNewsUtils;
 import com.marcelje.hackernews.utils.MenuUtils;
@@ -96,7 +96,7 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
         @Override
         public void onClick(View view) {
             Item data = mData.get(getAdapterPosition());
-            NewsDetailsActivity.startActivity(mActivity, data);
+            ItemActivity.startActivity(mActivity, data);
         }
 
         @Override
