@@ -56,10 +56,10 @@ public class ToolbarActivity extends AppCompatActivity {
 
     void setContentView(@LayoutRes int toolbarResID, @LayoutRes int layoutResID) {
         View toolbar = getLayoutInflater().inflate(toolbarResID, null, false);
-        FrameLayout container = toolbar.findViewById(R.id.layout_container);
+        FrameLayout container = (FrameLayout) toolbar.findViewById(R.id.layout_container);
         getLayoutInflater().inflate(layoutResID, container, true);
 
-        mToolbar = toolbar.findViewById(R.id.toolbar);
+        mToolbar = (Toolbar) toolbar.findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
         super.setContentView(toolbar);

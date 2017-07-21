@@ -25,10 +25,10 @@ class WebActivityClient extends WebViewClient {
 
     @Override
     public void onPageFinished(WebView view, String url) {
-        TextView tvWebTitle = mActivity.findViewById(R.id.tv_web_title);
+        TextView tvWebTitle = (TextView) mActivity.findViewById(R.id.tv_web_title);
         tvWebTitle.setText(view.getTitle());
 
-        TextView tvWebUrl = mActivity.findViewById(R.id.tv_web_url);
+        TextView tvWebUrl = (TextView) mActivity.findViewById(R.id.tv_web_url);
         tvWebUrl.setText(url);
 
         mActivity.findViewById(R.id.layout_web_title).setVisibility(View.VISIBLE);
