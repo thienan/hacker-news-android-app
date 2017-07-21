@@ -204,5 +204,57 @@ public class Item {
 
             return items;
         }
+
+        public static ContentValues[] kidsToValues(Item item) {
+            List<ContentValues> valuesList = new ArrayList<>();
+
+            for (long kidId : item.getKids()) {
+                ContentValues values = new ContentValues();
+                values.put(HackerNewsContract.BookmarkedKidEntry.COLUMN_ITEM_ID, item.getId());
+                values.put(HackerNewsContract.BookmarkedKidEntry.COLUMN_KID_ID, kidId);
+
+                valuesList.add(values);
+            }
+
+            return valuesList.toArray(new ContentValues[valuesList.size()]);
+        }
+
+        public static List<Long> kidsFromCursor(Cursor cursor) {
+            List<Long> kidList = new ArrayList<>();
+            if (cursor == null) return kidList;
+
+            while (cursor.moveToNext()) {
+                long kidId = cursor.getLong(cursor.getColumnIndex(HackerNewsContract.BookmarkedKidEntry.COLUMN_KID_ID));
+                kidList.add(kidId);
+            }
+
+            return kidList;
+        }
+
+        public static ContentValues[] partsToValues(Item item) {
+            List<ContentValues> valuesList = new ArrayList<>();
+
+            for (long partId : item.getParts()) {
+                ContentValues values = new ContentValues();
+                values.put(HackerNewsContract.BookmarkedPartEntry.COLUMN_ITEM_ID, item.getId());
+                values.put(HackerNewsContract.BookmarkedPartEntry.COLUMN_PART_ID, partId);
+
+                valuesList.add(values);
+            }
+
+            return valuesList.toArray(new ContentValues[valuesList.size()]);
+        }
+
+        public static List<Long> partsFromCursor(Cursor cursor) {
+            List<Long> partList = new ArrayList<>();
+            if (cursor == null) return partList;
+
+            while (cursor.moveToNext()) {
+                long partId = cursor.getLong(cursor.getColumnIndex(HackerNewsContract.BookmarkedPartEntry.COLUMN_PART_ID));
+                partList.add(partId);
+            }
+
+            return partList;
+        }
     }
 }

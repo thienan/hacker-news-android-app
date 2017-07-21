@@ -52,6 +52,24 @@ public class BookmarkedItemLoader extends AsyncTaskLoader<HackerNewsResponse<Lis
 
             List<Item> items = Item.Factory.fromCursor(cursor);
 
+            for (Item item : items) {
+                cursor = ContentResolverCompat.query(getContext().getContentResolver(),
+                        HackerNewsContract.BookmarkedKidEntry.CONTENT_URI, null,
+                        HackerNewsContract.BookmarkedKidEntry.COLUMN_ITEM_ID + "=?",
+                        new String[]{String.valueOf(item.getId())}, null,
+                        mCancellationSignal);
+
+                item.setKids(Item.Factory.kidsFromCursor(cursor));
+
+                cursor = ContentResolverCompat.query(getContext().getContentResolver(),
+                        HackerNewsContract.BookmarkedPartEntry.CONTENT_URI, null,
+                        HackerNewsContract.BookmarkedPartEntry.COLUMN_ITEM_ID + "=?",
+                        new String[]{String.valueOf(item.getId())}, null,
+                        mCancellationSignal);
+
+                item.setParts(Item.Factory.partsFromCursor(cursor));
+            }
+
             return HackerNewsResponse.ok(items);
         } finally {
             synchronized (this) {

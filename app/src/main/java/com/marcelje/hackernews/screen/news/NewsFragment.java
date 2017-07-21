@@ -109,7 +109,14 @@ public class NewsFragment extends ToolbarFragment
     public void onLoadFinished(Loader<HackerNewsResponse<List<Item>>> loader,
                                HackerNewsResponse<List<Item>> data) {
         if (data.isSuccessful()) {
-            mAdapter.addData(data.getData());
+            switch (loader.getId()) {
+                case LOADER_ID_STORIES_ITEM:
+                    mAdapter.addData(data.getData());
+                case LOADER_ID_BOOKMARKED_ITEM:
+                    mAdapter.swapData(data.getData());
+                default:
+                    //do nothing
+            }
         } else {
             SnackbarFactory
                     .createRetrieveErrorSnackbar(mBinding.rvItemList,

@@ -11,7 +11,7 @@
     <string name="message_copy">Copied %s</string>
     <string name="message_bookmarked">Bookmarked</string>
     <string name="message_unbookmarked">Unbookmarked</string>
-    <string name="message_error_retrieve_data">Failed to retrieve data from server</string>
+    <string name="message_error_retrieve_data">Failed to retrieve data</string>
 
     <string name="text_deleted">&lt;&lt;deleted&gt;&gt;</string>
     <string name="text_dead">&lt;&lt;dead&gt;&gt;</string>

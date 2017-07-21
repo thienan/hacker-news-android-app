@@ -25,6 +25,18 @@ class HackerNewsDbHelper extends SQLiteOpenHelper {
             HackerNewsContract.BookmarkedItemEntry.COLUMN_TITLE + " TEXT, " +
             HackerNewsContract.BookmarkedItemEntry.COLUMN_DESCENDANTS + " INTEGER " + ");";
 
+    private static final String CREATE_BOOKMARKED_KID_TABLE = "CREATE TABLE "
+            + HackerNewsContract.BookmarkedKidEntry.TABLE_NAME + " (" +
+            HackerNewsContract.BookmarkedKidEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            HackerNewsContract.BookmarkedKidEntry.COLUMN_ITEM_ID + " INTEGER, " +
+            HackerNewsContract.BookmarkedKidEntry.COLUMN_KID_ID + " INTEGER " + ");";
+
+    private static final String CREATE_BOOKMARKED_PART_TABLE = "CREATE TABLE "
+            + HackerNewsContract.BookmarkedPartEntry.TABLE_NAME + " (" +
+            HackerNewsContract.BookmarkedPartEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            HackerNewsContract.BookmarkedPartEntry.COLUMN_ITEM_ID + " INTEGER, " +
+            HackerNewsContract.BookmarkedPartEntry.COLUMN_PART_ID + " INTEGER " + ");";
+
     private static final String CREATE_USER_TABLE = "CREATE TABLE "
             + HackerNewsContract.UserEntry.TABLE_NAME + " (" +
             HackerNewsContract.UserEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -34,6 +46,8 @@ class HackerNewsDbHelper extends SQLiteOpenHelper {
             HackerNewsContract.UserEntry.COLUMN_KARMA + " INTEGER, " +
             HackerNewsContract.UserEntry.COLUMN_ABOUT + " TEXT " + ");";
 
+
+
     public HackerNewsDbHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
     }
@@ -41,6 +55,8 @@ class HackerNewsDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_BOOKMARKED_ITEM_TABLE);
+        db.execSQL(CREATE_BOOKMARKED_KID_TABLE);
+        db.execSQL(CREATE_BOOKMARKED_PART_TABLE);
         db.execSQL(CREATE_USER_TABLE);
     }
 

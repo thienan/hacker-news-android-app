@@ -22,17 +22,33 @@ public final class HackerNewsDao {
         return isBookmarked;
     }
 
-    public static Cursor getItem(Context context, long itemId) {
+    private static Cursor getItem(Context context, long itemId) {
         return context.getContentResolver().query(HackerNewsContract.BookmarkedItemEntry.CONTENT_URI,
                 null, BaseColumns._ID + "=?", new String[]{String.valueOf(itemId)}, null);
     }
 
     public static int deleteItem(Context context, long itemId) {
         Uri deletedUri = ContentUris.withAppendedId(HackerNewsContract.BookmarkedItemEntry.CONTENT_URI, itemId);
+
+        context.getContentResolver().delete(
+                HackerNewsContract.BookmarkedKidEntry.CONTENT_URI,
+                HackerNewsContract.BookmarkedKidEntry.COLUMN_ITEM_ID + "=?",
+                new String[]{String.valueOf(itemId)});
+
+        context.getContentResolver().delete(
+                HackerNewsContract.BookmarkedPartEntry.CONTENT_URI,
+                HackerNewsContract.BookmarkedPartEntry.COLUMN_ITEM_ID + "=?",
+                new String[]{String.valueOf(itemId)});
+
         return context.getContentResolver().delete(deletedUri, null, null);
     }
 
     public static Uri insertItem(Context context, Item item) {
+        context.getContentResolver()
+                .bulkInsert(HackerNewsContract.BookmarkedKidEntry.CONTENT_URI, Item.Factory.kidsToValues(item));
+        context.getContentResolver()
+                .bulkInsert(HackerNewsContract.BookmarkedPartEntry.CONTENT_URI, Item.Factory.partsToValues(item));
+
         return context.getContentResolver()
                 .insert(HackerNewsContract.BookmarkedItemEntry.CONTENT_URI, Item.Factory.toValues(item));
     }
