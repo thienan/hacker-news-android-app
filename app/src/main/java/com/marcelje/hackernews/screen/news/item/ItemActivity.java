@@ -101,12 +101,16 @@ public class ItemActivity extends ToolbarActivity
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem menuItem = menu.findItem(R.id.action_bookmark);
+        MenuItem menuItemBookmark = menu.findItem(R.id.action_bookmark);
+
+        if (mItem != null && ITEM_TYPE_COMMENT.equals(mItem.getType())) {
+            menuItemBookmark.setVisible(false);
+        }
 
         if (HackerNewsDao.isItemAvailable(this, mItemId)) {
-            menuItem.setTitle(R.string.menu_item_unbookmark);
+            menuItemBookmark.setTitle(R.string.menu_item_unbookmark);
         } else {
-            menuItem.setTitle(R.string.menu_item_bookmark);
+            menuItemBookmark.setTitle(R.string.menu_item_bookmark);
         }
 
         return super.onPrepareOptionsMenu(menu);
