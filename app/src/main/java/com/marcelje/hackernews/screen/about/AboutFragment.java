@@ -14,8 +14,7 @@ import com.marcelje.hackernews.utils.ItemUtils;
 public class AboutFragment extends ToolbarFragment {
 
     public static AboutFragment newInstance() {
-        AboutFragment fragment = new AboutFragment();
-        return fragment;
+        return new AboutFragment();
     }
 
     @Override
