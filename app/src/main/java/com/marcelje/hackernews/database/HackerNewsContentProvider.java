@@ -195,7 +195,7 @@ public class HackerNewsContentProvider extends ContentProvider {
         int match = sUriMatcher.match(uri);
         int deleted;
 
-        String id = uri.getPathSegments().get(1);
+        String id;
         String tableName;
 
         switch (match) {
@@ -205,6 +205,7 @@ public class HackerNewsContentProvider extends ContentProvider {
                 break;
             case BOOKMARKED_ITEM_ID:
                 tableName = HackerNewsContract.BookmarkedItemEntry.TABLE_NAME;
+                id = uri.getPathSegments().get(1);
                 deleted = db.delete(tableName, BaseColumns._ID + "=?", new String[]{id});
                 break;
             case BOOKMARKED_KID:
@@ -213,6 +214,7 @@ public class HackerNewsContentProvider extends ContentProvider {
                 break;
             case BOOKMARKED_KID_ID:
                 tableName = HackerNewsContract.BookmarkedKidEntry.TABLE_NAME;
+                id = uri.getPathSegments().get(1);
                 deleted = db.delete(tableName, BaseColumns._ID + "=?", new String[]{id});
                 break;
             case BOOKMARKED_PART:
@@ -221,6 +223,7 @@ public class HackerNewsContentProvider extends ContentProvider {
                 break;
             case BOOKMARKED_PART_ID:
                 tableName = HackerNewsContract.BookmarkedPartEntry.TABLE_NAME;
+                id = uri.getPathSegments().get(1);
                 deleted = db.delete(tableName, BaseColumns._ID + "=?", new String[]{id});
                 break;
             case USER:
@@ -229,6 +232,7 @@ public class HackerNewsContentProvider extends ContentProvider {
                 break;
             case USER_ID:
                 tableName = HackerNewsContract.UserEntry.TABLE_NAME;
+                id = uri.getPathSegments().get(1);
                 deleted = db.delete(tableName, BaseColumns._ID + "=?", new String[]{id});
                 break;
             default:
