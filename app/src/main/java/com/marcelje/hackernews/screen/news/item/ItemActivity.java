@@ -22,6 +22,7 @@ import com.marcelje.hackernews.screen.news.item.head.CommentFragment;
 import com.marcelje.hackernews.screen.news.item.head.StoryFragment;
 import com.marcelje.hackernews.utils.BrowserUtils;
 import com.marcelje.hackernews.utils.HackerNewsUtils;
+import com.marcelje.hackernews.utils.ItemUtils;
 import com.marcelje.hackernews.utils.MenuUtils;
 
 import org.parceler.Parcels;
@@ -170,7 +171,7 @@ public class ItemActivity extends ToolbarActivity
     }
 
     private void init() {
-        setTitle(mItem.getType());
+        setTitle(ItemUtils.getTypeAsTitle(mItem));
 
         switch (mItem.getType()) {
             case ITEM_TYPE_COMMENT:

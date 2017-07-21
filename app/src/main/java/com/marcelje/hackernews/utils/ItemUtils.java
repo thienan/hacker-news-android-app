@@ -33,6 +33,13 @@ public final class ItemUtils {
     private ItemUtils() {
     }
 
+    public static String getTypeAsTitle(Item item) {
+        if (item == null) return "";
+
+        String type = item.getType();
+        return String.valueOf(type.charAt(0)).toUpperCase() + type.substring(1).toLowerCase();
+    }
+
     public static CharSequence getRelativeDate(Context context, Item item) {
         if (context == null || item == null) return "";
 
