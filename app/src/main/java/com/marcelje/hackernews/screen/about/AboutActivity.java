@@ -19,8 +19,9 @@ public class AboutActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setDisplayHomeAsUpEnabled(true);
 
-        Fragment fragment = AboutFragment.newInstance();
-        setFragment(fragment);
+        if (savedInstanceState == null) {
+            setFragment(AboutFragment.newInstance());
+        }
     }
 
 }
