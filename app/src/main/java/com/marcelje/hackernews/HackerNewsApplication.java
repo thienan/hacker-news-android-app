@@ -1,6 +1,5 @@
 package com.marcelje.hackernews;
 
-import android.app.Activity;
 import android.app.Application;
 
 import com.facebook.stetho.Stetho;
@@ -12,8 +11,8 @@ public class HackerNewsApplication extends Application {
 
     private ModuleComponent mModuleComponent;
 
-    public static HackerNewsApplication getApplication(Activity activity) {
-        return (HackerNewsApplication) activity.getApplication();
+    public static HackerNewsApplication getApplication(Application application) {
+        return (HackerNewsApplication) application;
     }
 
     @Override

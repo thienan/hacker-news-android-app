@@ -9,6 +9,7 @@ import com.marcelje.hackernews.api.HackerNewsApi;
 import com.marcelje.hackernews.model.Item;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ItemListLoader extends AsyncTaskLoader<HackerNewsResponse<List<Item>>> {
@@ -32,7 +33,7 @@ public class ItemListLoader extends AsyncTaskLoader<HackerNewsResponse<List<Item
         List<Item> items = new ArrayList<>();
         for (long itemId : mItemIds) {
             if (mCancellationSignal.isCanceled()) {
-                break;
+                return HackerNewsResponse.ok(Collections.emptyList());
             }
 
             HackerNewsResponse<Item> itemResponse = HackerNewsApi.with(mActivity).getItem(itemId);
@@ -42,6 +43,10 @@ public class ItemListLoader extends AsyncTaskLoader<HackerNewsResponse<List<Item
                     items.add(itemResponse.getData());
                 }
             }
+        }
+
+        if (mCancellationSignal.isCanceled()) {
+            return HackerNewsResponse.ok(Collections.emptyList());
         }
 
         synchronized (this) {

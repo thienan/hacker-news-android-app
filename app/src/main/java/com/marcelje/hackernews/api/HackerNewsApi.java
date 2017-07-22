@@ -1,6 +1,7 @@
 package com.marcelje.hackernews.api;
 
 import android.app.Activity;
+import android.app.Application;
 
 import com.marcelje.hackernews.HackerNewsApplication;
 import com.marcelje.hackernews.loader.HackerNewsResponse;
@@ -24,11 +25,11 @@ public final class HackerNewsApi {
     @SuppressWarnings("WeakerAccess")
     HackerNewsResource resource;
 
-    private HackerNewsApi(Activity activity) {
-        HackerNewsApplication.getApplication(activity).getServiceComponent().inject(this);
+    public static HackerNewsApi with(Activity activity) {
+        return with(activity.getApplication());
     }
 
-    public static HackerNewsApi with(Activity activity) {
+    public static HackerNewsApi with(Application application) {
         HackerNewsApi result = instance;
 
         if (result == null) {
@@ -36,12 +37,16 @@ public final class HackerNewsApi {
                 result = instance;
 
                 if (result == null) {
-                    instance = result = new HackerNewsApi(activity);
+                    instance = result = new HackerNewsApi(application);
                 }
             }
         }
 
         return result;
+    }
+
+    private HackerNewsApi(Application application) {
+        HackerNewsApplication.getApplication(application).getServiceComponent().inject(this);
     }
 
     public HackerNewsResponse<User> getUser(String userId) {

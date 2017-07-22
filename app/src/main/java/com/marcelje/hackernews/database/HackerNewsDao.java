@@ -8,6 +8,8 @@ import android.provider.BaseColumns;
 
 import com.marcelje.hackernews.model.Item;
 
+import java.util.List;
+
 @SuppressWarnings({"WeakerAccess", "UnusedReturnValue"})
 public final class HackerNewsDao {
 
@@ -25,6 +27,36 @@ public final class HackerNewsDao {
     private static Cursor getItem(Context context, long itemId) {
         return context.getContentResolver().query(HackerNewsContract.BookmarkedItemEntry.CONTENT_URI,
                 null, BaseColumns._ID + "=?", new String[]{String.valueOf(itemId)}, null);
+    }
+
+    public static List<Item> getItems(Context context) {
+        List<Item> items;
+
+        Cursor cursor = context.getContentResolver().query(HackerNewsContract.BookmarkedItemEntry.CONTENT_URI, null, null, null, null);
+
+        items = Item.Factory.fromCursor(cursor);
+
+        for (Item item : items) {
+            cursor = context.getContentResolver().query(
+                    HackerNewsContract.BookmarkedKidEntry.CONTENT_URI, null,
+                    HackerNewsContract.BookmarkedKidEntry.COLUMN_ITEM_ID + "=?",
+                    new String[]{String.valueOf(item.getId())}, null);
+
+            item.setKids(Item.Factory.kidsFromCursor(cursor));
+
+            cursor = context.getContentResolver().query(
+                    HackerNewsContract.BookmarkedPartEntry.CONTENT_URI, null,
+                    HackerNewsContract.BookmarkedPartEntry.COLUMN_ITEM_ID + "=?",
+                    new String[]{String.valueOf(item.getId())}, null);
+
+            item.setParts(Item.Factory.partsFromCursor(cursor));
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return items;
     }
 
     public static int deleteItem(Context context, long itemId) {

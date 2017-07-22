@@ -1,6 +1,9 @@
 package com.marcelje.hackernews.screen.news;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,13 +21,27 @@ import com.marcelje.hackernews.utils.SettingsUtils;
 
 public class NewsActivity extends FragmentActivity implements AdapterView.OnItemSelectedListener {
 
+    private static final String EXTRA_NEWS_TYPE = "com.marcelje.hackernews.screen.news.extra.NEWS_TYPE";
+
     private NewsFragment mFragment;
+
+    private String mNewsType;
+
+    public static Intent createIntent(Context context, String newsType) {
+        Intent intent = new Intent(context, NewsActivity.class);
+
+        Bundle extras = createExtras(newsType);
+        intent.putExtras(extras);
+
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setDisplayShowTitleEnabled(false);
 
+        extractExtras();
         attachSpinner(savedInstanceState);
 
         mFragment = NewsFragment.newInstance();
@@ -69,14 +86,32 @@ public class NewsActivity extends FragmentActivity implements AdapterView.OnItem
         finish(); // no animation
     }
 
+    private static Bundle createExtras(String newsType) {
+        Bundle extras = new Bundle();
+        extras.putString(EXTRA_NEWS_TYPE, newsType);
+
+        return extras;
+    }
+
+    private void extractExtras() {
+        Intent intent = getIntent();
+
+        if (intent.hasExtra(EXTRA_NEWS_TYPE)) {
+            mNewsType = intent.getStringExtra(EXTRA_NEWS_TYPE);
+        }
+    }
+
     private void attachSpinner(Bundle savedInstanceState) {
         Spinner spinner = SpinnerFactory.createSpinner(this, this);
         spinner.setId(R.id.spinner_news_type);
 
         if (savedInstanceState == null) {
-            String defaultNews = SettingsUtils.getDefaultNews(this);
+            if (TextUtils.isEmpty(mNewsType)) {
+                mNewsType = SettingsUtils.getDefaultNews(this);
+            }
+
             ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
-            spinner.setSelection(adapter.getPosition(defaultNews));
+            spinner.setSelection(adapter.getPosition(mNewsType));
         }
 
         getToolbar().addView(spinner);

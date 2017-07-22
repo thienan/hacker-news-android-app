@@ -15,6 +15,7 @@
         <activity android:name=".activity.ToolbarActivity" />
         <activity android:name=".activity.WebToolbarActivity" />
         <activity android:name=".activity.FragmentActivity" />
+
         <activity
             android:name=".screen.news.NewsActivity"
             android:launchMode="singleTop"
@@ -25,6 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".screen.news.item.ItemActivity"
             android:parentActivityName=".screen.news.NewsActivity"
@@ -33,6 +35,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.marcelje.hackernews.screen.news.NewsActivity" />
         </activity>
+
         <activity
             android:name=".screen.news.item.text.DetailsTextActivity"
             android:label="@string/title_activity_details_text"
@@ -42,6 +45,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.marcelje.hackernews.screen.news.item.ItemActivity" />
         </activity>
+
         <activity
             android:name=".screen.user.UserActivity"
             android:parentActivityName=".screen.news.NewsActivity"
@@ -50,9 +54,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.marcelje.hackernews.screen.news.NewsActivity" />
         </activity>
+
         <activity
             android:name=".screen.web.WebActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".screen.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
@@ -80,7 +86,35 @@
         <provider
             android:name=".database.HackerNewsContentProvider"
             android:authorities="com.marcelje.hackernews.database.AUTHORITY"
+            android:exported="true" />
+
+        <receiver android:name=".widget.NewsWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/news_widget_info" />
+        </receiver>
+
+        <activity
+            android:name=".widget.NewsWidgetConfigureActivity"
+            android:label="@string/title_activity_news_widget_configure"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".widget.NewsWidgetUpdaterService"
             android:exported="false" />
+
+        <service
+            android:name=".widget.NewsWidgetItemService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

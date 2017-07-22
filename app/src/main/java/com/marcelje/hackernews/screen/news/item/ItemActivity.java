@@ -1,6 +1,7 @@
 package com.marcelje.hackernews.screen.news.item;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -35,7 +36,7 @@ public class ItemActivity extends ToolbarActivity
 
     private static final String EXTRA_CALLER_ACTIVITY = "com.marcelje.hackernews.screen.news.item.extra.CALLER_ACTIVITY";
     private static final String EXTRA_ITEM_ID = "com.marcelje.hackernews.screen.news.item.extra.ITEM_ID";
-    private static final String EXTRA_ITEM = "com.marcelje.hackernews.screen.news.item.extra.ITEM";
+    public static final String EXTRA_ITEM = "com.marcelje.hackernews.screen.news.item.extra.ITEM";
     private static final String EXTRA_PARENT = "com.marcelje.hackernews.screen.news.item.extra.PARENT";
     private static final String EXTRA_POSTER = "com.marcelje.hackernews.screen.news.item.extra.POSTER";
 
@@ -55,13 +56,8 @@ public class ItemActivity extends ToolbarActivity
     private String mParent;
     private String mPoster;
 
-    public static void startActivity(ToolbarActivity activity, long itemId) {
-        Intent intent = new Intent(activity, ItemActivity.class);
-
-        Bundle extras = createExtras(activity, itemId);
-        intent.putExtras(extras);
-
-        activity.startActivity(intent);
+    public static Intent createIntent(Context context) {
+        return new Intent(context, ItemActivity.class);
     }
 
     public static void startActivity(ToolbarActivity activity, Item item) {
@@ -69,11 +65,16 @@ public class ItemActivity extends ToolbarActivity
     }
 
     public static void startActivity(ToolbarActivity activity, Item item, String parent, String poster) {
+        startActivity(activity, createExtras(activity, item, parent, poster));
+    }
+
+    private static void startActivity(ToolbarActivity activity, long itemId) {
+        startActivity(activity, createExtras(activity, itemId));
+    }
+
+    private static void startActivity(ToolbarActivity activity, Bundle extras) {
         Intent intent = new Intent(activity, ItemActivity.class);
-
-        Bundle extras = createExtras(activity, item, parent, poster);
         intent.putExtras(extras);
-
         activity.startActivity(intent);
     }
 
@@ -120,7 +121,9 @@ public class ItemActivity extends ToolbarActivity
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case android.R.id.home:
-                if (NewsActivity.class.getName().equals(mCallerActivity) || mItem.getParent() <= 0) {
+                if (NewsActivity.class.getName().equals(mCallerActivity) ||
+                        mItem.getParent() <= 0) {
+
                     return super.onOptionsItemSelected(menuItem);
                 } else {
                     startActivity(this, mItem.getParent());

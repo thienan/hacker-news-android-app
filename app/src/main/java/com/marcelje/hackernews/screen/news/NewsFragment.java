@@ -46,7 +46,7 @@ public class NewsFragment extends ToolbarFragment
     private NewsAdapter mAdapter;
 
     private List<Long> mItemIds;
-    private String mType;
+    private String mNewsType;
 
     public static NewsFragment newInstance() {
         return new NewsFragment();
@@ -65,7 +65,7 @@ public class NewsFragment extends ToolbarFragment
         mBinding.rvItemList.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                if (!TYPE_BOOKMARKED.equals(mType)) {
+                if (!TYPE_BOOKMARKED.equals(mNewsType)) {
                     nextPageNews();
                 }
             }
@@ -112,8 +112,10 @@ public class NewsFragment extends ToolbarFragment
             switch (loader.getId()) {
                 case LOADER_ID_STORIES_ITEM:
                     mAdapter.addData(data.getData());
+                    break;
                 case LOADER_ID_BOOKMARKED_ITEM:
                     mAdapter.swapData(data.getData());
+                    break;
                 default:
                     //do nothing
             }
@@ -132,13 +134,13 @@ public class NewsFragment extends ToolbarFragment
     }
 
     private void refreshNews() {
-        changeNewsType(mType);
+        changeNewsType(mNewsType);
     }
 
     public void changeNewsType(String type) {
         mAdapter.clearData();
         mCurrentPage = 1;
-        mType = type;
+        mNewsType = type;
 
         showProgressBar();
         retrieveNews();
@@ -152,7 +154,7 @@ public class NewsFragment extends ToolbarFragment
     private void retrieveNews() {
         LoaderManager loaderManager = getActivity().getSupportLoaderManager();
 
-        switch (mType) {
+        switch (mNewsType) {
             case TYPE_TOP:
                 //fall through
             case TYPE_BEST:
@@ -164,11 +166,13 @@ public class NewsFragment extends ToolbarFragment
             case TYPE_ASK:
                 //fall through
             case TYPE_JOB:
+                loaderManager.destroyLoader(LOADER_ID_BOOKMARKED_ITEM);
                 loaderManager.destroyLoader(LOADER_ID_STORIES);
                 loaderManager.initLoader(LOADER_ID_STORIES, null, getStoriesCallback());
 
                 break;
             case TYPE_BOOKMARKED:
+                loaderManager.destroyLoader(LOADER_ID_STORIES);
                 loaderManager.restartLoader(LOADER_ID_BOOKMARKED_ITEM, null, this);
                 break;
             default:
@@ -194,7 +198,7 @@ public class NewsFragment extends ToolbarFragment
             public Loader<HackerNewsResponse<List<Long>>> onCreateLoader(int id, Bundle args) {
                 switch (id) {
                     case LOADER_ID_STORIES:
-                        return new StoriesLoader(getActivity(), mType);
+                        return new StoriesLoader(getActivity(), mNewsType);
                     default:
                 }
 

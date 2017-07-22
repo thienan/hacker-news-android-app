@@ -30,7 +30,7 @@ public class UserActivity extends FragmentActivity {
 
         extractExtras();
 
-        setTitle(String.format(getString(R.string.title_profile), mUserId));
+        setTitle(String.format(getString(R.string.title_activity_user), mUserId));
 
         Fragment fragment = UserFragment.newInstance(mUserId);
         setFragment(fragment);
