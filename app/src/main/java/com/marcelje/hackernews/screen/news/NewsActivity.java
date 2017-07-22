@@ -58,6 +58,9 @@ public class NewsActivity extends FragmentActivity implements AdapterView.OnItem
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
+            case R.id.action_refresh:
+                mFragment.refresh();
+                return true;
             case R.id.action_about:
                 AboutActivity.startActivity(this);
                 return true;

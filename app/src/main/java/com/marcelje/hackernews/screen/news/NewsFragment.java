@@ -133,6 +133,11 @@ public class NewsFragment extends ToolbarFragment
 
     }
 
+    public void refresh() {
+        mBinding.srlRefresh.setRefreshing(true);
+        refreshNews();
+    }
+
     private void refreshNews() {
         changeNewsType(mNewsType);
     }
