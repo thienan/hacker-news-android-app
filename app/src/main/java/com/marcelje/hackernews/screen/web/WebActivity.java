@@ -21,7 +21,6 @@ public class WebActivity extends WebToolbarActivity {
     private static final String EXTRA_URL = "com.marcelje.hackernews.screen.web.extra.URL";
 
     private WebView wvWebPage;
-
     private String mUrl;
 
     public static void startActivity(Activity activity, String url) {
