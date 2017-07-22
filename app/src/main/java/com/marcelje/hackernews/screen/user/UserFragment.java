@@ -38,7 +38,7 @@ public class UserFragment extends ToolbarFragment
 
     private static final int ITEM_COUNT = 10;
 
-    private String mArgUserId;
+    private String mUserId;
 
     private FragmentUserBinding mBinding;
     private SubmissionAdapter mAdapter;
@@ -104,7 +104,7 @@ public class UserFragment extends ToolbarFragment
     public Loader<HackerNewsResponse<User>> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_ID_USER_ITEM:
-                return new UserLoader(getActivity(), mArgUserId);
+                return new UserLoader(getActivity(), mUserId);
             default:
                 return null;
 
@@ -148,7 +148,7 @@ public class UserFragment extends ToolbarFragment
         Bundle args = getArguments();
 
         if (args.containsKey(ARG_USER_ID)) {
-            mArgUserId = args.getString(ARG_USER_ID);
+            mUserId = args.getString(ARG_USER_ID);
         }
     }
 

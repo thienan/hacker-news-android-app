@@ -2,7 +2,6 @@ package com.marcelje.hackernews.screen.news.item.text;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 
 import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.activity.FragmentActivity;
@@ -29,8 +28,9 @@ public class DetailsTextActivity extends FragmentActivity {
 
         extractExtras();
 
-        Fragment fragment = DetailsTextFragment.newInstance(mText);
-        setFragment(fragment);
+        if (savedInstanceState == null) {
+            setFragment(DetailsTextFragment.newInstance(mText));
+        }
     }
 
     private static Bundle createExtras(String text) {
