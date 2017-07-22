@@ -2,7 +2,6 @@ package com.marcelje.hackernews.screen.user;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.activity.ToolbarActivity;
@@ -32,8 +31,9 @@ public class UserActivity extends FragmentActivity {
 
         setTitle(String.format(getString(R.string.title_activity_user), mUserId));
 
-        Fragment fragment = UserFragment.newInstance(mUserId);
-        setFragment(fragment);
+        if (savedInstanceState == null) {
+            setFragment(UserFragment.newInstance(mUserId));
+        }
     }
 
     private static Bundle createExtras(String userId) {

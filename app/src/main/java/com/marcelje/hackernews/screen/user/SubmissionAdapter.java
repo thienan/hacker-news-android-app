@@ -86,6 +86,16 @@ public class SubmissionAdapter extends RecyclerView.Adapter<SubmissionAdapter.Su
         }
     }
 
+    public List<Item> getData() {
+        return mData;
+    }
+
+    public void swapData(List<Item> data) {
+        mData.clear();
+        mData.addAll(data);
+        notifyDataSetChanged();
+    }
+
     public void clearData() {
         mData.clear();
         notifyDataSetChanged();

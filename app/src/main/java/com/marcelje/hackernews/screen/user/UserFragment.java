@@ -20,6 +20,8 @@ import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.model.User;
 import com.marcelje.hackernews.utils.CollectionUtils;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 public class UserFragment extends ToolbarFragment
@@ -27,16 +29,21 @@ public class UserFragment extends ToolbarFragment
 
     private static final String ARG_USER_ID = "com.marcelje.hackernews.screen.user.arg.USER_ID";
 
+    private static final String STATE_USER = "com.marcelje.hackernews.screen.user.state.USER";
+    private static final String STATE_SUBMISSION_DATA = "com.marcelje.hackernews.screen.user.state.SUBMISSION_DATA";
+    private static final String STATE_CURRENT_PAGE = "com.marcelje.hackernews.screen.user.state.CURRENT_PAGE";
+
     private static final int LOADER_ID_USER_ITEM = 800;
     private static final int LOADER_ID_SUBMISSIONS = 900;
 
     private static final int ITEM_COUNT = 10;
-    private int mCurrentPage = 1;
+
+    private String mArgUserId;
 
     private FragmentUserBinding mBinding;
-    private String mUserId;
-
     private SubmissionAdapter mAdapter;
+
+    private int mCurrentPage = 1;
 
     public static UserFragment newInstance(String userId) {
         UserFragment fragment = new UserFragment();
@@ -70,18 +77,34 @@ public class UserFragment extends ToolbarFragment
             }
         });
 
-        if (savedInstanceState == null) {
-            retrieveUser();
+        if (savedInstanceState != null) {
+            onRestoreInstanceState(savedInstanceState);
         }
 
+        getActivity().getSupportLoaderManager().initLoader(LOADER_ID_USER_ITEM, null, this);
+
         return mBinding.getRoot();
+    }
+
+    private void onRestoreInstanceState(Bundle inState) {
+        mBinding.setUser((User) Parcels.unwrap(inState.getParcelable(STATE_USER)));
+        mAdapter.swapData((List<Item>) Parcels.unwrap(inState.getParcelable(STATE_SUBMISSION_DATA)));
+        mCurrentPage = inState.getInt(STATE_CURRENT_PAGE);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(STATE_USER, Parcels.wrap(mBinding.getUser()));
+        outState.putParcelable(STATE_SUBMISSION_DATA, Parcels.wrap(mAdapter.getData()));
+        outState.putInt(STATE_CURRENT_PAGE, mCurrentPage);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
     public Loader<HackerNewsResponse<User>> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_ID_USER_ITEM:
-                return new UserLoader(getActivity(), mUserId);
+                return new UserLoader(getActivity(), mArgUserId);
             default:
                 return null;
 
@@ -92,7 +115,10 @@ public class UserFragment extends ToolbarFragment
     public void onLoadFinished(Loader<HackerNewsResponse<User>> loader, HackerNewsResponse<User> response) {
         if (response.isSuccessful()) {
             mBinding.setUser(response.getData());
-            refreshSubmissions();
+            // check if this comes after configuration changes and the submissions is not loaded yet.
+            if (mAdapter.getData().size() == 0 && mBinding.getUser().getSubmitted().size() > 0) {
+                refreshSubmissions();
+            }
         } else {
             SnackbarFactory
                     .createRetrieveErrorSnackbar(mBinding.getRoot(),
@@ -107,7 +133,8 @@ public class UserFragment extends ToolbarFragment
 
     @Override
     public void onClick(View view) {
-        retrieveUser();
+        getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_USER_ITEM, null, this);
+        refreshSubmissions();
     }
 
     private static Bundle createArguments(String userId) {
@@ -121,12 +148,8 @@ public class UserFragment extends ToolbarFragment
         Bundle args = getArguments();
 
         if (args.containsKey(ARG_USER_ID)) {
-            mUserId = args.getString(ARG_USER_ID);
+            mArgUserId = args.getString(ARG_USER_ID);
         }
-    }
-
-    private void retrieveUser() {
-        getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_USER_ITEM, null, this);
     }
 
     private void refreshSubmissions() {
