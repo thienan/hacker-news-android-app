@@ -1,5 +1,6 @@
 package com.marcelje.hackernews.utils;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,6 +20,26 @@ public class CollectionUtils {
         }
 
         return lists.subList(firstIndex, lastIndex);
+    }
+
+    public static long[] toLongArray(List<Long> list) {
+        long[] array = new long[list.size()];
+
+        for (int i = 0; i < list.size(); i++) {
+            array[i] = list.get(i);
+        }
+
+        return array;
+    }
+
+    public static List<Long> toLongList(long[] array) {
+        List<Long> list = new ArrayList<>();
+
+        for (long number : array) {
+            list.add(number);
+        }
+
+        return list;
     }
 
 }

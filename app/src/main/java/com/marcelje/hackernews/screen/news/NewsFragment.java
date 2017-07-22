@@ -19,13 +19,23 @@ import com.marcelje.hackernews.loader.HackerNewsResponse;
 import com.marcelje.hackernews.loader.ItemListLoader;
 import com.marcelje.hackernews.loader.StoriesLoader;
 import com.marcelje.hackernews.model.Item;
+import com.marcelje.hackernews.model.User;
 import com.marcelje.hackernews.utils.CollectionUtils;
 
+import org.parceler.Parcels;
+
+import java.util.Arrays;
 import java.util.List;
 
 public class NewsFragment extends ToolbarFragment
         implements SwipeRefreshLayout.OnRefreshListener,
         View.OnClickListener, LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> {
+
+    private static final String STATE_NEWS_TYPE = "com.marcelje.hackernews.screen.news.state.NEWS_TYPE";
+    private static final String STATE_NEWS_DATA_IDS = "com.marcelje.hackernews.screen.news.state.NEWS_DATA_IDS";
+    private static final String STATE_NEWS_DATA = "com.marcelje.hackernews.screen.news.state.NEWS_DATA";
+    private static final String STATE_NEWS_VIEW = "com.marcelje.hackernews.screen.news.state.NEWS_VIEW";
+    private static final String STATE_CURRENT_PAGE = "com.marcelje.hackernews.screen.news.state.CURRENT_PAGE";
 
     private static final String TYPE_TOP = "Top";
     private static final String TYPE_BEST = "Best";
@@ -40,13 +50,14 @@ public class NewsFragment extends ToolbarFragment
     private static final int LOADER_ID_BOOKMARKED_ITEM = 700;
 
     private static final int ITEM_COUNT = 10;
-    private int mCurrentPage = 1;
+
+    private String mNewsType;
+    private List<Long> mItemIds;
 
     private FragmentNewsBinding mBinding;
     private NewsAdapter mAdapter;
 
-    private List<Long> mItemIds;
-    private String mNewsType;
+    private int mCurrentPage = 1;
 
     public static NewsFragment newInstance() {
         return new NewsFragment();
@@ -74,7 +85,29 @@ public class NewsFragment extends ToolbarFragment
         mBinding.srlRefresh.setColorSchemeResources(R.color.colorAccent);
         mBinding.srlRefresh.setOnRefreshListener(this);
 
+        if (savedInstanceState != null) {
+            onRestoreInstanceState(savedInstanceState);
+        }
+
         return mBinding.getRoot();
+    }
+
+    private void onRestoreInstanceState(Bundle inState) {
+        mNewsType = inState.getString(STATE_NEWS_TYPE);
+        mItemIds = CollectionUtils.toLongList(inState.getLongArray(STATE_NEWS_DATA_IDS));
+        mAdapter.swapData((List<Item>) Parcels.unwrap(inState.getParcelable(STATE_NEWS_DATA)));
+        mBinding.rvItemList.getLayoutManager().onRestoreInstanceState(inState.getParcelable(STATE_NEWS_VIEW));
+        mCurrentPage = inState.getInt(STATE_CURRENT_PAGE);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString(STATE_NEWS_TYPE, mNewsType);
+        outState.putLongArray(STATE_NEWS_DATA_IDS, CollectionUtils.toLongArray(mItemIds));
+        outState.putParcelable(STATE_NEWS_DATA, Parcels.wrap(mAdapter.getData()));
+        outState.putParcelable(STATE_NEWS_VIEW, mBinding.rvItemList.getLayoutManager().onSaveInstanceState());
+        outState.putInt(STATE_CURRENT_PAGE, mCurrentPage);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

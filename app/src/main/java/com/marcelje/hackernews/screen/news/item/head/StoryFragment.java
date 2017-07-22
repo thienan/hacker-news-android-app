@@ -63,8 +63,6 @@ public class StoryFragment extends ItemHeadFragment
             mBinding.sectionNews.tvText.setBackground(null);
         }
 
-        refresh();
-
         return mBinding.getRoot();
     }
 

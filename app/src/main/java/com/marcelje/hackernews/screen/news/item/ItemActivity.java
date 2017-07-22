@@ -40,15 +40,15 @@ public class ItemActivity extends ToolbarActivity
     private static final String EXTRA_PARENT = "com.marcelje.hackernews.screen.news.item.extra.PARENT";
     private static final String EXTRA_POSTER = "com.marcelje.hackernews.screen.news.item.extra.POSTER";
 
+    private static final String TAG_HEAD_FRAGMENT = "com.marcelje.hackernews.screen.news.item.tag.HEAD_FRAGMENT";
+    private static final String TAG_COMMENT_FRAGMENT = "com.marcelje.hackernews.screen.news.item.tag.COMMENT_FRAGMENT";
+
     private static final String ITEM_TYPE_COMMENT = "comment";
     private static final String ITEM_TYPE_STORY = "story";
     private static final String ITEM_TYPE_POLL = "poll";
     private static final String ITEM_TYPE_JOB = "job";
 
     private static final int LOADER_ID_ITEM = 300;
-
-    private ItemHeadFragment mHeadFragment;
-    private ItemCommentFragment mCommentFragment;
 
     private String mCallerActivity;
     private long mItemId;
@@ -87,7 +87,11 @@ public class ItemActivity extends ToolbarActivity
         extractExtras();
 
         if (mItem != null) {
-            init();
+            setTitle(ItemUtils.getTypeAsTitle(mItem));
+
+            if (savedInstanceState == null) {
+                init();
+            }
         } else {
             getSupportLoaderManager().restartLoader(LOADER_ID_ITEM, null, this);
         }
@@ -180,9 +184,11 @@ public class ItemActivity extends ToolbarActivity
     private void init() {
         setTitle(ItemUtils.getTypeAsTitle(mItem));
 
+        ItemHeadFragment headFragment;
+
         switch (mItem.getType()) {
             case ITEM_TYPE_COMMENT:
-                mHeadFragment = CommentFragment.newInstance(mItem, mParent, mPoster);
+                headFragment = CommentFragment.newInstance(mItem, mParent, mPoster);
                 break;
             case ITEM_TYPE_STORY:
                 //fall through
@@ -191,14 +197,14 @@ public class ItemActivity extends ToolbarActivity
             case ITEM_TYPE_POLL:
                 //fall through
             default:
-                mHeadFragment = StoryFragment.newInstance(mItem);
+                headFragment = StoryFragment.newInstance(mItem);
         }
 
-        mCommentFragment = ItemCommentFragment.newInstance(mItem, mParent, mPoster);
+        ItemCommentFragment commentFragment = ItemCommentFragment.newInstance(mItem, mParent, mPoster);
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.item_head_container, mHeadFragment)
-                .add(R.id.item_comment_container, mCommentFragment)
+                .add(R.id.item_head_container, headFragment, TAG_HEAD_FRAGMENT)
+                .add(R.id.item_comment_container, commentFragment, TAG_COMMENT_FRAGMENT)
                 .commitAllowingStateLoss(); //TODO: not a good solution
     }
 
@@ -248,8 +254,10 @@ public class ItemActivity extends ToolbarActivity
     }
 
     private void refresh() {
-        mHeadFragment.refresh();
-        mCommentFragment.refresh();
+        ((ItemHeadFragment) getSupportFragmentManager()
+                .findFragmentByTag(TAG_HEAD_FRAGMENT)).refresh();
+        ((ItemCommentFragment) getSupportFragmentManager()
+                .findFragmentByTag(TAG_COMMENT_FRAGMENT)).refresh();
     }
 
     private void share() {

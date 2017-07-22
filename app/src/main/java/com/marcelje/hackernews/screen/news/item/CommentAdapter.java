@@ -49,6 +49,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         return mData.size();
     }
 
+    public List<Item> getData() {
+        return mData;
+    }
+
+    public void swapData(List<Item> data) {
+        mData.clear();
+        mData.addAll(data);
+        notifyDataSetChanged();
+    }
+
     public void clearData() {
         mData.clear();
         notifyDataSetChanged();

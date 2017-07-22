@@ -31,17 +31,21 @@ public class ItemCommentFragment extends ToolbarFragment
     private static final String ARG_PARENT = "com.marcelje.hackernews.screen.news.item.arg.PARENT";
     private static final String ARG_POSTER = "com.marcelje.hackernews.screen.news.items.arg.POSTER";
 
+    private static final String STATE_COMMENT_DATA = "com.marcelje.hackernews.screen.news.item.state.COMMENT_DATA";
+    private static final String STATE_CURRENT_PAGE = "com.marcelje.hackernews.screen.news.item.state.CURRENT_PAGE";
+
     private static final int LOADER_ID_COMMENT_ITEM = 400;
 
     private static final int ITEM_COUNT = 10;
-    private int mCurrentPage = 1;
-
-    private FragmentItemCommentBinding mBinding;
-    private CommentAdapter mAdapter;
 
     private Item mItem;
     private String mParent;
     private String mPoster;
+
+    private FragmentItemCommentBinding mBinding;
+    private CommentAdapter mAdapter;
+
+    private int mCurrentPage = 1;
 
     public static ItemCommentFragment newInstance(Item item, String parent, String poster) {
         ItemCommentFragment fragment = new ItemCommentFragment();
@@ -84,9 +88,27 @@ public class ItemCommentFragment extends ToolbarFragment
                     }
                 });
 
-        refresh();
+        if (savedInstanceState == null) {
+            refresh();
+        } else {
+            onRestoreInstanceState(savedInstanceState);
+        }
 
         return mBinding.getRoot();
+    }
+
+    private void onRestoreInstanceState(Bundle inState) {
+        mAdapter.swapData((List<Item>) Parcels.unwrap(inState.getParcelable(STATE_COMMENT_DATA)));
+        mCurrentPage = inState.getInt(STATE_CURRENT_PAGE);
+
+        if (mAdapter.getData().size() <= 0) refresh();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(STATE_COMMENT_DATA, Parcels.wrap(mAdapter.getData()));
+        outState.putInt(STATE_CURRENT_PAGE, mCurrentPage);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

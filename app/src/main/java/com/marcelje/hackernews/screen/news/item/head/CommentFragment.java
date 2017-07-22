@@ -68,11 +68,10 @@ public class CommentFragment extends ItemHeadFragment
         mBinding.commentHead.tvText.setMaxLines(Integer.MAX_VALUE);
         mBinding.commentHead.tvText.setMovementMethod(LinkMovementMethod.getInstance());
 
-        refresh();
-
         return mBinding.getRoot();
     }
 
+    @Override
     public void refresh() {
         getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_COMMENT_HEAD, null, this);
     }

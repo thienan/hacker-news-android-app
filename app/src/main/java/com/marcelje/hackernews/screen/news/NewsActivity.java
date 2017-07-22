@@ -19,11 +19,9 @@ import com.marcelje.hackernews.screen.about.AboutActivity;
 import com.marcelje.hackernews.screen.settings.SettingsActivity;
 import com.marcelje.hackernews.utils.SettingsUtils;
 
-public class NewsActivity extends FragmentActivity implements AdapterView.OnItemSelectedListener {
+public class NewsActivity extends FragmentActivity<NewsFragment> implements AdapterView.OnItemSelectedListener {
 
     private static final String EXTRA_NEWS_TYPE = "com.marcelje.hackernews.screen.news.extra.NEWS_TYPE";
-
-    private NewsFragment mFragment;
 
     private String mNewsType;
 
@@ -44,8 +42,9 @@ public class NewsActivity extends FragmentActivity implements AdapterView.OnItem
         extractExtras();
         attachSpinner(savedInstanceState);
 
-        mFragment = NewsFragment.newInstance();
-        setFragment(mFragment);
+        if (savedInstanceState == null) {
+            setFragment(NewsFragment.newInstance());
+        }
     }
 
     @Override
@@ -59,7 +58,7 @@ public class NewsActivity extends FragmentActivity implements AdapterView.OnItem
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.action_refresh:
-                mFragment.refresh();
+                getFragment().refresh();
                 return true;
             case R.id.action_about:
                 AboutActivity.startActivity(this);
@@ -76,7 +75,7 @@ public class NewsActivity extends FragmentActivity implements AdapterView.OnItem
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         String type = (String) parent.getItemAtPosition(pos);
-        mFragment.changeNewsType(type);
+        getFragment().changeNewsType(type);
     }
 
     @Override

@@ -55,6 +55,10 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ItemViewHolder> {
         return mData.size();
     }
 
+    public List<Item> getData() {
+        return mData;
+    }
+
     public void swapData(List<Item> data) {
         mData.clear();
         mData.addAll(data);

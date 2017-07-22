@@ -6,7 +6,9 @@ import android.support.v4.app.Fragment;
 
 import com.marcelje.hackernews.R;
 
-public class FragmentActivity extends ToolbarActivity {
+public class FragmentActivity<T extends Fragment> extends ToolbarActivity {
+
+    private static final String TAG_FRAGMENT = "com.marcelje.hackernews.activity.tag.FRAGMENT";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -14,9 +16,13 @@ public class FragmentActivity extends ToolbarActivity {
         setContentView(R.layout.activity_base);
     }
 
-    protected void setFragment(Fragment fragment) {
+    protected void setFragment(T fragment) {
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, fragment)
+                .add(R.id.fragment_container, fragment, TAG_FRAGMENT)
                 .commit();
+    }
+
+    protected T getFragment() {
+        return (T) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT);
     }
 }
