@@ -40,7 +40,13 @@ public class WebActivity extends WebToolbarActivity {
 
         extractExtras();
         updateTitle();
-        setUpWebView();
+        setUpWebView(savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        wvWebPage.saveState(outState);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -97,7 +103,7 @@ public class WebActivity extends WebToolbarActivity {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private void setUpWebView() {
+    private void setUpWebView(Bundle savedInstanceState) {
         wvWebPage = (WebView) findViewById(R.id.wv_web_page);
 
         WebSettings webSettings = wvWebPage.getSettings();
@@ -106,6 +112,11 @@ public class WebActivity extends WebToolbarActivity {
         webSettings.setUseWideViewPort(true);
 
         wvWebPage.setWebViewClient(new WebActivityClient(this));
-        wvWebPage.loadUrl(mUrl);
+
+        if (savedInstanceState == null) {
+            wvWebPage.loadUrl(mUrl);
+        } else {
+            wvWebPage.restoreState(savedInstanceState);
+        }
     }
 }
