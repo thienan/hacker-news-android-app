@@ -23,6 +23,8 @@ public class CollectionUtils {
     }
 
     public static long[] toLongArray(List<Long> list) {
+        if (list == null) return new long[0];
+
         long[] array = new long[list.size()];
 
         for (int i = 0; i < list.size(); i++) {
@@ -34,6 +36,7 @@ public class CollectionUtils {
 
     public static List<Long> toLongList(long[] array) {
         List<Long> list = new ArrayList<>();
+        if (array == null) return list;
 
         for (long number : array) {
             list.add(number);

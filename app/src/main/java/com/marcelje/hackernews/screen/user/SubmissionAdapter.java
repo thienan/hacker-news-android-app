@@ -12,7 +12,7 @@ import com.marcelje.hackernews.databinding.SubmissionCommentBinding;
 import com.marcelje.hackernews.databinding.SubmissionNewsBinding;
 import com.marcelje.hackernews.handlers.ItemTextClickHandlers;
 import com.marcelje.hackernews.model.Item;
-import com.marcelje.hackernews.screen.news.item.ItemActivity;
+import com.marcelje.hackernews.screen.news.item.BaseItemActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,7 +125,7 @@ public class SubmissionAdapter extends RecyclerView.Adapter<SubmissionAdapter.Su
         @Override
         public void onClick(View view) {
             Item data = mData.get(getAdapterPosition());
-            ItemActivity.startActivity(mActivity, data);
+            BaseItemActivity.startActivity(mActivity, data);
         }
     }
 
@@ -139,7 +139,7 @@ public class SubmissionAdapter extends RecyclerView.Adapter<SubmissionAdapter.Su
         @Override
         public void onClick(View view) {
             Item data = mData.get(getAdapterPosition());
-            ItemActivity.startActivity(mActivity, data);
+            BaseItemActivity.startActivity(mActivity, data);
         }
     }
 }

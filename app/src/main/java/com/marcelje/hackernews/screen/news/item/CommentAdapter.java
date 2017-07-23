@@ -82,7 +82,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         @Override
         public void onClick(View view) {
             Item data = mData.get(getAdapterPosition());
-            ItemActivity.startActivity(mActivity, data, mParent, mPoster);
+            BaseItemActivity.startActivity(mActivity, data, mParent, mPoster);
         }
     }
 }

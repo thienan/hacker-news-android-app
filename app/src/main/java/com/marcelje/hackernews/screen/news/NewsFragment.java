@@ -19,12 +19,10 @@ import com.marcelje.hackernews.loader.HackerNewsResponse;
 import com.marcelje.hackernews.loader.ItemListLoader;
 import com.marcelje.hackernews.loader.StoriesLoader;
 import com.marcelje.hackernews.model.Item;
-import com.marcelje.hackernews.model.User;
 import com.marcelje.hackernews.utils.CollectionUtils;
 
 import org.parceler.Parcels;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class NewsFragment extends ToolbarFragment

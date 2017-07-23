@@ -2,7 +2,6 @@ package com.marcelje.hackernews.screen.about;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 
 import com.marcelje.hackernews.activity.FragmentActivity;
 import com.marcelje.hackernews.activity.ToolbarActivity;

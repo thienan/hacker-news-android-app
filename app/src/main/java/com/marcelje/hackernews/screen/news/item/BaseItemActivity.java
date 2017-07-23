@@ -18,9 +18,6 @@ import com.marcelje.hackernews.factory.SnackbarFactory;
 import com.marcelje.hackernews.loader.HackerNewsResponse;
 import com.marcelje.hackernews.loader.ItemListLoader;
 import com.marcelje.hackernews.model.Item;
-import com.marcelje.hackernews.screen.news.NewsActivity;
-import com.marcelje.hackernews.screen.news.item.head.CommentFragment;
-import com.marcelje.hackernews.screen.news.item.head.StoryFragment;
 import com.marcelje.hackernews.utils.BrowserUtils;
 import com.marcelje.hackernews.utils.HackerNewsUtils;
 import com.marcelje.hackernews.utils.ItemUtils;
@@ -31,9 +28,7 @@ import org.parceler.Parcels;
 import java.util.Collections;
 import java.util.List;
 
-import timber.log.Timber;
-
-public class ItemActivity extends ToolbarActivity
+public class BaseItemActivity extends ToolbarActivity
         implements LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> {
 
     private static final String EXTRA_CALLER_ACTIVITY = "com.marcelje.hackernews.screen.news.item.extra.CALLER_ACTIVITY";
@@ -47,35 +42,35 @@ public class ItemActivity extends ToolbarActivity
     private static final String STATE_PARENT_ID = "com.marcelje.hackernews.screen.news.item.state.PARENT_ID";
     private static final String STATE_PARENT_ITEM = "com.marcelje.hackernews.screen.news.item.state.PARENT_ITEM";
 
-    private static final String ITEM_TYPE_COMMENT = "comment";
+    protected static final String ITEM_TYPE_COMMENT = "comment";
     private static final String ITEM_TYPE_STORY = "story";
     private static final String ITEM_TYPE_POLL = "poll";
     private static final String ITEM_TYPE_JOB = "job";
 
     private static final int LOADER_PARENT_ITEM = 300;
 
-    private String mCallerActivity;
-    private Item mItem;
-    private String mParent;
-    private String mPoster;
+    protected String mCallerActivity;
+    protected Item mItem;
+    protected String mParent;
+    protected String mPoster;
 
     private long mParentId;
-    private Item mParentItem;
-
-    public static Intent createIntent(Context context) {
-        return new Intent(context, ItemActivity.class);
-    }
+    protected Item mParentItem;
 
     public static void startActivity(ToolbarActivity activity, Item item) {
         startActivity(activity, item, null, null);
     }
 
     public static void startActivity(ToolbarActivity activity, Item item, String parent, String poster) {
-        startActivity(activity, createExtras(activity, item, parent, poster));
+        if (ITEM_TYPE_COMMENT.equals(item.getType())) {
+            CommentActivity.startActivity(activity, item, parent, poster);
+        } else {
+            StoryActivity.startActivity(activity, item, parent, poster);
+        }
     }
 
-    private static void startActivity(ToolbarActivity activity, Bundle extras) {
-        Intent intent = new Intent(activity, ItemActivity.class);
+    protected static void startActivity(ToolbarActivity activity, Intent intent, Item item, String parent, String poster) {
+        Bundle extras = createExtras(activity, item, parent, poster);
         intent.putExtras(extras);
         activity.startActivity(intent);
     }
@@ -91,32 +86,7 @@ public class ItemActivity extends ToolbarActivity
         setTitle(ItemUtils.getTypeAsTitle(mItem));
 
         if (savedInstanceState == null) {
-            if (mParentId > 0) {
-                getSupportLoaderManager().restartLoader(LOADER_PARENT_ITEM, null, this);
-            }
-
-            ItemHeadFragment headFragment;
-
-            switch (mItem.getType()) {
-                case ITEM_TYPE_COMMENT:
-                    headFragment = CommentFragment.newInstance(mItem, mParent, mPoster);
-                    break;
-                case ITEM_TYPE_STORY:
-                    //fall through
-                case ITEM_TYPE_JOB:
-                    //fall through
-                case ITEM_TYPE_POLL:
-                    //fall through
-                default:
-                    headFragment = StoryFragment.newInstance(mItem);
-            }
-
-            ItemCommentFragment commentFragment = ItemCommentFragment.newInstance(mItem, mParent, mPoster);
-
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.item_head_container, headFragment, TAG_HEAD_FRAGMENT)
-                    .add(R.id.item_comment_container, commentFragment, TAG_COMMENT_FRAGMENT)
-                    .commit();
+            loadParentItem();
         }
     }
 
@@ -161,16 +131,6 @@ public class ItemActivity extends ToolbarActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case android.R.id.home:
-                if (NewsActivity.class.getName().equals(mCallerActivity) || mParentId <= 0) {
-                    return super.onOptionsItemSelected(menuItem);
-                } else if (mParentItem != null) {
-                    startActivity(this, mParentItem);
-                } else {
-                    getSupportLoaderManager().restartLoader(LOADER_PARENT_ITEM, null, this);
-                }
-
-                return true;
             case R.id.action_refresh:
                 refresh();
                 return true;
@@ -184,9 +144,8 @@ public class ItemActivity extends ToolbarActivity
                 openPage();
                 return true;
             default:
+                return super.onOptionsItemSelected(menuItem);
         }
-
-        return super.onOptionsItemSelected(menuItem);
     }
 
     @Override
@@ -216,6 +175,21 @@ public class ItemActivity extends ToolbarActivity
     @Override
     public void onLoaderReset(Loader<HackerNewsResponse<List<Item>>> loader) {
 
+    }
+
+    protected void loadFragment(ItemHeadFragment headFragment, ItemCommentFragment commentFragment) {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.item_head_container, headFragment, TAG_HEAD_FRAGMENT)
+                .add(R.id.item_comment_container, commentFragment, TAG_COMMENT_FRAGMENT)
+                .commit();
+    }
+
+    protected void loadParentItem() {
+        mParentId = mItem.getParent();
+
+        if (mParentId > 0) {
+            getSupportLoaderManager().restartLoader(LOADER_PARENT_ITEM, null, this);
+        }
     }
 
     private static Bundle createExtras(Activity activity, Item item, String parent, String poster) {

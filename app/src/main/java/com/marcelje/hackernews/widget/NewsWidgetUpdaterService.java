@@ -12,7 +12,8 @@ import android.widget.RemoteViews;
 
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.screen.news.NewsActivity;
-import com.marcelje.hackernews.screen.news.item.ItemActivity;
+import com.marcelje.hackernews.screen.news.item.BaseItemActivity;
+import com.marcelje.hackernews.screen.news.item.StoryActivity;
 
 public class NewsWidgetUpdaterService extends IntentService {
     private static final String ACTION_WIDGET_UPDATE = "com.marcelje.hackernews.widget_preview.action.WIDGET_UPDATE";
@@ -73,7 +74,7 @@ public class NewsWidgetUpdaterService extends IntentService {
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addNextIntent(NewsActivity.createIntent(context, newsType));
-        stackBuilder.addNextIntent(ItemActivity.createIntent(context));
+        stackBuilder.addNextIntent(StoryActivity.createIntent(context));
 
         PendingIntent itemPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 

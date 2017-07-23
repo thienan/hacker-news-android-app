@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.model.Item;
-import com.marcelje.hackernews.screen.news.item.ItemActivity;
+import com.marcelje.hackernews.screen.news.item.BaseItemActivity;
 import com.marcelje.hackernews.utils.BrowserUtils;
 
 public class ItemTextClickHandlers {
@@ -17,7 +17,7 @@ public class ItemTextClickHandlers {
 
     public void onClick(Item data) {
         if (TextUtils.isEmpty(data.getUrl())) {
-            ItemActivity.startActivity(mActivity, data);
+            BaseItemActivity.startActivity(mActivity, data);
         } else {
             BrowserUtils.openTab(mActivity, data.getUrl());
         }
