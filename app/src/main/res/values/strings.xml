@@ -67,5 +67,5 @@
 
     <string name="desc_app_logo">App Logo</string>
     <string name="desc_refresh_widget">Refresh widget</string>
-    <string name="desc_go_to_app">Go to app</string>
+    <string name="desc_widget_config">Widget config</string>
 </resources>

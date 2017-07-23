@@ -2,6 +2,7 @@ package com.marcelje.hackernews.widget;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -22,8 +23,13 @@ public class NewsWidgetConfigureActivity extends ToolbarActivity {
     private Spinner mNewsTypeSpinner;
     private Spinner mNewsCountSpinner;
 
-    public NewsWidgetConfigureActivity() {
-        super();
+    public static Intent createIntent(Context context, int appWidgetId) {
+        Intent intent = new Intent(context, NewsWidgetConfigureActivity.class);
+
+        Bundle extras = createExtras(appWidgetId);
+        intent.putExtras(extras);
+
+        return intent;
     }
 
     @Override
@@ -32,20 +38,22 @@ public class NewsWidgetConfigureActivity extends ToolbarActivity {
         setResult(RESULT_CANCELED);
         setContentView(R.layout.widget_news_configure);
 
-        mNewsTypeSpinner = (Spinner) findViewById(R.id.news_type_spinner);
-        mNewsCountSpinner = (Spinner) findViewById(R.id.news_count_spinner);
-
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            mAppWidgetId = extras.getInt(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    AppWidgetManager.INVALID_APPWIDGET_ID);
-        }
+        extractExtras();
 
         if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish();
         }
+
+        mNewsTypeSpinner = (Spinner) findViewById(R.id.news_type_spinner);
+        mNewsCountSpinner = (Spinner) findViewById(R.id.news_count_spinner);
+
+        mNewsTypeSpinner.setSelection((
+                (ArrayAdapter<String>) mNewsTypeSpinner.getAdapter())
+                .getPosition(NewsWidgetStorage.loadNewsType(this, mAppWidgetId)));
+
+        mNewsCountSpinner.setSelection((
+                (ArrayAdapter<String>) mNewsCountSpinner.getAdapter())
+                .getPosition(String.valueOf(NewsWidgetStorage.loadNewsCount(this, mAppWidgetId))));
     }
 
     @Override
@@ -71,7 +79,7 @@ public class NewsWidgetConfigureActivity extends ToolbarActivity {
                 NewsWidgetStorage.saveWidgetConfig(this, mAppWidgetId, newsType, newsCount);
 
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-                NewsWidgetUpdaterService.updateAppWidget(this, appWidgetManager, mAppWidgetId, newsType, newsCount);
+                NewsWidgetUpdaterService.updateAppWidget(this, appWidgetManager, mAppWidgetId, newsType);
 
                 Intent resultValue = new Intent();
                 resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
@@ -81,6 +89,28 @@ public class NewsWidgetConfigureActivity extends ToolbarActivity {
                 return true;
             default:
                 return false;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish(); // no animation
+    }
+
+    private static Bundle createExtras(int appWidgetId) {
+        Bundle extras = new Bundle();
+        extras.putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+
+        return extras;
+    }
+
+    private void extractExtras() {
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            mAppWidgetId = extras.getInt(
+                    AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    AppWidgetManager.INVALID_APPWIDGET_ID);
         }
     }
 }

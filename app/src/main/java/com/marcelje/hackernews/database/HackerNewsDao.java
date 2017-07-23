@@ -8,6 +8,7 @@ import android.provider.BaseColumns;
 
 import com.marcelje.hackernews.model.Item;
 
+import java.util.Collections;
 import java.util.List;
 
 @SuppressWarnings({"WeakerAccess", "UnusedReturnValue"})
@@ -17,6 +18,8 @@ public final class HackerNewsDao {
     }
 
     public static boolean isItemAvailable(Context context, long itemId) {
+        if (context == null || itemId <= 0) return false;
+
         Cursor cur = getItem(context, itemId);
         boolean isBookmarked = cur.getCount() > 0;
         cur.close();
@@ -30,6 +33,8 @@ public final class HackerNewsDao {
     }
 
     public static List<Item> getItems(Context context) {
+        if (context == null) return Collections.emptyList();
+
         List<Item> items;
 
         Cursor cursor = context.getContentResolver().query(HackerNewsContract.BookmarkedItemEntry.CONTENT_URI, null, null, null, null);

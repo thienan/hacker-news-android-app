@@ -12,11 +12,10 @@ import android.widget.RemoteViews;
 
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.screen.news.NewsActivity;
-import com.marcelje.hackernews.screen.news.item.BaseItemActivity;
 import com.marcelje.hackernews.screen.news.item.StoryActivity;
 
 public class NewsWidgetUpdaterService extends IntentService {
-    private static final String ACTION_WIDGET_UPDATE = "com.marcelje.hackernews.widget_preview.action.WIDGET_UPDATE";
+    private static final String ACTION_WIDGET_UPDATE = "com.marcelje.hackernews.widget.action.WIDGET_UPDATE";
 
     public NewsWidgetUpdaterService() {
         super("NewsWidgetUpdaterService");
@@ -46,33 +45,42 @@ public class NewsWidgetUpdaterService extends IntentService {
 
     private void handleActionWidgetUpdate() {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-        int[] appWidgetIds =
-                appWidgetManager.getAppWidgetIds(new ComponentName(this, NewsWidget.class));
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, NewsWidget.class));
 
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.lv_news_list);
 
         for (int appWidgetId : appWidgetIds) {
             String newsType = NewsWidgetStorage.loadNewsType(this, appWidgetId);
-            int newsCount = NewsWidgetStorage.loadNewsCount(this, appWidgetId);
             if (TextUtils.isEmpty(newsType)) continue;
-            updateAppWidget(this, appWidgetManager, appWidgetId, newsType, newsCount);
+
+            updateAppWidget(this, appWidgetManager, appWidgetId, newsType);
         }
     }
 
     static void updateAppWidget(Context context,
                                 AppWidgetManager appWidgetManager,
                                 int appWidgetId,
-                                String newsType,
-                                int newsCount) {
+                                String newsType) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_news_layout);
+        views.setTextViewText(R.id.tv_title, newsType);
 
-        Intent widgetItemIntent = NewsWidgetItemService.createIntent(context, newsType, newsCount);
+        setItemList(context, views, appWidgetId);
+        setItemClick(context, views, newsType);
+        setWidgetClick(context, views, newsType);
+        setRefreshClick(context, views);
+        setConfigClick(context, views, appWidgetId);
+
+        appWidgetManager.updateAppWidget(appWidgetId, views);
+    }
+
+    private static void setItemList(Context context, RemoteViews views, int appWidgetId) {
+        Intent widgetItemIntent = NewsWidgetItemService.createIntent(context, appWidgetId);
 
         views.setRemoteAdapter(R.id.lv_news_list, widgetItemIntent);
         views.setEmptyView(R.id.lv_news_list, R.id.tv_empty);
+    }
 
-        views.setTextViewText(R.id.tv_title, newsType);
-
+    private static void setItemClick(Context context, RemoteViews views, String newsType) {
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addNextIntent(NewsActivity.createIntent(context, newsType));
         stackBuilder.addNextIntent(StoryActivity.createIntent(context));
@@ -80,7 +88,9 @@ public class NewsWidgetUpdaterService extends IntentService {
         PendingIntent itemPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         views.setPendingIntentTemplate(R.id.lv_news_list, itemPendingIntent);
+    }
 
+    private static void setWidgetClick(Context context, RemoteViews views, String newsType) {
         Intent openActivity = NewsActivity.createIntent(context, newsType);
 
         PendingIntent openActivityPendingIntent =
@@ -89,7 +99,9 @@ public class NewsWidgetUpdaterService extends IntentService {
                         PendingIntent.FLAG_UPDATE_CURRENT);
 
         views.setOnClickPendingIntent(R.id.news_widget, openActivityPendingIntent);
+    }
 
+    private static void setRefreshClick(Context context, RemoteViews views) {
         Intent refreshWidget = NewsWidgetUpdaterService.createIntent(context);
 
         PendingIntent refreshWidgetPendingIntent =
@@ -98,7 +110,16 @@ public class NewsWidgetUpdaterService extends IntentService {
                         PendingIntent.FLAG_UPDATE_CURRENT);
 
         views.setOnClickPendingIntent(R.id.ib_news_refresh, refreshWidgetPendingIntent);
+    }
 
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+    private static void setConfigClick(Context context, RemoteViews views, int appWidgetId) {
+        Intent configWidget = NewsWidgetConfigureActivity.createIntent(context, appWidgetId);
+
+        PendingIntent configWidgetPendingIntent =
+                PendingIntent.getActivity(context, 0,
+                        configWidget,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+        views.setOnClickPendingIntent(R.id.ib_news_config, configWidgetPendingIntent);
     }
 }

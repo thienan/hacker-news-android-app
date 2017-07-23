@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 class NewsWidgetStorage {
 
     private static final String INVALID_NEWS_TYPE = "";
+    private static final int NEWS_COUNT_DEFAULT = 20;
 
     private static final String PREFS_NAME = "com.marcelje.hackernews.widget_preview.NewsWidget";
     private static final String PREF_PREFIX_KEY = "appwidget_";
@@ -26,7 +27,7 @@ class NewsWidgetStorage {
 
     static int loadNewsCount(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        return prefs.getInt(PREF_PREFIX_KEY + appWidgetId + NEWS_COUNT, 0);
+        return prefs.getInt(PREF_PREFIX_KEY + appWidgetId + NEWS_COUNT, NEWS_COUNT_DEFAULT);
     }
 
     static void deleteWidgetConfig(Context context, int appWidgetId) {

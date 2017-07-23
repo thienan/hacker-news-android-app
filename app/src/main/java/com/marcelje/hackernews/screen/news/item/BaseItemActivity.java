@@ -1,7 +1,6 @@
 package com.marcelje.hackernews.screen.news.item;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -42,20 +41,20 @@ public class BaseItemActivity extends ToolbarActivity
     private static final String STATE_PARENT_ID = "com.marcelje.hackernews.screen.news.item.state.PARENT_ID";
     private static final String STATE_PARENT_ITEM = "com.marcelje.hackernews.screen.news.item.state.PARENT_ITEM";
 
-    protected static final String ITEM_TYPE_COMMENT = "comment";
+    static final String ITEM_TYPE_COMMENT = "comment";
     private static final String ITEM_TYPE_STORY = "story";
     private static final String ITEM_TYPE_POLL = "poll";
     private static final String ITEM_TYPE_JOB = "job";
 
     private static final int LOADER_PARENT_ITEM = 300;
 
-    protected String mCallerActivity;
-    protected Item mItem;
-    protected String mParent;
-    protected String mPoster;
+    String mCallerActivity;
+    Item mItem;
+    String mParent;
+    String mPoster;
 
     private long mParentId;
-    protected Item mParentItem;
+    Item mParentItem;
 
     public static void startActivity(ToolbarActivity activity, Item item) {
         startActivity(activity, item, null, null);
@@ -69,7 +68,7 @@ public class BaseItemActivity extends ToolbarActivity
         }
     }
 
-    protected static void startActivity(ToolbarActivity activity, Intent intent, Item item, String parent, String poster) {
+    static void startActivity(ToolbarActivity activity, Intent intent, Item item, String parent, String poster) {
         Bundle extras = createExtras(activity, item, parent, poster);
         intent.putExtras(extras);
         activity.startActivity(intent);
@@ -119,7 +118,7 @@ public class BaseItemActivity extends ToolbarActivity
             menuItemBookmark.setVisible(false);
         }
 
-        if (HackerNewsDao.isItemAvailable(this, mItem.getId())) {
+        if (HackerNewsDao.isItemAvailable(this, mItem != null ? mItem.getId() : 0)) {
             menuItemBookmark.setTitle(R.string.menu_item_unbookmark);
         } else {
             menuItemBookmark.setTitle(R.string.menu_item_bookmark);
@@ -177,14 +176,14 @@ public class BaseItemActivity extends ToolbarActivity
 
     }
 
-    protected void loadFragment(ItemHeadFragment headFragment, ItemCommentFragment commentFragment) {
+    void loadFragment(ItemHeadFragment headFragment, ItemCommentFragment commentFragment) {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.item_head_container, headFragment, TAG_HEAD_FRAGMENT)
                 .add(R.id.item_comment_container, commentFragment, TAG_COMMENT_FRAGMENT)
                 .commit();
     }
 
-    protected void loadParentItem() {
+    void loadParentItem() {
         mParentId = mItem.getParent();
 
         if (mParentId > 0) {

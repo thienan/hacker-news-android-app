@@ -1,5 +1,6 @@
 package com.marcelje.hackernews.widget;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,19 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NewsWidgetItemService extends RemoteViewsService {
+    private int mAppWidgetId;
 
-    private static final String EXTRA_NEWS_TYPE = "com.marcelje.hackernews.widget.extra.NEWS_TYPE";
-    private static final String EXTRA_NEWS_COUNT = "com.marcelje.hackernews.widget.extra.NEWS_COUNT";
-
-    private static final int NEWS_COUNT_DEFAULT = 20;
-
-    private String mNewsType;
-    private int mNewsCount;
-
-    public static Intent createIntent(Context context, String newsType, int newCount) {
+    public static Intent createIntent(Context context, int appWidgetId) {
         Intent intent = new Intent(context, NewsWidgetItemService.class);
-        intent.putExtra(NewsWidgetItemService.EXTRA_NEWS_TYPE, newsType);
-        intent.putExtra(NewsWidgetItemService.EXTRA_NEWS_COUNT, newCount);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 
         return intent;
     }
@@ -42,29 +35,23 @@ public class NewsWidgetItemService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
         extractExtras(intent);
-
-        return new IngredientItemFactory(mNewsType, mNewsCount);
+        return new IngredientItemFactory(mAppWidgetId);
 
     }
 
     private void extractExtras(Intent intent) {
-        if (intent.hasExtra(EXTRA_NEWS_TYPE)) {
-            mNewsType = intent.getStringExtra(EXTRA_NEWS_TYPE);
-        }
-
-        if (intent.hasExtra(EXTRA_NEWS_COUNT)) {
-            mNewsCount = intent.getIntExtra(EXTRA_NEWS_COUNT, NEWS_COUNT_DEFAULT);
+        if (intent.getExtras() != null) {
+            mAppWidgetId = intent.getIntExtra(
+                    AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         }
     }
 
     class IngredientItemFactory implements RemoteViewsService.RemoteViewsFactory {
         private List<Item> mItems;
-        private final String mNewsType;
-        private final int mNewsCount;
+        private final int mAppWidgetId;
 
-        public IngredientItemFactory(String newsType, int newsCount) {
-            mNewsType = newsType;
-            mNewsCount = newsCount;
+        public IngredientItemFactory(int appWidgetId) {
+            mAppWidgetId = appWidgetId;
         }
 
         @Override
@@ -74,31 +61,34 @@ public class NewsWidgetItemService extends RemoteViewsService {
 
         @Override
         public void onDataSetChanged() {
+            String newsType = NewsWidgetStorage.loadNewsType(getApplicationContext(), mAppWidgetId);
+            int newsCount = NewsWidgetStorage.loadNewsCount(getApplicationContext(), mAppWidgetId);
+
             HackerNewsResponse<List<Long>> itemIds = HackerNewsResponse.error("Unknown type");
 
-            if (getString(R.string.settings_type_option_bookmarked).equals(mNewsType)) {
+            if (getString(R.string.settings_type_option_bookmarked).equals(newsType)) {
                 mItems = HackerNewsDao.getItems(getApplicationContext());
                 return;
             }
 
-            if (getString(R.string.settings_type_option_top).equals(mNewsType)) {
+            if (getString(R.string.settings_type_option_top).equals(newsType)) {
                 itemIds = HackerNewsApi.with(getApplication()).getTopStories();
-            } else if (getString(R.string.settings_type_option_best).equals(mNewsType)) {
+            } else if (getString(R.string.settings_type_option_best).equals(newsType)) {
                 itemIds = HackerNewsApi.with(getApplication()).getBestStories();
-            } else if (getString(R.string.settings_type_option_new).equals(mNewsType)) {
+            } else if (getString(R.string.settings_type_option_new).equals(newsType)) {
                 itemIds = HackerNewsApi.with(getApplication()).getNewStories();
-            } else if (getString(R.string.settings_type_option_show).equals(mNewsType)) {
+            } else if (getString(R.string.settings_type_option_show).equals(newsType)) {
                 itemIds = HackerNewsApi.with(getApplication()).getShowStories();
-            } else if (getString(R.string.settings_type_option_ask).equals(mNewsType)) {
+            } else if (getString(R.string.settings_type_option_ask).equals(newsType)) {
                 itemIds = HackerNewsApi.with(getApplication()).getAskStories();
-            } else if (getString(R.string.settings_type_option_jobs).equals(mNewsType)) {
+            } else if (getString(R.string.settings_type_option_jobs).equals(newsType)) {
                 itemIds = HackerNewsApi.with(getApplication()).getJobStories();
             }
 
             mItems = new ArrayList<>();
 
             if (itemIds.isSuccessful()) {
-                for (long itemId : CollectionUtils.subList(itemIds.getData(), 0, mNewsCount)) {
+                for (long itemId : CollectionUtils.subList(itemIds.getData(), 0, newsCount)) {
                     HackerNewsResponse<Item> itemResponse = HackerNewsApi.with(getApplication()).getItem(itemId);
                     if (itemResponse.isSuccessful()) {
                         Item item = itemResponse.getData();
