@@ -23,7 +23,11 @@ public class NewsActivity extends FragmentActivity<NewsFragment> implements Adap
 
     private static final String EXTRA_NEWS_TYPE = "com.marcelje.hackernews.screen.news.extra.NEWS_TYPE";
 
+    private static final String STATE_NEWS_TYPE = "com.marcelje.hackernews.screen.news.state.NEWS_TYPE";
+
     private String mNewsType;
+
+    private boolean isNewState = false;
 
     public static Intent createIntent(Context context, String newsType) {
         Intent intent = new Intent(context, NewsActivity.class);
@@ -43,8 +47,21 @@ public class NewsActivity extends FragmentActivity<NewsFragment> implements Adap
         attachSpinner(savedInstanceState);
 
         if (savedInstanceState == null) {
+            isNewState = true;
             setFragment(NewsFragment.newInstance());
         }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        mNewsType = savedInstanceState.getString(STATE_NEWS_TYPE);
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(STATE_NEWS_TYPE, mNewsType);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -74,8 +91,12 @@ public class NewsActivity extends FragmentActivity<NewsFragment> implements Adap
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        String type = (String) parent.getItemAtPosition(pos);
-        getFragment().changeNewsType(type);
+        // TODO: This is a workaround to make saveInstanceState possible for spinner.
+        if (isNewState || !parent.getSelectedItem().toString().equals(mNewsType)) {
+            mNewsType = parent.getSelectedItem().toString();
+            String type = (String) parent.getItemAtPosition(pos);
+            getFragment().changeNewsType(type);
+        }
     }
 
     @Override
