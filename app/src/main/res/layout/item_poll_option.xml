@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.marcelje.hackernews.model.Item" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/view_margin">
+
+        <TextView
+            android:id="@+id/tv_option_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{item.text}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+        <TextView
+            android:id="@+id/tv_option_score"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{@plurals/total_scores(item.score, item.score)}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+
+    </LinearLayout>
+</layout>

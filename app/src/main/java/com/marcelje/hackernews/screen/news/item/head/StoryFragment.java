@@ -4,6 +4,8 @@ import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import com.marcelje.hackernews.loader.HackerNewsResponse;
 import com.marcelje.hackernews.loader.ItemListLoader;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.screen.news.item.ItemHeadFragment;
+import com.marcelje.hackernews.screen.news.item.PollOptionAdapter;
 
 import org.parceler.Parcels;
 
@@ -28,9 +31,14 @@ public class StoryFragment extends ItemHeadFragment
 
     private static final String ARG_ITEM = "com.marcelje.hackernews.screen.news.item.head.arg.ITEM";
 
+    private static final String STATE_POLL_OPTIONS_DATA = "com.marcelje.hackernews.screen.news.item.head.state.POLL_OPTION_DATA";
+
     private static final int LOADER_ID_STORIES_ITEM = 200;
+    private static final int LOADER_ID_POLL_OPTIONS = 250;
 
     private FragmentStoryBinding mBinding;
+
+    private PollOptionAdapter mAdapter;
 
     private Item mItem;
 
@@ -63,7 +71,32 @@ public class StoryFragment extends ItemHeadFragment
             mBinding.sectionNews.tvText.setBackground(null);
         }
 
+        mAdapter = new PollOptionAdapter();
+
+        mBinding.sectionPollOptions.rvPollOptionList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mBinding.sectionPollOptions.rvPollOptionList.setAdapter(mAdapter);
+        mBinding.sectionPollOptions.rvPollOptionList.addItemDecoration(
+                new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+
+        mBinding.sectionPollOptions.getRoot().setVisibility(View.GONE);
+
+        if (savedInstanceState == null) {
+            getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_POLL_OPTIONS, null, this);
+        } else {
+            onRestoreInstanceState(savedInstanceState);
+        }
+
         return mBinding.getRoot();
+    }
+
+    private void onRestoreInstanceState(Bundle inState) {
+        mAdapter.swapData((List<Item>) Parcels.unwrap(inState.getParcelable(STATE_POLL_OPTIONS_DATA)));
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(STATE_POLL_OPTIONS_DATA, Parcels.wrap(mAdapter.getData()));
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -76,6 +109,8 @@ public class StoryFragment extends ItemHeadFragment
         switch (id) {
             case LOADER_ID_STORIES_ITEM:
                 return new ItemListLoader(getActivity(), Collections.singletonList(mItem.getId()));
+            case LOADER_ID_POLL_OPTIONS:
+                return new ItemListLoader(getActivity(), mItem.getParts());
             default:
                 return null;
 
@@ -90,8 +125,18 @@ public class StoryFragment extends ItemHeadFragment
                 case LOADER_ID_STORIES_ITEM:
                     mItem = response.getData().get(0);
                     mBinding.setItem(mItem);
+
+                    getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_POLL_OPTIONS, null, this);
+                    break;
+                case LOADER_ID_POLL_OPTIONS:
+                    if (response.getData().size() > 0) {
+                        mAdapter.swapData(response.getData());
+                        mBinding.sectionPollOptions.getRoot().setVisibility(View.VISIBLE);
+                    }
+
                     break;
                 default:
+                    // do nothing
             }
         }
     }

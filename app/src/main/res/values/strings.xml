@@ -52,6 +52,7 @@
     <string name="label_details">Details</string>
     <string name="label_comments">Comments</string>
     <string name="label_submissions">Submissions</string>
+    <string name="label_poll_options">Poll Options</string>
 
     <string name="about_text"><![CDATA[
         Hacker News Android app.<br/><br/>

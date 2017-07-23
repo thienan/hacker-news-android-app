@@ -3,6 +3,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="activity"
             type="com.marcelje.hackernews.activity.ToolbarActivity" />
@@ -43,6 +45,10 @@
             app:activity="@{activity}"
             app:itemTextDetailsClickHandlers="@{itemTextDetailsClickHandlers}"
             app:text="@{item.text}" />
-    </LinearLayout>
 
+        <include
+            android:id="@+id/section_poll_options"
+            layout="@layout/section_poll_options"
+            android:visibility="@{item.parts.size() > 0 ? View.VISIBLE : View.GONE}" />
+    </LinearLayout>
 </layout>
