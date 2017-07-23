@@ -9,4 +9,11 @@
         <item>@string/settings_type_option_jobs</item>
         <item>@string/settings_type_option_bookmarked</item>
     </array>
+    <array name="widget_config_news_count">
+        <item>"10"</item>
+        <item>"15"</item>
+        <item>"20"</item>
+        <item>"25"</item>
+        <item>"30"</item>
+    </array>
 </resources>

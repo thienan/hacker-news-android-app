@@ -5,5 +5,6 @@
     <dimen name="divider_height">1dp</dimen>
     <dimen name="toolbar_elevation">4dp</dimen>
     <dimen name="view_margin">8dp</dimen>
+    <dimen name="widget_config_padding">16dp</dimen>
     <dimen name="widget_margin">8dp</dimen>
 </resources>

@@ -19,7 +19,8 @@ import com.marcelje.hackernews.activity.ToolbarActivity;
 public class NewsWidgetConfigureActivity extends ToolbarActivity {
 
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    private Spinner mSpinner;
+    private Spinner mNewsTypeSpinner;
+    private Spinner mNewsCountSpinner;
 
     public NewsWidgetConfigureActivity() {
         super();
@@ -31,11 +32,8 @@ public class NewsWidgetConfigureActivity extends ToolbarActivity {
         setResult(RESULT_CANCELED);
         setContentView(R.layout.widget_news_configure);
 
-        mSpinner = (Spinner) findViewById(R.id.news_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.settings_type_options, android.R.layout.simple_spinner_item);
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinner.setAdapter(adapter);
+        mNewsTypeSpinner = (Spinner) findViewById(R.id.news_type_spinner);
+        mNewsCountSpinner = (Spinner) findViewById(R.id.news_count_spinner);
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -67,12 +65,13 @@ public class NewsWidgetConfigureActivity extends ToolbarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_next:
-                String newsType = mSpinner.getSelectedItem().toString();
+                String newsType = mNewsTypeSpinner.getSelectedItem().toString();
+                int newsCount = Integer.parseInt(mNewsCountSpinner.getSelectedItem().toString());
 
-                NewsWidgetStorage.saveNewsType(this, mAppWidgetId, newsType);
+                NewsWidgetStorage.saveWidgetConfig(this, mAppWidgetId, newsType, newsCount);
 
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-                NewsWidgetUpdaterService.updateAppWidget(this, appWidgetManager, mAppWidgetId, newsType);
+                NewsWidgetUpdaterService.updateAppWidget(this, appWidgetManager, mAppWidgetId, newsType, newsCount);
 
                 Intent resultValue = new Intent();
                 resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);

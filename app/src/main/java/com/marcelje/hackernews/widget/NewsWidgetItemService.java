@@ -1,5 +1,6 @@
 package com.marcelje.hackernews.widget;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -22,26 +23,48 @@ import java.util.List;
 
 public class NewsWidgetItemService extends RemoteViewsService {
 
-    public static final String EXTRA_NEWS_TYPE = "com.marcelje.hackernews.widget_preview.extra.NEWS_TYPE";
+    private static final String EXTRA_NEWS_TYPE = "com.marcelje.hackernews.widget.extra.NEWS_TYPE";
+    private static final String EXTRA_NEWS_COUNT = "com.marcelje.hackernews.widget.extra.NEWS_COUNT";
+
+    private static final int NEWS_COUNT_DEFAULT = 20;
+
+    private String mNewsType;
+    private int mNewsCount;
+
+    public static Intent createIntent(Context context, String newsType, int newCount) {
+        Intent intent = new Intent(context, NewsWidgetItemService.class);
+        intent.putExtra(NewsWidgetItemService.EXTRA_NEWS_TYPE, newsType);
+        intent.putExtra(NewsWidgetItemService.EXTRA_NEWS_COUNT, newCount);
+
+        return intent;
+    }
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
+        extractExtras(intent);
+
+        return new IngredientItemFactory(mNewsType, mNewsCount);
+
+    }
+
+    private void extractExtras(Intent intent) {
         if (intent.hasExtra(EXTRA_NEWS_TYPE)) {
-            return new IngredientItemFactory(intent.getStringExtra(EXTRA_NEWS_TYPE));
+            mNewsType = intent.getStringExtra(EXTRA_NEWS_TYPE);
         }
 
-        return null;
+        if (intent.hasExtra(EXTRA_NEWS_COUNT)) {
+            mNewsCount = intent.getIntExtra(EXTRA_NEWS_COUNT, NEWS_COUNT_DEFAULT);
+        }
     }
 
     class IngredientItemFactory implements RemoteViewsService.RemoteViewsFactory {
-
-        private static final int MAX_ITEMS_SHOWN = 20;
-
         private List<Item> mItems;
         private final String mNewsType;
+        private final int mNewsCount;
 
-        public IngredientItemFactory(String newsType) {
+        public IngredientItemFactory(String newsType, int newsCount) {
             mNewsType = newsType;
+            mNewsCount = newsCount;
         }
 
         @Override
@@ -75,7 +98,7 @@ public class NewsWidgetItemService extends RemoteViewsService {
             mItems = new ArrayList<>();
 
             if (itemIds.isSuccessful()) {
-                for (long itemId : CollectionUtils.subList(itemIds.getData(), 0, MAX_ITEMS_SHOWN)) {
+                for (long itemId : CollectionUtils.subList(itemIds.getData(), 0, mNewsCount)) {
                     HackerNewsResponse<Item> itemResponse = HackerNewsApi.with(getApplication()).getItem(itemId);
                     if (itemResponse.isSuccessful()) {
                         Item item = itemResponse.getData();

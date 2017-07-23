@@ -53,21 +53,22 @@ public class NewsWidgetUpdaterService extends IntentService {
 
         for (int appWidgetId : appWidgetIds) {
             String newsType = NewsWidgetStorage.loadNewsType(this, appWidgetId);
+            int newsCount = NewsWidgetStorage.loadNewsCount(this, appWidgetId);
             if (TextUtils.isEmpty(newsType)) continue;
-            updateAppWidget(this, appWidgetManager, appWidgetId, newsType);
+            updateAppWidget(this, appWidgetManager, appWidgetId, newsType, newsCount);
         }
     }
 
     static void updateAppWidget(Context context,
                                 AppWidgetManager appWidgetManager,
                                 int appWidgetId,
-                                String newsType) {
+                                String newsType,
+                                int newsCount) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_news_layout);
 
-        Intent intent = new Intent(context, NewsWidgetItemService.class);
-        intent.putExtra(NewsWidgetItemService.EXTRA_NEWS_TYPE, newsType);
+        Intent widgetItemIntent = NewsWidgetItemService.createIntent(context, newsType, newsCount);
 
-        views.setRemoteAdapter(R.id.lv_news_list, intent);
+        views.setRemoteAdapter(R.id.lv_news_list, widgetItemIntent);
         views.setEmptyView(R.id.lv_news_list, R.id.tv_empty);
 
         views.setTextViewText(R.id.tv_title, newsType);
