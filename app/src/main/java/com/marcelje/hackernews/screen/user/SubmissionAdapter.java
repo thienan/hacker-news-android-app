@@ -1,23 +1,18 @@
 package com.marcelje.hackernews.screen.user;
 
-import android.databinding.ViewDataBinding;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.marcelje.hackernews.BR;
 import com.marcelje.hackernews.activity.ToolbarActivity;
+import com.marcelje.hackernews.adapter.BaseAdapter;
 import com.marcelje.hackernews.databinding.SubmissionCommentBinding;
 import com.marcelje.hackernews.databinding.SubmissionNewsBinding;
 import com.marcelje.hackernews.handlers.ItemTextClickHandlers;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.screen.news.item.BaseItemActivity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class SubmissionAdapter extends RecyclerView.Adapter<SubmissionAdapter.SubmissionViewHolder> {
+public class SubmissionAdapter extends BaseAdapter implements BaseAdapter.OnClickListener {
 
     private static final int VIEW_TYPE_NEWS = 1;
     private static final int VIEW_TYPE_COMMENT = 2;
@@ -27,52 +22,36 @@ public class SubmissionAdapter extends RecyclerView.Adapter<SubmissionAdapter.Su
     private static final String ITEM_TYPE_POLL = "poll";
     private static final String ITEM_TYPE_JOB = "job";
 
-    private final ToolbarActivity mActivity;
-    private final List<Item> mData;
-
-    public SubmissionAdapter(ToolbarActivity activity) {
-        mActivity = activity;
-        mData = new ArrayList<>();
+    public SubmissionAdapter(ToolbarActivity mActivity) {
+        super(mActivity);
     }
 
     @Override
-    public SubmissionAdapter.SubmissionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseAdapter.BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
         switch (viewType) {
             case VIEW_TYPE_NEWS:
                 SubmissionNewsBinding newsBinding = SubmissionNewsBinding.inflate(inflater, parent, false);
-                newsBinding.setItemTextClickHandlers(new ItemTextClickHandlers(mActivity));
-                return new ItemViewHolder(newsBinding);
+                newsBinding.setItemTextClickHandlers(new ItemTextClickHandlers(getActivity()));
+                return new BaseAdapter.BaseViewHolder(newsBinding, this);
             case VIEW_TYPE_COMMENT:
                 SubmissionCommentBinding commentBinding = SubmissionCommentBinding.inflate(inflater, parent, false);
-                return new CommentViewHolder(commentBinding);
+                return new BaseAdapter.BaseViewHolder(commentBinding, this);
             default:
                 return null;
         }
     }
 
     @Override
-    public void onBindViewHolder(SubmissionAdapter.SubmissionViewHolder holder, int position) {
-        Item item = mData.get(position);
-
-        switch (getItemViewType(position)) {
-            case VIEW_TYPE_NEWS:
-                holder.binding.setVariable(BR.item, item);
-            case VIEW_TYPE_COMMENT:
-                holder.binding.setVariable(BR.item, item);
-            default:
-        }
-    }
-
-    @Override
-    public int getItemCount() {
-        return mData.size();
+    public void onBindViewHolder(BaseAdapter.BaseViewHolder holder, int position) {
+        Item item = getData().get(position);
+        holder.binding.setVariable(BR.item, item);
     }
 
     @Override
     public int getItemViewType(int position) {
-        switch (mData.get(position).getType()) {
+        switch (getData().get(position).getType()) {
             case ITEM_TYPE_COMMENT:
                 return VIEW_TYPE_COMMENT;
             case ITEM_TYPE_STORY:
@@ -86,60 +65,9 @@ public class SubmissionAdapter extends RecyclerView.Adapter<SubmissionAdapter.Su
         }
     }
 
-    public List<Item> getData() {
-        return mData;
-    }
-
-    public void swapData(List<Item> data) {
-        mData.clear();
-        mData.addAll(data);
-        notifyDataSetChanged();
-    }
-
-    public void clearData() {
-        mData.clear();
-        notifyDataSetChanged();
-    }
-
-    public void addData(List<Item> data) {
-        mData.addAll(data);
-        notifyItemRangeInserted(mData.size() - data.size(), data.size());
-    }
-
-    class SubmissionViewHolder<T extends ViewDataBinding> extends RecyclerView.ViewHolder {
-        final T binding;
-
-        public SubmissionViewHolder(T binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-        }
-    }
-
-    class CommentViewHolder extends SubmissionViewHolder<SubmissionCommentBinding> implements View.OnClickListener {
-
-        public CommentViewHolder(SubmissionCommentBinding binding) {
-            super(binding);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            Item data = mData.get(getAdapterPosition());
-            BaseItemActivity.startActivity(mActivity, data);
-        }
-    }
-
-    class ItemViewHolder extends SubmissionViewHolder<SubmissionNewsBinding> implements View.OnClickListener {
-
-        public ItemViewHolder(SubmissionNewsBinding binding) {
-            super(binding);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            Item data = mData.get(getAdapterPosition());
-            BaseItemActivity.startActivity(mActivity, data);
-        }
+    @Override
+    public void onClick(int pos) {
+        Item data = getData().get(pos);
+        BaseItemActivity.startActivity(getActivity(), data);
     }
 }

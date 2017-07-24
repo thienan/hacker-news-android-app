@@ -71,7 +71,7 @@ public class StoryFragment extends ItemHeadFragment
             mBinding.sectionNews.tvText.setBackground(null);
         }
 
-        mAdapter = new PollOptionAdapter();
+        mAdapter = new PollOptionAdapter(getToolbarActivity());
 
         mBinding.sectionPollOptions.rvPollOptionList.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.sectionPollOptions.rvPollOptionList.setAdapter(mAdapter);
