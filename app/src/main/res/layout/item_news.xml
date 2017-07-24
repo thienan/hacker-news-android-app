@@ -18,54 +18,61 @@
         <variable
             name="itemTextClickHandlers"
             type="com.marcelje.hackernews.handlers.ItemTextClickHandlers" />
+
+        <variable
+            name="itemBookmarkClickHandlers"
+            type="com.marcelje.hackernews.handlers.ItemBookmarkClickHandlers" />
     </data>
 
-    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/view_margin"
-        android:elevation="@dimen/card_elevation"
-        android:padding="@dimen/view_margin"
-        app:cardCornerRadius="@dimen/card_radius">
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/text_spacing"
+        android:paddingTop="@dimen/text_spacing">
+
+        <TextView
+            android:layout_width="@dimen/avatar_size"
+            android:layout_height="@dimen/avatar_size"
+            android:layout_margin="@dimen/view_margin"
+            android:background="@drawable/ic_circle"
+            android:gravity="center"
+            android:text="@{String.valueOf(item.score)}"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/avatar_text_size" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical">
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/layout_user"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
                 android:onClick="@{() -> itemUserClickHandlers.onClick(item.by)}"
-                android:padding="@dimen/view_margin">
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/text_spacing"
+                android:paddingEnd="@dimen/view_margin"
+                android:paddingStart="@dimen/view_margin"
+                android:paddingTop="@dimen/text_spacing">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginEnd="@dimen/view_margin"
+                    android:text="@{item.by}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@{item.by}"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@{ItemUtils.getRelativeDate(context, item)}"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
-                </LinearLayout>
-            </android.support.v7.widget.Toolbar>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray"
-                android:padding="@dimen/view_margin" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{ItemUtils.getRelativeDate(context, item)}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_text"
@@ -73,32 +80,33 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
                 android:onClick="@{() -> itemTextClickHandlers.onClick(item)}"
-                android:padding="@dimen/view_margin"
+                android:paddingBottom="@dimen/text_spacing"
+                android:paddingEnd="@dimen/view_margin"
+                android:paddingStart="@dimen/view_margin"
+                android:paddingTop="@dimen/text_spacing"
                 android:text="@{ItemUtils.getTitle(context, item)}"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:orientation="horizontal"
-                android:padding="@dimen/view_margin">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/view_margin"
-                    android:text="@{@plurals/total_scores(item.score, item.score)}"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{@plurals/total_comments(item.descendants, item.descendants)}"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                    android:visibility="@{item.descendants > 0 ? View.VISIBLE : View.GONE}" />
-            </LinearLayout>
-
+                android:paddingBottom="@dimen/text_spacing"
+                android:paddingEnd="@dimen/view_margin"
+                android:paddingStart="@dimen/view_margin"
+                android:paddingTop="@dimen/text_spacing"
+                android:text="@{@plurals/total_comments(item.descendants, item.descendants)}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                android:visibility="@{item.descendants > 0 ? View.VISIBLE : View.GONE}" />
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+
+        <ImageButton
+            android:id="@+id/ib_bookmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
+            android:onClick="@{(v) -> itemBookmarkClickHandlers.onClick(v, item)}"
+            android:padding="@dimen/view_margin"
+            android:tint="@color/colorIcons" />
+
+    </LinearLayout>
 </layout>

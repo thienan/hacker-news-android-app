@@ -34,7 +34,7 @@
 
         <include
             android:id="@+id/section_news"
-            layout="@layout/item_news"
+            layout="@layout/section_news"
             app:item="@{item}"
             app:itemTextClickHandlers="@{itemTextClickHandlers}"
             app:itemUserClickHandlers="@{itemUserClickHandlers}" />
