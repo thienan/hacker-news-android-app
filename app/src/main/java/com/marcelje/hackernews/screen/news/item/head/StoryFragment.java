@@ -18,7 +18,6 @@ import com.marcelje.hackernews.handlers.ItemUserClickHandlers;
 import com.marcelje.hackernews.loader.HackerNewsResponse;
 import com.marcelje.hackernews.loader.ItemListLoader;
 import com.marcelje.hackernews.model.Item;
-import com.marcelje.hackernews.screen.news.item.ItemHeadFragment;
 import com.marcelje.hackernews.screen.news.item.PollOptionAdapter;
 
 import org.parceler.Parcels;

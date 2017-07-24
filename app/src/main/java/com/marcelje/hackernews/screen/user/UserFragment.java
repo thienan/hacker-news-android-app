@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,6 +71,8 @@ public class UserFragment extends ToolbarFragment
 
         mBinding.rvSubmissionList.setLayoutManager(layoutManager);
         mBinding.rvSubmissionList.setAdapter(mAdapter);
+        mBinding.rvSubmissionList.addItemDecoration(
+                new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         mBinding.rvSubmissionList.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {

@@ -1,4 +1,4 @@
-package com.marcelje.hackernews.screen.news.item;
+package com.marcelje.hackernews.screen.news.item.head;
 
 import com.marcelje.hackernews.fragment.ToolbarFragment;
 

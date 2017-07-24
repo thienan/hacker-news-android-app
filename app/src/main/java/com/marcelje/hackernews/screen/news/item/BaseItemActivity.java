@@ -17,6 +17,8 @@ import com.marcelje.hackernews.factory.SnackbarFactory;
 import com.marcelje.hackernews.loader.HackerNewsResponse;
 import com.marcelje.hackernews.loader.ItemListLoader;
 import com.marcelje.hackernews.model.Item;
+import com.marcelje.hackernews.screen.news.item.comment.ItemCommentFragment;
+import com.marcelje.hackernews.screen.news.item.head.ItemHeadFragment;
 import com.marcelje.hackernews.utils.BrowserUtils;
 import com.marcelje.hackernews.utils.HackerNewsUtils;
 import com.marcelje.hackernews.utils.ItemUtils;

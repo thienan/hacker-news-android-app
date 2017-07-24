@@ -1,4 +1,4 @@
-package com.marcelje.hackernews.screen.news.item;
+package com.marcelje.hackernews.screen.news.item.comment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

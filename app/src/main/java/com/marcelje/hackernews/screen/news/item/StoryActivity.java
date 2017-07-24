@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.model.Item;
+import com.marcelje.hackernews.screen.news.item.comment.ItemCommentFragment;
+import com.marcelje.hackernews.screen.news.item.head.ItemHeadFragment;
 import com.marcelje.hackernews.screen.news.item.head.StoryFragment;
 
 public class StoryActivity extends BaseItemActivity {

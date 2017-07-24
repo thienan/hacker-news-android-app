@@ -1,4 +1,4 @@
-package com.marcelje.hackernews.screen.news.item;
+package com.marcelje.hackernews.screen.news.item.comment;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -9,6 +9,7 @@ import com.marcelje.hackernews.adapter.BaseAdapter;
 import com.marcelje.hackernews.databinding.ItemCommentBinding;
 import com.marcelje.hackernews.handlers.ItemUserClickHandlers;
 import com.marcelje.hackernews.model.Item;
+import com.marcelje.hackernews.screen.news.item.BaseItemActivity;
 
 public class CommentAdapter extends BaseAdapter implements BaseAdapter.OnClickListener {
 

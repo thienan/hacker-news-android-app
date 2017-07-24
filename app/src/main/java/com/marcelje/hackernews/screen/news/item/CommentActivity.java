@@ -6,7 +6,9 @@ import android.view.MenuItem;
 
 import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.model.Item;
+import com.marcelje.hackernews.screen.news.item.comment.ItemCommentFragment;
 import com.marcelje.hackernews.screen.news.item.head.CommentFragment;
+import com.marcelje.hackernews.screen.news.item.head.ItemHeadFragment;
 
 public class CommentActivity extends BaseItemActivity {
 

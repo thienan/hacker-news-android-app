@@ -6,8 +6,9 @@ import android.view.ViewGroup;
 import com.marcelje.hackernews.BR;
 import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.adapter.BaseAdapter;
-import com.marcelje.hackernews.databinding.SubmissionCommentBinding;
-import com.marcelje.hackernews.databinding.SubmissionNewsBinding;
+import com.marcelje.hackernews.databinding.ItemCommentBinding;
+import com.marcelje.hackernews.databinding.ItemNewsBinding;
+import com.marcelje.hackernews.handlers.ItemBookmarkClickHandlers;
 import com.marcelje.hackernews.handlers.ItemTextClickHandlers;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.screen.news.item.BaseItemActivity;
@@ -32,11 +33,12 @@ public class SubmissionAdapter extends BaseAdapter implements BaseAdapter.OnClic
 
         switch (viewType) {
             case VIEW_TYPE_NEWS:
-                SubmissionNewsBinding newsBinding = SubmissionNewsBinding.inflate(inflater, parent, false);
+                ItemNewsBinding newsBinding = ItemNewsBinding.inflate(inflater, parent, false);
                 newsBinding.setItemTextClickHandlers(new ItemTextClickHandlers(getActivity()));
+                newsBinding.setItemBookmarkClickHandlers(new ItemBookmarkClickHandlers(getActivity()));
                 return new BaseAdapter.BaseViewHolder(newsBinding, this);
             case VIEW_TYPE_COMMENT:
-                SubmissionCommentBinding commentBinding = SubmissionCommentBinding.inflate(inflater, parent, false);
+                ItemCommentBinding commentBinding = ItemCommentBinding.inflate(inflater, parent, false);
                 return new BaseAdapter.BaseViewHolder(commentBinding, this);
             default:
                 return null;
