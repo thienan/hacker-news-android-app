@@ -113,23 +113,6 @@ public class BaseItemActivity extends ToolbarActivity
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem menuItemBookmark = menu.findItem(R.id.action_bookmark);
-
-        if (mItem != null && ITEM_TYPE_COMMENT.equals(mItem.getType())) {
-            menuItemBookmark.setVisible(false);
-        }
-
-        if (HackerNewsDao.isItemAvailable(this, mItem != null ? mItem.getId() : 0)) {
-            menuItemBookmark.setTitle(R.string.menu_item_unbookmark);
-        } else {
-            menuItemBookmark.setTitle(R.string.menu_item_bookmark);
-        }
-
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.action_refresh:
@@ -137,9 +120,6 @@ public class BaseItemActivity extends ToolbarActivity
                 return true;
             case R.id.action_share:
                 share();
-                return true;
-            case R.id.action_bookmark:
-                bookmark(menuItem);
                 return true;
             case R.id.action_open_page:
                 openPage();
@@ -234,18 +214,6 @@ public class BaseItemActivity extends ToolbarActivity
 
     private void share() {
         MenuUtils.openShareHackerNewsLinkChooser(this, mItem);
-    }
-
-    private void bookmark(MenuItem menuItem) {
-        if (HackerNewsDao.isItemAvailable(this, mItem.getId())) {
-            HackerNewsDao.deleteItem(this, mItem.getId());
-            SnackbarFactory.createUnbookmarkedSuccessSnackBar(getToolbar()).show();
-            menuItem.setTitle(R.string.menu_item_bookmark);
-        } else {
-            HackerNewsDao.insertItem(this, mItem);
-            SnackbarFactory.createBookmarkedSuccessSnackBar(getToolbar()).show();
-            menuItem.setTitle(R.string.menu_item_unbookmark);
-        }
     }
 
     private void openPage() {

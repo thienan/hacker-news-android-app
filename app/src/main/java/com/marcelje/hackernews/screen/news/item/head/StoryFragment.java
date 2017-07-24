@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.marcelje.hackernews.databinding.FragmentStoryBinding;
+import com.marcelje.hackernews.handlers.ItemBookmarkClickHandlers;
 import com.marcelje.hackernews.handlers.ItemTextClickHandlers;
 import com.marcelje.hackernews.handlers.ItemTextDetailsClickHandlers;
 import com.marcelje.hackernews.handlers.ItemUserClickHandlers;
@@ -64,10 +65,11 @@ public class StoryFragment extends ItemHeadFragment
         mBinding.setItem(mItem);
         mBinding.setItemUserClickHandlers(new ItemUserClickHandlers(getToolbarActivity()));
         mBinding.setItemTextClickHandlers(new ItemTextClickHandlers(getToolbarActivity()));
+        mBinding.setItemBookmarkClickHandlers(new ItemBookmarkClickHandlers(getToolbarActivity()));
         mBinding.setItemTextDetailsClickHandlers(new ItemTextDetailsClickHandlers(getToolbarActivity()));
 
         if (TextUtils.isEmpty(mItem.getUrl())) {
-            mBinding.sectionNews.tvText.setBackground(null);
+            mBinding.sectionNews.itemNews.tvText.setBackground(null);
         }
 
         mAdapter = new PollOptionAdapter(getToolbarActivity());

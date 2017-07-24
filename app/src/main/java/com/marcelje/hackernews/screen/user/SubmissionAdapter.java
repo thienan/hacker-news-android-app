@@ -34,6 +34,7 @@ public class SubmissionAdapter extends BaseAdapter implements BaseAdapter.OnClic
         switch (viewType) {
             case VIEW_TYPE_NEWS:
                 ItemNewsBinding newsBinding = ItemNewsBinding.inflate(inflater, parent, false);
+                newsBinding.setActivity(getActivity());
                 newsBinding.setItemTextClickHandlers(new ItemTextClickHandlers(getActivity()));
                 newsBinding.setItemBookmarkClickHandlers(new ItemBookmarkClickHandlers(getActivity()));
                 return new BaseAdapter.BaseViewHolder(newsBinding, this);

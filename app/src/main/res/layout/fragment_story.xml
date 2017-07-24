@@ -22,6 +22,10 @@
             type="com.marcelje.hackernews.handlers.ItemTextClickHandlers" />
 
         <variable
+            name="itemBookmarkClickHandlers"
+            type="com.marcelje.hackernews.handlers.ItemBookmarkClickHandlers" />
+
+        <variable
             name="itemTextDetailsClickHandlers"
             type="com.marcelje.hackernews.handlers.ItemTextDetailsClickHandlers" />
     </data>
@@ -31,13 +35,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
         <include
             android:id="@+id/section_news"
             layout="@layout/section_news"
+            app:activity="@{activity}"
             app:item="@{item}"
             app:itemTextClickHandlers="@{itemTextClickHandlers}"
-            app:itemUserClickHandlers="@{itemUserClickHandlers}" />
+            app:itemUserClickHandlers="@{itemUserClickHandlers}"
+            app:itemBookmarkClickHandlers="@{itemBookmarkClickHandlers}"/>
 
         <include
             android:id="@+id/section_news_details"
