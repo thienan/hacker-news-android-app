@@ -38,10 +38,7 @@ public class ItemListLoader extends AsyncTaskLoader<HackerNewsResponse<List<Item
 
             HackerNewsResponse<Item> itemResponse = HackerNewsApi.with(mActivity).getItem(itemId);
             if (itemResponse.isSuccessful()) {
-                Item item = itemResponse.getData();
-                if (item.isNotDeleted() && item.isNotDead()) {
-                    items.add(itemResponse.getData());
-                }
+                items.add(itemResponse.getData());
             }
         }
 

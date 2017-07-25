@@ -4,6 +4,7 @@ import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.marcelje.hackernews.BR;
 import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.model.Item;
 
@@ -18,6 +19,12 @@ public abstract class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.BaseV
     public BaseAdapter(ToolbarActivity mActivity) {
         this.mActivity = mActivity;
         mData = new ArrayList<>();
+    }
+
+    @Override
+    public void onBindViewHolder(BaseViewHolder holder, int position) {
+        Item item = getData().get(position);
+        holder.binding.setVariable(BR.item, item);
     }
 
     @Override

@@ -12,8 +12,6 @@ import android.view.MenuItem;
 
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.activity.ToolbarActivity;
-import com.marcelje.hackernews.database.HackerNewsDao;
-import com.marcelje.hackernews.factory.SnackbarFactory;
 import com.marcelje.hackernews.loader.HackerNewsResponse;
 import com.marcelje.hackernews.loader.ItemListLoader;
 import com.marcelje.hackernews.model.Item;

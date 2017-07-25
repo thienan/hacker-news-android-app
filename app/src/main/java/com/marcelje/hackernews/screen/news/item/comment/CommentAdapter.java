@@ -3,7 +3,6 @@ package com.marcelje.hackernews.screen.news.item.comment;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.marcelje.hackernews.BR;
 import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.adapter.BaseAdapter;
 import com.marcelje.hackernews.databinding.ItemCommentBinding;
@@ -26,16 +25,10 @@ public class CommentAdapter extends BaseAdapter implements BaseAdapter.OnClickLi
     public BaseAdapter.BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         ItemCommentBinding binding = ItemCommentBinding.inflate(inflater, parent, false);
+        binding.setActivity(getActivity());
         binding.setItemUserClickHandlers(new ItemUserClickHandlers(getActivity()));
 
         return new BaseAdapter.BaseViewHolder(binding, this);
-    }
-
-    @Override
-    public void onBindViewHolder(BaseAdapter.BaseViewHolder holder, int position) {
-        Item item = getData().get(position);
-        holder.binding.setVariable(BR.activity, getActivity());
-        holder.binding.setVariable(BR.item, item);
     }
 
     @Override

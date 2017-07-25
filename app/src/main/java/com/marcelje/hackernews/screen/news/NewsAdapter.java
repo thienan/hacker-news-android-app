@@ -3,7 +3,6 @@ package com.marcelje.hackernews.screen.news;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.marcelje.hackernews.BR;
 import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.adapter.BaseAdapter;
 import com.marcelje.hackernews.databinding.ItemNewsBinding;
@@ -29,12 +28,6 @@ class NewsAdapter extends BaseAdapter implements BaseAdapter.OnClickListener {
         binding.setItemBookmarkClickHandlers(new ItemBookmarkClickHandlers(getActivity()));
 
         return new BaseAdapter.BaseViewHolder(binding, this);
-    }
-
-    @Override
-    public void onBindViewHolder(BaseAdapter.BaseViewHolder holder, int position) {
-        Item item = getData().get(position);
-        holder.binding.setVariable(BR.item, item);
     }
 
     @Override
