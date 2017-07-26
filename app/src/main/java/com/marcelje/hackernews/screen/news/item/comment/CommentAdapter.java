@@ -1,5 +1,6 @@
 package com.marcelje.hackernews.screen.news.item.comment;
 
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -27,6 +28,8 @@ public class CommentAdapter extends BaseAdapter implements BaseAdapter.OnClickLi
         ItemCommentBinding binding = ItemCommentBinding.inflate(inflater, parent, false);
         binding.setActivity(getActivity());
         binding.setItemUserClickHandlers(new ItemUserClickHandlers(getActivity()));
+
+        binding.tvText.setMovementMethod(LinkMovementMethod.getInstance());
 
         return new BaseAdapter.BaseViewHolder(binding, this);
     }

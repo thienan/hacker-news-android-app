@@ -1,5 +1,6 @@
 package com.marcelje.hackernews.screen.user;
 
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -39,6 +40,7 @@ public class SubmissionAdapter extends BaseAdapter implements BaseAdapter.OnClic
                 return new BaseAdapter.BaseViewHolder(newsBinding, this);
             case VIEW_TYPE_COMMENT:
                 ItemCommentBinding commentBinding = ItemCommentBinding.inflate(inflater, parent, false);
+                commentBinding.tvText.setMovementMethod(LinkMovementMethod.getInstance());
                 return new BaseAdapter.BaseViewHolder(commentBinding, this);
             default:
                 return null;
