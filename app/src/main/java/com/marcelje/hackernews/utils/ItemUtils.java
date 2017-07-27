@@ -23,6 +23,7 @@ import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.model.User;
 import com.marcelje.hackernews.screen.user.UserActivity;
+import com.marcelje.hackernews.span.CustomTabUrlSpan;
 
 @SuppressWarnings("WeakerAccess")
 public final class ItemUtils {
@@ -142,28 +143,6 @@ public final class ItemUtils {
         @Override
         public void updateDrawState(TextPaint ds) {
             //override do nothing
-        }
-    }
-
-    private static class CustomTabUrlSpan extends URLSpan {
-
-        private final ToolbarActivity mActivity;
-
-        public CustomTabUrlSpan(ToolbarActivity activity, String url) {
-            super(url);
-            mActivity = activity;
-        }
-
-        @Override
-        public void onClick(View view) {
-            BrowserUtils.openTab(mActivity, getURL());
-        }
-
-        @Override
-        public void updateDrawState(TextPaint ds) {
-            super.updateDrawState(ds);
-            ds.setTypeface(Typeface.create(ds.getTypeface(), Typeface.BOLD));
-            ds.setUnderlineText(false);
         }
     }
 }

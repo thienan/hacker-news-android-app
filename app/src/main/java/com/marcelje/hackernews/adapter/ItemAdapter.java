@@ -7,22 +7,34 @@ import android.view.View;
 import com.marcelje.hackernews.BR;
 import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.model.Item;
+import com.marcelje.hackernews.screen.news.item.BaseItemActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.BaseViewHolder> {
+public abstract class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
     private final ToolbarActivity mActivity;
     private final List<Item> mData;
+    private final String mParent;
+    private final String mPoster;
 
-    public BaseAdapter(ToolbarActivity mActivity) {
-        this.mActivity = mActivity;
+    public ItemAdapter(ToolbarActivity activity, String parent, String poster) {
+        mActivity = activity;
         mData = new ArrayList<>();
+        mParent = parent;
+        mPoster = poster;
+    }
+
+    public ItemAdapter(ToolbarActivity activity) {
+        mActivity = activity;
+        mData = new ArrayList<>();
+        mParent = null;
+        mPoster = null;
     }
 
     @Override
-    public void onBindViewHolder(BaseViewHolder holder, int position) {
+    public void onBindViewHolder(ItemViewHolder holder, int position) {
         Item item = getData().get(position);
         holder.binding.setVariable(BR.item, item);
     }
@@ -56,29 +68,25 @@ public abstract class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.BaseV
         notifyItemRangeInserted(mData.size() - data.size(), data.size());
     }
 
-    public static class BaseViewHolder<T extends ViewDataBinding>
+    public class ItemViewHolder<T extends ViewDataBinding>
             extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final T binding;
-        private final OnClickListener mListener;
+        private final boolean mClickable;
 
-        public BaseViewHolder(T binding, OnClickListener listener) {
+        public ItemViewHolder(T binding, boolean clickable) {
             super(binding.getRoot());
             this.binding = binding;
-            mListener = listener;
+            mClickable = clickable;
 
-            itemView.setOnClickListener(this);
+            if (mClickable) {
+                itemView.setOnClickListener(this);
+            }
         }
 
         @Override
         public void onClick(View view) {
-            if (mListener != null) {
-                mListener.onClick(getAdapterPosition());
-            }
+            Item data = mData.get(getAdapterPosition());
+            BaseItemActivity.startActivity(mActivity, data, mParent, mPoster);
         }
     }
-
-    public interface OnClickListener {
-        void onClick(int pos);
-    }
-
 }

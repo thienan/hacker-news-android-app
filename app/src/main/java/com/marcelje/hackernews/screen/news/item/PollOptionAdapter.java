@@ -4,20 +4,20 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.marcelje.hackernews.activity.ToolbarActivity;
-import com.marcelje.hackernews.adapter.BaseAdapter;
+import com.marcelje.hackernews.adapter.ItemAdapter;
 import com.marcelje.hackernews.databinding.ItemPollOptionBinding;
 
-public class PollOptionAdapter extends BaseAdapter {
+public class PollOptionAdapter extends ItemAdapter {
 
     public PollOptionAdapter(ToolbarActivity mActivity) {
         super(mActivity);
     }
 
     @Override
-    public BaseAdapter.BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         ItemPollOptionBinding binding = ItemPollOptionBinding.inflate(inflater, parent, false);
 
-        return new BaseAdapter.BaseViewHolder(binding, null);
+        return new ItemViewHolder(binding, false);
     }
 }

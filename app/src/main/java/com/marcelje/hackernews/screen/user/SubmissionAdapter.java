@@ -5,15 +5,13 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.marcelje.hackernews.activity.ToolbarActivity;
-import com.marcelje.hackernews.adapter.BaseAdapter;
+import com.marcelje.hackernews.adapter.ItemAdapter;
 import com.marcelje.hackernews.databinding.ItemCommentBinding;
 import com.marcelje.hackernews.databinding.ItemNewsBinding;
 import com.marcelje.hackernews.handlers.ItemBookmarkClickHandlers;
 import com.marcelje.hackernews.handlers.ItemTextClickHandlers;
-import com.marcelje.hackernews.model.Item;
-import com.marcelje.hackernews.screen.news.item.BaseItemActivity;
 
-public class SubmissionAdapter extends BaseAdapter implements BaseAdapter.OnClickListener {
+class SubmissionAdapter extends ItemAdapter {
 
     private static final int VIEW_TYPE_NEWS = 1;
     private static final int VIEW_TYPE_COMMENT = 2;
@@ -28,7 +26,7 @@ public class SubmissionAdapter extends BaseAdapter implements BaseAdapter.OnClic
     }
 
     @Override
-    public BaseAdapter.BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
         switch (viewType) {
@@ -37,11 +35,11 @@ public class SubmissionAdapter extends BaseAdapter implements BaseAdapter.OnClic
                 newsBinding.setActivity(getActivity());
                 newsBinding.setItemTextClickHandlers(new ItemTextClickHandlers(getActivity()));
                 newsBinding.setItemBookmarkClickHandlers(new ItemBookmarkClickHandlers(getActivity()));
-                return new BaseAdapter.BaseViewHolder(newsBinding, this);
+                return new ItemViewHolder(newsBinding, true);
             case VIEW_TYPE_COMMENT:
                 ItemCommentBinding commentBinding = ItemCommentBinding.inflate(inflater, parent, false);
                 commentBinding.tvText.setMovementMethod(LinkMovementMethod.getInstance());
-                return new BaseAdapter.BaseViewHolder(commentBinding, this);
+                return new ItemViewHolder(commentBinding, true);
             default:
                 return null;
         }
@@ -61,11 +59,5 @@ public class SubmissionAdapter extends BaseAdapter implements BaseAdapter.OnClic
             default:
                 return VIEW_TYPE_NEWS;
         }
-    }
-
-    @Override
-    public void onClick(int pos) {
-        Item data = getData().get(pos);
-        BaseItemActivity.startActivity(getActivity(), data);
     }
 }
