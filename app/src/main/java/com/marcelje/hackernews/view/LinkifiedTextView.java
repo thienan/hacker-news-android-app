@@ -11,7 +11,6 @@ import android.view.MotionEvent;
 import android.widget.TextView;
 
 import com.marcelje.hackernews.span.CustomTabUrlSpan;
-import com.marcelje.hackernews.utils.ItemUtils;
 
 public class LinkifiedTextView extends AppCompatTextView {
     private CustomTabUrlSpan mPressedSpan;

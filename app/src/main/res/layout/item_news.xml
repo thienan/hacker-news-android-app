@@ -30,91 +30,114 @@
             type="com.marcelje.hackernews.handlers.ItemBookmarkClickHandlers" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingBottom="@dimen/text_spacing"
-        android:paddingTop="@dimen/text_spacing">
-
-        <TextView
-            android:layout_width="@dimen/avatar_size"
-            android:layout_height="@dimen/avatar_size"
-            android:layout_margin="@dimen/view_margin"
-            android:background="@drawable/ic_circle"
-            android:gravity="center"
-            android:text="@{String.valueOf(item.score)}"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/avatar_text_size" />
+        android:background="?attr/selectableItemBackground">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/text_spacing"
+            android:paddingTop="@dimen/text_spacing"
+            android:visibility="@{item.deleted || item.dead ? View.GONE : View.VISIBLE}">
+
+            <TextView
+                android:layout_width="@dimen/avatar_size"
+                android:layout_height="@dimen/avatar_size"
+                android:layout_margin="@dimen/view_margin"
+                android:background="@drawable/ic_circle"
+                android:gravity="center"
+                android:text="@{String.valueOf(item.score)}"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/avatar_text_size" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:onClick="@{() -> itemUserClickHandlers.onClick(item.by)}"
-                android:orientation="horizontal"
-                android:paddingBottom="@dimen/text_spacing"
-                android:paddingEnd="@dimen/view_margin"
-                android:paddingStart="@dimen/view_margin"
-                android:paddingTop="@dimen/text_spacing">
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{() -> itemUserClickHandlers.onClick(item.by)}"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/text_spacing"
+                    android:paddingEnd="@dimen/view_margin"
+                    android:paddingStart="@dimen/view_margin"
+                    android:paddingTop="@dimen/text_spacing">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/view_margin"
+                        android:text="@{item.by}"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{ItemUtils.getRelativeDate(context, item)}"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{() -> itemTextClickHandlers.onClick(item)}"
+                    android:paddingBottom="@dimen/text_spacing"
+                    android:paddingEnd="@dimen/view_margin"
+                    android:paddingStart="@dimen/view_margin"
+                    android:paddingTop="@dimen/text_spacing"
+                    android:text="@{ItemUtils.getTitle(context, item)}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/view_margin"
-                    android:text="@{item.by}"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{ItemUtils.getRelativeDate(context, item)}"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+                    android:paddingBottom="@dimen/text_spacing"
+                    android:paddingEnd="@dimen/view_margin"
+                    android:paddingStart="@dimen/view_margin"
+                    android:paddingTop="@dimen/text_spacing"
+                    android:text="@{@plurals/total_comments(item.descendants, item.descendants)}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                    android:visibility="@{item.descendants > 0 ? View.VISIBLE : View.GONE}" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:onClick="@{() -> itemTextClickHandlers.onClick(item)}"
-                android:paddingBottom="@dimen/text_spacing"
-                android:paddingEnd="@dimen/view_margin"
-                android:paddingStart="@dimen/view_margin"
-                android:paddingTop="@dimen/text_spacing"
-                android:text="@{ItemUtils.getTitle(context, item)}"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
-
-            <TextView
+            <ImageButton
+                android:id="@+id/ib_bookmark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/text_spacing"
-                android:paddingEnd="@dimen/view_margin"
-                android:paddingStart="@dimen/view_margin"
-                android:paddingTop="@dimen/text_spacing"
-                android:text="@{@plurals/total_comments(item.descendants, item.descendants)}"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                android:visibility="@{item.descendants > 0 ? View.VISIBLE : View.GONE}" />
+                android:background="?android:selectableItemBackground"
+                android:contentDescription="@string/desc_bookmark"
+                android:onClick="@{(v) -> itemBookmarkClickHandlers.onClick(v, item)}"
+                android:padding="@dimen/view_margin"
+                android:src="@{HackerNewsDao.isItemAvailable(activity, item.getId) ? @drawable/ic_bookmark : @drawable/ic_bookmark_border}"
+                android:tint="@color/colorIcons" />
+
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/ib_bookmark"
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/desc_bookmark"
-            android:background="?android:selectableItemBackground"
-            android:onClick="@{(v) -> itemBookmarkClickHandlers.onClick(v, item)}"
             android:padding="@dimen/view_margin"
-            android:src="@{HackerNewsDao.isItemAvailable(activity, item.getId) ? @drawable/ic_bookmark : @drawable/ic_bookmark_border}"
-            android:tint="@color/colorIcons" />
+            android:text="@string/text_deleted"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:visibility="@{item.deleted ? View.VISIBLE : View.GONE}" />
 
-    </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/view_margin"
+            android:text="@string/text_dead"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:visibility="@{item.dead ? View.VISIBLE : View.GONE}" />
+
+    </FrameLayout>
 </layout>

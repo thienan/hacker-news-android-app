@@ -9,21 +9,18 @@ import android.text.Html;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
-import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
-import android.view.View;
 
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.model.User;
-import com.marcelje.hackernews.screen.user.UserActivity;
 import com.marcelje.hackernews.span.CustomTabUrlSpan;
+import com.marcelje.hackernews.span.UserClickableSpan;
 
 @SuppressWarnings("WeakerAccess")
 public final class ItemUtils {
@@ -123,26 +120,5 @@ public final class ItemUtils {
         }
 
         return spannedText;
-    }
-
-    private static class UserClickableSpan extends ClickableSpan {
-
-        private final ToolbarActivity mActivity;
-        private final String mUserId;
-
-        public UserClickableSpan(ToolbarActivity activity, String userId) {
-            mActivity = activity;
-            mUserId = userId;
-        }
-
-        @Override
-        public void onClick(View view) {
-            UserActivity.startActivity(mActivity, mUserId);
-        }
-
-        @Override
-        public void updateDrawState(TextPaint ds) {
-            //override do nothing
-        }
     }
 }
