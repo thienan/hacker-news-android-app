@@ -44,8 +44,20 @@ public class NewsFragment extends ToolbarFragment
     private static final String TYPE_JOB = "Jobs";
     private static final String TYPE_BOOKMARKED = "Bookmarked";
 
-    private static final int LOADER_ID_STORIES = 500;
-    private static final int LOADER_ID_STORIES_ITEM = 600;
+    private static final int LOADER_ID_STORIES_TOP = 510;
+    private static final int LOADER_ID_STORIES_BEST = 520;
+    private static final int LOADER_ID_STORIES_NEW = 530;
+    private static final int LOADER_ID_STORIES_SHOW = 540;
+    private static final int LOADER_ID_STORIES_ASK = 550;
+    private static final int LOADER_ID_STORIES_JOB = 560;
+
+    private static final int LOADER_ID_STORIES_TOP_ITEM = 610;
+    private static final int LOADER_ID_STORIES_BEST_ITEM = 620;
+    private static final int LOADER_ID_STORIES_NEW_ITEM = 630;
+    private static final int LOADER_ID_STORIES_SHOW_ITEM = 640;
+    private static final int LOADER_ID_STORIES_ASK_ITEM = 650;
+    private static final int LOADER_ID_STORIES_JOB_ITEM = 660;
+
     private static final int LOADER_ID_BOOKMARKED_ITEM = 700;
 
     private static final int ITEM_COUNT = 10;
@@ -124,7 +136,17 @@ public class NewsFragment extends ToolbarFragment
     @Override
     public Loader<HackerNewsResponse<List<Item>>> onCreateLoader(int id, Bundle args) {
         switch (id) {
-            case LOADER_ID_STORIES_ITEM:
+            case LOADER_ID_STORIES_TOP_ITEM:
+                //fall through
+            case LOADER_ID_STORIES_BEST_ITEM:
+                //fall through
+            case LOADER_ID_STORIES_NEW_ITEM:
+                //fall through
+            case LOADER_ID_STORIES_SHOW_ITEM:
+                //fall through
+            case LOADER_ID_STORIES_ASK_ITEM:
+                //fall through
+            case LOADER_ID_STORIES_JOB_ITEM:
                 List<Long> list = CollectionUtils.subList(mItemIds,
                         (mCurrentPage - 1) * ITEM_COUNT,
                         mCurrentPage * ITEM_COUNT);
@@ -144,11 +166,40 @@ public class NewsFragment extends ToolbarFragment
                                HackerNewsResponse<List<Item>> data) {
         if (data.isSuccessful()) {
             switch (loader.getId()) {
-                case LOADER_ID_STORIES_ITEM:
-                    mAdapter.addData(data.getData());
+                case LOADER_ID_STORIES_TOP_ITEM:
+                    if (TYPE_TOP.equals(mNewsType)) {
+                        mAdapter.addData(data.getData());
+                    }
+                    break;
+                case LOADER_ID_STORIES_BEST_ITEM:
+                    if (TYPE_BEST.equals(mNewsType)) {
+                        mAdapter.addData(data.getData());
+                    }
+                    break;
+                case LOADER_ID_STORIES_NEW_ITEM:
+                    if (TYPE_NEW.equals(mNewsType)) {
+                        mAdapter.addData(data.getData());
+                    }
+                    break;
+                case LOADER_ID_STORIES_SHOW_ITEM:
+                    if (TYPE_SHOW.equals(mNewsType)) {
+                        mAdapter.addData(data.getData());
+                    }
+                    break;
+                case LOADER_ID_STORIES_ASK_ITEM:
+                    if (TYPE_ASK.equals(mNewsType)) {
+                        mAdapter.addData(data.getData());
+                    }
+                    break;
+                case LOADER_ID_STORIES_JOB_ITEM:
+                    if (TYPE_JOB.equals(mNewsType)) {
+                        mAdapter.addData(data.getData());
+                    }
                     break;
                 case LOADER_ID_BOOKMARKED_ITEM:
-                    mAdapter.swapData(data.getData());
+                    if (TYPE_BOOKMARKED.equals(mNewsType)) {
+                        mAdapter.swapData(data.getData());
+                    }
                     break;
                 default:
                     //do nothing
@@ -195,23 +246,24 @@ public class NewsFragment extends ToolbarFragment
 
         switch (mNewsType) {
             case TYPE_TOP:
-                //fall through
+                loaderManager.restartLoader(LOADER_ID_STORIES_TOP, null, getStoriesCallback());
+                break;
             case TYPE_BEST:
-                //fall through
+                loaderManager.restartLoader(LOADER_ID_STORIES_BEST, null, getStoriesCallback());
+                break;
             case TYPE_NEW:
-                //fall through
+                loaderManager.restartLoader(LOADER_ID_STORIES_NEW, null, getStoriesCallback());
+                break;
             case TYPE_SHOW:
-                //fall through
+                loaderManager.restartLoader(LOADER_ID_STORIES_SHOW, null, getStoriesCallback());
+                break;
             case TYPE_ASK:
-                //fall through
+                loaderManager.restartLoader(LOADER_ID_STORIES_ASK, null, getStoriesCallback());
+                break;
             case TYPE_JOB:
-                loaderManager.destroyLoader(LOADER_ID_BOOKMARKED_ITEM);
-                loaderManager.destroyLoader(LOADER_ID_STORIES);
-                loaderManager.initLoader(LOADER_ID_STORIES, null, getStoriesCallback());
-
+                loaderManager.restartLoader(LOADER_ID_STORIES_JOB, null, getStoriesCallback());
                 break;
             case TYPE_BOOKMARKED:
-                loaderManager.destroyLoader(LOADER_ID_STORIES);
                 loaderManager.restartLoader(LOADER_ID_BOOKMARKED_ITEM, null, this);
                 break;
             default:
@@ -236,7 +288,17 @@ public class NewsFragment extends ToolbarFragment
             @Override
             public Loader<HackerNewsResponse<List<Long>>> onCreateLoader(int id, Bundle args) {
                 switch (id) {
-                    case LOADER_ID_STORIES:
+                    case LOADER_ID_STORIES_TOP:
+                        //fall through
+                    case LOADER_ID_STORIES_BEST:
+                        //fall through
+                    case LOADER_ID_STORIES_NEW:
+                        //fall through
+                    case LOADER_ID_STORIES_SHOW:
+                        //fall through
+                    case LOADER_ID_STORIES_ASK:
+                        //fall through
+                    case LOADER_ID_STORIES_JOB:
                         return new StoriesLoader(getActivity(), mNewsType);
                     default:
                 }
@@ -248,9 +310,36 @@ public class NewsFragment extends ToolbarFragment
             public void onLoadFinished(Loader<HackerNewsResponse<List<Long>>> loader,
                                        HackerNewsResponse<List<Long>> data) {
                 if (data.isSuccessful()) {
-                    mItemIds = data.getData();
-                    getActivity().getSupportLoaderManager()
-                            .restartLoader(LOADER_ID_STORIES_ITEM, null, NewsFragment.this);
+
+                    int storiesItemId = -1;
+
+                    switch (loader.getId()) {
+                        case LOADER_ID_STORIES_TOP:
+                            storiesItemId = LOADER_ID_STORIES_TOP_ITEM;
+                            break;
+                        case LOADER_ID_STORIES_BEST:
+                            storiesItemId = LOADER_ID_STORIES_BEST_ITEM;
+                            break;
+                        case LOADER_ID_STORIES_NEW:
+                            storiesItemId = LOADER_ID_STORIES_NEW_ITEM;
+                            break;
+                        case LOADER_ID_STORIES_SHOW:
+                            storiesItemId = LOADER_ID_STORIES_SHOW_ITEM;
+                            break;
+                        case LOADER_ID_STORIES_ASK:
+                            storiesItemId = LOADER_ID_STORIES_ASK_ITEM;
+                            break;
+                        case LOADER_ID_STORIES_JOB:
+                            storiesItemId = LOADER_ID_STORIES_JOB_ITEM;
+                            break;
+                        default:
+                    }
+
+                    if (storiesItemId > 0) {
+                        mItemIds = data.getData();
+                        getActivity().getSupportLoaderManager()
+                                .restartLoader(storiesItemId, null, NewsFragment.this);
+                    }
                 } else {
                     SnackbarFactory
                             .createRetrieveErrorSnackbar(mBinding.rvItemList,
