@@ -38,6 +38,7 @@ class SubmissionAdapter extends ItemAdapter {
                 return new ItemViewHolder(newsBinding, true);
             case VIEW_TYPE_COMMENT:
                 ItemCommentBinding commentBinding = ItemCommentBinding.inflate(inflater, parent, false);
+                commentBinding.setActivity(getActivity());
                 commentBinding.tvText.setMovementMethod(LinkMovementMethod.getInstance());
                 return new ItemViewHolder(commentBinding, true);
             default:
