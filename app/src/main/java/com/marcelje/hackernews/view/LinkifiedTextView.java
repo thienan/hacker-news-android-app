@@ -33,14 +33,16 @@ public class LinkifiedTextView extends AppCompatTextView {
                     mPressedSpan.onClick(widget);
                     mPressedSpan.setPressed(false);
                     mPressedSpan = null;
+                    Selection.removeSelection(buffer);
+                    return true;
                 }
-                Selection.removeSelection(buffer);
             } else if (action == MotionEvent.ACTION_DOWN) {
                 mPressedSpan = getPressedSpan(widget, buffer, event);
                 if (mPressedSpan != null) {
                     mPressedSpan.setPressed(true);
                     Selection.setSelection(buffer, buffer.getSpanStart(mPressedSpan),
                             buffer.getSpanEnd(mPressedSpan));
+                    return true;
                 }
             } else if (action == MotionEvent.ACTION_MOVE) {
                 CustomTabUrlSpan touchedSpan = getPressedSpan(widget, buffer, event);
@@ -48,18 +50,19 @@ public class LinkifiedTextView extends AppCompatTextView {
                     mPressedSpan.setPressed(false);
                     mPressedSpan = null;
                     Selection.removeSelection(buffer);
+                    return true;
                 }
             } else {
                 if (mPressedSpan != null) {
                     mPressedSpan.setPressed(false);
                     mPressedSpan = null;
-                    super.onTouchEvent(event);
                 }
                 Selection.removeSelection(buffer);
+                return super.onTouchEvent(event);
             }
         }
 
-        return true;
+        return false;
     }
 
     private CustomTabUrlSpan getPressedSpan(TextView textView, Spannable spannable, MotionEvent event) {
