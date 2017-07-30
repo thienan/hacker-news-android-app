@@ -108,7 +108,7 @@ public class NewsFragment extends ToolbarFragment
     private void onRestoreInstanceState(Bundle inState) {
         mNewsType = inState.getString(STATE_NEWS_TYPE);
         mItemIds = CollectionUtils.toLongList(inState.getLongArray(STATE_NEWS_DATA_IDS));
-        mAdapter.swapData((List<Item>) Parcels.unwrap(inState.getParcelable(STATE_NEWS_DATA)));
+        mAdapter.swapData(Parcels.unwrap(inState.getParcelable(STATE_NEWS_DATA)));
         mBinding.rvItemList.getLayoutManager().onRestoreInstanceState(inState.getParcelable(STATE_NEWS_VIEW));
         mCurrentPage = inState.getInt(STATE_CURRENT_PAGE);
     }

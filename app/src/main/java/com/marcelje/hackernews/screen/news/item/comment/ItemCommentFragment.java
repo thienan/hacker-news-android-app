@@ -98,7 +98,7 @@ public class ItemCommentFragment extends ToolbarFragment
     }
 
     private void onRestoreInstanceState(Bundle inState) {
-        mAdapter.swapData((List<Item>) Parcels.unwrap(inState.getParcelable(STATE_COMMENT_DATA)));
+        mAdapter.swapData(Parcels.unwrap(inState.getParcelable(STATE_COMMENT_DATA)));
         mCurrentPage = inState.getInt(STATE_CURRENT_PAGE);
 
         if (mAdapter.getData().size() <= 0) refresh();

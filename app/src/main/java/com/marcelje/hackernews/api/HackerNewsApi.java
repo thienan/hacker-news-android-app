@@ -8,13 +8,13 @@ import com.marcelje.hackernews.loader.HackerNewsResponse;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.model.User;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import retrofit2.Call;
-import retrofit2.Response;
+import io.reactivex.Observable;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 import timber.log.Timber;
 
 public final class HackerNewsApi {
@@ -54,9 +54,9 @@ public final class HackerNewsApi {
         return get(resource.getUser(userId));
     }
 
-    public HackerNewsResponse<Item> getItem(long itemId) {
+    public Observable<Item> getItem(long itemId) {
         Timber.d("getItem(id=%d)", itemId);
-        return get(resource.getItem(itemId));
+        return resource.getItem(itemId);
     }
 
     public HackerNewsResponse<List<Long>> getTopStories() {
@@ -89,20 +89,17 @@ public final class HackerNewsApi {
         return get(resource.getJobStories());
     }
 
-    private <T> HackerNewsResponse<T> get(Call<T> call) {
-        try {
-            Response<T> response = call.execute();
+    private <T> HackerNewsResponse<T> get(Observable<T> call) {
+        final HackerNewsResponse<T>[] r = new HackerNewsResponse[1];
 
-            if (response.isSuccessful()) {
-                Timber.d(response.body().toString());
-                return HackerNewsResponse.ok(response.body());
-            } else {
-                Timber.d(response.errorBody().toString());
-                return HackerNewsResponse.error(response.errorBody().toString());
-            }
-        } catch (IOException e) {
-            Timber.e(e);
-            return HackerNewsResponse.error(e.getMessage());
-        }
+        call.subscribe(data -> {
+            Timber.d(data.toString());
+            r[0] = HackerNewsResponse.ok(data);
+        }, throwable -> {
+            Timber.e(throwable);
+            r[0] = HackerNewsResponse.error(throwable.getMessage());
+        });
+
+        return r[0];
     }
 }

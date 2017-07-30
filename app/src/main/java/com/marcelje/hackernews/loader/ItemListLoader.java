@@ -2,15 +2,13 @@ package com.marcelje.hackernews.loader;
 
 import android.app.Activity;
 import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.os.CancellationSignal;
-import android.support.v4.os.OperationCanceledException;
 
 import com.marcelje.hackernews.api.HackerNewsApi;
 import com.marcelje.hackernews.model.Item;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+
+import io.reactivex.Observable;
 
 public class ItemListLoader extends AsyncTaskLoader<HackerNewsResponse<List<Item>>> {
 
@@ -18,50 +16,18 @@ public class ItemListLoader extends AsyncTaskLoader<HackerNewsResponse<List<Item
     private final List<Long> mItemIds;
 
     private HackerNewsResponse<List<Item>> mItems;
-    private CancellationSignal mCancellationSignal;
 
     /* Runs on a worker thread */
     @Override
     public HackerNewsResponse<List<Item>> loadInBackground() {
-        synchronized (this) {
-            if (isLoadInBackgroundCanceled()) {
-                throw new OperationCanceledException();
-            }
-            mCancellationSignal = new CancellationSignal();
-        }
+        final HackerNewsResponse[] items = new HackerNewsResponse[1];
 
-        List<Item> items = new ArrayList<>();
-        for (long itemId : mItemIds) {
-            if (mCancellationSignal.isCanceled()) {
-                return HackerNewsResponse.ok(Collections.emptyList());
-            }
+        Observable.fromIterable(mItemIds)
+                .flatMap(itemId -> HackerNewsApi.with(mActivity).getItem(itemId))
+                .toList()
+                .subscribe(data -> items[0] = HackerNewsResponse.ok(data));
 
-            HackerNewsResponse<Item> itemResponse = HackerNewsApi.with(mActivity).getItem(itemId);
-            if (itemResponse.isSuccessful()) {
-                items.add(itemResponse.getData());
-            }
-        }
-
-        if (mCancellationSignal.isCanceled()) {
-            return HackerNewsResponse.ok(Collections.emptyList());
-        }
-
-        synchronized (this) {
-            mCancellationSignal = null;
-        }
-
-        return HackerNewsResponse.ok(items);
-    }
-
-    @Override
-    public void cancelLoadInBackground() {
-        super.cancelLoadInBackground();
-
-        synchronized (this) {
-            if (mCancellationSignal != null) {
-                mCancellationSignal.cancel();
-            }
-        }
+        return items[0];
     }
 
     /* Runs on the UI thread */

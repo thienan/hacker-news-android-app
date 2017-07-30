@@ -91,7 +91,7 @@ public class StoryFragment extends ItemHeadFragment
     }
 
     private void onRestoreInstanceState(Bundle inState) {
-        mAdapter.swapData((List<Item>) Parcels.unwrap(inState.getParcelable(STATE_POLL_OPTIONS_DATA)));
+        mAdapter.swapData(Parcels.unwrap(inState.getParcelable(STATE_POLL_OPTIONS_DATA)));
     }
 
     @Override

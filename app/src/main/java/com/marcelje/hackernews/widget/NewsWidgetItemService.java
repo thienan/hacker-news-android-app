@@ -22,6 +22,8 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
+
 public class NewsWidgetItemService extends RemoteViewsService {
     private int mAppWidgetId;
 
@@ -64,12 +66,12 @@ public class NewsWidgetItemService extends RemoteViewsService {
             String newsType = NewsWidgetStorage.loadNewsType(getApplicationContext(), mAppWidgetId);
             int newsCount = NewsWidgetStorage.loadNewsCount(getApplicationContext(), mAppWidgetId);
 
-            HackerNewsResponse<List<Long>> itemIds = HackerNewsResponse.error("Unknown type");
-
             if (getString(R.string.settings_type_option_bookmarked).equals(newsType)) {
                 mItems = HackerNewsDao.getItems(getApplicationContext());
                 return;
             }
+
+            HackerNewsResponse<List<Long>> itemIds = HackerNewsResponse.error("Unknown type");
 
             if (getString(R.string.settings_type_option_top).equals(newsType)) {
                 itemIds = HackerNewsApi.with(getApplication()).getTopStories();
@@ -88,15 +90,11 @@ public class NewsWidgetItemService extends RemoteViewsService {
             mItems = new ArrayList<>();
 
             if (itemIds.isSuccessful()) {
-                for (long itemId : CollectionUtils.subList(itemIds.getData(), 0, newsCount)) {
-                    HackerNewsResponse<Item> itemResponse = HackerNewsApi.with(getApplication()).getItem(itemId);
-                    if (itemResponse.isSuccessful()) {
-                        Item item = itemResponse.getData();
-                        if (item.isNotDeleted() && item.isNotDead()) {
-                            mItems.add(itemResponse.getData());
-                        }
-                    }
-                }
+                Observable.fromIterable(CollectionUtils.subList(itemIds.getData(), 0, newsCount))
+                        .flatMap(itemId -> HackerNewsApi.with(getApplication()).getItem(itemId))
+                        .filter(item -> item.isNotDeleted() || item.isNotDead())
+                        .toList()
+                        .subscribe(data -> mItems.addAll(data));
             }
         }
 

@@ -90,8 +90,8 @@ public class UserFragment extends ToolbarFragment
     }
 
     private void onRestoreInstanceState(Bundle inState) {
-        mBinding.setUser((User) Parcels.unwrap(inState.getParcelable(STATE_USER)));
-        mAdapter.swapData((List<Item>) Parcels.unwrap(inState.getParcelable(STATE_SUBMISSION_DATA)));
+        mBinding.setUser(Parcels.unwrap(inState.getParcelable(STATE_USER)));
+        mAdapter.swapData(Parcels.unwrap(inState.getParcelable(STATE_SUBMISSION_DATA)));
         mCurrentPage = inState.getInt(STATE_CURRENT_PAGE);
     }
 

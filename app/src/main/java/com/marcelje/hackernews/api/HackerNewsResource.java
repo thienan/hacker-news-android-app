@@ -5,33 +5,33 @@ import com.marcelje.hackernews.model.User;
 
 import java.util.List;
 
-import retrofit2.Call;
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface HackerNewsResource {
 
     @GET("user/{id}.json")
-    Call<User> getUser(@Path("id") String id);
+    Observable<User> getUser(@Path("id") String id);
 
     @GET("item/{id}.json")
-    Call<Item> getItem(@Path("id") long id);
+    Observable<Item> getItem(@Path("id") long id);
 
     @GET("topstories.json")
-    Call<List<Long>> getTopStories();
+    Observable<List<Long>> getTopStories();
 
     @GET("newstories.json")
-    Call<List<Long>> getNewStories();
+    Observable<List<Long>> getNewStories();
 
     @GET("beststories.json")
-    Call<List<Long>> getBestStories();
+    Observable<List<Long>> getBestStories();
 
     @GET("askstories.json")
-    Call<List<Long>> getAskStories();
+    Observable<List<Long>> getAskStories();
 
     @GET("showstories.json")
-    Call<List<Long>> getShowStories();
+    Observable<List<Long>> getShowStories();
 
     @GET("jobstories.json")
-    Call<List<Long>> getJobStories();
+    Observable<List<Long>> getJobStories();
 }
