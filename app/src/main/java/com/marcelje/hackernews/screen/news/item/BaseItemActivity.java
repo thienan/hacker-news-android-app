@@ -61,10 +61,19 @@ public class BaseItemActivity extends ToolbarActivity
     }
 
     public static void startActivity(ToolbarActivity activity, Item item, String parent, String poster) {
-        if (ITEM_TYPE_COMMENT.equals(item.getType())) {
-            CommentActivity.startActivity(activity, item, parent, poster);
-        } else {
-            StoryActivity.startActivity(activity, item, parent, poster);
+        switch (item.getType()) {
+            case ITEM_TYPE_COMMENT:
+                CommentActivity.startActivity(activity, item, parent, poster);
+                break;
+            case ITEM_TYPE_STORY:
+                //fall through
+            case ITEM_TYPE_POLL:
+                //fall through
+            case ITEM_TYPE_JOB:
+                //fall through
+            default:
+                StoryActivity.startActivity(activity, item, parent, poster);
+                break;
         }
     }
 
@@ -163,6 +172,16 @@ public class BaseItemActivity extends ToolbarActivity
                 .commit();
     }
 
+    ItemHeadFragment getHeadFragment() {
+        return (ItemHeadFragment) getSupportFragmentManager()
+                .findFragmentByTag(TAG_HEAD_FRAGMENT);
+    }
+
+    ItemCommentFragment getCommentFragment() {
+        return (ItemCommentFragment) getSupportFragmentManager()
+                .findFragmentByTag(TAG_COMMENT_FRAGMENT);
+    }
+
     void loadParentItem() {
         mParentId = mItem.getParent();
 
@@ -204,10 +223,8 @@ public class BaseItemActivity extends ToolbarActivity
     }
 
     private void refresh() {
-        ((ItemHeadFragment) getSupportFragmentManager()
-                .findFragmentByTag(TAG_HEAD_FRAGMENT)).refresh();
-        ((ItemCommentFragment) getSupportFragmentManager()
-                .findFragmentByTag(TAG_COMMENT_FRAGMENT)).refresh();
+        getHeadFragment().refresh();
+        getCommentFragment().refresh();
     }
 
     private void share() {

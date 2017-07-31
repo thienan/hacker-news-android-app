@@ -11,7 +11,7 @@ import java.util.List;
 public class StoriesLoader extends AsyncTaskLoader<HackerNewsResponse<List<Long>>> {
 
     private final Activity mActivity;
-    private final String mType;
+    private final String mNewsType;
 
     private HackerNewsResponse<List<Long>> mItems;
 
@@ -20,17 +20,17 @@ public class StoriesLoader extends AsyncTaskLoader<HackerNewsResponse<List<Long>
     public HackerNewsResponse<List<Long>> loadInBackground() {
         HackerNewsResponse<List<Long>> itemIds = HackerNewsResponse.error("Unknown type");
 
-        if (mActivity.getString(R.string.settings_type_option_top).equals(mType)) {
+        if (mActivity.getString(R.string.settings_type_option_top).equals(mNewsType)) {
             itemIds = HackerNewsApi.with(mActivity).getTopStories();
-        } else if (mActivity.getString(R.string.settings_type_option_best).equals(mType)) {
+        } else if (mActivity.getString(R.string.settings_type_option_best).equals(mNewsType)) {
             itemIds = HackerNewsApi.with(mActivity).getBestStories();
-        } else if (mActivity.getString(R.string.settings_type_option_new).equals(mType)) {
+        } else if (mActivity.getString(R.string.settings_type_option_new).equals(mNewsType)) {
             itemIds = HackerNewsApi.with(mActivity).getNewStories();
-        } else if (mActivity.getString(R.string.settings_type_option_show).equals(mType)) {
+        } else if (mActivity.getString(R.string.settings_type_option_show).equals(mNewsType)) {
             itemIds = HackerNewsApi.with(mActivity).getShowStories();
-        } else if (mActivity.getString(R.string.settings_type_option_ask).equals(mType)) {
+        } else if (mActivity.getString(R.string.settings_type_option_ask).equals(mNewsType)) {
             itemIds = HackerNewsApi.with(mActivity).getAskStories();
-        } else if (mActivity.getString(R.string.settings_type_option_jobs).equals(mType)) {
+        } else if (mActivity.getString(R.string.settings_type_option_jobs).equals(mNewsType)) {
             itemIds = HackerNewsApi.with(mActivity).getJobStories();
         }
 
@@ -51,11 +51,11 @@ public class StoriesLoader extends AsyncTaskLoader<HackerNewsResponse<List<Long>
         }
     }
 
-    public StoriesLoader(Activity activity, String type) {
+    public StoriesLoader(Activity activity, String newsType) {
         super(activity);
 
         mActivity = activity;
-        mType = type;
+        mNewsType = newsType;
     }
 
     /**

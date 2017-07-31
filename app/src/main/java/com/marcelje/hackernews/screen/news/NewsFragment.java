@@ -3,7 +3,6 @@ package com.marcelje.hackernews.screen.news;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,22 +24,13 @@ import org.parceler.Parcels;
 import java.util.List;
 
 public class NewsFragment extends ToolbarFragment
-        implements SwipeRefreshLayout.OnRefreshListener,
-        View.OnClickListener, LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> {
+        implements LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> {
 
     private static final String STATE_NEWS_TYPE = "com.marcelje.hackernews.screen.news.state.NEWS_TYPE";
     private static final String STATE_NEWS_DATA_IDS = "com.marcelje.hackernews.screen.news.state.NEWS_DATA_IDS";
     private static final String STATE_NEWS_DATA = "com.marcelje.hackernews.screen.news.state.NEWS_DATA";
     private static final String STATE_NEWS_VIEW = "com.marcelje.hackernews.screen.news.state.NEWS_VIEW";
     private static final String STATE_CURRENT_PAGE = "com.marcelje.hackernews.screen.news.state.CURRENT_PAGE";
-
-    private static final String TYPE_TOP = "Top";
-    private static final String TYPE_BEST = "Best";
-    private static final String TYPE_NEW = "New";
-    private static final String TYPE_SHOW = "Show";
-    private static final String TYPE_ASK = "Ask";
-    private static final String TYPE_JOB = "Jobs";
-    private static final String TYPE_BOOKMARKED = "Bookmarked";
 
     private static final int LOADER_ID_STORIES_TOP = 510;
     private static final int LOADER_ID_STORIES_BEST = 520;
@@ -55,7 +45,6 @@ public class NewsFragment extends ToolbarFragment
     private static final int LOADER_ID_STORIES_SHOW_ITEM = 640;
     private static final int LOADER_ID_STORIES_ASK_ITEM = 650;
     private static final int LOADER_ID_STORIES_JOB_ITEM = 660;
-
     private static final int LOADER_ID_BOOKMARKED_ITEM = 700;
 
     private static final int ITEM_COUNT = 10;
@@ -83,12 +72,10 @@ public class NewsFragment extends ToolbarFragment
         mBinding.rvItemList.setLayoutManager(layoutManager);
         mBinding.rvItemList.setAdapter(mAdapter);
         mBinding.rvItemList.showDivider();
-        mBinding.rvItemList.setOnLoadMoreListener((page, totalItemsCount) -> {
-            if (!TYPE_BOOKMARKED.equals(mNewsType)) nextPageNews();
-        });
+        mBinding.rvItemList.setOnLoadMoreListener((page, totalItemsCount) -> nextPageNews());
 
         mBinding.srlRefresh.setColorSchemeResources(R.color.colorAccent);
-        mBinding.srlRefresh.setOnRefreshListener(this);
+        mBinding.srlRefresh.setOnRefreshListener(this::refreshNews);
 
         if (savedInstanceState != null) {
             onRestoreInstanceState(savedInstanceState);
@@ -113,16 +100,6 @@ public class NewsFragment extends ToolbarFragment
         outState.putParcelable(STATE_NEWS_VIEW, mBinding.rvItemList.getLayoutManager().onSaveInstanceState());
         outState.putInt(STATE_CURRENT_PAGE, mCurrentPage);
         super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onRefresh() {
-        refreshNews();
-    }
-
-    @Override
-    public void onClick(View view) {
-        retrieveNews();
     }
 
     @Override
@@ -159,37 +136,37 @@ public class NewsFragment extends ToolbarFragment
         if (data.isSuccessful()) {
             switch (loader.getId()) {
                 case LOADER_ID_STORIES_TOP_ITEM:
-                    if (TYPE_TOP.equals(mNewsType)) {
+                    if (getString(R.string.settings_type_option_top).equals(mNewsType)) {
                         mAdapter.addData(data.getData());
                     }
                     break;
                 case LOADER_ID_STORIES_BEST_ITEM:
-                    if (TYPE_BEST.equals(mNewsType)) {
+                    if (getString(R.string.settings_type_option_best).equals(mNewsType)) {
                         mAdapter.addData(data.getData());
                     }
                     break;
                 case LOADER_ID_STORIES_NEW_ITEM:
-                    if (TYPE_NEW.equals(mNewsType)) {
+                    if (getString(R.string.settings_type_option_new).equals(mNewsType)) {
                         mAdapter.addData(data.getData());
                     }
                     break;
                 case LOADER_ID_STORIES_SHOW_ITEM:
-                    if (TYPE_SHOW.equals(mNewsType)) {
+                    if (getString(R.string.settings_type_option_show).equals(mNewsType)) {
                         mAdapter.addData(data.getData());
                     }
                     break;
                 case LOADER_ID_STORIES_ASK_ITEM:
-                    if (TYPE_ASK.equals(mNewsType)) {
+                    if (getString(R.string.settings_type_option_ask).equals(mNewsType)) {
                         mAdapter.addData(data.getData());
                     }
                     break;
                 case LOADER_ID_STORIES_JOB_ITEM:
-                    if (TYPE_JOB.equals(mNewsType)) {
+                    if (getString(R.string.settings_type_option_jobs).equals(mNewsType)) {
                         mAdapter.addData(data.getData());
                     }
                     break;
                 case LOADER_ID_BOOKMARKED_ITEM:
-                    if (TYPE_BOOKMARKED.equals(mNewsType)) {
+                    if (getString(R.string.settings_type_option_bookmarked).equals(mNewsType)) {
                         mAdapter.swapData(data.getData());
                     }
                     break;
@@ -197,9 +174,7 @@ public class NewsFragment extends ToolbarFragment
                     //do nothing
             }
         } else {
-            SnackbarFactory
-                    .createRetrieveErrorSnackbar(mBinding.rvItemList,
-                            NewsFragment.this).show();
+            SnackbarFactory.createRetrieveErrorSnackbar(mBinding.rvItemList, (v) -> retrieveNews()).show();
         }
 
         mBinding.rvItemList.hideProgressBar();
@@ -237,32 +212,23 @@ public class NewsFragment extends ToolbarFragment
     private void retrieveNews() {
         LoaderManager loaderManager = getActivity().getSupportLoaderManager();
 
-        switch (mNewsType) {
-            case TYPE_TOP:
-                loaderManager.restartLoader(LOADER_ID_STORIES_TOP, null, getStoriesCallback());
-                break;
-            case TYPE_BEST:
-                loaderManager.restartLoader(LOADER_ID_STORIES_BEST, null, getStoriesCallback());
-                break;
-            case TYPE_NEW:
-                loaderManager.restartLoader(LOADER_ID_STORIES_NEW, null, getStoriesCallback());
-                break;
-            case TYPE_SHOW:
-                loaderManager.restartLoader(LOADER_ID_STORIES_SHOW, null, getStoriesCallback());
-                break;
-            case TYPE_ASK:
-                loaderManager.restartLoader(LOADER_ID_STORIES_ASK, null, getStoriesCallback());
-                break;
-            case TYPE_JOB:
-                loaderManager.restartLoader(LOADER_ID_STORIES_JOB, null, getStoriesCallback());
-                break;
-            case TYPE_BOOKMARKED:
-                loaderManager.restartLoader(LOADER_ID_BOOKMARKED_ITEM, null, this);
-                break;
-            default:
-                mBinding.rvItemList.hideProgressBar();
-                mBinding.srlRefresh.setRefreshing(false);
-                break;
+        if (getString(R.string.settings_type_option_top).equals(mNewsType)) {
+            loaderManager.restartLoader(LOADER_ID_STORIES_TOP, null, getStoriesCallback());
+        } else if (getString(R.string.settings_type_option_best).equals(mNewsType)) {
+            loaderManager.restartLoader(LOADER_ID_STORIES_BEST, null, getStoriesCallback());
+        } else if (getString(R.string.settings_type_option_new).equals(mNewsType)) {
+            loaderManager.restartLoader(LOADER_ID_STORIES_NEW, null, getStoriesCallback());
+        } else if (getString(R.string.settings_type_option_show).equals(mNewsType)) {
+            loaderManager.restartLoader(LOADER_ID_STORIES_SHOW, null, getStoriesCallback());
+        } else if (getString(R.string.settings_type_option_ask).equals(mNewsType)) {
+            loaderManager.restartLoader(LOADER_ID_STORIES_ASK, null, getStoriesCallback());
+        } else if (getString(R.string.settings_type_option_jobs).equals(mNewsType)) {
+            loaderManager.restartLoader(LOADER_ID_STORIES_JOB, null, getStoriesCallback());
+        } else if (getString(R.string.settings_type_option_bookmarked).equals(mNewsType)) {
+            loaderManager.restartLoader(LOADER_ID_BOOKMARKED_ITEM, null, this);
+        } else {
+            mBinding.rvItemList.hideProgressBar();
+            mBinding.srlRefresh.setRefreshing(false);
         }
     }
 
@@ -326,7 +292,7 @@ public class NewsFragment extends ToolbarFragment
                 } else {
                     SnackbarFactory
                             .createRetrieveErrorSnackbar(mBinding.rvItemList,
-                                    NewsFragment.this).show();
+                                    (v) -> retrieveNews()).show();
 
                     mBinding.rvItemList.hideProgressBar();
                     mBinding.srlRefresh.setRefreshing(false);

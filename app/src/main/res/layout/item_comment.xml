@@ -93,7 +93,7 @@
             android:padding="@dimen/view_margin"
             android:text="@string/text_dead"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:visibility="@{item.dead ? View.VISIBLE : View.GONE}" />
+            android:visibility="@{item.dead &amp;&amp; !item.deleted ? View.VISIBLE : View.GONE}" />
 
     </FrameLayout>
 </layout>
