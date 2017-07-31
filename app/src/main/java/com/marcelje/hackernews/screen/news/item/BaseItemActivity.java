@@ -116,6 +116,8 @@ public class BaseItemActivity extends ToolbarActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_item, menu);
+        MenuUtils.whitenMenuItemIcon(this, menu, R.id.action_share);
+
         return true;
     }
 

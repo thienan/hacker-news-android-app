@@ -28,8 +28,7 @@ public final class ItemUtils {
     private static final String BRACKET_OPEN = " (";
     private static final String BRACKET_CLOSE = ")";
 
-    private ItemUtils() {
-    }
+    private ItemUtils() {}
 
     public static String getTypeAsTitle(Item item) {
         if (item == null) return "";

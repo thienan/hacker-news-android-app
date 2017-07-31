@@ -6,6 +6,8 @@ import java.util.List;
 
 public class CollectionUtils {
 
+    private CollectionUtils() {}
+
     public static List<Long> subList(List<Long> lists, int firstIndex, int lastIndex) {
         if (lists == null || lists.size() == 0) return Collections.emptyList();
         if (firstIndex > lists.size() || lastIndex < 0) return Collections.emptyList();

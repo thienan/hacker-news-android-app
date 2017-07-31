@@ -4,10 +4,7 @@ import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +13,7 @@ import android.widget.Spinner;
 
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.activity.ToolbarActivity;
+import com.marcelje.hackernews.utils.MenuUtils;
 
 public class NewsWidgetConfigureActivity extends ToolbarActivity {
 
@@ -60,11 +58,7 @@ public class NewsWidgetConfigureActivity extends ToolbarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_widget_news_configure, menu);
-
-        Drawable drawable = menu.findItem(R.id.action_next).getIcon();
-        drawable = DrawableCompat.wrap(drawable);
-        DrawableCompat.setTint(drawable, ContextCompat.getColor(this, android.R.color.white));
-        menu.findItem(R.id.action_next).setIcon(drawable);
+        MenuUtils.whitenMenuItemIcon(this, menu, R.id.action_next);
 
         return true;
     }
