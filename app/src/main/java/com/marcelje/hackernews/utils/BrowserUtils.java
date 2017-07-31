@@ -23,7 +23,8 @@ import timber.log.Timber;
 
 public final class BrowserUtils {
 
-    private BrowserUtils() {}
+    private BrowserUtils() {
+    }
 
     private static final String ACTION_CUSTOM_TABS_CONNECTION =
             "android.support.customtabs.action.CustomTabsService";
@@ -52,6 +53,8 @@ public final class BrowserUtils {
             WebActivity.startActivity(activity, url);
         } else {
             customTabsIntent.intent.setPackage(packageName);
+            customTabsIntent.intent.putExtra(Intent.EXTRA_REFERRER,
+                    Uri.parse(Intent.URI_ANDROID_APP_SCHEME + "//" + activity.getPackageName()));
             customTabsIntent.launchUrl(activity, Uri.parse(url));
         }
     }
