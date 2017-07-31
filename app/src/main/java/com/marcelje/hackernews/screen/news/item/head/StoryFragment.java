@@ -1,5 +1,6 @@
 package com.marcelje.hackernews.screen.news.item.head;
 
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.marcelje.hackernews.chrome.CustomTabsHelper;
 import com.marcelje.hackernews.databinding.FragmentStoryBinding;
 import com.marcelje.hackernews.handlers.ItemBookmarkClickHandlers;
 import com.marcelje.hackernews.handlers.ItemTextClickHandlers;
@@ -34,6 +36,8 @@ public class StoryFragment extends ItemHeadFragment
     private static final int LOADER_ID_STORIES_ITEM = 200;
     private static final int LOADER_ID_POLL_OPTIONS = 250;
 
+    private CustomTabsHelper customTabsHelper;
+
     private FragmentStoryBinding mBinding;
 
     private PollOptionAdapter mAdapter;
@@ -53,6 +57,8 @@ public class StoryFragment extends ItemHeadFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         extractArguments();
+
+        customTabsHelper = new CustomTabsHelper();
     }
 
     @Override
@@ -62,7 +68,8 @@ public class StoryFragment extends ItemHeadFragment
         mBinding.setActivity(getToolbarActivity());
         mBinding.setItem(mItem);
         mBinding.setItemUserClickHandlers(new ItemUserClickHandlers(getToolbarActivity()));
-        mBinding.setItemTextClickHandlers(new ItemTextClickHandlers(getToolbarActivity()));
+        mBinding.setItemTextClickHandlers(
+                new ItemTextClickHandlers(getToolbarActivity(), customTabsHelper.getSession()));
         mBinding.setItemBookmarkClickHandlers(new ItemBookmarkClickHandlers(getToolbarActivity()));
         mBinding.setItemTextDetailsClickHandlers(new ItemTextDetailsClickHandlers(getToolbarActivity()));
 
@@ -85,6 +92,22 @@ public class StoryFragment extends ItemHeadFragment
         }
 
         return mBinding.getRoot();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        customTabsHelper.bindCustomTabsService(getActivity());
+
+        if (!TextUtils.isEmpty(mItem.getUrl())) {
+            customTabsHelper.mayLaunchUrl(Uri.parse(mItem.getUrl()), null, null);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        customTabsHelper.unbindCustomTabsService(getActivity());
     }
 
     private void onRestoreInstanceState(Bundle inState) {

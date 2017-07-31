@@ -17,7 +17,7 @@ import com.marcelje.hackernews.loader.ItemListLoader;
 import com.marcelje.hackernews.model.Item;
 import com.marcelje.hackernews.screen.news.item.comment.ItemCommentFragment;
 import com.marcelje.hackernews.screen.news.item.head.ItemHeadFragment;
-import com.marcelje.hackernews.utils.BrowserUtils;
+import com.marcelje.hackernews.chrome.CustomTabsBrowser;
 import com.marcelje.hackernews.utils.HackerNewsUtils;
 import com.marcelje.hackernews.utils.ItemUtils;
 import com.marcelje.hackernews.utils.MenuUtils;
@@ -234,6 +234,6 @@ public class BaseItemActivity extends ToolbarActivity
     }
 
     private void openPage() {
-        BrowserUtils.openTab(this, HackerNewsUtils.geItemUrl(mItem.getId()));
+        CustomTabsBrowser.openTab(this, HackerNewsUtils.geItemUrl(mItem.getId()));
     }
 }

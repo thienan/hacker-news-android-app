@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.activity.ToolbarActivity;
-import com.marcelje.hackernews.utils.BrowserUtils;
+import com.marcelje.hackernews.chrome.CustomTabsBrowser;
 
 public class CustomTabUrlSpan extends URLSpan {
 
@@ -30,7 +30,7 @@ public class CustomTabUrlSpan extends URLSpan {
 
     @Override
     public void onClick(View view) {
-        BrowserUtils.openTab(mActivity, getURL());
+        CustomTabsBrowser.openTab(mActivity, getURL());
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.marcelje.hackernews.utils;
+package com.marcelje.hackernews.chrome;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.customtabs.CustomTabsSession;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
@@ -21,9 +22,9 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public final class BrowserUtils {
+public final class CustomTabsBrowser {
 
-    private BrowserUtils() {
+    private CustomTabsBrowser() {
     }
 
     private static final String ACTION_CUSTOM_TABS_CONNECTION =
@@ -35,9 +36,19 @@ public final class BrowserUtils {
     private static final String LOCAL_PACKAGE = "com.google.android.apps.chrome";
 
     public static void openTab(Activity activity, String url) {
+        openTab(activity, null, url);
+    }
+
+    public static void openTab(Activity activity, CustomTabsSession session, String url) {
         if (activity == null || TextUtils.isEmpty(url)) return;
 
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        CustomTabsIntent.Builder builder;
+
+        if (session == null) {
+            builder = new CustomTabsIntent.Builder();
+        } else {
+            builder = new CustomTabsIntent.Builder(session);
+        }
 
         setShowTitle(builder);
         setToolbarColor(activity, builder);
@@ -47,7 +58,7 @@ public final class BrowserUtils {
 
         CustomTabsIntent customTabsIntent = builder.build();
 
-        String packageName = getPackageNameToUse(activity);
+        String packageName = getCustomTabPackageName(activity);
 
         if (packageName == null) {
             WebActivity.startActivity(activity, url);
@@ -96,7 +107,7 @@ public final class BrowserUtils {
         builder.addDefaultShareMenuItem();
     }
 
-    private static String getPackageNameToUse(Context context) {
+    public static String getCustomTabPackageName(Context context) {
         if (context == null) return null;
 
         String packageNameToUse = null;
