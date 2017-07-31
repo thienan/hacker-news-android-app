@@ -20,6 +20,7 @@ public class SimpleRecyclerView extends FrameLayout {
 
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
+    private View mEmptyView;
 
     public interface OnLoadMoreListener {
         void onLoadMore(int page, int totalItemsCount);
@@ -45,6 +46,7 @@ public class SimpleRecyclerView extends FrameLayout {
         View view = inflater.inflate(R.layout.simple_recycler_view, this);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+        mEmptyView = view.findViewById(R.id.empty_view);
     }
 
     public RecyclerView.LayoutManager getLayoutManager() {
@@ -76,10 +78,18 @@ public class SimpleRecyclerView extends FrameLayout {
     public void showProgressBar() {
         mProgressBar.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.GONE);
+        mEmptyView.setVisibility(View.GONE);
     }
 
     public void hideProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.VISIBLE);
+        if (mRecyclerView.getAdapter().getItemCount() > 0) {
+            mProgressBar.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mEmptyView.setVisibility(GONE);
+        } else {
+            mProgressBar.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.GONE);
+            mEmptyView.setVisibility(VISIBLE);
+        }
     }
 }
