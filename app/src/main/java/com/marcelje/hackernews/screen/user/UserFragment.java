@@ -4,7 +4,6 @@ import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.view.ViewGroup;
 import com.marcelje.hackernews.databinding.FragmentUserBinding;
 import com.marcelje.hackernews.factory.SnackbarFactory;
 import com.marcelje.hackernews.fragment.ToolbarFragment;
-import com.marcelje.hackernews.listener.EndlessRecyclerViewScrollListener;
 import com.marcelje.hackernews.loader.HackerNewsResponse;
 import com.marcelje.hackernews.loader.ItemListLoader;
 import com.marcelje.hackernews.loader.UserLoader;
@@ -71,14 +69,8 @@ public class UserFragment extends ToolbarFragment
 
         mBinding.rvSubmissionList.setLayoutManager(layoutManager);
         mBinding.rvSubmissionList.setAdapter(mAdapter);
-        mBinding.rvSubmissionList.addItemDecoration(
-                new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        mBinding.rvSubmissionList.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                nextPageSubmissions();
-            }
-        });
+        mBinding.rvSubmissionList.showDivider();
+        mBinding.rvSubmissionList.setOnLoadMoreListener((page, totalItemsCount) -> nextPageSubmissions());
 
         if (savedInstanceState != null) {
             onRestoreInstanceState(savedInstanceState);
@@ -137,7 +129,6 @@ public class UserFragment extends ToolbarFragment
     @Override
     public void onClick(View view) {
         getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_USER_ITEM, null, this);
-        refreshSubmissions();
     }
 
     private static Bundle createArguments(String userId) {
@@ -158,7 +149,7 @@ public class UserFragment extends ToolbarFragment
     private void refreshSubmissions() {
         mAdapter.clearData();
         mCurrentPage = 1;
-        showProgressBar();
+        mBinding.rvSubmissionList.showProgressBar();
         retrieveSubmissions();
     }
 
@@ -171,14 +162,6 @@ public class UserFragment extends ToolbarFragment
         if (mBinding.getUser().getSubmitted() == null) return;
         getActivity().getSupportLoaderManager().destroyLoader(LOADER_ID_SUBMISSIONS);
         getActivity().getSupportLoaderManager().initLoader(LOADER_ID_SUBMISSIONS, null, getCallback());
-    }
-
-    private void showProgressBar() {
-        mBinding.pbLoading.setVisibility(View.VISIBLE);
-    }
-
-    private void hideProgressBar() {
-        mBinding.pbLoading.setVisibility(View.GONE);
     }
 
     private LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> getCallback() {
@@ -199,7 +182,7 @@ public class UserFragment extends ToolbarFragment
             @Override
             public void onLoadFinished(Loader<HackerNewsResponse<List<Item>>> loader, HackerNewsResponse<List<Item>> data) {
                 mAdapter.addData(data.getData());
-                hideProgressBar();
+                mBinding.rvSubmissionList.hideProgressBar();
             }
 
             @Override

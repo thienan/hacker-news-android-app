@@ -4,14 +4,12 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.marcelje.hackernews.fragment.ToolbarFragment;
-import com.marcelje.hackernews.listener.EndlessRecyclerViewScrollListener;
 import com.marcelje.hackernews.R;
 import com.marcelje.hackernews.databinding.FragmentNewsBinding;
 import com.marcelje.hackernews.factory.SnackbarFactory;
@@ -84,15 +82,9 @@ public class NewsFragment extends ToolbarFragment
 
         mBinding.rvItemList.setLayoutManager(layoutManager);
         mBinding.rvItemList.setAdapter(mAdapter);
-        mBinding.rvItemList.addItemDecoration(
-                new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        mBinding.rvItemList.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                if (!TYPE_BOOKMARKED.equals(mNewsType)) {
-                    nextPageNews();
-                }
-            }
+        mBinding.rvItemList.showDivider();
+        mBinding.rvItemList.setOnLoadMoreListener((page, totalItemsCount) -> {
+            if (!TYPE_BOOKMARKED.equals(mNewsType)) nextPageNews();
         });
 
         mBinding.srlRefresh.setColorSchemeResources(R.color.colorAccent);
@@ -210,7 +202,8 @@ public class NewsFragment extends ToolbarFragment
                             NewsFragment.this).show();
         }
 
-        hideProgressBar();
+        mBinding.rvItemList.hideProgressBar();
+        mBinding.srlRefresh.setRefreshing(false);
     }
 
     @Override
@@ -232,7 +225,7 @@ public class NewsFragment extends ToolbarFragment
         mCurrentPage = 1;
         mNewsType = type;
 
-        showProgressBar();
+        mBinding.rvItemList.showProgressBar();
         retrieveNews();
     }
 
@@ -267,20 +260,10 @@ public class NewsFragment extends ToolbarFragment
                 loaderManager.restartLoader(LOADER_ID_BOOKMARKED_ITEM, null, this);
                 break;
             default:
-                hideProgressBar();
+                mBinding.rvItemList.hideProgressBar();
+                mBinding.srlRefresh.setRefreshing(false);
                 break;
         }
-    }
-
-    private void showProgressBar() {
-        mBinding.pbLoading.setVisibility(View.VISIBLE);
-        mBinding.rvItemList.setVisibility(View.GONE);
-    }
-
-    private void hideProgressBar() {
-        mBinding.pbLoading.setVisibility(View.GONE);
-        mBinding.rvItemList.setVisibility(View.VISIBLE);
-        mBinding.srlRefresh.setRefreshing(false);
     }
 
     private LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Long>>> getStoriesCallback() {
@@ -345,7 +328,8 @@ public class NewsFragment extends ToolbarFragment
                             .createRetrieveErrorSnackbar(mBinding.rvItemList,
                                     NewsFragment.this).show();
 
-                    hideProgressBar();
+                    mBinding.rvItemList.hideProgressBar();
+                    mBinding.srlRefresh.setRefreshing(false);
                 }
             }
 

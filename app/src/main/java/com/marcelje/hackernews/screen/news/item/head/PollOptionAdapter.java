@@ -1,4 +1,4 @@
-package com.marcelje.hackernews.screen.news.item;
+package com.marcelje.hackernews.screen.news.item.head;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -7,7 +7,7 @@ import com.marcelje.hackernews.activity.ToolbarActivity;
 import com.marcelje.hackernews.adapter.ItemAdapter;
 import com.marcelje.hackernews.databinding.ItemPollOptionBinding;
 
-public class PollOptionAdapter extends ItemAdapter {
+class PollOptionAdapter extends ItemAdapter {
 
     public PollOptionAdapter(ToolbarActivity mActivity) {
         super(mActivity);

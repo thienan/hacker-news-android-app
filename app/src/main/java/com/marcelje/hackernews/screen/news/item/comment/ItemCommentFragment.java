@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import com.marcelje.hackernews.databinding.FragmentItemCommentBinding;
 import com.marcelje.hackernews.factory.SnackbarFactory;
 import com.marcelje.hackernews.fragment.ToolbarFragment;
-import com.marcelje.hackernews.listener.EndlessRecyclerViewScrollListener;
 import com.marcelje.hackernews.loader.HackerNewsResponse;
 import com.marcelje.hackernews.loader.ItemListLoader;
 import com.marcelje.hackernews.model.Item;
@@ -25,7 +23,7 @@ import org.parceler.Parcels;
 import java.util.List;
 
 public class ItemCommentFragment extends ToolbarFragment
-        implements LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>>, View.OnClickListener {
+        implements LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> {
 
     private static final String ARG_ITEM = "com.marcelje.hackernews.screen.news.item.arg.ITEM";
     private static final String ARG_PARENT = "com.marcelje.hackernews.screen.news.item.arg.PARENT";
@@ -78,15 +76,8 @@ public class ItemCommentFragment extends ToolbarFragment
 
         mBinding.rvCommentList.setLayoutManager(layoutManager);
         mBinding.rvCommentList.setAdapter(mAdapter);
-        mBinding.rvCommentList.addItemDecoration(
-                new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        mBinding.rvCommentList
-                .addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
-                    @Override
-                    public void onLoadMore(int page, int totalItemsCount) {
-                        nextPageComments();
-                    }
-                });
+        mBinding.rvCommentList.showDivider();
+        mBinding.rvCommentList.setOnLoadMoreListener((page, totalItemsCount) -> nextPageComments());
 
         if (savedInstanceState == null) {
             refresh();
@@ -131,18 +122,19 @@ public class ItemCommentFragment extends ToolbarFragment
     }
 
     @Override
-    public void onLoadFinished(Loader<HackerNewsResponse<List<Item>>> loader, HackerNewsResponse<List<Item>> response) {
+    public void onLoadFinished(Loader<HackerNewsResponse<List<Item>>> loader,
+                               HackerNewsResponse<List<Item>> response) {
         if (response.isSuccessful()) {
             switch (loader.getId()) {
                 case LOADER_ID_COMMENT_ITEM:
                     mAdapter.addData(response.getData());
-                    hideProgressBar();
+                    mBinding.rvCommentList.hideProgressBar();
                     break;
                 default:
             }
         } else {
-            SnackbarFactory.createRetrieveErrorSnackbar(mBinding.getRoot(), this).show();
-            hideProgressBar();
+            SnackbarFactory.createRetrieveErrorSnackbar(mBinding.getRoot(), v -> retrieveComments()).show();
+            mBinding.rvCommentList.hideProgressBar();
         }
 
     }
@@ -152,15 +144,10 @@ public class ItemCommentFragment extends ToolbarFragment
 
     }
 
-    @Override
-    public void onClick(View view) {
-        retrieveComments();
-    }
-
     public void refresh() {
         mAdapter.clearData();
         mCurrentPage = 1;
-        showProgressBar();
+        mBinding.rvCommentList.showProgressBar();
         retrieveComments();
     }
 
@@ -173,14 +160,6 @@ public class ItemCommentFragment extends ToolbarFragment
         if (mItem.getKids() == null) return;
         getActivity().getSupportLoaderManager().destroyLoader(LOADER_ID_COMMENT_ITEM);
         getActivity().getSupportLoaderManager().initLoader(LOADER_ID_COMMENT_ITEM, null, this);
-    }
-
-    private void showProgressBar() {
-        mBinding.pbLoading.setVisibility(View.VISIBLE);
-    }
-
-    private void hideProgressBar() {
-        mBinding.pbLoading.setVisibility(View.GONE);
     }
 
     private static Bundle createArguments(Item item, String parent, String poster) {

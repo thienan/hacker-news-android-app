@@ -1,33 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/srl_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white">
+        android:layout_height="wrap_content">
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/srl_refresh"
+        <com.marcelje.hackernews.view.SimpleRecyclerView
+            android:id="@+id/rv_item_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_item_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingEnd="@dimen/view_margin"
-                android:paddingStart="@dimen/view_margin"
-                android:scrollbars="vertical" />
-        </android.support.v4.widget.SwipeRefreshLayout>
-
-        <ProgressBar
-            android:id="@+id/pb_loading"
-            style="@style/Widget.AppCompat.ProgressBar"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
-
-    </FrameLayout>
+            android:background="@android:color/white"
+            android:paddingEnd="@dimen/view_margin"
+            android:paddingStart="@dimen/view_margin" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 </layout>
 

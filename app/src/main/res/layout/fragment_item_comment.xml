@@ -30,19 +30,10 @@
             android:elevation="@dimen/card_elevation"
             app:cardCornerRadius="@dimen/card_radius">
 
-            <android.support.v7.widget.RecyclerView
+            <com.marcelje.hackernews.view.SimpleRecyclerView
                 android:id="@+id/rv_comment_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="vertical" />
-
-            <ProgressBar
-                android:id="@+id/pb_loading"
-                style="@style/Widget.AppCompat.ProgressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone" />
+                android:layout_height="wrap_content" />
 
         </android.support.v7.widget.CardView>
     </LinearLayout>

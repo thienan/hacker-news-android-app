@@ -21,10 +21,10 @@
             android:elevation="@dimen/card_elevation"
             app:cardCornerRadius="@dimen/card_radius">
 
-            <android.support.v7.widget.RecyclerView
+            <com.marcelje.hackernews.view.SimpleRecyclerView
                 android:id="@+id/rv_poll_option_list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content" />
         </android.support.v7.widget.CardView>
     </LinearLayout>
 </layout>

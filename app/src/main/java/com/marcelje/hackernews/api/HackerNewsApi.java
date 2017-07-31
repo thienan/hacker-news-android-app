@@ -13,8 +13,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
 import timber.log.Timber;
 
 public final class HackerNewsApi {
