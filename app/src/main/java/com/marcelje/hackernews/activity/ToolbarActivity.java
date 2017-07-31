@@ -51,7 +51,9 @@ public class ToolbarActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(R.anim.no_change, R.anim.slide_right);
+        if (!isTaskRoot()) {
+            overridePendingTransition(R.anim.no_change, R.anim.slide_right);
+        }
     }
 
     void setContentView(@LayoutRes int toolbarResID, @LayoutRes int layoutResID) {

@@ -104,11 +104,6 @@ public class NewsActivity extends FragmentActivity<NewsFragment> implements Adap
         //do nothing
     }
 
-    @Override
-    public void onBackPressed() {
-        finish(); // no animation
-    }
-
     private static Bundle createExtras(String newsType) {
         Bundle extras = new Bundle();
         extras.putString(EXTRA_NEWS_TYPE, newsType);

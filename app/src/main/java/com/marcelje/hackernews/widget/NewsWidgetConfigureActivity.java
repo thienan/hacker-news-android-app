@@ -92,11 +92,6 @@ public class NewsWidgetConfigureActivity extends ToolbarActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        finish(); // no animation
-    }
-
     private static Bundle createExtras(int appWidgetId) {
         Bundle extras = new Bundle();
         extras.putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
