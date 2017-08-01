@@ -1,0 +1,189 @@
+package co.marcelje.hackernews.screen.news.item.comment;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import co.marcelje.hackernews.databinding.FragmentItemCommentBinding;
+import co.marcelje.hackernews.factory.SnackbarFactory;
+import co.marcelje.hackernews.fragment.ToolbarFragment;
+import co.marcelje.hackernews.loader.HackerNewsResponse;
+import co.marcelje.hackernews.loader.ItemListLoader;
+import co.marcelje.hackernews.model.Item;
+import co.marcelje.hackernews.utils.CollectionUtils;
+
+import org.parceler.Parcels;
+
+import java.util.List;
+
+public class ItemCommentFragment extends ToolbarFragment
+        implements LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> {
+
+    private static final String ARG_ITEM = "co.marcelje.hackernews.screen.news.item.arg.ITEM";
+    private static final String ARG_PARENT = "co.marcelje.hackernews.screen.news.item.arg.PARENT";
+    private static final String ARG_POSTER = "co.marcelje.hackernews.screen.news.items.arg.POSTER";
+
+    private static final String STATE_COMMENT_DATA = "co.marcelje.hackernews.screen.news.item.state.COMMENT_DATA";
+    private static final String STATE_CURRENT_PAGE = "co.marcelje.hackernews.screen.news.item.state.CURRENT_PAGE";
+
+    private static final int LOADER_ID_COMMENT_ITEM = 400;
+
+    private static final int ITEM_COUNT = 10;
+
+    private Item mItem;
+    private String mParent;
+    private String mPoster;
+
+    private FragmentItemCommentBinding mBinding;
+    private CommentAdapter mAdapter;
+
+    private int mCurrentPage = 1;
+
+    public static ItemCommentFragment newInstance(Item item, String parent, String poster) {
+        ItemCommentFragment fragment = new ItemCommentFragment();
+
+        Bundle args = createArguments(item, parent, poster);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        extractArguments();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        mBinding = FragmentItemCommentBinding.inflate(inflater, container, false);
+        mBinding.setTotal(mItem.getKids().size());
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+
+        if (TextUtils.isEmpty(mParent) && TextUtils.isEmpty(mPoster)) {
+            mAdapter = new CommentAdapter(getToolbarActivity(), null, mItem.getBy());
+        } else {
+            mAdapter = new CommentAdapter(getToolbarActivity(), mItem.getBy(), mPoster);
+        }
+
+        mBinding.rvCommentList.setLayoutManager(layoutManager);
+        mBinding.rvCommentList.setAdapter(mAdapter);
+        mBinding.rvCommentList.showDivider();
+        mBinding.rvCommentList.setOnLoadMoreListener((page, totalItemsCount) -> nextPageComments());
+
+        if (savedInstanceState == null) {
+            refresh();
+        } else {
+            onRestoreInstanceState(savedInstanceState);
+        }
+
+        return mBinding.getRoot();
+    }
+
+    private void onRestoreInstanceState(Bundle inState) {
+        mAdapter.swapData(Parcels.unwrap(inState.getParcelable(STATE_COMMENT_DATA)));
+        mCurrentPage = inState.getInt(STATE_CURRENT_PAGE);
+
+        if (mAdapter.getData().size() <= 0) refresh();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(STATE_COMMENT_DATA, Parcels.wrap(mAdapter.getData()));
+        outState.putInt(STATE_CURRENT_PAGE, mCurrentPage);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public Loader<HackerNewsResponse<List<Item>>> onCreateLoader(int id, Bundle args) {
+        switch (id) {
+            case LOADER_ID_COMMENT_ITEM:
+                List<Long> kids = mItem.getKids();
+
+                List<Long> list = CollectionUtils.subList(kids,
+                        (mCurrentPage - 1) * ITEM_COUNT,
+                        mCurrentPage * ITEM_COUNT);
+
+                if (list.size() == 0) return null;
+
+                return new ItemListLoader(getActivity(), list);
+            default:
+                return null;
+
+        }
+    }
+
+    @Override
+    public void onLoadFinished(Loader<HackerNewsResponse<List<Item>>> loader,
+                               HackerNewsResponse<List<Item>> response) {
+        if (response.isSuccessful()) {
+            switch (loader.getId()) {
+                case LOADER_ID_COMMENT_ITEM:
+                    mAdapter.addData(response.getData());
+                    mBinding.rvCommentList.hideProgressBar();
+                    break;
+                default:
+            }
+        } else {
+            SnackbarFactory.createRetrieveErrorSnackbar(mBinding.getRoot(), v -> retrieveComments()).show();
+            mBinding.rvCommentList.hideProgressBar();
+        }
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<HackerNewsResponse<List<Item>>> loader) {
+
+    }
+
+    public void refresh() {
+        mAdapter.clearData();
+        mCurrentPage = 1;
+        mBinding.rvCommentList.showProgressBar();
+        retrieveComments();
+    }
+
+    private void nextPageComments() {
+        mCurrentPage++;
+        retrieveComments();
+    }
+
+    private void retrieveComments() {
+        if (mItem.getKids() == null) return;
+        getActivity().getSupportLoaderManager().destroyLoader(LOADER_ID_COMMENT_ITEM);
+        getActivity().getSupportLoaderManager().initLoader(LOADER_ID_COMMENT_ITEM, null, this);
+    }
+
+    private static Bundle createArguments(Item item, String parent, String poster) {
+        Bundle args = new Bundle();
+        if (item != null) args.putParcelable(ARG_ITEM, Parcels.wrap(item));
+        if (!TextUtils.isEmpty(parent)) args.putString(ARG_PARENT, parent);
+        if (!TextUtils.isEmpty(poster)) args.putString(ARG_POSTER, poster);
+
+        return args;
+    }
+
+    private void extractArguments() {
+        Bundle args = getArguments();
+
+        if (args.containsKey(ARG_ITEM)) {
+            mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
+        }
+
+        if (args.containsKey(ARG_PARENT)) {
+            mParent = args.getString(ARG_PARENT);
+        }
+
+        if (args.containsKey(ARG_POSTER)) {
+            mPoster = args.getString(ARG_POSTER);
+        }
+    }
+}

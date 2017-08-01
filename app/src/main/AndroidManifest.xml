@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.marcelje.hackernews">
+    package="co.marcelje.hackernews">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -32,7 +32,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.marcelje.hackernews.screen.news.NewsActivity" />
+                android:value="co.marcelje.hackernews.screen.news.NewsActivity" />
         </activity>
         <activity
             android:name=".screen.news.item.CommentActivity"
@@ -40,7 +40,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.marcelje.hackernews.screen.news.item.StoryActivity" />
+                android:value="co.marcelje.hackernews.screen.news.item.StoryActivity" />
         </activity>
         <activity
             android:name=".screen.news.item.text.DetailsTextActivity"
@@ -49,7 +49,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.marcelje.hackernews.screen.news.item.BaseItemActivity" />
+                android:value="co.marcelje.hackernews.screen.news.item.BaseItemActivity" />
         </activity>
         <activity
             android:name=".screen.user.UserActivity"
@@ -57,7 +57,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.marcelje.hackernews.screen.news.NewsActivity" />
+                android:value="co.marcelje.hackernews.screen.news.NewsActivity" />
         </activity>
         <activity
             android:name=".screen.web.WebActivity"
@@ -69,7 +69,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.marcelje.hackernews.screen.news.NewsActivity" />
+                android:value="co.marcelje.hackernews.screen.news.NewsActivity" />
         </activity>
         <activity
             android:name=".screen.about.AboutActivity"
@@ -78,7 +78,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.marcelje.hackernews.screen.news.NewsActivity" />
+                android:value="co.marcelje.hackernews.screen.news.NewsActivity" />
         </activity>
 
         <receiver
@@ -87,7 +87,7 @@
 
         <provider
             android:name=".database.HackerNewsContentProvider"
-            android:authorities="com.marcelje.hackernews.database.AUTHORITY"
+            android:authorities="co.marcelje.hackernews.database.AUTHORITY"
             android:exported="true" />
 
         <receiver android:name=".widget.NewsWidget">

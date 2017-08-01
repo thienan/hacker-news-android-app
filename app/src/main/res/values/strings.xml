@@ -31,8 +31,6 @@
     <string name="menu_item_share">Share</string>
     <string name="menu_item_copy_link">Copy Link</string>
     <string name="menu_item_open_in_browser">Open in browser</string>
-    <string name="menu_item_bookmark">Bookmark</string>
-    <string name="menu_item_unbookmark">Unbookmark</string>
     <string name="menu_item_refresh">Refresh</string>
     <string name="menu_item_open_page">Open page</string>
     <string name="menu_item_about">About</string>
