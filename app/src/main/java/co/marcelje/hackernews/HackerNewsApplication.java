@@ -2,9 +2,11 @@ package co.marcelje.hackernews;
 
 import android.app.Application;
 
+import com.crashlytics.android.Crashlytics;
 import com.facebook.stetho.Stetho;
 import co.marcelje.hackernews.injector.ModuleComponent;
 
+import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 public class HackerNewsApplication extends Application {
@@ -22,6 +24,7 @@ public class HackerNewsApplication extends Application {
         initStetho();
         initDagger();
         initTimber();
+        initCrashlytics();
     }
 
     public ModuleComponent getServiceComponent() {
@@ -38,5 +41,9 @@ public class HackerNewsApplication extends Application {
 
     private void initTimber() {
         Timber.plant(new Timber.DebugTree());
+    }
+
+    private void initCrashlytics() {
+        Fabric.with(this, new Crashlytics());
     }
 }

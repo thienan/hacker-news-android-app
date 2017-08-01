@@ -59,7 +59,8 @@
         In general, the content is about \"anything that gratifies one\'s intellectual curiosity\".<br/><br/>
         The official website can be found on
         <a href="https://news.ycombinator.com">https://news.ycombinator.com</a><br/><br/>
-        This project is open source. Crashes, bugs, or feature requests can be reported on this project\'s
+        This project is open source. Crash reports are automatically reported back to us.
+        Bugs, or feature requests can be reported on this project\'s
         <a href="https://github.com/marcelje/hacker-news-android-app">Github page</a>.
         Contributors are also welcomed.
     ]]></string>
