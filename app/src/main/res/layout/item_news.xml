@@ -44,15 +44,11 @@
             android:paddingTop="@dimen/text_spacing"
             android:visibility="@{item.deleted || item.dead ? View.GONE : View.VISIBLE}">
 
-            <TextView
-                android:layout_width="@dimen/avatar_size"
-                android:layout_height="@dimen/avatar_size"
+            <co.marcelje.hackernews.view.ScoreView
+                android:layout_width="@dimen/score_size"
+                android:layout_height="@dimen/score_size"
                 android:layout_margin="@dimen/view_margin"
-                android:background="@drawable/ic_circle"
-                android:gravity="center"
-                android:text="@{String.valueOf(item.score)}"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/avatar_text_size" />
+                android:text="@{String.valueOf(item.score)}"/>
 
             <LinearLayout
                 android:layout_width="0dp"

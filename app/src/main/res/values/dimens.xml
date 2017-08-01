@@ -6,8 +6,7 @@
     <dimen name="toolbar_elevation">4dp</dimen>
     <dimen name="view_margin">8dp</dimen>
     <dimen name="text_spacing">4dp</dimen>
-    <dimen name="avatar_size">40dp</dimen>
-    <dimen name="avatar_text_size">14sp</dimen>
+    <dimen name="score_size">40dp</dimen>
     <dimen name="widget_config_padding">16dp</dimen>
     <dimen name="widget_margin">8dp</dimen>
 </resources>
