@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import co.marcelje.hackernews.R;
 import co.marcelje.hackernews.loader.HackerNewsResponse;
 import co.marcelje.hackernews.loader.ItemListLoader;
+import co.marcelje.hackernews.screen.news.NewsActivity;
 import co.marcelje.hackernews.screen.news.item.comment.ItemCommentFragment;
 import co.marcelje.hackernews.screen.news.item.head.ItemHeadFragment;
 import co.marcelje.hackernews.chrome.CustomTabsBrowser;
@@ -31,7 +32,7 @@ import co.marcelje.hackernews.model.Item;
 public class BaseItemActivity extends ToolbarActivity
         implements LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> {
 
-    private static final String EXTRA_CALLER_ACTIVITY = "co.marcelje.hackernews.screen.news.item.extra.CALLER_ACTIVITY";
+    private static final String EXTRA_ROOT_CALLER_ACTIVITY = "co.marcelje.hackernews.screen.news.item.extra.ROOT_CALLER_ACTIVITY";
     public static final String EXTRA_ITEM = "co.marcelje.hackernews.screen.news.item.extra.ITEM";
     private static final String EXTRA_PARENT = "co.marcelje.hackernews.screen.news.item.extra.PARENT";
     private static final String EXTRA_POSTER = "co.marcelje.hackernews.screen.news.item.extra.POSTER";
@@ -42,20 +43,20 @@ public class BaseItemActivity extends ToolbarActivity
     private static final String STATE_PARENT_ID = "co.marcelje.hackernews.screen.news.item.state.PARENT_ID";
     private static final String STATE_PARENT_ITEM = "co.marcelje.hackernews.screen.news.item.state.PARENT_ITEM";
 
-    static final String ITEM_TYPE_COMMENT = "comment";
+    private static final String ITEM_TYPE_COMMENT = "comment";
     private static final String ITEM_TYPE_STORY = "story";
     private static final String ITEM_TYPE_POLL = "poll";
     private static final String ITEM_TYPE_JOB = "job";
 
     private static final int LOADER_PARENT_ITEM = 300;
 
-    String mCallerActivity;
-    Item mItem;
-    String mParent;
-    String mPoster;
+    private String mRootCallerActivity;
+    private Item mItem;
+    private String mParent;
+    private String mPoster;
 
     private long mParentId;
-    Item mParentItem;
+    private Item mParentItem;
 
     public static void startActivity(ToolbarActivity activity, Item item) {
         startActivity(activity, item, null, null);
@@ -125,6 +126,22 @@ public class BaseItemActivity extends ToolbarActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                if (!NewsActivity.class.getName().equals(mRootCallerActivity)) {
+                    if (mParentItem != null) {
+                        if (ITEM_TYPE_COMMENT.equals(mParentItem.getType())) {
+                            CommentActivity.startActivity(this, mParentItem);
+                        } else {
+                            StoryActivity.startActivity(this, mParentItem);
+                        }
+                    } else {
+                        loadParentItem();
+                    }
+
+                    return true;
+                }
+
+                return super.onOptionsItemSelected(menuItem);
             case R.id.action_refresh:
                 refresh();
                 return true;
@@ -195,8 +212,16 @@ public class BaseItemActivity extends ToolbarActivity
 
     private static Bundle createExtras(Activity activity, Item item, String parent, String poster) {
         Bundle extras = new Bundle();
-        if (activity != null)
-            extras.putString(EXTRA_CALLER_ACTIVITY, activity.getClass().getName());
+        if (activity != null) {
+            String rootCallerActivity;
+            if (activity.getIntent() != null
+                    && activity.getIntent().hasExtra(EXTRA_ROOT_CALLER_ACTIVITY)) {
+                rootCallerActivity = activity.getIntent().getStringExtra(EXTRA_ROOT_CALLER_ACTIVITY);
+            } else {
+                rootCallerActivity = activity.getClass().getName();
+            }
+            extras.putString(EXTRA_ROOT_CALLER_ACTIVITY, rootCallerActivity);
+        }
         if (item != null) extras.putParcelable(EXTRA_ITEM, Parcels.wrap(item));
         if (!TextUtils.isEmpty(parent)) extras.putString(EXTRA_PARENT, parent);
         if (!TextUtils.isEmpty(poster)) extras.putString(EXTRA_POSTER, poster);
@@ -207,8 +232,8 @@ public class BaseItemActivity extends ToolbarActivity
     private void extractExtras() {
         Intent intent = getIntent();
 
-        if (intent.hasExtra(EXTRA_CALLER_ACTIVITY)) {
-            mCallerActivity = intent.getStringExtra(EXTRA_CALLER_ACTIVITY);
+        if (intent.hasExtra(EXTRA_ROOT_CALLER_ACTIVITY)) {
+            mRootCallerActivity = intent.getStringExtra(EXTRA_ROOT_CALLER_ACTIVITY);
         }
 
         if (intent.hasExtra(EXTRA_ITEM)) {
@@ -236,5 +261,17 @@ public class BaseItemActivity extends ToolbarActivity
 
     private void openPage() {
         CustomTabsBrowser.openTab(this, HackerNewsUtils.geItemUrl(mItem.getId()));
+    }
+
+    public Item getItem() {
+        return mItem;
+    }
+
+    public String getItemParentName() {
+        return mParent;
+    }
+
+    public String getItemPosterName() {
+        return mPoster;
     }
 }

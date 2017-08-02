@@ -26,8 +26,9 @@ public class StoryActivity extends BaseItemActivity {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState == null) {
-            ItemHeadFragment headFragment = StoryFragment.newInstance(mItem);
-            ItemCommentFragment commentFragment = ItemCommentFragment.newInstance(mItem, mParent, mPoster);
+            ItemHeadFragment headFragment = StoryFragment.newInstance(getItem());
+            ItemCommentFragment commentFragment = ItemCommentFragment
+                    .newInstance(getItem(), getItemParentName(), getItemPosterName());
 
             loadFragment(headFragment, commentFragment);
         }
