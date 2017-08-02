@@ -34,8 +34,8 @@ public class BaseItemActivity extends ToolbarActivity
 
     private static final String EXTRA_ROOT_CALLER_ACTIVITY = "co.marcelje.hackernews.screen.news.item.extra.ROOT_CALLER_ACTIVITY";
     public static final String EXTRA_ITEM = "co.marcelje.hackernews.screen.news.item.extra.ITEM";
-    private static final String EXTRA_PARENT = "co.marcelje.hackernews.screen.news.item.extra.PARENT";
-    private static final String EXTRA_POSTER = "co.marcelje.hackernews.screen.news.item.extra.POSTER";
+    private static final String EXTRA_ITEM_PARENT_NAME = "co.marcelje.hackernews.screen.news.item.extra.ITEM_PARENT_NAME";
+    private static final String EXTRA_ITEM_POSTER_NAME = "co.marcelje.hackernews.screen.news.item.extra.ITEM_POSTER_NAME";
 
     private static final String TAG_HEAD_FRAGMENT = "co.marcelje.hackernews.screen.news.item.tag.HEAD_FRAGMENT";
     private static final String TAG_COMMENT_FRAGMENT = "co.marcelje.hackernews.screen.news.item.tag.COMMENT_FRAGMENT";
@@ -52,8 +52,8 @@ public class BaseItemActivity extends ToolbarActivity
 
     private String mRootCallerActivity;
     private Item mItem;
-    private String mParent;
-    private String mPoster;
+    private String mItemParentName;
+    private String mItemParentPoster;
 
     private long mParentId;
     private Item mParentItem;
@@ -62,10 +62,11 @@ public class BaseItemActivity extends ToolbarActivity
         startActivity(activity, item, null, null);
     }
 
-    public static void startActivity(ToolbarActivity activity, Item item, String parent, String poster) {
+    public static void startActivity(ToolbarActivity activity, Item item,
+                                     String itemParentName, String itemPosterName) {
         switch (item.getType()) {
             case ITEM_TYPE_COMMENT:
-                CommentActivity.startActivity(activity, item, parent, poster);
+                CommentActivity.startActivity(activity, item, itemParentName, itemPosterName);
                 break;
             case ITEM_TYPE_STORY:
                 //fall through
@@ -74,13 +75,14 @@ public class BaseItemActivity extends ToolbarActivity
             case ITEM_TYPE_JOB:
                 //fall through
             default:
-                StoryActivity.startActivity(activity, item, parent, poster);
+                StoryActivity.startActivity(activity, item, itemParentName, itemPosterName);
                 break;
         }
     }
 
-    static void startActivity(ToolbarActivity activity, Intent intent, Item item, String parent, String poster) {
-        Bundle extras = createExtras(activity, item, parent, poster);
+    static void startActivity(ToolbarActivity activity, Intent intent, Item item,
+                              String itemParentName, String itemPosterName) {
+        Bundle extras = createExtras(activity, item, itemParentName, itemPosterName);
         intent.putExtras(extras);
         activity.startActivity(intent);
     }
@@ -127,7 +129,8 @@ public class BaseItemActivity extends ToolbarActivity
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case android.R.id.home:
-                if (!NewsActivity.class.getName().equals(mRootCallerActivity)) {
+                if (!NewsActivity.class.getName().equals(mRootCallerActivity)
+                        && mItem.getParent() > 0) {
                     if (mParentItem != null) {
                         if (ITEM_TYPE_COMMENT.equals(mParentItem.getType())) {
                             CommentActivity.startActivity(this, mParentItem);
@@ -210,7 +213,8 @@ public class BaseItemActivity extends ToolbarActivity
         }
     }
 
-    private static Bundle createExtras(Activity activity, Item item, String parent, String poster) {
+    private static Bundle createExtras(Activity activity, Item item,
+                                       String itemParentName, String itemPosterName) {
         Bundle extras = new Bundle();
         if (activity != null) {
             String rootCallerActivity;
@@ -223,8 +227,10 @@ public class BaseItemActivity extends ToolbarActivity
             extras.putString(EXTRA_ROOT_CALLER_ACTIVITY, rootCallerActivity);
         }
         if (item != null) extras.putParcelable(EXTRA_ITEM, Parcels.wrap(item));
-        if (!TextUtils.isEmpty(parent)) extras.putString(EXTRA_PARENT, parent);
-        if (!TextUtils.isEmpty(poster)) extras.putString(EXTRA_POSTER, poster);
+        if (!TextUtils.isEmpty(itemParentName))
+            extras.putString(EXTRA_ITEM_PARENT_NAME, itemParentName);
+        if (!TextUtils.isEmpty(itemPosterName))
+            extras.putString(EXTRA_ITEM_POSTER_NAME, itemPosterName);
 
         return extras;
     }
@@ -241,12 +247,12 @@ public class BaseItemActivity extends ToolbarActivity
             mParentId = mItem.getParent();
         }
 
-        if (intent.hasExtra(EXTRA_PARENT)) {
-            mParent = intent.getStringExtra(EXTRA_PARENT);
+        if (intent.hasExtra(EXTRA_ITEM_PARENT_NAME)) {
+            mItemParentName = intent.getStringExtra(EXTRA_ITEM_PARENT_NAME);
         }
 
-        if (intent.hasExtra(EXTRA_POSTER)) {
-            mPoster = intent.getStringExtra(EXTRA_POSTER);
+        if (intent.hasExtra(EXTRA_ITEM_POSTER_NAME)) {
+            mItemParentPoster = intent.getStringExtra(EXTRA_ITEM_POSTER_NAME);
         }
     }
 
@@ -268,10 +274,10 @@ public class BaseItemActivity extends ToolbarActivity
     }
 
     public String getItemParentName() {
-        return mParent;
+        return mItemParentName;
     }
 
     public String getItemPosterName() {
-        return mPoster;
+        return mItemParentPoster;
     }
 }

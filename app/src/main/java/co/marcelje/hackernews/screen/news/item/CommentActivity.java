@@ -13,9 +13,10 @@ import co.marcelje.hackernews.screen.news.item.head.ItemHeadFragment;
 
 public class CommentActivity extends BaseItemActivity {
 
-    public static void startActivity(ToolbarActivity activity, Item item, String parent, String poster) {
+    public static void startActivity(ToolbarActivity activity, Item item,
+                                     String itemParentName, String itemPosterName) {
         Intent intent = new Intent(activity, CommentActivity.class);
-        startActivity(activity, intent, item, parent, poster);
+        startActivity(activity, intent, item, itemParentName, itemPosterName);
     }
 
     @Override

@@ -10,6 +10,7 @@
 
     <string name="title_share">Share via</string>
     <string name="message_copy">Copied %s</string>
+    <string name="message_copied_to_clipboard">Copied to clipboard</string>
     <string name="message_bookmarked">Bookmarked</string>
     <string name="message_unbookmarked">Unbookmarked</string>
     <string name="message_error_retrieve_data">Failed to retrieve data</string>

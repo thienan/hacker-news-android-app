@@ -25,21 +25,21 @@ public class CommentFragment extends ItemHeadFragment
         implements LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> {
 
     private static final String ARG_ITEM = "co.marcelje.hackernews.screen.news.item.head.arg.ITEM";
-    private static final String ARG_PARENT = "co.marcelje.hackernews.screen.news.item.head.arg.PARENT";
-    private static final String ARG_POSTER = "co.marcelje.hackernews.screen.news.item.head.arg.POSTER";
+    private static final String ARG_ITEM_PARENT_NAME = "co.marcelje.hackernews.screen.news.item.head.arg.ITEM_PARENT_NAME";
+    private static final String ARG_ITEM_POSTER_NAME = "co.marcelje.hackernews.screen.news.item.head.arg.ITEM_POSTER_NAME";
 
     private static final int LOADER_ID_COMMENT_HEAD = 100;
 
     private FragmentCommentBinding mBinding;
 
     private Item mItem;
-    private String mParent;
-    private String mPoster;
+    private String mItemParentName;
+    private String mItemPosterName;
 
-    public static CommentFragment newInstance(Item item, String parent, String poster) {
+    public static CommentFragment newInstance(Item item, String itemParentName, String itemPosterName) {
         CommentFragment fragment = new CommentFragment();
 
-        Bundle args = createArguments(item, parent, poster);
+        Bundle args = createArguments(item, itemParentName, itemPosterName);
         fragment.setArguments(args);
 
         return fragment;
@@ -57,8 +57,8 @@ public class CommentFragment extends ItemHeadFragment
         mBinding = FragmentCommentBinding.inflate(inflater, container, false);
         mBinding.setItem(mItem);
         mBinding.setActivity(getToolbarActivity());
-        mBinding.setParent(mParent);
-        mBinding.setPoster(mPoster);
+        mBinding.setItemParentName(mItemParentName);
+        mBinding.setItemPosterName(mItemPosterName);
         mBinding.setItemUserClickHandlers(new ItemUserClickHandlers(getToolbarActivity()));
 
         mBinding.tvCommentInfo.setMovementMethod(LinkMovementMethod.getInstance());
@@ -105,11 +105,11 @@ public class CommentFragment extends ItemHeadFragment
 
     }
 
-    private static Bundle createArguments(Item item, String parent, String poster) {
+    private static Bundle createArguments(Item item, String itemParentName, String itemPosterName) {
         Bundle args = new Bundle();
         if (item != null) args.putParcelable(ARG_ITEM, Parcels.wrap(item));
-        if (!TextUtils.isEmpty(parent)) args.putString(ARG_PARENT, parent);
-        if (!TextUtils.isEmpty(poster)) args.putString(ARG_POSTER, poster);
+        if (!TextUtils.isEmpty(itemParentName)) args.putString(ARG_ITEM_PARENT_NAME, itemParentName);
+        if (!TextUtils.isEmpty(itemPosterName)) args.putString(ARG_ITEM_POSTER_NAME, itemPosterName);
 
         return args;
     }
@@ -121,12 +121,12 @@ public class CommentFragment extends ItemHeadFragment
             mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
         }
 
-        if (args.containsKey(ARG_PARENT)) {
-            mParent = args.getString(ARG_PARENT);
+        if (args.containsKey(ARG_ITEM_PARENT_NAME)) {
+            mItemParentName = args.getString(ARG_ITEM_PARENT_NAME);
         }
 
-        if (args.containsKey(ARG_POSTER)) {
-            mPoster = args.getString(ARG_POSTER);
+        if (args.containsKey(ARG_ITEM_POSTER_NAME)) {
+            mItemPosterName = args.getString(ARG_ITEM_POSTER_NAME);
         }
     }
 }

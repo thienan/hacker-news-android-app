@@ -17,21 +17,21 @@ public abstract class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemV
 
     private final ToolbarActivity mActivity;
     private final List<Item> mData;
-    private final String mParent;
-    private final String mPoster;
+    private final String mItemParentName;
+    private final String mItemPosterName;
 
-    protected ItemAdapter(ToolbarActivity activity, String parent, String poster) {
+    protected ItemAdapter(ToolbarActivity activity, String itemParentName, String itemPosterName) {
         mActivity = activity;
         mData = new ArrayList<>();
-        mParent = parent;
-        mPoster = poster;
+        mItemParentName = itemParentName;
+        mItemPosterName = itemPosterName;
     }
 
     protected ItemAdapter(ToolbarActivity activity) {
         mActivity = activity;
         mData = new ArrayList<>();
-        mParent = null;
-        mPoster = null;
+        mItemParentName = null;
+        mItemPosterName = null;
     }
 
     @Override
@@ -87,7 +87,7 @@ public abstract class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemV
         @Override
         public void onClick(View view) {
             Item data = mData.get(getAdapterPosition());
-            BaseItemActivity.startActivity(mActivity, data, mParent, mPoster);
+            BaseItemActivity.startActivity(mActivity, data, mItemParentName, mItemPosterName);
         }
     }
 }

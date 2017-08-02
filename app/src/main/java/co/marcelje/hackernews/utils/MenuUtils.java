@@ -13,6 +13,8 @@ import co.marcelje.hackernews.model.Item;
 
 public final class MenuUtils {
 
+    private static final String MIME_TEXT = "text/plain";
+
     private MenuUtils() {}
 
     public static void openShareHackerNewsLinkChooser(Context context, Item item) {
@@ -21,7 +23,7 @@ public final class MenuUtils {
         Intent intent = new Intent(Intent.ACTION_SEND);
         String text = HackerNewsUtils.geItemUrl(item.getId());
         intent.putExtra(Intent.EXTRA_TEXT, text);
-        intent.setType("text/plain");
+        intent.setType(MIME_TEXT);
 
         Intent chooserIntent = Intent.createChooser(intent, context.getString(R.string.title_share));
         chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -34,7 +36,7 @@ public final class MenuUtils {
 
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_TEXT, text);
-        intent.setType("text/plain");
+        intent.setType(MIME_TEXT);
 
         Intent chooserIntent = Intent.createChooser(intent, context.getString(R.string.title_share));
         chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

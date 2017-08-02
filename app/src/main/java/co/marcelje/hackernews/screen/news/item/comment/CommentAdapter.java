@@ -11,8 +11,8 @@ import co.marcelje.hackernews.handlers.ItemUserClickHandlers;
 
 class CommentAdapter extends ItemAdapter {
 
-    public CommentAdapter(ToolbarActivity activity, String parent, String poster) {
-        super(activity, parent, poster);
+    public CommentAdapter(ToolbarActivity activity, String itemParentName, String itemPosterName) {
+        super(activity, itemParentName, itemPosterName);
     }
 
     @Override

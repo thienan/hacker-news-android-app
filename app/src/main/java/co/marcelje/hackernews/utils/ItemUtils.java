@@ -41,7 +41,7 @@ public final class ItemUtils {
         if (context == null || item == null) return "";
 
         return DateUtils.getRelativeDateTimeString(context,
-                item.getTime() * 1000,
+                item.getTime() * DateUtils.SECOND_IN_MILLIS,
                 DateUtils.SECOND_IN_MILLIS,
                 DateUtils.WEEK_IN_MILLIS, 0);
     }
@@ -50,7 +50,7 @@ public final class ItemUtils {
         if (context == null || user == null) return "";
 
         return DateUtils.getRelativeDateTimeString(context,
-                user.getCreated() * 1000,
+                user.getCreated() * DateUtils.SECOND_IN_MILLIS,
                 DateUtils.SECOND_IN_MILLIS,
                 DateUtils.YEAR_IN_MILLIS, 0);
     }
@@ -76,22 +76,27 @@ public final class ItemUtils {
         return title;
     }
 
-    public static SpannableStringBuilder getCommentInfo(final ToolbarActivity activity, final String parent, final String poster) {
+    public static SpannableStringBuilder getCommentInfo(final ToolbarActivity activity,
+                                                        final String itemParentName, final String itemPosterName) {
         SpannableStringBuilder commentInfo = new SpannableStringBuilder();
-        if (TextUtils.isEmpty(parent) && TextUtils.isEmpty(poster)) return commentInfo;
+        if (TextUtils.isEmpty(itemParentName) && TextUtils.isEmpty(itemPosterName)) return commentInfo;
         commentInfo.append("Reply of ");
 
-        if (!TextUtils.isEmpty(parent)) {
-            SpannableString comment = new SpannableString(String.format("%s's comment on ", parent));
-            comment.setSpan(new StyleSpan(Typeface.BOLD), 0, parent.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-            comment.setSpan(new UserClickableSpan(activity, parent), 0, parent.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        if (!TextUtils.isEmpty(itemParentName)) {
+            SpannableString comment = new SpannableString(String.format("%s's comment on ", itemParentName));
+            comment.setSpan(new StyleSpan(Typeface.BOLD),
+                    0, itemParentName.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            comment.setSpan(new UserClickableSpan(activity, itemParentName),
+                    0, itemParentName.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             commentInfo.append(comment);
         }
 
-        if (!TextUtils.isEmpty(poster)) {
-            SpannableString post = new SpannableString(String.format("%s's post", poster));
-            post.setSpan(new StyleSpan(Typeface.BOLD), 0, poster.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-            post.setSpan(new UserClickableSpan(activity, poster), 0, poster.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        if (!TextUtils.isEmpty(itemPosterName)) {
+            SpannableString post = new SpannableString(String.format("%s's post", itemPosterName));
+            post.setSpan(new StyleSpan(Typeface.BOLD),
+                    0, itemPosterName.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            post.setSpan(new UserClickableSpan(activity, itemPosterName),
+                    0, itemPosterName.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             commentInfo.append(post);
         }
 

@@ -16,9 +16,10 @@ public class StoryActivity extends BaseItemActivity {
         return new Intent(context, StoryActivity.class);
     }
 
-    public static void startActivity(ToolbarActivity activity, Item item, String parent, String poster) {
+    public static void startActivity(ToolbarActivity activity, Item item,
+                                     String itemParentName, String itemPosterName) {
         Intent intent = new Intent(activity, StoryActivity.class);
-        startActivity(activity, intent, item, parent, poster);
+        startActivity(activity, intent, item, itemParentName, itemPosterName);
     }
 
     @Override

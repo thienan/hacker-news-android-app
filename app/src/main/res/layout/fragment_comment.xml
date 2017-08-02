@@ -22,11 +22,11 @@
             type="co.marcelje.hackernews.activity.ToolbarActivity" />
 
         <variable
-            name="parent"
+            name="itemParentName"
             type="String" />
 
         <variable
-            name="poster"
+            name="itemPosterName"
             type="String" />
     </data>
 
@@ -41,9 +41,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/view_margin"
-            android:text="@{ItemUtils.getCommentInfo(activity, parent, poster)}"
+            android:text="@{ItemUtils.getCommentInfo(activity, itemParentName, itemPosterName)}"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:visibility="@{TextUtils.isEmpty(parent) &amp;&amp; TextUtils.isEmpty(poster) ? View.GONE : View.VISIBLE}" />
+            android:visibility="@{TextUtils.isEmpty(itemParentName) &amp;&amp; TextUtils.isEmpty(itemPosterName) ? View.GONE : View.VISIBLE}" />
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
