@@ -205,7 +205,7 @@ public class BaseItemActivity extends ToolbarActivity
                 .findFragmentByTag(TAG_COMMENT_FRAGMENT);
     }
 
-    void loadParentItem() {
+    private void loadParentItem() {
         mParentId = mItem.getParent();
 
         if (mParentId > 0) {

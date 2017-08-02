@@ -51,6 +51,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="4dp"
                         android:layout_marginStart="4dp"
                         android:text="@{user.id}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
@@ -66,6 +67,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="4dp"
                         android:layout_marginStart="4dp"
                         android:text="@{ItemUtils.getRelativeDate(context, user)}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
@@ -81,6 +83,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="4dp"
                         android:layout_marginStart="4dp"
                         android:text="@{String.valueOf(user.karma)}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
@@ -96,6 +99,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="4dp"
                         android:layout_marginStart="4dp"
                         android:text='@{user == null || TextUtils.isEmpty(user.about) ? "" : Html.fromHtml(user.about)}'
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />

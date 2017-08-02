@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsSession;
 import android.support.v4.content.ContextCompat;
@@ -64,8 +65,10 @@ public final class CustomTabsBrowser {
             WebActivity.startActivity(activity, url);
         } else {
             customTabsIntent.intent.setPackage(packageName);
-            customTabsIntent.intent.putExtra(Intent.EXTRA_REFERRER,
-                    Uri.parse(Intent.URI_ANDROID_APP_SCHEME + "//" + activity.getPackageName()));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                customTabsIntent.intent.putExtra(Intent.EXTRA_REFERRER,
+                        Uri.parse(Intent.URI_ANDROID_APP_SCHEME + "//" + activity.getPackageName()));
+            }
             customTabsIntent.launchUrl(activity, Uri.parse(url));
         }
     }

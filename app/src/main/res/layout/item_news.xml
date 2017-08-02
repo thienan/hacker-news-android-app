@@ -70,6 +70,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/view_margin"
                         android:layout_marginEnd="@dimen/view_margin"
                         android:text="@{item.by}"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />

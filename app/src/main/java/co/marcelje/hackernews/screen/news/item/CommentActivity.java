@@ -2,11 +2,9 @@ package co.marcelje.hackernews.screen.news.item;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 
 import co.marcelje.hackernews.activity.ToolbarActivity;
 import co.marcelje.hackernews.model.Item;
-import co.marcelje.hackernews.screen.news.NewsActivity;
 import co.marcelje.hackernews.screen.news.item.comment.ItemCommentFragment;
 import co.marcelje.hackernews.screen.news.item.head.CommentFragment;
 import co.marcelje.hackernews.screen.news.item.head.ItemHeadFragment;

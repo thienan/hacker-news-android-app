@@ -1,5 +1,6 @@
 package co.marcelje.hackernews.span;
 
+import android.annotation.SuppressLint;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
@@ -10,6 +11,7 @@ import co.marcelje.hackernews.R;
 import co.marcelje.hackernews.activity.ToolbarActivity;
 import co.marcelje.hackernews.chrome.CustomTabsBrowser;
 
+@SuppressLint("ParcelCreator")
 public class CustomTabUrlSpan extends URLSpan {
 
     private final ToolbarActivity mActivity;
