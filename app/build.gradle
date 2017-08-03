@@ -13,7 +13,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        manifestPlaceholders = [crashlyticsKey:getKey("crashlytics.key")]
+        manifestPlaceholders = [crashlyticsKey:"$System.env.CRASHLYTICS_KEY"]
     }
     buildTypes {
         debug {
@@ -78,15 +78,4 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
     annotationProcessor 'org.parceler:parceler:1.1.6'
     provided 'javax.annotation:jsr250-api:1.0'
-}
-
-def getKey(String keyName) {
-    def propsFile = rootProject.file('key.properties')
-    if (propsFile.exists()) {
-        def props = new Properties()
-        props.load(new FileInputStream(propsFile))
-        return props[keyName]
-    } else {
-        return ""
-    }
 }
