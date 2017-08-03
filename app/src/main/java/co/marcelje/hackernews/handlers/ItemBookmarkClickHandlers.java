@@ -8,10 +8,12 @@ import org.greenrobot.eventbus.EventBus;
 import co.marcelje.hackernews.R;
 import co.marcelje.hackernews.activity.ToolbarActivity;
 import co.marcelje.hackernews.database.HackerNewsDao;
-import co.marcelje.hackernews.event.BookmarkEvent;
+import co.marcelje.hackernews.event.ItemBookmarkEvent;
 import co.marcelje.hackernews.factory.SnackbarFactory;
 import co.marcelje.hackernews.model.Item;
 import co.marcelje.hackernews.screen.news.NewsActivity;
+import co.marcelje.hackernews.screen.news.item.StoryActivity;
+import co.marcelje.hackernews.screen.user.UserActivity;
 
 public class ItemBookmarkClickHandlers {
 
@@ -35,8 +37,10 @@ public class ItemBookmarkClickHandlers {
                 bookmarkButton.setImageResource(R.drawable.ic_bookmark);
             }
 
-            if (!NewsActivity.class.getName().equals(mActivity.getClass().getName())) {
-                EventBus.getDefault().post(new BookmarkEvent());
+            if (StoryActivity.class.getName().equals(mActivity.getClass().getName())) {
+                EventBus.getDefault().post(new ItemBookmarkEvent.StoryActivityEvent());
+            } else if (UserActivity.class.getName().equals(mActivity.getClass().getName())) {
+                EventBus.getDefault().post(new ItemBookmarkEvent.UserActivityEvent());
             }
         }
     }

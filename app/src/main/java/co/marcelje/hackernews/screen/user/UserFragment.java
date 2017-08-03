@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import co.marcelje.hackernews.databinding.FragmentUserBinding;
+import co.marcelje.hackernews.event.ItemBookmarkEvent;
 import co.marcelje.hackernews.factory.SnackbarFactory;
 import co.marcelje.hackernews.fragment.ToolbarFragment;
 import co.marcelje.hackernews.loader.HackerNewsResponse;
@@ -19,6 +20,9 @@ import co.marcelje.hackernews.model.Item;
 import co.marcelje.hackernews.model.User;
 import co.marcelje.hackernews.utils.CollectionUtils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.parceler.Parcels;
 
 import java.util.List;
@@ -56,7 +60,14 @@ public class UserFragment extends ToolbarFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         extractArguments();
+    }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 
     @Override
@@ -129,6 +140,12 @@ public class UserFragment extends ToolbarFragment
     @Override
     public void onClick(View view) {
         getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_USER_ITEM, null, this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings({"UnusedParameters", "unused"})
+    public void onBookmarkEvent(ItemBookmarkEvent.StoryActivityEvent event) {
+        mAdapter.notifyDataSetChanged();
     }
 
     private static Bundle createArguments(String userId) {

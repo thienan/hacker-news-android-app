@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import co.marcelje.hackernews.event.BookmarkEvent;
+import co.marcelje.hackernews.event.ItemBookmarkEvent;
 import co.marcelje.hackernews.fragment.ToolbarFragment;
 import co.marcelje.hackernews.R;
 import co.marcelje.hackernews.databinding.FragmentNewsBinding;
@@ -205,7 +205,13 @@ public class NewsFragment extends ToolbarFragment
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     @SuppressWarnings({"UnusedParameters", "unused"})
-    public void onBookmarkEvent(BookmarkEvent event) {
+    public void onBookmarkEvent(ItemBookmarkEvent.StoryActivityEvent event) {
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings({"UnusedParameters", "unused"})
+    public void onBookmarkEvent(ItemBookmarkEvent.UserActivityEvent event) {
         mAdapter.notifyDataSetChanged();
     }
 
