@@ -1,6 +1,7 @@
 package co.marcelje.hackernews.screen.news;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import co.marcelje.hackernews.event.BookmarkEvent;
 import co.marcelje.hackernews.fragment.ToolbarFragment;
 import co.marcelje.hackernews.R;
 import co.marcelje.hackernews.databinding.FragmentNewsBinding;
@@ -19,6 +21,9 @@ import co.marcelje.hackernews.loader.StoriesLoader;
 import co.marcelje.hackernews.model.Item;
 import co.marcelje.hackernews.utils.CollectionUtils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.parceler.Parcels;
 
 import java.util.List;
@@ -82,6 +87,18 @@ public class NewsFragment extends ToolbarFragment
         }
 
         return mBinding.getRoot();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 
     private void onRestoreInstanceState(Bundle inState) {
@@ -184,6 +201,12 @@ public class NewsFragment extends ToolbarFragment
     @Override
     public void onLoaderReset(Loader<HackerNewsResponse<List<Item>>> loader) {
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings({"UnusedParameters", "unused"})
+    public void onBookmarkEvent(BookmarkEvent event) {
+        mAdapter.notifyDataSetChanged();
     }
 
     public void refresh() {
