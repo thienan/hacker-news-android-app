@@ -7,7 +7,7 @@ The official website can be found on https://news.ycombinator.com.
 
 This project is the Android app for reading Hacker News. 
 The app supports devices running Android 4.1+.
-This project is unofficial, means that this project is not related to Ycombinator.
+This project is unofficial, means that this project is neither affiliated with nor endorsed by Y Combinator.
 
 <h2>Features</h2>
 
@@ -32,6 +32,10 @@ With the app, you can:
 <img src="https://user-images.githubusercontent.com/16059491/28873729-06105b42-77b9-11e7-8544-59bcb58eca47.png" vspace=8 hspace=8 width="240">
 <img src="https://user-images.githubusercontent.com/16059491/28869192-228e13a8-77a6-11e7-967f-168d7c9ac1f2.png" vspace=8 hspace=8 width="240">
 </p>
+
+<h2>Bugs</h2>
+
+Use the [issue tracker](https://github.com/marcelje/hacker-news-android-app/issues) to file bugs or request features.
 
 <h2>License</h2>
 
