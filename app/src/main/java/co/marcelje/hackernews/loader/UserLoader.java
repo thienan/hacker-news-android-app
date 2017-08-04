@@ -1,6 +1,7 @@
 package co.marcelje.hackernews.loader;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
 import co.marcelje.hackernews.api.HackerNewsApi;
@@ -8,7 +9,6 @@ import co.marcelje.hackernews.model.User;
 
 public class UserLoader extends AsyncTaskLoader<HackerNewsResponse<User>> {
 
-    private final Activity mActivity;
     private final String mUserId;
 
     private HackerNewsResponse<User> mUser;
@@ -16,7 +16,7 @@ public class UserLoader extends AsyncTaskLoader<HackerNewsResponse<User>> {
     /* Runs on a worker thread */
     @Override
     public HackerNewsResponse<User> loadInBackground() {
-        return HackerNewsApi.with(mActivity).getUser(mUserId);
+        return HackerNewsApi.getInstance().getUser(mUserId);
     }
 
     /* Runs on the UI thread */
@@ -33,10 +33,8 @@ public class UserLoader extends AsyncTaskLoader<HackerNewsResponse<User>> {
         }
     }
 
-    public UserLoader(Activity activity, String userId) {
-        super(activity);
-
-        mActivity = activity;
+    public UserLoader(Context context, String userId) {
+        super(context);
         mUserId = userId;
     }
 

@@ -23,11 +23,7 @@ public final class HackerNewsApi {
     @SuppressWarnings("WeakerAccess")
     HackerNewsResource resource;
 
-    public static HackerNewsApi with(Activity activity) {
-        return with(activity.getApplication());
-    }
-
-    public static HackerNewsApi with(Application application) {
+    public static HackerNewsApi getInstance() {
         HackerNewsApi result = instance;
 
         if (result == null) {
@@ -35,7 +31,7 @@ public final class HackerNewsApi {
                 result = instance;
 
                 if (result == null) {
-                    instance = result = new HackerNewsApi(application);
+                    instance = result = new HackerNewsApi();
                 }
             }
         }
@@ -43,8 +39,8 @@ public final class HackerNewsApi {
         return result;
     }
 
-    private HackerNewsApi(Application application) {
-        HackerNewsApplication.getApplication(application).getServiceComponent().inject(this);
+    private HackerNewsApi() {
+        HackerNewsApplication.getInstance().getServiceComponent().inject(this);
     }
 
     public HackerNewsResponse<User> getUser(String userId) {

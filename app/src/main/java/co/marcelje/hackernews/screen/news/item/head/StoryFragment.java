@@ -129,9 +129,9 @@ public class StoryFragment extends ItemHeadFragment
     public Loader<HackerNewsResponse<List<Item>>> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_ID_STORIES_ITEM:
-                return new ItemListLoader(getActivity(), Collections.singletonList(mItem.getId()));
+                return new ItemListLoader(getContext(), Collections.singletonList(mItem.getId()));
             case LOADER_ID_POLL_OPTIONS:
-                return new ItemListLoader(getActivity(), mItem.getParts());
+                return new ItemListLoader(getContext(), mItem.getParts());
             default:
                 return null;
 

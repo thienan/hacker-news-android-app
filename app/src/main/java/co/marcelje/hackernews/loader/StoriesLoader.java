@@ -1,6 +1,6 @@
 package co.marcelje.hackernews.loader;
 
-import android.app.Activity;
+import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
 import co.marcelje.hackernews.R;
@@ -10,7 +10,6 @@ import java.util.List;
 
 public class StoriesLoader extends AsyncTaskLoader<HackerNewsResponse<List<Long>>> {
 
-    private final Activity mActivity;
     private final String mNewsType;
 
     private HackerNewsResponse<List<Long>> mItems;
@@ -20,18 +19,18 @@ public class StoriesLoader extends AsyncTaskLoader<HackerNewsResponse<List<Long>
     public HackerNewsResponse<List<Long>> loadInBackground() {
         HackerNewsResponse<List<Long>> itemIds = HackerNewsResponse.error("Unknown type");
 
-        if (mActivity.getString(R.string.settings_type_option_top).equals(mNewsType)) {
-            itemIds = HackerNewsApi.with(mActivity).getTopStories();
-        } else if (mActivity.getString(R.string.settings_type_option_best).equals(mNewsType)) {
-            itemIds = HackerNewsApi.with(mActivity).getBestStories();
-        } else if (mActivity.getString(R.string.settings_type_option_new).equals(mNewsType)) {
-            itemIds = HackerNewsApi.with(mActivity).getNewStories();
-        } else if (mActivity.getString(R.string.settings_type_option_show).equals(mNewsType)) {
-            itemIds = HackerNewsApi.with(mActivity).getShowStories();
-        } else if (mActivity.getString(R.string.settings_type_option_ask).equals(mNewsType)) {
-            itemIds = HackerNewsApi.with(mActivity).getAskStories();
-        } else if (mActivity.getString(R.string.settings_type_option_jobs).equals(mNewsType)) {
-            itemIds = HackerNewsApi.with(mActivity).getJobStories();
+        if (getContext().getString(R.string.settings_type_option_top).equals(mNewsType)) {
+            itemIds = HackerNewsApi.getInstance().getTopStories();
+        } else if (getContext().getString(R.string.settings_type_option_best).equals(mNewsType)) {
+            itemIds = HackerNewsApi.getInstance().getBestStories();
+        } else if (getContext().getString(R.string.settings_type_option_new).equals(mNewsType)) {
+            itemIds = HackerNewsApi.getInstance().getNewStories();
+        } else if (getContext().getString(R.string.settings_type_option_show).equals(mNewsType)) {
+            itemIds = HackerNewsApi.getInstance().getShowStories();
+        } else if (getContext().getString(R.string.settings_type_option_ask).equals(mNewsType)) {
+            itemIds = HackerNewsApi.getInstance().getAskStories();
+        } else if (getContext().getString(R.string.settings_type_option_jobs).equals(mNewsType)) {
+            itemIds = HackerNewsApi.getInstance().getJobStories();
         }
 
         return itemIds;
@@ -51,10 +50,8 @@ public class StoriesLoader extends AsyncTaskLoader<HackerNewsResponse<List<Long>
         }
     }
 
-    public StoriesLoader(Activity activity, String newsType) {
-        super(activity);
-
-        mActivity = activity;
+    public StoriesLoader(Context context, String newsType) {
+        super(context);
         mNewsType = newsType;
     }
 

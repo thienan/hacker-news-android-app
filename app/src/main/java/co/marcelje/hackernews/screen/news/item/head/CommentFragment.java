@@ -79,7 +79,7 @@ public class CommentFragment extends ItemHeadFragment
     public Loader<HackerNewsResponse<List<Item>>> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_ID_COMMENT_HEAD:
-                return new ItemListLoader(getActivity(), Collections.singletonList(mItem.getId()));
+                return new ItemListLoader(getContext(), Collections.singletonList(mItem.getId()));
             default:
                 return null;
 

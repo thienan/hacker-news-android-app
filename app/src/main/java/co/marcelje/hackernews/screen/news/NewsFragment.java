@@ -139,7 +139,7 @@ public class NewsFragment extends ToolbarFragment
 
                 if (list.size() == 0) return null;
 
-                return new ItemListLoader(getActivity(), list);
+                return new ItemListLoader(getContext(), list);
             case LOADER_ID_BOOKMARKED_ITEM:
                 return new BookmarkedItemLoader(getActivity());
             default:
@@ -277,7 +277,7 @@ public class NewsFragment extends ToolbarFragment
                     case LOADER_ID_STORIES_ASK:
                         //fall through
                     case LOADER_ID_STORIES_JOB:
-                        return new StoriesLoader(getActivity(), mNewsType);
+                        return new StoriesLoader(getContext(), mNewsType);
                     default:
                 }
 

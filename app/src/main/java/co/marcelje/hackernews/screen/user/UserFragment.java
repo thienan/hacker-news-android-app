@@ -110,7 +110,7 @@ public class UserFragment extends ToolbarFragment
     public Loader<HackerNewsResponse<User>> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_ID_USER_ITEM:
-                return new UserLoader(getActivity(), mUserId);
+                return new UserLoader(getContext(), mUserId);
             default:
                 return null;
 
@@ -193,7 +193,7 @@ public class UserFragment extends ToolbarFragment
 
                 if (list.size() == 0) return null;
 
-                return new ItemListLoader(getActivity(), list);
+                return new ItemListLoader(getContext(), list);
             }
 
             @Override

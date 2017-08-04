@@ -1,6 +1,7 @@
 package co.marcelje.hackernews.loader;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
 import co.marcelje.hackernews.api.HackerNewsApi;
@@ -12,7 +13,6 @@ import io.reactivex.Observable;
 
 public class ItemListLoader extends AsyncTaskLoader<HackerNewsResponse<List<Item>>> {
 
-    private final Activity mActivity;
     private final List<Long> mItemIds;
 
     private HackerNewsResponse<List<Item>> mItems;
@@ -23,7 +23,7 @@ public class ItemListLoader extends AsyncTaskLoader<HackerNewsResponse<List<Item
         final HackerNewsResponse[] items = new HackerNewsResponse[1];
 
         Observable.fromIterable(mItemIds)
-                .flatMap(itemId -> HackerNewsApi.with(mActivity).getItem(itemId))
+                .flatMap(itemId -> HackerNewsApi.getInstance().getItem(itemId))
                 .toList()
                 .subscribe(data -> items[0] = HackerNewsResponse.ok(data));
 
@@ -44,10 +44,8 @@ public class ItemListLoader extends AsyncTaskLoader<HackerNewsResponse<List<Item
         }
     }
 
-    public ItemListLoader(Activity activity, List<Long> itemIds) {
-        super(activity);
-
-        mActivity = activity;
+    public ItemListLoader(Context context, List<Long> itemIds) {
+        super(context);
         mItemIds = itemIds;
     }
 

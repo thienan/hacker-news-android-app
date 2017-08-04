@@ -114,7 +114,7 @@ public class ItemCommentFragment extends ToolbarFragment
 
                 if (list.size() == 0) return null;
 
-                return new ItemListLoader(getActivity(), list);
+                return new ItemListLoader(getContext(), list);
             default:
                 return null;
 

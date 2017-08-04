@@ -74,24 +74,24 @@ public class NewsWidgetItemService extends RemoteViewsService {
             HackerNewsResponse<List<Long>> itemIds = HackerNewsResponse.error("Unknown type");
 
             if (getString(R.string.settings_type_option_top).equals(newsType)) {
-                itemIds = HackerNewsApi.with(getApplication()).getTopStories();
+                itemIds = HackerNewsApi.getInstance().getTopStories();
             } else if (getString(R.string.settings_type_option_best).equals(newsType)) {
-                itemIds = HackerNewsApi.with(getApplication()).getBestStories();
+                itemIds = HackerNewsApi.getInstance().getBestStories();
             } else if (getString(R.string.settings_type_option_new).equals(newsType)) {
-                itemIds = HackerNewsApi.with(getApplication()).getNewStories();
+                itemIds = HackerNewsApi.getInstance().getNewStories();
             } else if (getString(R.string.settings_type_option_show).equals(newsType)) {
-                itemIds = HackerNewsApi.with(getApplication()).getShowStories();
+                itemIds = HackerNewsApi.getInstance().getShowStories();
             } else if (getString(R.string.settings_type_option_ask).equals(newsType)) {
-                itemIds = HackerNewsApi.with(getApplication()).getAskStories();
+                itemIds = HackerNewsApi.getInstance().getAskStories();
             } else if (getString(R.string.settings_type_option_jobs).equals(newsType)) {
-                itemIds = HackerNewsApi.with(getApplication()).getJobStories();
+                itemIds = HackerNewsApi.getInstance().getJobStories();
             }
 
             mItems = new ArrayList<>();
 
             if (itemIds.isSuccessful()) {
                 Observable.fromIterable(CollectionUtils.subList(itemIds.getData(), 0, newsCount))
-                        .flatMap(itemId -> HackerNewsApi.with(getApplication()).getItem(itemId))
+                        .flatMap(itemId -> HackerNewsApi.getInstance().getItem(itemId))
                         .filter(item -> item.isNotDeleted() || item.isNotDead())
                         .toList()
                         .subscribe(data -> mItems.addAll(data));

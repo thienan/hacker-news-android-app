@@ -14,16 +14,19 @@ import timber.log.Timber;
 
 public class HackerNewsApplication extends Application {
 
+    private static HackerNewsApplication instance;
+
     private ModuleComponent mModuleComponent;
 
-    public static HackerNewsApplication getApplication(Application application) {
-        return (HackerNewsApplication) application;
+    public static HackerNewsApplication getInstance() {
+        return instance;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
 
+        initSelf();
         initStetho();
         initDagger();
         initTimber();
@@ -33,6 +36,10 @@ public class HackerNewsApplication extends Application {
 
     public ModuleComponent getServiceComponent() {
         return mModuleComponent;
+    }
+
+    private void initSelf() {
+        instance = this;
     }
 
     private void initStetho() {
