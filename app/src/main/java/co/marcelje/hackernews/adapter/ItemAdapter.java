@@ -16,57 +16,61 @@ import co.marcelje.hackernews.activity.ToolbarActivity;
 public abstract class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
     private final ToolbarActivity mActivity;
-    private final List<Item> mData;
+    private final List<Item> mItems;
     private final String mItemParentName;
     private final String mItemPosterName;
 
     protected ItemAdapter(ToolbarActivity activity, String itemParentName, String itemPosterName) {
         mActivity = activity;
-        mData = new ArrayList<>();
+        mItems = new ArrayList<>();
         mItemParentName = itemParentName;
         mItemPosterName = itemPosterName;
     }
 
     protected ItemAdapter(ToolbarActivity activity) {
         mActivity = activity;
-        mData = new ArrayList<>();
+        mItems = new ArrayList<>();
         mItemParentName = null;
         mItemPosterName = null;
     }
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
-        Item item = getData().get(position);
+        Item item = getItem(position);
         holder.binding.setVariable(BR.item, item);
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return mItems.size();
     }
 
     protected ToolbarActivity getActivity() {
         return mActivity;
     }
 
-    public List<Item> getData() {
-        return mData;
+    public Item getItem(int position) {
+        return mItems.get(position);
     }
 
-    public void swapData(List<Item> data) {
-        mData.clear();
-        mData.addAll(data);
+    public List<Item> getItems() {
+        return mItems;
+    }
+
+    public void swapItems(List<Item> items) {
+        mItems.clear();
+        mItems.addAll(items);
         notifyDataSetChanged();
     }
 
-    public void clearData() {
-        mData.clear();
+    public void clearItems() {
+        mItems.clear();
         notifyDataSetChanged();
     }
 
-    public void addData(List<Item> data) {
-        mData.addAll(data);
-        notifyItemRangeInserted(mData.size() - data.size(), data.size());
+    public void addItems(List<Item> items) {
+        mItems.addAll(items);
+        notifyItemRangeInserted(mItems.size() - items.size(), items.size());
     }
 
     public class ItemViewHolder<T extends ViewDataBinding>
@@ -86,7 +90,7 @@ public abstract class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemV
 
         @Override
         public void onClick(View view) {
-            Item data = mData.get(getAdapterPosition());
+            Item data = mItems.get(getAdapterPosition());
             BaseItemActivity.startActivity(mActivity, data, mItemParentName, mItemPosterName);
         }
     }

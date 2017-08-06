@@ -48,7 +48,7 @@ class SubmissionAdapter extends ItemAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        switch (getData().get(position).getType()) {
+        switch (getItem(position).getType()) {
             case ITEM_TYPE_COMMENT:
                 return VIEW_TYPE_COMMENT;
             case ITEM_TYPE_STORY:

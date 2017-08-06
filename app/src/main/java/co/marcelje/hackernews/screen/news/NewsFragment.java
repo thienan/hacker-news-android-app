@@ -104,7 +104,7 @@ public class NewsFragment extends ToolbarFragment
     private void onRestoreInstanceState(Bundle inState) {
         mNewsType = inState.getString(STATE_NEWS_TYPE);
         mItemIds = CollectionUtils.toLongList(inState.getLongArray(STATE_NEWS_DATA_IDS));
-        mAdapter.swapData(Parcels.unwrap(inState.getParcelable(STATE_NEWS_DATA)));
+        mAdapter.swapItems(Parcels.unwrap(inState.getParcelable(STATE_NEWS_DATA)));
         mBinding.rvItemList.getLayoutManager().onRestoreInstanceState(inState.getParcelable(STATE_NEWS_VIEW));
         mCurrentPage = inState.getInt(STATE_CURRENT_PAGE);
     }
@@ -113,7 +113,7 @@ public class NewsFragment extends ToolbarFragment
     public void onSaveInstanceState(Bundle outState) {
         outState.putString(STATE_NEWS_TYPE, mNewsType);
         outState.putLongArray(STATE_NEWS_DATA_IDS, CollectionUtils.toLongArray(mItemIds));
-        outState.putParcelable(STATE_NEWS_DATA, Parcels.wrap(mAdapter.getData()));
+        outState.putParcelable(STATE_NEWS_DATA, Parcels.wrap(mAdapter.getItems()));
         outState.putParcelable(STATE_NEWS_VIEW, mBinding.rvItemList.getLayoutManager().onSaveInstanceState());
         outState.putInt(STATE_CURRENT_PAGE, mCurrentPage);
         super.onSaveInstanceState(outState);
@@ -154,37 +154,37 @@ public class NewsFragment extends ToolbarFragment
             switch (loader.getId()) {
                 case LOADER_ID_STORIES_TOP_ITEM:
                     if (getString(R.string.settings_type_option_top).equals(mNewsType)) {
-                        mAdapter.addData(data.getData());
+                        mAdapter.addItems(data.getData());
                     }
                     break;
                 case LOADER_ID_STORIES_BEST_ITEM:
                     if (getString(R.string.settings_type_option_best).equals(mNewsType)) {
-                        mAdapter.addData(data.getData());
+                        mAdapter.addItems(data.getData());
                     }
                     break;
                 case LOADER_ID_STORIES_NEW_ITEM:
                     if (getString(R.string.settings_type_option_new).equals(mNewsType)) {
-                        mAdapter.addData(data.getData());
+                        mAdapter.addItems(data.getData());
                     }
                     break;
                 case LOADER_ID_STORIES_SHOW_ITEM:
                     if (getString(R.string.settings_type_option_show).equals(mNewsType)) {
-                        mAdapter.addData(data.getData());
+                        mAdapter.addItems(data.getData());
                     }
                     break;
                 case LOADER_ID_STORIES_ASK_ITEM:
                     if (getString(R.string.settings_type_option_ask).equals(mNewsType)) {
-                        mAdapter.addData(data.getData());
+                        mAdapter.addItems(data.getData());
                     }
                     break;
                 case LOADER_ID_STORIES_JOB_ITEM:
                     if (getString(R.string.settings_type_option_jobs).equals(mNewsType)) {
-                        mAdapter.addData(data.getData());
+                        mAdapter.addItems(data.getData());
                     }
                     break;
                 case LOADER_ID_BOOKMARKED_ITEM:
                     if (getString(R.string.settings_type_option_bookmarked).equals(mNewsType)) {
-                        mAdapter.swapData(data.getData());
+                        mAdapter.swapItems(data.getData());
                     }
                     break;
                 default:
@@ -225,7 +225,7 @@ public class NewsFragment extends ToolbarFragment
     }
 
     public void changeNewsType(String type) {
-        mAdapter.clearData();
+        mAdapter.clearItems();
         mCurrentPage = 1;
         mNewsType = type;
 

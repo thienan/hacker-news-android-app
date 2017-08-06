@@ -94,14 +94,14 @@ public class UserFragment extends ToolbarFragment
 
     private void onRestoreInstanceState(Bundle inState) {
         mBinding.setUser(Parcels.unwrap(inState.getParcelable(STATE_USER)));
-        mAdapter.swapData(Parcels.unwrap(inState.getParcelable(STATE_SUBMISSION_DATA)));
+        mAdapter.swapItems(Parcels.unwrap(inState.getParcelable(STATE_SUBMISSION_DATA)));
         mCurrentPage = inState.getInt(STATE_CURRENT_PAGE);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(STATE_USER, Parcels.wrap(mBinding.getUser()));
-        outState.putParcelable(STATE_SUBMISSION_DATA, Parcels.wrap(mAdapter.getData()));
+        outState.putParcelable(STATE_SUBMISSION_DATA, Parcels.wrap(mAdapter.getItems()));
         outState.putInt(STATE_CURRENT_PAGE, mCurrentPage);
         super.onSaveInstanceState(outState);
     }
@@ -122,7 +122,7 @@ public class UserFragment extends ToolbarFragment
         if (response.isSuccessful()) {
             mBinding.setUser(response.getData());
             // check if this comes after configuration changes and the submissions is not loaded yet.
-            if (mAdapter.getData().size() == 0 && mBinding.getUser().getSubmitted().size() > 0) {
+            if (mAdapter.getItemCount() == 0 && mBinding.getUser().getSubmitted().size() > 0) {
                 refreshSubmissions();
             }
         } else {
@@ -164,7 +164,7 @@ public class UserFragment extends ToolbarFragment
     }
 
     private void refreshSubmissions() {
-        mAdapter.clearData();
+        mAdapter.clearItems();
         mCurrentPage = 1;
         mBinding.rvSubmissionList.showProgressBar();
         retrieveSubmissions();
@@ -198,7 +198,7 @@ public class UserFragment extends ToolbarFragment
 
             @Override
             public void onLoadFinished(Loader<HackerNewsResponse<List<Item>>> loader, HackerNewsResponse<List<Item>> data) {
-                mAdapter.addData(data.getData());
+                mAdapter.addItems(data.getData());
                 mBinding.rvSubmissionList.hideProgressBar();
             }
 

@@ -111,12 +111,12 @@ public class StoryFragment extends ItemHeadFragment
     }
 
     private void onRestoreInstanceState(Bundle inState) {
-        mAdapter.swapData(Parcels.unwrap(inState.getParcelable(STATE_POLL_OPTIONS_DATA)));
+        mAdapter.swapItems(Parcels.unwrap(inState.getParcelable(STATE_POLL_OPTIONS_DATA)));
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(STATE_POLL_OPTIONS_DATA, Parcels.wrap(mAdapter.getData()));
+        outState.putParcelable(STATE_POLL_OPTIONS_DATA, Parcels.wrap(mAdapter.getItems()));
         super.onSaveInstanceState(outState);
     }
 
@@ -151,7 +151,7 @@ public class StoryFragment extends ItemHeadFragment
                     break;
                 case LOADER_ID_POLL_OPTIONS:
                     if (response.getData().size() > 0) {
-                        mAdapter.swapData(response.getData());
+                        mAdapter.swapItems(response.getData());
                         mBinding.sectionPollOptions.getRoot().setVisibility(View.VISIBLE);
                     }
 

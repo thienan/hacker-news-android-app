@@ -89,15 +89,15 @@ public class ItemCommentFragment extends ToolbarFragment
     }
 
     private void onRestoreInstanceState(Bundle inState) {
-        mAdapter.swapData(Parcels.unwrap(inState.getParcelable(STATE_COMMENT_DATA)));
+        mAdapter.swapItems(Parcels.unwrap(inState.getParcelable(STATE_COMMENT_DATA)));
         mCurrentPage = inState.getInt(STATE_CURRENT_PAGE);
 
-        if (mAdapter.getData().size() <= 0) refresh();
+        if (mAdapter.getItemCount() <= 0) refresh();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(STATE_COMMENT_DATA, Parcels.wrap(mAdapter.getData()));
+        outState.putParcelable(STATE_COMMENT_DATA, Parcels.wrap(mAdapter.getItems()));
         outState.putInt(STATE_CURRENT_PAGE, mCurrentPage);
         super.onSaveInstanceState(outState);
     }
@@ -127,7 +127,7 @@ public class ItemCommentFragment extends ToolbarFragment
         if (response.isSuccessful()) {
             switch (loader.getId()) {
                 case LOADER_ID_COMMENT_ITEM:
-                    mAdapter.addData(response.getData());
+                    mAdapter.addItems(response.getData());
                     mBinding.rvCommentList.hideProgressBar();
                     break;
                 default:
@@ -145,7 +145,7 @@ public class ItemCommentFragment extends ToolbarFragment
     }
 
     public void refresh() {
-        mAdapter.clearData();
+        mAdapter.clearItems();
         mCurrentPage = 1;
         mBinding.rvCommentList.showProgressBar();
         retrieveComments();
