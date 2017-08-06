@@ -1,5 +1,6 @@
 package co.marcelje.hackernews.database;
 
+import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 

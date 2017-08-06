@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import co.marcelje.hackernews.database.HackerNewsContract;
+import co.marcelje.hackernews.utils.DatabaseUtils;
 
 import org.parceler.Parcel;
 
@@ -185,19 +186,32 @@ public class Item {
 
             while (cursor.moveToNext()) {
                 Item item = new Item();
-                item.setId(cursor.getLong(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry._ID)));
-                item.setDeleted(cursor.getInt(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_DELETED)) == 1);
-                item.setType(cursor.getString(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_TYPE)));
-                item.setBy(cursor.getString(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_BY)));
-                item.setTime(cursor.getLong(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_TIME)));
-                item.setText(cursor.getString(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_TEXT)));
-                item.setDead(cursor.getInt(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_DEAD)) == 1);
-                item.setParent(cursor.getLong(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_PARENT)));
-                item.setPoll(cursor.getLong(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_POLL)));
-                item.setUrl(cursor.getString(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_URL)));
-                item.setScore(cursor.getInt(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_SCORE)));
-                item.setTitle(cursor.getString(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_TITLE)));
-                item.setDescendants(cursor.getInt(cursor.getColumnIndex(HackerNewsContract.BookmarkedItemEntry.COLUMN_DESCENDANTS)));
+                item.setId(DatabaseUtils.getLong(cursor,
+                        HackerNewsContract.BookmarkedItemEntry._ID));
+                item.setDeleted(DatabaseUtils.getBoolean(cursor,
+                        HackerNewsContract.BookmarkedItemEntry.COLUMN_DELETED));
+                item.setType(DatabaseUtils.getString(cursor,
+                        HackerNewsContract.BookmarkedItemEntry.COLUMN_TYPE));
+                item.setBy(DatabaseUtils.getString(cursor,
+                        HackerNewsContract.BookmarkedItemEntry.COLUMN_BY));
+                item.setTime(DatabaseUtils.getLong(cursor,
+                        HackerNewsContract.BookmarkedItemEntry.COLUMN_TIME));
+                item.setText(DatabaseUtils.getString(cursor,
+                        HackerNewsContract.BookmarkedItemEntry.COLUMN_TEXT));
+                item.setDead(DatabaseUtils.getBoolean(cursor,
+                        HackerNewsContract.BookmarkedItemEntry.COLUMN_DEAD));
+                item.setParent(DatabaseUtils.getLong(cursor,
+                        HackerNewsContract.BookmarkedItemEntry.COLUMN_PARENT));
+                item.setPoll(DatabaseUtils.getLong(cursor,
+                        HackerNewsContract.BookmarkedItemEntry.COLUMN_POLL));
+                item.setUrl(DatabaseUtils.getString(cursor,
+                        HackerNewsContract.BookmarkedItemEntry.COLUMN_URL));
+                item.setScore(DatabaseUtils.getInt(cursor,
+                        HackerNewsContract.BookmarkedItemEntry.COLUMN_SCORE));
+                item.setTitle(DatabaseUtils.getString(cursor,
+                        HackerNewsContract.BookmarkedItemEntry.COLUMN_TITLE));
+                item.setDescendants(DatabaseUtils.getInt(cursor,
+                        HackerNewsContract.BookmarkedItemEntry.COLUMN_DESCENDANTS));
 
                 items.add(item);
             }
@@ -224,7 +238,8 @@ public class Item {
             if (cursor == null) return kidList;
 
             while (cursor.moveToNext()) {
-                long kidId = cursor.getLong(cursor.getColumnIndex(HackerNewsContract.BookmarkedKidEntry.COLUMN_KID_ID));
+                long kidId = DatabaseUtils.getLong(cursor,
+                        HackerNewsContract.BookmarkedKidEntry.COLUMN_KID_ID);
                 kidList.add(kidId);
             }
 
@@ -250,7 +265,8 @@ public class Item {
             if (cursor == null) return partList;
 
             while (cursor.moveToNext()) {
-                long partId = cursor.getLong(cursor.getColumnIndex(HackerNewsContract.BookmarkedPartEntry.COLUMN_PART_ID));
+                long partId = DatabaseUtils.getLong(cursor,
+                        HackerNewsContract.BookmarkedPartEntry.COLUMN_PART_ID);
                 partList.add(partId);
             }
 
