@@ -58,12 +58,10 @@ public class HackerNewsContentProvider extends ContentProvider {
                         String sortOrder) {
         final SQLiteDatabase db = helper.getReadableDatabase();
 
-        int match = sUriMatcher.match(uri);
         Cursor retCursor;
-
         String tableName;
 
-        switch (match) {
+        switch (sUriMatcher.match(uri)) {
             case BOOKMARKED_ITEM:
                 tableName = HackerNewsContract.BookmarkedItemEntry.TABLE_NAME;
                 break;
@@ -101,13 +99,12 @@ public class HackerNewsContentProvider extends ContentProvider {
                       ContentValues values) {
         final SQLiteDatabase db = helper.getWritableDatabase();
 
-        int match = sUriMatcher.match(uri);
         Uri returnUri;
 
         String tableName;
         Uri contentUri;
 
-        switch (match) {
+        switch (sUriMatcher.match(uri)) {
             case BOOKMARKED_ITEM:
                 tableName = HackerNewsContract.BookmarkedItemEntry.TABLE_NAME;
                 contentUri = HackerNewsContract.BookmarkedItemEntry.CONTENT_URI;
@@ -147,11 +144,9 @@ public class HackerNewsContentProvider extends ContentProvider {
     public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] valuesArray) {
         final SQLiteDatabase db = helper.getWritableDatabase();
 
-        int match = sUriMatcher.match(uri);
-
         String tableName;
 
-        switch (match) {
+        switch (sUriMatcher.match(uri)) {
             case BOOKMARKED_ITEM:
                 tableName = HackerNewsContract.BookmarkedItemEntry.TABLE_NAME;
                 break;
@@ -192,48 +187,47 @@ public class HackerNewsContentProvider extends ContentProvider {
                       String[] selectionArgs) {
         final SQLiteDatabase db = helper.getWritableDatabase();
 
-        int match = sUriMatcher.match(uri);
         int deleted;
 
-        String id;
+        long id;
         String tableName;
 
-        switch (match) {
+        switch (sUriMatcher.match(uri)) {
             case BOOKMARKED_ITEM:
                 tableName = HackerNewsContract.BookmarkedItemEntry.TABLE_NAME;
                 deleted = db.delete(tableName, selection, selectionArgs);
                 break;
             case BOOKMARKED_ITEM_ID:
+                id = ContentUris.parseId(uri);
                 tableName = HackerNewsContract.BookmarkedItemEntry.TABLE_NAME;
-                id = uri.getPathSegments().get(1);
-                deleted = db.delete(tableName, BaseColumns._ID + "=?", new String[]{id});
+                deleted = db.delete(tableName, BaseColumns._ID + "=?", new String[]{String.valueOf(id)});
                 break;
             case BOOKMARKED_KID:
                 tableName = HackerNewsContract.BookmarkedKidEntry.TABLE_NAME;
                 deleted = db.delete(tableName, selection, selectionArgs);
                 break;
             case BOOKMARKED_KID_ID:
+                id = ContentUris.parseId(uri);
                 tableName = HackerNewsContract.BookmarkedKidEntry.TABLE_NAME;
-                id = uri.getPathSegments().get(1);
-                deleted = db.delete(tableName, BaseColumns._ID + "=?", new String[]{id});
+                deleted = db.delete(tableName, BaseColumns._ID + "=?", new String[]{String.valueOf(id)});
                 break;
             case BOOKMARKED_PART:
                 tableName = HackerNewsContract.BookmarkedPartEntry.TABLE_NAME;
                 deleted = db.delete(tableName, selection, selectionArgs);
                 break;
             case BOOKMARKED_PART_ID:
+                id = ContentUris.parseId(uri);
                 tableName = HackerNewsContract.BookmarkedPartEntry.TABLE_NAME;
-                id = uri.getPathSegments().get(1);
-                deleted = db.delete(tableName, BaseColumns._ID + "=?", new String[]{id});
+                deleted = db.delete(tableName, BaseColumns._ID + "=?", new String[]{String.valueOf(id)});
                 break;
             case USER:
                 tableName = HackerNewsContract.UserEntry.TABLE_NAME;
                 deleted = db.delete(tableName, selection, selectionArgs);
                 break;
             case USER_ID:
+                id = ContentUris.parseId(uri);
                 tableName = HackerNewsContract.UserEntry.TABLE_NAME;
-                id = uri.getPathSegments().get(1);
-                deleted = db.delete(tableName, BaseColumns._ID + "=?", new String[]{id});
+                deleted = db.delete(tableName, BaseColumns._ID + "=?", new String[]{String.valueOf(id)});
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -253,13 +247,12 @@ public class HackerNewsContentProvider extends ContentProvider {
                       String[] selectionArgs) {
         final SQLiteDatabase db = helper.getWritableDatabase();
 
-        int match = sUriMatcher.match(uri);
         int updated;
 
-        String id = uri.getPathSegments().get(1);
+        long id = ContentUris.parseId(uri);
         String tableName;
 
-        switch (match) {
+        switch (sUriMatcher.match(uri)) {
             case BOOKMARKED_ITEM_ID:
                 tableName = HackerNewsContract.BookmarkedItemEntry.TABLE_NAME;
                 break;
@@ -276,7 +269,7 @@ public class HackerNewsContentProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
-        updated = db.update(tableName, values, BaseColumns._ID + "=?", new String[]{id});
+        updated = db.update(tableName, values, BaseColumns._ID + "=?", new String[]{String.valueOf(id)});
 
         if (updated != 0 && getContext() != null) {
             getContext().getContentResolver().notifyChange(uri, null);
@@ -288,9 +281,7 @@ public class HackerNewsContentProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        int match = sUriMatcher.match(uri);
-
-        switch (match) {
+        switch (sUriMatcher.match(uri)) {
             case BOOKMARKED_ITEM:
                 return TYPE_DIRECTORY + "/" +
                         HackerNewsContract.AUTHORITY + "/" +
