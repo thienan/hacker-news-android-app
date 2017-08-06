@@ -7,7 +7,7 @@
 
         <import type="co.marcelje.hackernews.utils.ItemUtils" />
 
-        <import type="co.marcelje.hackernews.database.HackerNewsDao" />
+        <import type="co.marcelje.hackernews.database.DatabaseDao" />
 
         <variable
             name="activity"
@@ -115,7 +115,7 @@
                 android:contentDescription="@string/desc_bookmark"
                 android:onClick="@{(v) -> itemBookmarkClickHandlers.onClick(v, item)}"
                 android:padding="@dimen/view_margin"
-                android:src="@{HackerNewsDao.isItemAvailable(activity, item.getId) ? @drawable/ic_bookmark : @drawable/ic_bookmark_border}"
+                android:src="@{DatabaseDao.isItemAvailable(activity, item.getId) ? @drawable/ic_bookmark : @drawable/ic_bookmark_border}"
                 android:tint="@color/colorIcons" />
 
         </LinearLayout>

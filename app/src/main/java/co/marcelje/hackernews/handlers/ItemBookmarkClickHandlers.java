@@ -7,11 +7,10 @@ import org.greenrobot.eventbus.EventBus;
 
 import co.marcelje.hackernews.R;
 import co.marcelje.hackernews.activity.ToolbarActivity;
-import co.marcelje.hackernews.database.HackerNewsDao;
+import co.marcelje.hackernews.database.DatabaseDao;
 import co.marcelje.hackernews.event.ItemBookmarkEvent;
 import co.marcelje.hackernews.factory.SnackbarFactory;
 import co.marcelje.hackernews.model.Item;
-import co.marcelje.hackernews.screen.news.NewsActivity;
 import co.marcelje.hackernews.screen.news.item.StoryActivity;
 import co.marcelje.hackernews.screen.user.UserActivity;
 
@@ -27,12 +26,12 @@ public class ItemBookmarkClickHandlers {
         if (view instanceof ImageButton) {
             ImageButton bookmarkButton = (ImageButton) view;
 
-            if (HackerNewsDao.isItemAvailable(mActivity, data.getId())) {
-                HackerNewsDao.deleteItem(mActivity, data.getId());
+            if (DatabaseDao.isItemAvailable(mActivity, data.getId())) {
+                DatabaseDao.deleteItem(mActivity, data.getId());
                 SnackbarFactory.createUnbookmarkedSuccessSnackBar(view).show();
                 bookmarkButton.setImageResource(R.drawable.ic_bookmark_border);
             } else {
-                HackerNewsDao.insertItem(mActivity, data);
+                DatabaseDao.insertItem(mActivity, data);
                 SnackbarFactory.createBookmarkedSuccessSnackBar(view).show();
                 bookmarkButton.setImageResource(R.drawable.ic_bookmark);
             }

@@ -4,7 +4,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-public final class HackerNewsContract {
+public final class DatabaseContract {
 
     public static final String AUTHORITY = "co.marcelje.hackernews.database.AUTHORITY";
     @SuppressWarnings("WeakerAccess")

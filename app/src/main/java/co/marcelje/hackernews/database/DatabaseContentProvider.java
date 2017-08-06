@@ -11,7 +11,7 @@ import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-public class HackerNewsContentProvider extends ContentProvider {
+public class DatabaseContentProvider extends ContentProvider {
 
     private static final String TYPE_DIRECTORY = "vnd.android.cursor.dir";
     private static final String TYPE_ITEM = "vnd.android.cursor.item";
@@ -29,23 +29,23 @@ public class HackerNewsContentProvider extends ContentProvider {
 
     private static UriMatcher buildUriMatcher() {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(HackerNewsContract.AUTHORITY, HackerNewsContract.PATH_BOOKMARKED_ITEMS, BOOKMARKED_ITEM);
-        uriMatcher.addURI(HackerNewsContract.AUTHORITY, HackerNewsContract.PATH_BOOKMARKED_ITEMS + "/#", BOOKMARKED_ITEM_ID);
-        uriMatcher.addURI(HackerNewsContract.AUTHORITY, HackerNewsContract.PATH_BOOKMARKED_KIDS, BOOKMARKED_KID);
-        uriMatcher.addURI(HackerNewsContract.AUTHORITY, HackerNewsContract.PATH_BOOKMARKED_KIDS + "/#", BOOKMARKED_KID_ID);
-        uriMatcher.addURI(HackerNewsContract.AUTHORITY, HackerNewsContract.PATH_BOOKMARKED_PARTS, BOOKMARKED_PART);
-        uriMatcher.addURI(HackerNewsContract.AUTHORITY, HackerNewsContract.PATH_BOOKMARKED_PARTS + "/#", BOOKMARKED_PART_ID);
-        uriMatcher.addURI(HackerNewsContract.AUTHORITY, HackerNewsContract.PATH_USERS, USER);
-        uriMatcher.addURI(HackerNewsContract.AUTHORITY, HackerNewsContract.PATH_USERS + "/#", USER_ID);
+        uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_BOOKMARKED_ITEMS, BOOKMARKED_ITEM);
+        uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_BOOKMARKED_ITEMS + "/#", BOOKMARKED_ITEM_ID);
+        uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_BOOKMARKED_KIDS, BOOKMARKED_KID);
+        uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_BOOKMARKED_KIDS + "/#", BOOKMARKED_KID_ID);
+        uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_BOOKMARKED_PARTS, BOOKMARKED_PART);
+        uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_BOOKMARKED_PARTS + "/#", BOOKMARKED_PART_ID);
+        uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_USERS, USER);
+        uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_USERS + "/#", USER_ID);
 
         return uriMatcher;
     }
 
-    private HackerNewsDbHelper helper;
+    private DatabaseHelper helper;
 
     @Override
     public boolean onCreate() {
-        helper = new HackerNewsDbHelper(getContext());
+        helper = new DatabaseHelper(getContext());
         return true;
     }
 
@@ -63,16 +63,16 @@ public class HackerNewsContentProvider extends ContentProvider {
 
         switch (sUriMatcher.match(uri)) {
             case BOOKMARKED_ITEM:
-                tableName = HackerNewsContract.BookmarkedItemEntry.TABLE_NAME;
+                tableName = DatabaseContract.BookmarkedItemEntry.TABLE_NAME;
                 break;
             case BOOKMARKED_KID:
-                tableName = HackerNewsContract.BookmarkedKidEntry.TABLE_NAME;
+                tableName = DatabaseContract.BookmarkedKidEntry.TABLE_NAME;
                 break;
             case BOOKMARKED_PART:
-                tableName = HackerNewsContract.BookmarkedPartEntry.TABLE_NAME;
+                tableName = DatabaseContract.BookmarkedPartEntry.TABLE_NAME;
                 break;
             case USER:
-                tableName = HackerNewsContract.UserEntry.TABLE_NAME;
+                tableName = DatabaseContract.UserEntry.TABLE_NAME;
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -106,20 +106,20 @@ public class HackerNewsContentProvider extends ContentProvider {
 
         switch (sUriMatcher.match(uri)) {
             case BOOKMARKED_ITEM:
-                tableName = HackerNewsContract.BookmarkedItemEntry.TABLE_NAME;
-                contentUri = HackerNewsContract.BookmarkedItemEntry.CONTENT_URI;
+                tableName = DatabaseContract.BookmarkedItemEntry.TABLE_NAME;
+                contentUri = DatabaseContract.BookmarkedItemEntry.CONTENT_URI;
                 break;
             case BOOKMARKED_KID:
-                tableName = HackerNewsContract.BookmarkedKidEntry.TABLE_NAME;
-                contentUri = HackerNewsContract.BookmarkedKidEntry.CONTENT_URI;
+                tableName = DatabaseContract.BookmarkedKidEntry.TABLE_NAME;
+                contentUri = DatabaseContract.BookmarkedKidEntry.CONTENT_URI;
                 break;
             case BOOKMARKED_PART:
-                tableName = HackerNewsContract.BookmarkedPartEntry.TABLE_NAME;
-                contentUri = HackerNewsContract.BookmarkedPartEntry.CONTENT_URI;
+                tableName = DatabaseContract.BookmarkedPartEntry.TABLE_NAME;
+                contentUri = DatabaseContract.BookmarkedPartEntry.CONTENT_URI;
                 break;
             case USER:
-                tableName = HackerNewsContract.UserEntry.TABLE_NAME;
-                contentUri = HackerNewsContract.UserEntry.CONTENT_URI;
+                tableName = DatabaseContract.UserEntry.TABLE_NAME;
+                contentUri = DatabaseContract.UserEntry.CONTENT_URI;
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -148,16 +148,16 @@ public class HackerNewsContentProvider extends ContentProvider {
 
         switch (sUriMatcher.match(uri)) {
             case BOOKMARKED_ITEM:
-                tableName = HackerNewsContract.BookmarkedItemEntry.TABLE_NAME;
+                tableName = DatabaseContract.BookmarkedItemEntry.TABLE_NAME;
                 break;
             case BOOKMARKED_KID:
-                tableName = HackerNewsContract.BookmarkedKidEntry.TABLE_NAME;
+                tableName = DatabaseContract.BookmarkedKidEntry.TABLE_NAME;
                 break;
             case BOOKMARKED_PART:
-                tableName = HackerNewsContract.BookmarkedPartEntry.TABLE_NAME;
+                tableName = DatabaseContract.BookmarkedPartEntry.TABLE_NAME;
                 break;
             case USER:
-                tableName = HackerNewsContract.UserEntry.TABLE_NAME;
+                tableName = DatabaseContract.UserEntry.TABLE_NAME;
                 break;
             default:
                 return super.bulkInsert(uri, valuesArray);
@@ -194,39 +194,39 @@ public class HackerNewsContentProvider extends ContentProvider {
 
         switch (sUriMatcher.match(uri)) {
             case BOOKMARKED_ITEM:
-                tableName = HackerNewsContract.BookmarkedItemEntry.TABLE_NAME;
+                tableName = DatabaseContract.BookmarkedItemEntry.TABLE_NAME;
                 deleted = db.delete(tableName, selection, selectionArgs);
                 break;
             case BOOKMARKED_ITEM_ID:
                 id = ContentUris.parseId(uri);
-                tableName = HackerNewsContract.BookmarkedItemEntry.TABLE_NAME;
+                tableName = DatabaseContract.BookmarkedItemEntry.TABLE_NAME;
                 deleted = db.delete(tableName, BaseColumns._ID + "=?", new String[]{String.valueOf(id)});
                 break;
             case BOOKMARKED_KID:
-                tableName = HackerNewsContract.BookmarkedKidEntry.TABLE_NAME;
+                tableName = DatabaseContract.BookmarkedKidEntry.TABLE_NAME;
                 deleted = db.delete(tableName, selection, selectionArgs);
                 break;
             case BOOKMARKED_KID_ID:
                 id = ContentUris.parseId(uri);
-                tableName = HackerNewsContract.BookmarkedKidEntry.TABLE_NAME;
+                tableName = DatabaseContract.BookmarkedKidEntry.TABLE_NAME;
                 deleted = db.delete(tableName, BaseColumns._ID + "=?", new String[]{String.valueOf(id)});
                 break;
             case BOOKMARKED_PART:
-                tableName = HackerNewsContract.BookmarkedPartEntry.TABLE_NAME;
+                tableName = DatabaseContract.BookmarkedPartEntry.TABLE_NAME;
                 deleted = db.delete(tableName, selection, selectionArgs);
                 break;
             case BOOKMARKED_PART_ID:
                 id = ContentUris.parseId(uri);
-                tableName = HackerNewsContract.BookmarkedPartEntry.TABLE_NAME;
+                tableName = DatabaseContract.BookmarkedPartEntry.TABLE_NAME;
                 deleted = db.delete(tableName, BaseColumns._ID + "=?", new String[]{String.valueOf(id)});
                 break;
             case USER:
-                tableName = HackerNewsContract.UserEntry.TABLE_NAME;
+                tableName = DatabaseContract.UserEntry.TABLE_NAME;
                 deleted = db.delete(tableName, selection, selectionArgs);
                 break;
             case USER_ID:
                 id = ContentUris.parseId(uri);
-                tableName = HackerNewsContract.UserEntry.TABLE_NAME;
+                tableName = DatabaseContract.UserEntry.TABLE_NAME;
                 deleted = db.delete(tableName, BaseColumns._ID + "=?", new String[]{String.valueOf(id)});
                 break;
             default:
@@ -254,16 +254,16 @@ public class HackerNewsContentProvider extends ContentProvider {
 
         switch (sUriMatcher.match(uri)) {
             case BOOKMARKED_ITEM_ID:
-                tableName = HackerNewsContract.BookmarkedItemEntry.TABLE_NAME;
+                tableName = DatabaseContract.BookmarkedItemEntry.TABLE_NAME;
                 break;
             case BOOKMARKED_KID_ID:
-                tableName = HackerNewsContract.BookmarkedKidEntry.TABLE_NAME;
+                tableName = DatabaseContract.BookmarkedKidEntry.TABLE_NAME;
                 break;
             case BOOKMARKED_PART_ID:
-                tableName = HackerNewsContract.BookmarkedPartEntry.TABLE_NAME;
+                tableName = DatabaseContract.BookmarkedPartEntry.TABLE_NAME;
                 break;
             case USER_ID:
-                tableName = HackerNewsContract.UserEntry.TABLE_NAME;
+                tableName = DatabaseContract.UserEntry.TABLE_NAME;
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -284,36 +284,36 @@ public class HackerNewsContentProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case BOOKMARKED_ITEM:
                 return TYPE_DIRECTORY + "/" +
-                        HackerNewsContract.AUTHORITY + "/" +
-                        HackerNewsContract.PATH_BOOKMARKED_ITEMS;
+                        DatabaseContract.AUTHORITY + "/" +
+                        DatabaseContract.PATH_BOOKMARKED_ITEMS;
             case BOOKMARKED_ITEM_ID:
                 return TYPE_ITEM + "/" +
-                        HackerNewsContract.AUTHORITY + "/" +
-                        HackerNewsContract.PATH_BOOKMARKED_ITEMS;
+                        DatabaseContract.AUTHORITY + "/" +
+                        DatabaseContract.PATH_BOOKMARKED_ITEMS;
             case BOOKMARKED_KID:
                 return TYPE_DIRECTORY + "/" +
-                        HackerNewsContract.AUTHORITY + "/" +
-                        HackerNewsContract.PATH_BOOKMARKED_KIDS;
+                        DatabaseContract.AUTHORITY + "/" +
+                        DatabaseContract.PATH_BOOKMARKED_KIDS;
             case BOOKMARKED_KID_ID:
                 return TYPE_ITEM + "/" +
-                        HackerNewsContract.AUTHORITY + "/" +
-                        HackerNewsContract.PATH_BOOKMARKED_KIDS;
+                        DatabaseContract.AUTHORITY + "/" +
+                        DatabaseContract.PATH_BOOKMARKED_KIDS;
             case BOOKMARKED_PART:
                 return TYPE_DIRECTORY + "/" +
-                        HackerNewsContract.AUTHORITY + "/" +
-                        HackerNewsContract.PATH_BOOKMARKED_PARTS;
+                        DatabaseContract.AUTHORITY + "/" +
+                        DatabaseContract.PATH_BOOKMARKED_PARTS;
             case BOOKMARKED_PART_ID:
                 return TYPE_ITEM + "/" +
-                        HackerNewsContract.AUTHORITY + "/" +
-                        HackerNewsContract.PATH_BOOKMARKED_PARTS;
+                        DatabaseContract.AUTHORITY + "/" +
+                        DatabaseContract.PATH_BOOKMARKED_PARTS;
             case USER:
                 return TYPE_DIRECTORY + "/" +
-                        HackerNewsContract.AUTHORITY + "/" +
-                        HackerNewsContract.PATH_USERS;
+                        DatabaseContract.AUTHORITY + "/" +
+                        DatabaseContract.PATH_USERS;
             case USER_ID:
                 return TYPE_ITEM + "/" +
-                        HackerNewsContract.AUTHORITY + "/" +
-                        HackerNewsContract.PATH_USERS;
+                        DatabaseContract.AUTHORITY + "/" +
+                        DatabaseContract.PATH_USERS;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

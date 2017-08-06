@@ -10,7 +10,7 @@ import android.widget.RemoteViewsService;
 
 import co.marcelje.hackernews.R;
 import co.marcelje.hackernews.api.HackerNewsApi;
-import co.marcelje.hackernews.database.HackerNewsDao;
+import co.marcelje.hackernews.database.DatabaseDao;
 import co.marcelje.hackernews.loader.HackerNewsResponse;
 import co.marcelje.hackernews.model.Item;
 import co.marcelje.hackernews.screen.news.item.BaseItemActivity;
@@ -67,7 +67,7 @@ public class NewsWidgetItemService extends RemoteViewsService {
             int newsCount = NewsWidgetStorage.loadNewsCount(getApplicationContext(), mAppWidgetId);
 
             if (getString(R.string.settings_type_option_bookmarked).equals(newsType)) {
-                mItems = HackerNewsDao.getItems(getApplicationContext());
+                mItems = DatabaseDao.getItems(getApplicationContext());
                 return;
             }
 

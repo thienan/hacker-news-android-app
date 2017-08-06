@@ -19,6 +19,7 @@
         <activity android:name=".activity.WebToolbarActivity" />
         <activity android:name=".activity.FragmentActivity" />
         <activity android:name=".screen.news.item.BaseItemActivity" />
+
         <activity
             android:name=".screen.news.NewsActivity"
             android:launchMode="singleTop"
@@ -29,6 +30,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".screen.news.item.StoryActivity"
             android:launchMode="singleTop"
@@ -38,6 +40,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="co.marcelje.hackernews.screen.news.NewsActivity" />
         </activity>
+
         <activity
             android:name=".screen.news.item.CommentActivity"
             android:parentActivityName=".screen.news.item.StoryActivity"
@@ -46,6 +49,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="co.marcelje.hackernews.screen.news.item.StoryActivity" />
         </activity>
+
         <activity
             android:name=".screen.news.item.text.DetailsTextActivity"
             android:label="@string/title_activity_details_text"
@@ -55,6 +59,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="co.marcelje.hackernews.screen.news.item.BaseItemActivity" />
         </activity>
+
         <activity
             android:name=".screen.user.UserActivity"
             android:parentActivityName=".screen.news.NewsActivity"
@@ -63,9 +68,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="co.marcelje.hackernews.screen.news.NewsActivity" />
         </activity>
+
         <activity
             android:name=".screen.web.WebActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".screen.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
@@ -75,6 +82,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="co.marcelje.hackernews.screen.news.NewsActivity" />
         </activity>
+
         <activity
             android:name=".screen.about.AboutActivity"
             android:label="@string/title_activity_about"
@@ -85,14 +93,18 @@
                 android:value="co.marcelje.hackernews.screen.news.NewsActivity" />
         </activity>
 
+        <activity
+            android:name=".widget.NewsWidgetConfigureActivity"
+            android:label="@string/title_activity_news_widget_configure"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
         <receiver
             android:name=".receiver.CopyReceiver"
             android:exported="false" />
-
-        <provider
-            android:name=".database.HackerNewsContentProvider"
-            android:authorities="co.marcelje.hackernews.database.AUTHORITY"
-            android:exported="true" />
 
         <receiver android:name=".widget.NewsWidget">
             <intent-filter>
@@ -104,22 +116,22 @@
                 android:resource="@xml/news_widget_info" />
         </receiver>
 
-        <activity
-            android:name=".widget.NewsWidgetConfigureActivity"
-            android:label="@string/title_activity_news_widget_configure"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
+        <provider
+            android:name=".database.DatabaseContentProvider"
+            android:authorities="co.marcelje.hackernews.database.AUTHORITY"
+            android:exported="true" />
+
+        <service
+            android:name=".database.DatabaseUpdaterService"
+            android:exported="false" />
 
         <service
             android:name=".widget.NewsWidgetUpdaterService"
             android:exported="false" />
+
         <service
             android:name=".widget.NewsWidgetItemService"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
-
 </manifest>

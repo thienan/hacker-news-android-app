@@ -8,7 +8,7 @@ import android.support.v4.content.ContentResolverCompat;
 import android.support.v4.os.CancellationSignal;
 import android.support.v4.os.OperationCanceledException;
 
-import co.marcelje.hackernews.database.HackerNewsContract;
+import co.marcelje.hackernews.database.DatabaseContract;
 import co.marcelje.hackernews.model.Item;
 
 import java.util.List;
@@ -54,16 +54,16 @@ public class BookmarkedItemLoader extends AsyncTaskLoader<HackerNewsResponse<Lis
 
             for (Item item : items) {
                 cursor = ContentResolverCompat.query(getContext().getContentResolver(),
-                        HackerNewsContract.BookmarkedKidEntry.CONTENT_URI, null,
-                        HackerNewsContract.BookmarkedKidEntry.COLUMN_ITEM_ID + "=?",
+                        DatabaseContract.BookmarkedKidEntry.CONTENT_URI, null,
+                        DatabaseContract.BookmarkedKidEntry.COLUMN_ITEM_ID + "=?",
                         new String[]{String.valueOf(item.getId())}, null,
                         mCancellationSignal);
 
                 item.setKids(Item.Factory.kidsFromCursor(cursor));
 
                 cursor = ContentResolverCompat.query(getContext().getContentResolver(),
-                        HackerNewsContract.BookmarkedPartEntry.CONTENT_URI, null,
-                        HackerNewsContract.BookmarkedPartEntry.COLUMN_ITEM_ID + "=?",
+                        DatabaseContract.BookmarkedPartEntry.CONTENT_URI, null,
+                        DatabaseContract.BookmarkedPartEntry.COLUMN_ITEM_ID + "=?",
                         new String[]{String.valueOf(item.getId())}, null,
                         mCancellationSignal);
 
@@ -106,7 +106,7 @@ public class BookmarkedItemLoader extends AsyncTaskLoader<HackerNewsResponse<Lis
     public BookmarkedItemLoader(Context context) {
         super(context);
         mObserver = new ForceLoadContentObserver();
-        mUri = HackerNewsContract.BookmarkedItemEntry.CONTENT_URI;
+        mUri = DatabaseContract.BookmarkedItemEntry.CONTENT_URI;
         mProjection = null;
         mSelection = null;
         mSelectionArgs = null;
