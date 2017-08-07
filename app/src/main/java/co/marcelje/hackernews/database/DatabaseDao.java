@@ -8,6 +8,7 @@ import android.provider.BaseColumns;
 
 import co.marcelje.hackernews.model.Item;
 import co.marcelje.hackernews.utils.DatabaseUtils;
+import co.marcelje.hackernews.utils.SettingsUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -115,6 +116,8 @@ public final class DatabaseDao {
     }
 
     public static void insertHistoryItem(Context context, Item item) {
+        if (!SettingsUtils.historyEnabled(context)) return;
+
         ContentValues values = new ContentValues();
         values.put(DatabaseContract.ReadHistoryEntry.COLUMN_ITEM_ID, item.getId());
         values.put(DatabaseContract.ReadHistoryEntry.COLUMN_READ_DATE, System.currentTimeMillis());

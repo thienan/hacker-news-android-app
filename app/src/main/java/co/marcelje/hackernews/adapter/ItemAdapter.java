@@ -13,9 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.marcelje.hackernews.activity.ToolbarActivity;
-import co.marcelje.hackernews.utils.SettingsUtils;
 
 public abstract class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
+
+    protected static final int VIEW_TYPE_NEWS = 1;
+    protected static final int VIEW_TYPE_COMMENT = 2;
+
+    private static final String ITEM_TYPE_COMMENT = "comment";
+    private static final String ITEM_TYPE_STORY = "story";
+    private static final String ITEM_TYPE_POLL = "poll";
+    private static final String ITEM_TYPE_JOB = "job";
 
     private final ToolbarActivity mActivity;
     private final List<Item> mItems;
@@ -40,6 +47,19 @@ public abstract class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemV
     public void onBindViewHolder(ItemViewHolder holder, int position) {
         Item item = getItem(position);
         holder.binding.setVariable(BR.item, item);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        switch (getItem(position).getType()) {
+            case ITEM_TYPE_COMMENT:
+                return VIEW_TYPE_COMMENT;
+            case ITEM_TYPE_STORY:
+            case ITEM_TYPE_JOB:
+            case ITEM_TYPE_POLL:
+            default:
+                return VIEW_TYPE_NEWS;
+        }
     }
 
     @Override
@@ -95,8 +115,14 @@ public abstract class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemV
             Item data = mItems.get(getAdapterPosition());
             BaseItemActivity.startActivity(mActivity, data, mItemParentName, mItemPosterName);
 
-            if (SettingsUtils.historyEnabled(mActivity)) {
-                DatabaseDao.insertHistoryItem(mActivity, data);
+            switch (data.getType()) {
+                case ITEM_TYPE_STORY:
+                case ITEM_TYPE_POLL:
+                case ITEM_TYPE_JOB:
+                    DatabaseDao.insertHistoryItem(mActivity, data);
+                    break;
+                default:
+                    //do nothing
             }
         }
     }

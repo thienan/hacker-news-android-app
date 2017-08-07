@@ -13,14 +13,6 @@ import co.marcelje.hackernews.handlers.ItemTextClickHandlers;
 
 class SubmissionAdapter extends ItemAdapter {
 
-    private static final int VIEW_TYPE_NEWS = 1;
-    private static final int VIEW_TYPE_COMMENT = 2;
-
-    private static final String ITEM_TYPE_COMMENT = "comment";
-    private static final String ITEM_TYPE_STORY = "story";
-    private static final String ITEM_TYPE_POLL = "poll";
-    private static final String ITEM_TYPE_JOB = "job";
-
     public SubmissionAdapter(ToolbarActivity mActivity) {
         super(mActivity);
     }
@@ -43,19 +35,6 @@ class SubmissionAdapter extends ItemAdapter {
                 return new ItemViewHolder(commentBinding, true);
             default:
                 return null;
-        }
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        switch (getItem(position).getType()) {
-            case ITEM_TYPE_COMMENT:
-                return VIEW_TYPE_COMMENT;
-            case ITEM_TYPE_STORY:
-            case ITEM_TYPE_JOB:
-            case ITEM_TYPE_POLL:
-            default:
-                return VIEW_TYPE_NEWS;
         }
     }
 }
