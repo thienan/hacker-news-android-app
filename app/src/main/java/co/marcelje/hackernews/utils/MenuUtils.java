@@ -43,11 +43,4 @@ public final class MenuUtils {
 
         context.startActivity(chooserIntent);
     }
-
-    public static void whitenMenuItemIcon(Context context, Menu menu, int menuItemId) {
-        Drawable drawable = menu.findItem(menuItemId).getIcon();
-        drawable = DrawableCompat.wrap(drawable);
-        DrawableCompat.setTint(drawable, ContextCompat.getColor(context, android.R.color.white));
-        menu.findItem(menuItemId).setIcon(drawable);
-    }
 }

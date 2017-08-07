@@ -81,8 +81,6 @@ public class NewsWidgetConfigureActivity extends ToolbarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_widget_news_configure, menu);
-        MenuUtils.whitenMenuItemIcon(this, menu, R.id.action_next);
-
         return true;
     }
 
