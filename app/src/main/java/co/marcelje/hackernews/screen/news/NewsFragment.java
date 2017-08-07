@@ -16,6 +16,7 @@ import co.marcelje.hackernews.databinding.FragmentNewsBinding;
 import co.marcelje.hackernews.factory.SnackbarFactory;
 import co.marcelje.hackernews.loader.BookmarkedItemLoader;
 import co.marcelje.hackernews.loader.HackerNewsResponse;
+import co.marcelje.hackernews.loader.HistoryLoader;
 import co.marcelje.hackernews.loader.ItemListLoader;
 import co.marcelje.hackernews.loader.StoriesLoader;
 import co.marcelje.hackernews.model.Item;
@@ -29,7 +30,7 @@ import org.parceler.Parcels;
 import java.util.List;
 
 public class NewsFragment extends ToolbarFragment
-        implements LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> {
+        implements LoaderManager.LoaderCallbacks {
 
     private static final String STATE_NEWS_TYPE = "co.marcelje.hackernews.screen.news.state.NEWS_TYPE";
     private static final String STATE_NEWS_DATA_IDS = "co.marcelje.hackernews.screen.news.state.NEWS_DATA_IDS";
@@ -43,6 +44,7 @@ public class NewsFragment extends ToolbarFragment
     private static final int LOADER_ID_STORIES_SHOW = 540;
     private static final int LOADER_ID_STORIES_ASK = 550;
     private static final int LOADER_ID_STORIES_JOB = 560;
+    private static final int LOADER_ID_HISTORY = 570;
 
     private static final int LOADER_ID_STORIES_TOP_ITEM = 610;
     private static final int LOADER_ID_STORIES_BEST_ITEM = 620;
@@ -50,7 +52,8 @@ public class NewsFragment extends ToolbarFragment
     private static final int LOADER_ID_STORIES_SHOW_ITEM = 640;
     private static final int LOADER_ID_STORIES_ASK_ITEM = 650;
     private static final int LOADER_ID_STORIES_JOB_ITEM = 660;
-    private static final int LOADER_ID_BOOKMARKED_ITEM = 700;
+    private static final int LOADER_ID_HISTORY_ITEM = 670;
+    private static final int LOADER_ID_BOOKMARKED_ITEM = 680;
 
     private static final int ITEM_COUNT = 10;
 
@@ -120,19 +123,24 @@ public class NewsFragment extends ToolbarFragment
     }
 
     @Override
-    public Loader<HackerNewsResponse<List<Item>>> onCreateLoader(int id, Bundle args) {
+    public Loader onCreateLoader(int id, Bundle args) {
         switch (id) {
+            case LOADER_ID_STORIES_TOP:
+            case LOADER_ID_STORIES_BEST:
+            case LOADER_ID_STORIES_NEW:
+            case LOADER_ID_STORIES_SHOW:
+            case LOADER_ID_STORIES_ASK:
+            case LOADER_ID_STORIES_JOB:
+                return new StoriesLoader(getContext(), mNewsType);
+            case LOADER_ID_HISTORY:
+                return new HistoryLoader(getContext());
             case LOADER_ID_STORIES_TOP_ITEM:
-                //fall through
             case LOADER_ID_STORIES_BEST_ITEM:
-                //fall through
             case LOADER_ID_STORIES_NEW_ITEM:
-                //fall through
             case LOADER_ID_STORIES_SHOW_ITEM:
-                //fall through
             case LOADER_ID_STORIES_ASK_ITEM:
-                //fall through
             case LOADER_ID_STORIES_JOB_ITEM:
+            case LOADER_ID_HISTORY_ITEM:
                 List<Long> list = CollectionUtils.subList(mItemIds,
                         (mCurrentPage - 1) * ITEM_COUNT,
                         mCurrentPage * ITEM_COUNT);
@@ -141,57 +149,100 @@ public class NewsFragment extends ToolbarFragment
 
                 return new ItemListLoader(getContext(), list);
             case LOADER_ID_BOOKMARKED_ITEM:
-                return new BookmarkedItemLoader(getActivity());
+                return new BookmarkedItemLoader(getContext());
             default:
                 return null;
         }
     }
 
     @Override
-    public void onLoadFinished(Loader<HackerNewsResponse<List<Item>>> loader,
-                               HackerNewsResponse<List<Item>> data) {
-        if (data.isSuccessful()) {
-            switch (loader.getId()) {
-                case LOADER_ID_STORIES_TOP_ITEM:
-                    if (getString(R.string.settings_type_option_top).equals(mNewsType)) {
-                        mAdapter.addItems(data.getData());
-                    }
-                    break;
-                case LOADER_ID_STORIES_BEST_ITEM:
-                    if (getString(R.string.settings_type_option_best).equals(mNewsType)) {
-                        mAdapter.addItems(data.getData());
-                    }
-                    break;
-                case LOADER_ID_STORIES_NEW_ITEM:
-                    if (getString(R.string.settings_type_option_new).equals(mNewsType)) {
-                        mAdapter.addItems(data.getData());
-                    }
-                    break;
-                case LOADER_ID_STORIES_SHOW_ITEM:
-                    if (getString(R.string.settings_type_option_show).equals(mNewsType)) {
-                        mAdapter.addItems(data.getData());
-                    }
-                    break;
-                case LOADER_ID_STORIES_ASK_ITEM:
-                    if (getString(R.string.settings_type_option_ask).equals(mNewsType)) {
-                        mAdapter.addItems(data.getData());
-                    }
-                    break;
-                case LOADER_ID_STORIES_JOB_ITEM:
-                    if (getString(R.string.settings_type_option_jobs).equals(mNewsType)) {
-                        mAdapter.addItems(data.getData());
-                    }
-                    break;
-                case LOADER_ID_BOOKMARKED_ITEM:
-                    if (getString(R.string.settings_type_option_bookmarked).equals(mNewsType)) {
-                        mAdapter.swapItems(data.getData());
-                    }
-                    break;
-                default:
-                    //do nothing
-            }
-        } else {
+    public void onLoadFinished(Loader loader,
+                               Object data) {
+        HackerNewsResponse response = (HackerNewsResponse) data;
+
+        if (!response.isSuccessful()) {
             SnackbarFactory.createRetrieveErrorSnackbar(mBinding.rvItemList, (v) -> retrieveNews()).show();
+            return;
+        }
+
+        switch (loader.getId()) {
+            case LOADER_ID_STORIES_TOP:
+                mItemIds = (List<Long>) response.getData();
+                getActivity().getSupportLoaderManager()
+                        .restartLoader(LOADER_ID_STORIES_TOP_ITEM, null, this);
+                return;
+            case LOADER_ID_STORIES_BEST:
+                mItemIds = (List<Long>) response.getData();
+                getActivity().getSupportLoaderManager()
+                        .restartLoader(LOADER_ID_STORIES_BEST_ITEM, null, this);
+                return;
+            case LOADER_ID_STORIES_NEW:
+                mItemIds = (List<Long>) response.getData();
+                getActivity().getSupportLoaderManager()
+                        .restartLoader(LOADER_ID_STORIES_NEW_ITEM, null, this);
+                return;
+            case LOADER_ID_STORIES_SHOW:
+                mItemIds = (List<Long>) response.getData();
+                getActivity().getSupportLoaderManager()
+                        .restartLoader(LOADER_ID_STORIES_SHOW_ITEM, null, this);
+                return;
+            case LOADER_ID_STORIES_ASK:
+                mItemIds = (List<Long>) response.getData();
+                getActivity().getSupportLoaderManager()
+                        .restartLoader(LOADER_ID_STORIES_ASK_ITEM, null, this);
+                return;
+            case LOADER_ID_STORIES_JOB:
+                mItemIds = (List<Long>) response.getData();
+                getActivity().getSupportLoaderManager()
+                        .restartLoader(LOADER_ID_STORIES_JOB_ITEM, null, this);
+                return;
+            case LOADER_ID_HISTORY:
+                mItemIds = (List<Long>) response.getData();
+                getActivity().getSupportLoaderManager()
+                        .restartLoader(LOADER_ID_HISTORY_ITEM, null, this);
+                return;
+            case LOADER_ID_STORIES_TOP_ITEM:
+                if (getString(R.string.settings_type_option_top).equals(mNewsType)) {
+                    mAdapter.addItems((List<Item>) response.getData());
+                }
+                break;
+            case LOADER_ID_STORIES_BEST_ITEM:
+                if (getString(R.string.settings_type_option_best).equals(mNewsType)) {
+                    mAdapter.addItems((List<Item>) response.getData());
+                }
+                break;
+            case LOADER_ID_STORIES_NEW_ITEM:
+                if (getString(R.string.settings_type_option_new).equals(mNewsType)) {
+                    mAdapter.addItems((List<Item>) response.getData());
+                }
+                break;
+            case LOADER_ID_STORIES_SHOW_ITEM:
+                if (getString(R.string.settings_type_option_show).equals(mNewsType)) {
+                    mAdapter.addItems((List<Item>) response.getData());
+                }
+                break;
+            case LOADER_ID_STORIES_ASK_ITEM:
+                if (getString(R.string.settings_type_option_ask).equals(mNewsType)) {
+                    mAdapter.addItems((List<Item>) response.getData());
+                }
+                break;
+            case LOADER_ID_STORIES_JOB_ITEM:
+                if (getString(R.string.settings_type_option_jobs).equals(mNewsType)) {
+                    mAdapter.addItems((List<Item>) response.getData());
+                }
+                break;
+            case LOADER_ID_HISTORY_ITEM:
+                if (getString(R.string.settings_type_option_history).equals(mNewsType)) {
+                    mAdapter.swapItems((List<Item>) response.getData());
+                }
+                break;
+            case LOADER_ID_BOOKMARKED_ITEM:
+                if (getString(R.string.settings_type_option_bookmarked).equals(mNewsType)) {
+                    mAdapter.swapItems((List<Item>) response.getData());
+                }
+                break;
+            default:
+                //do nothing
         }
 
         mBinding.rvItemList.hideProgressBar();
@@ -199,7 +250,7 @@ public class NewsFragment extends ToolbarFragment
     }
 
     @Override
-    public void onLoaderReset(Loader<HackerNewsResponse<List<Item>>> loader) {
+    public void onLoaderReset(Loader loader) {
 
     }
 
@@ -242,96 +293,24 @@ public class NewsFragment extends ToolbarFragment
         LoaderManager loaderManager = getActivity().getSupportLoaderManager();
 
         if (getString(R.string.settings_type_option_top).equals(mNewsType)) {
-            loaderManager.restartLoader(LOADER_ID_STORIES_TOP, null, getStoriesCallback());
+            loaderManager.restartLoader(LOADER_ID_STORIES_TOP, null, this);
         } else if (getString(R.string.settings_type_option_best).equals(mNewsType)) {
-            loaderManager.restartLoader(LOADER_ID_STORIES_BEST, null, getStoriesCallback());
+            loaderManager.restartLoader(LOADER_ID_STORIES_BEST, null, this);
         } else if (getString(R.string.settings_type_option_new).equals(mNewsType)) {
-            loaderManager.restartLoader(LOADER_ID_STORIES_NEW, null, getStoriesCallback());
+            loaderManager.restartLoader(LOADER_ID_STORIES_NEW, null, this);
         } else if (getString(R.string.settings_type_option_show).equals(mNewsType)) {
-            loaderManager.restartLoader(LOADER_ID_STORIES_SHOW, null, getStoriesCallback());
+            loaderManager.restartLoader(LOADER_ID_STORIES_SHOW, null, this);
         } else if (getString(R.string.settings_type_option_ask).equals(mNewsType)) {
-            loaderManager.restartLoader(LOADER_ID_STORIES_ASK, null, getStoriesCallback());
+            loaderManager.restartLoader(LOADER_ID_STORIES_ASK, null, this);
         } else if (getString(R.string.settings_type_option_jobs).equals(mNewsType)) {
-            loaderManager.restartLoader(LOADER_ID_STORIES_JOB, null, getStoriesCallback());
+            loaderManager.restartLoader(LOADER_ID_STORIES_JOB, null, this);
+        } else if (getString(R.string.settings_type_option_history).equals(mNewsType)) {
+            loaderManager.restartLoader(LOADER_ID_HISTORY, null, this);
         } else if (getString(R.string.settings_type_option_bookmarked).equals(mNewsType)) {
             loaderManager.restartLoader(LOADER_ID_BOOKMARKED_ITEM, null, this);
         } else {
             mBinding.rvItemList.hideProgressBar();
             mBinding.srlRefresh.setRefreshing(false);
         }
-    }
-
-    private LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Long>>> getStoriesCallback() {
-        return new LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Long>>>() {
-            @Override
-            public Loader<HackerNewsResponse<List<Long>>> onCreateLoader(int id, Bundle args) {
-                switch (id) {
-                    case LOADER_ID_STORIES_TOP:
-                        //fall through
-                    case LOADER_ID_STORIES_BEST:
-                        //fall through
-                    case LOADER_ID_STORIES_NEW:
-                        //fall through
-                    case LOADER_ID_STORIES_SHOW:
-                        //fall through
-                    case LOADER_ID_STORIES_ASK:
-                        //fall through
-                    case LOADER_ID_STORIES_JOB:
-                        return new StoriesLoader(getContext(), mNewsType);
-                    default:
-                }
-
-                return null;
-            }
-
-            @Override
-            public void onLoadFinished(Loader<HackerNewsResponse<List<Long>>> loader,
-                                       HackerNewsResponse<List<Long>> data) {
-                if (data.isSuccessful()) {
-
-                    int storiesItemId = -1;
-
-                    switch (loader.getId()) {
-                        case LOADER_ID_STORIES_TOP:
-                            storiesItemId = LOADER_ID_STORIES_TOP_ITEM;
-                            break;
-                        case LOADER_ID_STORIES_BEST:
-                            storiesItemId = LOADER_ID_STORIES_BEST_ITEM;
-                            break;
-                        case LOADER_ID_STORIES_NEW:
-                            storiesItemId = LOADER_ID_STORIES_NEW_ITEM;
-                            break;
-                        case LOADER_ID_STORIES_SHOW:
-                            storiesItemId = LOADER_ID_STORIES_SHOW_ITEM;
-                            break;
-                        case LOADER_ID_STORIES_ASK:
-                            storiesItemId = LOADER_ID_STORIES_ASK_ITEM;
-                            break;
-                        case LOADER_ID_STORIES_JOB:
-                            storiesItemId = LOADER_ID_STORIES_JOB_ITEM;
-                            break;
-                        default:
-                    }
-
-                    if (storiesItemId > 0) {
-                        mItemIds = data.getData();
-                        getActivity().getSupportLoaderManager()
-                                .restartLoader(storiesItemId, null, NewsFragment.this);
-                    }
-                } else {
-                    SnackbarFactory
-                            .createRetrieveErrorSnackbar(mBinding.rvItemList,
-                                    (v) -> retrieveNews()).show();
-
-                    mBinding.rvItemList.hideProgressBar();
-                    mBinding.srlRefresh.setRefreshing(false);
-                }
-            }
-
-            @Override
-            public void onLoaderReset(Loader<HackerNewsResponse<List<Long>>> loader) {
-
-            }
-        };
     }
 }

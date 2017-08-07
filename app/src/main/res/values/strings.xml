@@ -47,6 +47,7 @@
     <string name="settings_type_option_ask">Ask</string>
     <string name="settings_type_option_jobs">Jobs</string>
     <string name="settings_type_option_bookmarked">Bookmarked</string>
+    <string name="settings_type_option_history">History</string>
 
     <string name="label_details">Details</string>
     <string name="label_comments">Comments</string>

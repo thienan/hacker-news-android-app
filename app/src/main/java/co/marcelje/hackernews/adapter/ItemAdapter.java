@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import co.marcelje.hackernews.BR;
+import co.marcelje.hackernews.database.DatabaseDao;
 import co.marcelje.hackernews.model.Item;
 import co.marcelje.hackernews.screen.news.item.BaseItemActivity;
 
@@ -92,6 +93,7 @@ public abstract class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemV
         public void onClick(View view) {
             Item data = mItems.get(getAdapterPosition());
             BaseItemActivity.startActivity(mActivity, data, mItemParentName, mItemPosterName);
+            DatabaseDao.insertHistoryItem(mActivity, data);
         }
     }
 }

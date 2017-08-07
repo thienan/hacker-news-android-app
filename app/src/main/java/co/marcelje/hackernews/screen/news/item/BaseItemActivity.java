@@ -69,11 +69,8 @@ public class BaseItemActivity extends ToolbarActivity
                 CommentActivity.startActivity(activity, item, itemParentName, itemPosterName);
                 break;
             case ITEM_TYPE_STORY:
-                //fall through
             case ITEM_TYPE_POLL:
-                //fall through
             case ITEM_TYPE_JOB:
-                //fall through
             default:
                 StoryActivity.startActivity(activity, item, itemParentName, itemPosterName);
                 break;

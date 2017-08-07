@@ -26,12 +26,12 @@ public class ItemBookmarkClickHandlers {
         if (view instanceof ImageButton) {
             ImageButton bookmarkButton = (ImageButton) view;
 
-            if (DatabaseDao.isItemAvailable(mActivity, data.getId())) {
-                DatabaseDao.deleteItem(mActivity, data.getId());
+            if (DatabaseDao.isItemBookmarked(mActivity, data.getId())) {
+                DatabaseDao.deleteBookmarkedItem(mActivity, data.getId());
                 SnackbarFactory.createUnbookmarkedSuccessSnackBar(view).show();
                 bookmarkButton.setImageResource(R.drawable.ic_bookmark_border);
             } else {
-                DatabaseDao.insertItem(mActivity, data);
+                DatabaseDao.insertBookmarkedItem(mActivity, data);
                 SnackbarFactory.createBookmarkedSuccessSnackBar(view).show();
                 bookmarkButton.setImageResource(R.drawable.ic_bookmark);
             }

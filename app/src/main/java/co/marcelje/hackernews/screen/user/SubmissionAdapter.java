@@ -52,11 +52,8 @@ class SubmissionAdapter extends ItemAdapter {
             case ITEM_TYPE_COMMENT:
                 return VIEW_TYPE_COMMENT;
             case ITEM_TYPE_STORY:
-                //fall through
             case ITEM_TYPE_JOB:
-                //fall through
             case ITEM_TYPE_POLL:
-                //fall through
             default:
                 return VIEW_TYPE_NEWS;
         }

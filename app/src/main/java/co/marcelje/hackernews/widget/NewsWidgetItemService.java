@@ -67,7 +67,7 @@ public class NewsWidgetItemService extends RemoteViewsService {
             int newsCount = NewsWidgetStorage.loadNewsCount(getApplicationContext(), mAppWidgetId);
 
             if (getString(R.string.settings_type_option_bookmarked).equals(newsType)) {
-                mItems = DatabaseDao.getItems(getApplicationContext());
+                mItems = DatabaseDao.getBookmarkedItems(getApplicationContext());
                 return;
             }
 
@@ -85,6 +85,8 @@ public class NewsWidgetItemService extends RemoteViewsService {
                 itemIds = HackerNewsApi.getInstance().getAskStories();
             } else if (getString(R.string.settings_type_option_jobs).equals(newsType)) {
                 itemIds = HackerNewsApi.getInstance().getJobStories();
+            } else if (getString(R.string.settings_type_option_history).equals(newsType)) {
+                itemIds = HackerNewsResponse.ok(DatabaseDao.getHistory(getApplicationContext()));
             }
 
             mItems = new ArrayList<>();
