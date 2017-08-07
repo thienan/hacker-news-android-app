@@ -40,7 +40,7 @@
     <string name="menu_item_next">Next</string>
 
     <string name="settings_type_key">settings_type</string>
-    <string name="settings_type_title">Default News</string>
+    <string name="settings_type_title">Default news</string>
     <string name="settings_type_option_top">Top</string>
     <string name="settings_type_option_best">Best</string>
     <string name="settings_type_option_new">New</string>
@@ -49,6 +49,11 @@
     <string name="settings_type_option_jobs">Jobs</string>
     <string name="settings_type_option_bookmarked">Bookmarked</string>
     <string name="settings_type_option_history">History</string>
+
+    <string name="settings_history_key">settings_history</string>
+    <string name="settings_history_title">Enable history</string>
+    <string name="settings_history_enabled">Enabled</string>
+    <string name="settings_history_disabled">Disabled</string>
 
     <string name="label_details">Details</string>
     <string name="label_comments">Comments</string>

@@ -6,4 +6,11 @@
         android:entryValues="@array/settings_type_options"
         android:key="@string/settings_type_key"
         android:title="@string/settings_type_title" />
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="@string/settings_history_key"
+        android:summaryOff="@string/settings_history_disabled"
+        android:summaryOn="@string/settings_history_enabled"
+        android:title="@string/settings_history_title" />
 </PreferenceScreen>

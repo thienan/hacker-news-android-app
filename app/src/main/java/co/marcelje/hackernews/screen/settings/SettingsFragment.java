@@ -4,12 +4,13 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.support.v7.preference.ListPreference;
-import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
 import co.marcelje.hackernews.R;
+import co.marcelje.hackernews.database.DatabaseDao;
 
-public class SettingsFragment extends PreferenceFragmentCompat implements OnSharedPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragmentCompat
+        implements OnSharedPreferenceChangeListener {
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
@@ -18,31 +19,38 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnShar
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.settings);
-
-        SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
-        Preference p = findPreference(getString(R.string.settings_type_key));
-        String value = sharedPreferences.getString(p.getKey(), "");
-        setPreferenceSummary(p, value);
+        setPreferenceSummary(getPreferenceScreen().getSharedPreferences(),
+                getString(R.string.settings_type_key));
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Preference preference = findPreference(key);
-        if (null != preference) {
-            if (key.equals(getString(R.string.settings_type_key))) {
-                String value = sharedPreferences.getString(preference.getKey(), "");
-                setPreferenceSummary(preference, value);
+        setPreferenceSummary(sharedPreferences, key);
+
+        if (getString(R.string.settings_history_key).equals(key)) {
+            eraseHistory(sharedPreferences, key);
+        }
+    }
+
+    private void setPreferenceSummary(SharedPreferences sharedPreferences, String key) {
+        if (getString(R.string.settings_type_key).equals(key)) {
+            ListPreference newsTypePreference = (ListPreference) findPreference(key);
+            if (newsTypePreference == null) return;
+
+            String value = sharedPreferences.getString(key, getString(R.string.settings_type_option_top));
+
+            int prefIndex = newsTypePreference.findIndexOfValue(value);
+            if (prefIndex >= 0) {
+                newsTypePreference.setSummary(newsTypePreference.getEntries()[prefIndex]);
             }
         }
     }
 
-    private void setPreferenceSummary(Preference preference, String value) {
-        if (preference instanceof ListPreference) {
-            ListPreference listPreference = (ListPreference) preference;
-            int prefIndex = listPreference.findIndexOfValue(value);
-            if (prefIndex >= 0) {
-                listPreference.setSummary(listPreference.getEntries()[prefIndex]);
-            }
+    private void eraseHistory(SharedPreferences sharedPreferences, String key) {
+        boolean enableHistory = sharedPreferences.getBoolean(key, true);
+
+        if (!enableHistory) {
+            DatabaseDao.deleteAllHistoryItem(getContext());
         }
     }
 

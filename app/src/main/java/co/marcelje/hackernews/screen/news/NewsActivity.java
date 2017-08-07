@@ -2,7 +2,9 @@ package co.marcelje.hackernews.screen.news;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,8 +21,10 @@ import co.marcelje.hackernews.factory.SpinnerFactory;
 import co.marcelje.hackernews.screen.about.AboutActivity;
 import co.marcelje.hackernews.screen.settings.SettingsActivity;
 import co.marcelje.hackernews.utils.SettingsUtils;
+import timber.log.Timber;
 
-public class NewsActivity extends FragmentActivity<NewsFragment> implements AdapterView.OnItemSelectedListener {
+public class NewsActivity extends FragmentActivity<NewsFragment>
+        implements AdapterView.OnItemSelectedListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String EXTRA_NEWS_TYPE = "co.marcelje.hackernews.screen.news.extra.NEWS_TYPE";
 
@@ -51,6 +55,17 @@ public class NewsActivity extends FragmentActivity<NewsFragment> implements Adap
             isNewState = true;
             setFragment(NewsFragment.newInstance());
         }
+
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(this);
+
+        super.onDestroy();
     }
 
     @Override
@@ -121,6 +136,20 @@ public class NewsActivity extends FragmentActivity<NewsFragment> implements Adap
         //do nothing
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (getString(R.string.settings_history_key).equals(key)) {
+            Spinner spinner = (Spinner) findViewById(R.id.spinner_news_type);
+            ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) spinner.getAdapter();
+
+            if (SettingsUtils.historyEnabled(this)) {
+                adapter.add(getString(R.string.settings_type_option_history));
+            } else {
+                adapter.remove(getString(R.string.settings_type_option_history));
+            }
+        }
+    }
+
     private static Bundle createExtras(String newsType) {
         Bundle extras = new Bundle();
         extras.putString(EXTRA_NEWS_TYPE, newsType);
@@ -137,7 +166,7 @@ public class NewsActivity extends FragmentActivity<NewsFragment> implements Adap
     }
 
     private void attachSpinner(Bundle savedInstanceState) {
-        Spinner spinner = SpinnerFactory.createSpinner(this, this);
+        Spinner spinner = SpinnerFactory.createNewsTypeSpinner(this, this);
         spinner.setId(R.id.spinner_news_type);
 
         if (savedInstanceState == null) {

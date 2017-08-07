@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.marcelje.hackernews.activity.ToolbarActivity;
+import co.marcelje.hackernews.utils.SettingsUtils;
 
 public abstract class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
@@ -93,7 +94,10 @@ public abstract class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemV
         public void onClick(View view) {
             Item data = mItems.get(getAdapterPosition());
             BaseItemActivity.startActivity(mActivity, data, mItemParentName, mItemPosterName);
-            DatabaseDao.insertHistoryItem(mActivity, data);
+
+            if (SettingsUtils.historyEnabled(mActivity)) {
+                DatabaseDao.insertHistoryItem(mActivity, data);
+            }
         }
     }
 }

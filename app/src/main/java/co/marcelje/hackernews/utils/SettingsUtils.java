@@ -17,4 +17,9 @@ public final class SettingsUtils {
                 context.getString(R.string.settings_type_option_top));
     }
 
+    public static boolean historyEnabled(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return sharedPreferences.getBoolean(context.getString(R.string.settings_history_key), true);
+    }
+
 }
