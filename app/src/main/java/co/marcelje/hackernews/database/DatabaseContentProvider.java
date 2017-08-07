@@ -24,8 +24,6 @@ public class DatabaseContentProvider extends ContentProvider {
     private static final int BOOKMARKED_PART_ID = 301;
     private static final int READ_HISTORY = 400;
     private static final int READ_HISTORY_ID = 401;
-    private static final int USER = 500;
-    private static final int USER_ID = 501;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
@@ -39,8 +37,6 @@ public class DatabaseContentProvider extends ContentProvider {
         uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_BOOKMARKED_PARTS + "/#", BOOKMARKED_PART_ID);
         uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_READ_HISTORY, READ_HISTORY);
         uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_READ_HISTORY + "/#", READ_HISTORY_ID);
-        uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_USERS, USER);
-        uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_USERS + "/#", USER_ID);
 
         return uriMatcher;
     }
@@ -77,9 +73,6 @@ public class DatabaseContentProvider extends ContentProvider {
                 break;
             case READ_HISTORY:
                 tableName = DatabaseContract.ReadHistoryEntry.TABLE_NAME;
-                break;
-            case USER:
-                tableName = DatabaseContract.UserEntry.TABLE_NAME;
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -128,10 +121,6 @@ public class DatabaseContentProvider extends ContentProvider {
                 tableName = DatabaseContract.ReadHistoryEntry.TABLE_NAME;
                 contentUri = DatabaseContract.ReadHistoryEntry.CONTENT_URI;
                 break;
-            case USER:
-                tableName = DatabaseContract.UserEntry.TABLE_NAME;
-                contentUri = DatabaseContract.UserEntry.CONTENT_URI;
-                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -169,9 +158,6 @@ public class DatabaseContentProvider extends ContentProvider {
                 break;
             case READ_HISTORY:
                 tableName = DatabaseContract.ReadHistoryEntry.TABLE_NAME;
-                break;
-            case USER:
-                tableName = DatabaseContract.UserEntry.TABLE_NAME;
                 break;
             default:
                 return super.bulkInsert(uri, valuesArray);
@@ -243,15 +229,6 @@ public class DatabaseContentProvider extends ContentProvider {
                 tableName = DatabaseContract.ReadHistoryEntry.TABLE_NAME;
                 deleted = db.delete(tableName, BaseColumns._ID + "=?", new String[]{String.valueOf(id)});
                 break;
-            case USER:
-                tableName = DatabaseContract.UserEntry.TABLE_NAME;
-                deleted = db.delete(tableName, selection, selectionArgs);
-                break;
-            case USER_ID:
-                id = ContentUris.parseId(uri);
-                tableName = DatabaseContract.UserEntry.TABLE_NAME;
-                deleted = db.delete(tableName, BaseColumns._ID + "=?", new String[]{String.valueOf(id)});
-                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -287,9 +264,6 @@ public class DatabaseContentProvider extends ContentProvider {
                 break;
             case READ_HISTORY_ID:
                 tableName = DatabaseContract.ReadHistoryEntry.TABLE_NAME;
-                break;
-            case USER_ID:
-                tableName = DatabaseContract.UserEntry.TABLE_NAME;
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -340,14 +314,6 @@ public class DatabaseContentProvider extends ContentProvider {
                 return TYPE_ITEM + "/" +
                         DatabaseContract.AUTHORITY + "/" +
                         DatabaseContract.PATH_READ_HISTORY;
-            case USER:
-                return TYPE_DIRECTORY + "/" +
-                        DatabaseContract.AUTHORITY + "/" +
-                        DatabaseContract.PATH_USERS;
-            case USER_ID:
-                return TYPE_ITEM + "/" +
-                        DatabaseContract.AUTHORITY + "/" +
-                        DatabaseContract.PATH_USERS;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

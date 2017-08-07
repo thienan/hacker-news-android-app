@@ -43,15 +43,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
             DatabaseContract.ReadHistoryEntry.COLUMN_ITEM_ID + " INTEGER, " +
             DatabaseContract.ReadHistoryEntry.COLUMN_READ_DATE + " INTEGER " + ");";
 
-    private static final String CREATE_USER_TABLE = "CREATE TABLE "
-            + DatabaseContract.UserEntry.TABLE_NAME + " (" +
-            DatabaseContract.UserEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            DatabaseContract.UserEntry.COLUMN_USER_ID + " TEXT, " +
-            DatabaseContract.UserEntry.COLUMN_DELAY + " INTEGER, " +
-            DatabaseContract.UserEntry.COLUMN_CREATED + " INTEGER, " +
-            DatabaseContract.UserEntry.COLUMN_KARMA + " INTEGER, " +
-            DatabaseContract.UserEntry.COLUMN_ABOUT + " TEXT " + ");";
-
 
 
     public DatabaseHelper(Context context) {
@@ -64,7 +55,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_BOOKMARKED_KID_TABLE);
         db.execSQL(CREATE_BOOKMARKED_PART_TABLE);
         db.execSQL(CREATE_READ_HISTORY_TABLE);
-        db.execSQL(CREATE_USER_TABLE);
     }
 
     @Override
