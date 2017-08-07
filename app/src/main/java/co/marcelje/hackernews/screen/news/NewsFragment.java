@@ -145,8 +145,6 @@ public class NewsFragment extends ToolbarFragment
                         (mCurrentPage - 1) * ITEM_COUNT,
                         mCurrentPage * ITEM_COUNT);
 
-                if (list.size() == 0) return null;
-
                 return new ItemListLoader(getContext(), list);
             case LOADER_ID_BOOKMARKED_ITEM:
                 return new BookmarkedItemLoader(getContext());

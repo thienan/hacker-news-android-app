@@ -1,8 +1,5 @@
 package co.marcelje.hackernews.api;
 
-import android.app.Activity;
-import android.app.Application;
-
 import co.marcelje.hackernews.HackerNewsApplication;
 import co.marcelje.hackernews.loader.HackerNewsResponse;
 import co.marcelje.hackernews.model.Item;

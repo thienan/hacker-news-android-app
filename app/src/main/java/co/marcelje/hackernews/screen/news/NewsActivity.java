@@ -14,6 +14,7 @@ import android.widget.Spinner;
 
 import co.marcelje.hackernews.R;
 import co.marcelje.hackernews.activity.FragmentActivity;
+import co.marcelje.hackernews.database.DatabaseDao;
 import co.marcelje.hackernews.factory.SpinnerFactory;
 import co.marcelje.hackernews.screen.about.AboutActivity;
 import co.marcelje.hackernews.screen.settings.SettingsActivity;
@@ -72,8 +73,23 @@ public class NewsActivity extends FragmentActivity<NewsFragment> implements Adap
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (getString(R.string.settings_type_option_history).equals(mNewsType)) {
+            menu.findItem(R.id.action_clear_history).setVisible(true);
+        } else {
+            menu.findItem(R.id.action_clear_history).setVisible(false);
+        }
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
+            case R.id.action_clear_history:
+                DatabaseDao.deleteAllHistoryItem(this);
+                getFragment().refresh();
+                return true;
             case R.id.action_refresh:
                 getFragment().refresh();
                 return true;
@@ -96,6 +112,7 @@ public class NewsActivity extends FragmentActivity<NewsFragment> implements Adap
             mNewsType = parent.getSelectedItem().toString();
             String type = (String) parent.getItemAtPosition(pos);
             getFragment().changeNewsType(type);
+            supportInvalidateOptionsMenu();
         }
     }
 

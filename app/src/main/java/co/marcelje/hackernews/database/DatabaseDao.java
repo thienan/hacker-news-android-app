@@ -6,7 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 
-import co.marcelje.hackernews.loader.HackerNewsResponse;
 import co.marcelje.hackernews.model.Item;
 import co.marcelje.hackernews.utils.DatabaseUtils;
 
@@ -83,9 +82,7 @@ public final class DatabaseDao {
             mItemIds.add(DatabaseUtils.getLong(cursor, DatabaseContract.ReadHistoryEntry.COLUMN_ITEM_ID));
         }
 
-        if (cursor != null) {
-            cursor.close();
-        }
+        cursor.close();
 
         return mItemIds;
     }
@@ -124,5 +121,10 @@ public final class DatabaseDao {
 
         DatabaseUpdaterService.startActionInsert(context,
                 DatabaseContract.ReadHistoryEntry.CONTENT_URI, values);
+    }
+
+    public static void deleteAllHistoryItem(Context context) {
+        DatabaseUpdaterService.startActionDelete(context,
+                DatabaseContract.ReadHistoryEntry.CONTENT_URI, null, null);
     }
 }

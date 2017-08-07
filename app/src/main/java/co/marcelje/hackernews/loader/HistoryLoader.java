@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.marcelje.hackernews.database.DatabaseContract;
-import co.marcelje.hackernews.model.Item;
 import co.marcelje.hackernews.utils.DatabaseUtils;
 
 @SuppressWarnings("unused")
