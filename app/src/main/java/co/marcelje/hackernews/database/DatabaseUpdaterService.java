@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.parceler.Parcels;
+
 import co.marcelje.hackernews.utils.ParcelUtils;
 import timber.log.Timber;
 
@@ -17,6 +19,7 @@ public class DatabaseUpdaterService extends IntentService {
     private static final String ACTION_BULK_INSERT = "co.marcelje.hackernews.database.action.BULK_INSERT";
     private static final String ACTION_DELETE = "co.marcelje.hackernews.database.action.DELETE";
 
+    private static final String EXTRA_LISTENER = "co.marcelje.hackernews.database.extra.LISTENER";
     private static final String EXTRA_VALUES = "co.marcelje.hackernews.database.extra.VALUES";
     private static final String EXTRA_WHERE = "co.marcelje.hackernews.database.extra.WHERE";
     private static final String EXTRA_ARGS = "co.marcelje.hackernews.database.extra.ARGS";

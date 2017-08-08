@@ -56,7 +56,7 @@ public class HistoryLoader extends AsyncTaskLoader<HackerNewsResponse<List<Long>
             if (cursor == null) return HackerNewsResponse.ok(mItemIds);
 
             while (cursor.moveToNext()) {
-                mItemIds.add(DatabaseUtils.getLong(cursor, DatabaseContract.ReadHistoryEntry.COLUMN_ITEM_ID));
+                mItemIds.add(DatabaseUtils.getLong(cursor, DatabaseContract.ItemHistoryEntry.COLUMN_ITEM_ID));
             }
 
             return HackerNewsResponse.ok(mItemIds);
@@ -95,7 +95,7 @@ public class HistoryLoader extends AsyncTaskLoader<HackerNewsResponse<List<Long>
     public HistoryLoader(Context context) {
         super(context);
         mObserver = new ForceLoadContentObserver();
-        mUri = DatabaseContract.ReadHistoryEntry.CONTENT_URI;
+        mUri = DatabaseContract.ItemHistoryEntry.CONTENT_URI;
         mProjection = null;
         mSelection = null;
         mSelectionArgs = null;

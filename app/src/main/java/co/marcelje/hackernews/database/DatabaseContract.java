@@ -12,7 +12,8 @@ public final class DatabaseContract {
     public static final String PATH_BOOKMARKED_ITEMS = "bookmarked_items";
     public static final String PATH_BOOKMARKED_KIDS = "bookmarked_kids";
     public static final String PATH_BOOKMARKED_PARTS = "bookmarked_parts";
-    public static final String PATH_READ_HISTORY = "read_history";
+    public static final String PATH_ITEM_HISTORY = "item_history";
+    public static final String PATH_ITEM_READ = "item_read";
 
     public static final class BookmarkedItemEntry implements BaseColumns {
         public static final Uri CONTENT_URI =
@@ -54,13 +55,20 @@ public final class DatabaseContract {
         public static final String COLUMN_PART_ID = "part_id";
     }
 
-    public static final class ReadHistoryEntry implements BaseColumns {
+    public static final class ItemHistoryEntry implements BaseColumns {
         public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_READ_HISTORY).build();
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_ITEM_HISTORY).build();
 
-        public static final String TABLE_NAME = PATH_READ_HISTORY;
+        public static final String TABLE_NAME = PATH_ITEM_HISTORY;
 
         public static final String COLUMN_ITEM_ID = "item_id";
         public static final String COLUMN_READ_DATE = "read_date";
+    }
+
+    public static final class ItemReadEntry implements BaseColumns {
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_ITEM_READ).build();
+
+        public static final String TABLE_NAME = PATH_ITEM_READ;
     }
 }

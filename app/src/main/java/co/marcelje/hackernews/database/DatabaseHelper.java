@@ -37,12 +37,15 @@ class DatabaseHelper extends SQLiteOpenHelper {
             DatabaseContract.BookmarkedPartEntry.COLUMN_ITEM_ID + " INTEGER, " +
             DatabaseContract.BookmarkedPartEntry.COLUMN_PART_ID + " INTEGER " + ");";
 
-    private static final String CREATE_READ_HISTORY_TABLE = "CREATE TABLE "
-            + DatabaseContract.ReadHistoryEntry.TABLE_NAME + " (" +
-            DatabaseContract.ReadHistoryEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            DatabaseContract.ReadHistoryEntry.COLUMN_ITEM_ID + " INTEGER, " +
-            DatabaseContract.ReadHistoryEntry.COLUMN_READ_DATE + " INTEGER " + ");";
+    private static final String CREATE_ITEM_HISTORY_TABLE = "CREATE TABLE "
+            + DatabaseContract.ItemHistoryEntry.TABLE_NAME + " (" +
+            DatabaseContract.ItemHistoryEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            DatabaseContract.ItemHistoryEntry.COLUMN_ITEM_ID + " INTEGER, " +
+            DatabaseContract.ItemHistoryEntry.COLUMN_READ_DATE + " INTEGER " + ");";
 
+    private static final String CREATE_ITEM_READ_TABLE = "CREATE TABLE "
+            + DatabaseContract.ItemReadEntry.TABLE_NAME + " (" +
+            DatabaseContract.ItemReadEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT " + ");";
 
 
     public DatabaseHelper(Context context) {
@@ -54,7 +57,8 @@ class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_BOOKMARKED_ITEM_TABLE);
         db.execSQL(CREATE_BOOKMARKED_KID_TABLE);
         db.execSQL(CREATE_BOOKMARKED_PART_TABLE);
-        db.execSQL(CREATE_READ_HISTORY_TABLE);
+        db.execSQL(CREATE_ITEM_HISTORY_TABLE);
+        db.execSQL(CREATE_ITEM_READ_TABLE);
     }
 
     @Override

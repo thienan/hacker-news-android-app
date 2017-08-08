@@ -25,6 +25,7 @@ class SubmissionAdapter extends ItemAdapter {
             case VIEW_TYPE_NEWS:
                 ItemNewsBinding newsBinding = ItemNewsBinding.inflate(inflater, parent, false);
                 newsBinding.setActivity(getActivity());
+                newsBinding.setShowReadIndicator(true);
                 newsBinding.setItemTextClickHandlers(new ItemTextClickHandlers(getActivity()));
                 newsBinding.setItemBookmarkClickHandlers(new ItemBookmarkClickHandlers(getActivity()));
                 return new ItemViewHolder(newsBinding, true);

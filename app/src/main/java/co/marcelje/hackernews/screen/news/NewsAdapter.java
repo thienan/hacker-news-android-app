@@ -21,6 +21,7 @@ class NewsAdapter extends ItemAdapter {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         ItemNewsBinding binding = ItemNewsBinding.inflate(inflater, parent, false);
         binding.setActivity(getActivity());
+        binding.setShowReadIndicator(true);
         binding.setItemUserClickHandlers(new ItemUserClickHandlers(getActivity()));
         binding.setItemTextClickHandlers(new ItemTextClickHandlers(getActivity()));
         binding.setItemBookmarkClickHandlers(new ItemBookmarkClickHandlers(getActivity()));

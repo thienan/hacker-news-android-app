@@ -86,7 +86,7 @@ public class NewsWidgetItemService extends RemoteViewsService {
             } else if (getString(R.string.settings_type_option_jobs).equals(newsType)) {
                 itemIds = HackerNewsApi.getInstance().getJobStories();
             } else if (getString(R.string.settings_type_option_history).equals(newsType)) {
-                itemIds = HackerNewsResponse.ok(DatabaseDao.getHistory(getApplicationContext()));
+                itemIds = HackerNewsResponse.ok(DatabaseDao.getHistoryItems(getApplicationContext()));
             }
 
             mItems = new ArrayList<>();

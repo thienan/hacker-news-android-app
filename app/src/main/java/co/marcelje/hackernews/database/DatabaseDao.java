@@ -69,25 +69,6 @@ public final class DatabaseDao {
         return items;
     }
 
-    public static List<Long> getHistory(Context context) {
-        if (context == null) return Collections.emptyList();
-
-        Cursor cursor = context.getContentResolver()
-                .query(DatabaseContract.ReadHistoryEntry.CONTENT_URI,
-                        null, null, null, BaseColumns._ID + " DESC");
-
-        List<Long> mItemIds = new ArrayList<>();
-        if (cursor == null) return mItemIds;
-
-        while (cursor.moveToNext()) {
-            mItemIds.add(DatabaseUtils.getLong(cursor, DatabaseContract.ReadHistoryEntry.COLUMN_ITEM_ID));
-        }
-
-        cursor.close();
-
-        return mItemIds;
-    }
-
     public static void deleteBookmarkedItem(Context context, long itemId) {
         DatabaseUpdaterService.startActionDelete(context,
                 DatabaseContract.BookmarkedKidEntry.CONTENT_URI,
@@ -115,19 +96,70 @@ public final class DatabaseDao {
                 DatabaseContract.BookmarkedItemEntry.CONTENT_URI, Item.Factory.toValues(item));
     }
 
+    public static List<Long> getHistoryItems(Context context) {
+        if (context == null) return Collections.emptyList();
+
+        Cursor cursor = context.getContentResolver()
+                .query(DatabaseContract.ItemHistoryEntry.CONTENT_URI,
+                        null, null, null, BaseColumns._ID + " DESC");
+
+        List<Long> mItemIds = new ArrayList<>();
+        if (cursor == null) return mItemIds;
+
+        while (cursor.moveToNext()) {
+            mItemIds.add(DatabaseUtils.getLong(cursor, DatabaseContract.ItemHistoryEntry.COLUMN_ITEM_ID));
+        }
+
+        cursor.close();
+
+        return mItemIds;
+    }
+
     public static void insertHistoryItem(Context context, Item item) {
         if (!SettingsUtils.historyEnabled(context)) return;
 
         ContentValues values = new ContentValues();
-        values.put(DatabaseContract.ReadHistoryEntry.COLUMN_ITEM_ID, item.getId());
-        values.put(DatabaseContract.ReadHistoryEntry.COLUMN_READ_DATE, System.currentTimeMillis());
+        values.put(DatabaseContract.ItemHistoryEntry.COLUMN_ITEM_ID, item.getId());
+        values.put(DatabaseContract.ItemHistoryEntry.COLUMN_READ_DATE, System.currentTimeMillis());
 
         DatabaseUpdaterService.startActionInsert(context,
-                DatabaseContract.ReadHistoryEntry.CONTENT_URI, values);
+                DatabaseContract.ItemHistoryEntry.CONTENT_URI, values);
     }
 
     public static void deleteAllHistoryItem(Context context) {
         DatabaseUpdaterService.startActionDelete(context,
-                DatabaseContract.ReadHistoryEntry.CONTENT_URI, null, null);
+                DatabaseContract.ItemHistoryEntry.CONTENT_URI, null, null);
+    }
+
+    public static boolean isItemRead(Context context, long itemId) {
+        if (context == null || itemId <= 0) return false;
+
+        Cursor cur = getReadItem(context, itemId);
+        boolean isRead = cur.getCount() > 0;
+        cur.close();
+
+        return isRead;
+    }
+
+    private static Cursor getReadItem(Context context, long itemId) {
+        return context.getContentResolver().query(DatabaseContract.ItemReadEntry.CONTENT_URI,
+                null, BaseColumns._ID + "=?", new String[]{String.valueOf(itemId)}, null);
+    }
+
+    public static void insertReadItem(Context context, Item item) {
+        if (isItemRead(context, item.getId())) return;
+
+        ContentValues values = new ContentValues();
+        values.put(DatabaseContract.ItemReadEntry._ID, item.getId());
+
+        DatabaseUpdaterService.startActionInsert(context,
+                DatabaseContract.ItemReadEntry.CONTENT_URI, values);
+    }
+
+    public static void deleteReadItem(Context context, long itemId) {
+        DatabaseUpdaterService.startActionDelete(context,
+                DatabaseContract.ItemReadEntry.CONTENT_URI,
+                DatabaseContract.ItemReadEntry._ID + "=?",
+                new String[]{String.valueOf(itemId)});
     }
 }

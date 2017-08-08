@@ -22,8 +22,10 @@ public class DatabaseContentProvider extends ContentProvider {
     private static final int BOOKMARKED_KID_ID = 201;
     private static final int BOOKMARKED_PART = 300;
     private static final int BOOKMARKED_PART_ID = 301;
-    private static final int READ_HISTORY = 400;
-    private static final int READ_HISTORY_ID = 401;
+    private static final int ITEM_HISTORY = 400;
+    private static final int ITEM_HISTORY_ID = 401;
+    private static final int ITEM_READ = 500;
+    private static final int ITEM_READ_ID = 501;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
@@ -35,8 +37,10 @@ public class DatabaseContentProvider extends ContentProvider {
         uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_BOOKMARKED_KIDS + "/#", BOOKMARKED_KID_ID);
         uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_BOOKMARKED_PARTS, BOOKMARKED_PART);
         uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_BOOKMARKED_PARTS + "/#", BOOKMARKED_PART_ID);
-        uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_READ_HISTORY, READ_HISTORY);
-        uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_READ_HISTORY + "/#", READ_HISTORY_ID);
+        uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_ITEM_HISTORY, ITEM_HISTORY);
+        uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_ITEM_HISTORY + "/#", ITEM_HISTORY_ID);
+        uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_ITEM_READ, ITEM_READ);
+        uriMatcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_ITEM_READ + "/#", ITEM_READ_ID);
 
         return uriMatcher;
     }
@@ -71,8 +75,11 @@ public class DatabaseContentProvider extends ContentProvider {
             case BOOKMARKED_PART:
                 tableName = DatabaseContract.BookmarkedPartEntry.TABLE_NAME;
                 break;
-            case READ_HISTORY:
-                tableName = DatabaseContract.ReadHistoryEntry.TABLE_NAME;
+            case ITEM_HISTORY:
+                tableName = DatabaseContract.ItemHistoryEntry.TABLE_NAME;
+                break;
+            case ITEM_READ:
+                tableName = DatabaseContract.ItemReadEntry.TABLE_NAME;
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -117,9 +124,13 @@ public class DatabaseContentProvider extends ContentProvider {
                 tableName = DatabaseContract.BookmarkedPartEntry.TABLE_NAME;
                 contentUri = DatabaseContract.BookmarkedPartEntry.CONTENT_URI;
                 break;
-            case READ_HISTORY:
-                tableName = DatabaseContract.ReadHistoryEntry.TABLE_NAME;
-                contentUri = DatabaseContract.ReadHistoryEntry.CONTENT_URI;
+            case ITEM_HISTORY:
+                tableName = DatabaseContract.ItemHistoryEntry.TABLE_NAME;
+                contentUri = DatabaseContract.ItemHistoryEntry.CONTENT_URI;
+                break;
+            case ITEM_READ:
+                tableName = DatabaseContract.ItemReadEntry.TABLE_NAME;
+                contentUri = DatabaseContract.ItemReadEntry.CONTENT_URI;
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -156,8 +167,11 @@ public class DatabaseContentProvider extends ContentProvider {
             case BOOKMARKED_PART:
                 tableName = DatabaseContract.BookmarkedPartEntry.TABLE_NAME;
                 break;
-            case READ_HISTORY:
-                tableName = DatabaseContract.ReadHistoryEntry.TABLE_NAME;
+            case ITEM_HISTORY:
+                tableName = DatabaseContract.ItemHistoryEntry.TABLE_NAME;
+                break;
+            case ITEM_READ:
+                tableName = DatabaseContract.ItemReadEntry.TABLE_NAME;
                 break;
             default:
                 return super.bulkInsert(uri, valuesArray);
@@ -220,13 +234,22 @@ public class DatabaseContentProvider extends ContentProvider {
                 tableName = DatabaseContract.BookmarkedPartEntry.TABLE_NAME;
                 deleted = db.delete(tableName, BaseColumns._ID + "=?", new String[]{String.valueOf(id)});
                 break;
-            case READ_HISTORY:
-                tableName = DatabaseContract.ReadHistoryEntry.TABLE_NAME;
+            case ITEM_HISTORY:
+                tableName = DatabaseContract.ItemHistoryEntry.TABLE_NAME;
                 deleted = db.delete(tableName, selection, selectionArgs);
                 break;
-            case READ_HISTORY_ID:
+            case ITEM_HISTORY_ID:
                 id = ContentUris.parseId(uri);
-                tableName = DatabaseContract.ReadHistoryEntry.TABLE_NAME;
+                tableName = DatabaseContract.ItemHistoryEntry.TABLE_NAME;
+                deleted = db.delete(tableName, BaseColumns._ID + "=?", new String[]{String.valueOf(id)});
+                break;
+            case ITEM_READ:
+                tableName = DatabaseContract.ItemReadEntry.TABLE_NAME;
+                deleted = db.delete(tableName, selection, selectionArgs);
+                break;
+            case ITEM_READ_ID:
+                id = ContentUris.parseId(uri);
+                tableName = DatabaseContract.ItemReadEntry.TABLE_NAME;
                 deleted = db.delete(tableName, BaseColumns._ID + "=?", new String[]{String.valueOf(id)});
                 break;
             default:
@@ -262,8 +285,11 @@ public class DatabaseContentProvider extends ContentProvider {
             case BOOKMARKED_PART_ID:
                 tableName = DatabaseContract.BookmarkedPartEntry.TABLE_NAME;
                 break;
-            case READ_HISTORY_ID:
-                tableName = DatabaseContract.ReadHistoryEntry.TABLE_NAME;
+            case ITEM_HISTORY_ID:
+                tableName = DatabaseContract.ItemHistoryEntry.TABLE_NAME;
+                break;
+            case ITEM_READ_ID:
+                tableName = DatabaseContract.ItemReadEntry.TABLE_NAME;
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -306,14 +332,22 @@ public class DatabaseContentProvider extends ContentProvider {
                 return TYPE_ITEM + "/" +
                         DatabaseContract.AUTHORITY + "/" +
                         DatabaseContract.PATH_BOOKMARKED_PARTS;
-            case READ_HISTORY:
+            case ITEM_HISTORY:
                 return TYPE_DIRECTORY + "/" +
                         DatabaseContract.AUTHORITY + "/" +
-                        DatabaseContract.PATH_READ_HISTORY;
-            case READ_HISTORY_ID:
+                        DatabaseContract.PATH_ITEM_HISTORY;
+            case ITEM_HISTORY_ID:
                 return TYPE_ITEM + "/" +
                         DatabaseContract.AUTHORITY + "/" +
-                        DatabaseContract.PATH_READ_HISTORY;
+                        DatabaseContract.PATH_ITEM_HISTORY;
+            case ITEM_READ:
+                return TYPE_DIRECTORY + "/" +
+                        DatabaseContract.AUTHORITY + "/" +
+                        DatabaseContract.PATH_ITEM_READ;
+            case ITEM_READ_ID:
+                return TYPE_ITEM + "/" +
+                        DatabaseContract.AUTHORITY + "/" +
+                        DatabaseContract.PATH_ITEM_READ;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
