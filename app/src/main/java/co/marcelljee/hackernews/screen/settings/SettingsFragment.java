@@ -27,6 +27,10 @@ public class SettingsFragment extends PreferenceFragmentCompat
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         setPreferenceSummary(sharedPreferences, key);
 
+        if (getString(R.string.settings_read_indicator_key).equals(key)) {
+            eraseReadIndicator(sharedPreferences, key);
+        }
+
         if (getString(R.string.settings_history_key).equals(key)) {
             eraseHistory(sharedPreferences, key);
         }
@@ -43,6 +47,14 @@ public class SettingsFragment extends PreferenceFragmentCompat
             if (prefIndex >= 0) {
                 newsTypePreference.setSummary(newsTypePreference.getEntries()[prefIndex]);
             }
+        }
+    }
+
+    private void eraseReadIndicator(SharedPreferences sharedPreferences, String key) {
+        boolean readIndicatorEnabled = sharedPreferences.getBoolean(key, true);
+
+        if (!readIndicatorEnabled) {
+            DatabaseDao.deleteAllReadIndicatorItem(getContext());
         }
     }
 

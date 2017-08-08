@@ -120,7 +120,7 @@ public abstract class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemV
                 case ITEM_TYPE_POLL:
                 case ITEM_TYPE_JOB:
                     DatabaseDao.insertHistoryItem(mActivity, data);
-                    DatabaseDao.insertReadItem(mActivity, data);
+                    DatabaseDao.insertReadIndicatorItem(mActivity, data);
                     //TODO: find a better way to update the UI
                     notifyItemChanged(getAdapterPosition());
                     break;

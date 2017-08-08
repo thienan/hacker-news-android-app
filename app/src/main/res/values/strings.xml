@@ -50,10 +50,15 @@
     <string name="settings_type_option_bookmarked">Bookmarked</string>
     <string name="settings_type_option_history">History</string>
 
+    <string name="settings_read_indicator_key">settings_read_indicator</string>
+    <string name="settings_read_indicator_title">Enable read indicator</string>
+    <string name="settings_read_indicator_enabled">Read indicator is enabled</string>
+    <string name="settings_read_indicator_disabled">Read indicator is disabled</string>
+
     <string name="settings_history_key">settings_history</string>
     <string name="settings_history_title">Enable history</string>
-    <string name="settings_history_enabled">Enabled</string>
-    <string name="settings_history_disabled">Disabled</string>
+    <string name="settings_history_enabled">History is enabled</string>
+    <string name="settings_history_disabled">History is disabled</string>
 
     <string name="label_details">Details</string>
     <string name="label_comments">Comments</string>

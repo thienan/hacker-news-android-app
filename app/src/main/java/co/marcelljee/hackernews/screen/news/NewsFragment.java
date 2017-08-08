@@ -1,13 +1,17 @@
 package com.marcelljee.hackernews.screen.news;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.marcelljee.hackernews.event.ItemBookmarkEvent;
 import com.marcelljee.hackernews.fragment.ToolbarFragment;
@@ -30,7 +34,7 @@ import org.parceler.Parcels;
 import java.util.List;
 
 public class NewsFragment extends ToolbarFragment
-        implements LoaderManager.LoaderCallbacks {
+        implements LoaderManager.LoaderCallbacks, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String STATE_NEWS_TYPE = "com.marcelljee.hackernews.screen.news.state.NEWS_TYPE";
     private static final String STATE_NEWS_DATA_IDS = "com.marcelljee.hackernews.screen.news.state.NEWS_DATA_IDS";
@@ -96,11 +100,16 @@ public class NewsFragment extends ToolbarFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
+        PreferenceManager.getDefaultSharedPreferences(getContext())
+                .registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
+        PreferenceManager.getDefaultSharedPreferences(getContext())
+                .unregisterOnSharedPreferenceChangeListener(this);
+
         super.onDestroy();
     }
 
@@ -250,6 +259,13 @@ public class NewsFragment extends ToolbarFragment
     @Override
     public void onLoaderReset(Loader loader) {
 
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (getString(R.string.settings_read_indicator_key).equals(key)) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

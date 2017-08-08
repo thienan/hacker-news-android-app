@@ -134,19 +134,21 @@ public final class DatabaseDao {
     public static boolean isItemRead(Context context, long itemId) {
         if (context == null || itemId <= 0) return false;
 
-        Cursor cur = getReadItem(context, itemId);
+        Cursor cur = getReadIndicatorItem(context, itemId);
         boolean isRead = cur.getCount() > 0;
         cur.close();
 
         return isRead;
     }
 
-    private static Cursor getReadItem(Context context, long itemId) {
+    private static Cursor getReadIndicatorItem(Context context, long itemId) {
         return context.getContentResolver().query(DatabaseContract.ItemReadEntry.CONTENT_URI,
                 null, BaseColumns._ID + "=?", new String[]{String.valueOf(itemId)}, null);
     }
 
-    public static void insertReadItem(Context context, Item item) {
+    public static void insertReadIndicatorItem(Context context, Item item) {
+        if (!SettingsUtils.readIndicatorEnabled(context)) return;
+
         if (isItemRead(context, item.getId())) return;
 
         ContentValues values = new ContentValues();
@@ -156,10 +158,15 @@ public final class DatabaseDao {
                 DatabaseContract.ItemReadEntry.CONTENT_URI, values);
     }
 
-    public static void deleteReadItem(Context context, long itemId) {
+    public static void deleteReadIndicatorItem(Context context, long itemId) {
         DatabaseUpdaterService.startActionDelete(context,
                 DatabaseContract.ItemReadEntry.CONTENT_URI,
                 DatabaseContract.ItemReadEntry._ID + "=?",
                 new String[]{String.valueOf(itemId)});
+    }
+
+    public static void deleteAllReadIndicatorItem(Context context) {
+        DatabaseUpdaterService.startActionDelete(context,
+                DatabaseContract.ItemReadEntry.CONTENT_URI, null, null);
     }
 }

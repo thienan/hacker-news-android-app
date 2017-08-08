@@ -9,6 +9,13 @@
 
     <CheckBoxPreference
         android:defaultValue="true"
+        android:key="@string/settings_read_indicator_key"
+        android:summaryOff="@string/settings_read_indicator_disabled"
+        android:summaryOn="@string/settings_read_indicator_enabled"
+        android:title="@string/settings_read_indicator_title" />
+
+    <CheckBoxPreference
+        android:defaultValue="true"
         android:key="@string/settings_history_key"
         android:summaryOff="@string/settings_history_disabled"
         android:summaryOn="@string/settings_history_enabled"

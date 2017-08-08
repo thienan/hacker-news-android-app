@@ -1,14 +1,17 @@
 package com.marcelljee.hackernews.screen.user;
 
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.databinding.FragmentUserBinding;
 import com.marcelljee.hackernews.event.ItemBookmarkEvent;
 import com.marcelljee.hackernews.factory.SnackbarFactory;
@@ -28,7 +31,8 @@ import org.parceler.Parcels;
 import java.util.List;
 
 public class UserFragment extends ToolbarFragment
-        implements LoaderManager.LoaderCallbacks<HackerNewsResponse<User>>, View.OnClickListener {
+        implements LoaderManager.LoaderCallbacks<HackerNewsResponse<User>>,
+        SharedPreferences.OnSharedPreferenceChangeListener, View.OnClickListener {
 
     private static final String ARG_USER_ID = "com.marcelljee.hackernews.screen.user.arg.USER_ID";
 
@@ -61,12 +65,18 @@ public class UserFragment extends ToolbarFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
+        PreferenceManager.getDefaultSharedPreferences(getContext())
+                .registerOnSharedPreferenceChangeListener(this);
+
         extractArguments();
     }
 
     @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
+        PreferenceManager.getDefaultSharedPreferences(getContext())
+                .unregisterOnSharedPreferenceChangeListener(this);
+
         super.onDestroy();
     }
 
@@ -135,6 +145,13 @@ public class UserFragment extends ToolbarFragment
     @Override
     public void onLoaderReset(Loader<HackerNewsResponse<User>> loader) {
 
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (getString(R.string.settings_read_indicator_key).equals(key)) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
