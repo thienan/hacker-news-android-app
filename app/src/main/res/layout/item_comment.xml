@@ -9,19 +9,19 @@
 
         <import type="android.view.View" />
 
-        <import type="co.marcelje.hackernews.utils.ItemUtils" />
+        <import type="com.marcelljee.hackernews.utils.ItemUtils" />
 
         <variable
             name="activity"
-            type="co.marcelje.hackernews.activity.ToolbarActivity" />
+            type="com.marcelljee.hackernews.activity.ToolbarActivity" />
 
         <variable
             name="item"
-            type="co.marcelje.hackernews.model.Item" />
+            type="com.marcelljee.hackernews.model.Item" />
 
         <variable
             name="itemUserClickHandlers"
-            type="co.marcelje.hackernews.handlers.ItemUserClickHandlers" />
+            type="com.marcelljee.hackernews.handlers.ItemUserClickHandlers" />
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -61,7 +61,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
             </LinearLayout>
 
-            <co.marcelje.hackernews.view.LinkifiedTextView
+            <com.marcelljee.hackernews.view.LinkifiedTextView
                 android:id="@+id/tv_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <co.marcelje.hackernews.view.SimpleRecyclerView
+        <com.marcelljee.hackernews.view.SimpleRecyclerView
             android:id="@+id/rv_item_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

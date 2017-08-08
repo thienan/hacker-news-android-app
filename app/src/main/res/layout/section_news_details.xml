@@ -9,15 +9,15 @@
 
         <import type="android.text.TextUtils" />
 
-        <import type="co.marcelje.hackernews.utils.ItemUtils" />
+        <import type="com.marcelljee.hackernews.utils.ItemUtils" />
 
         <variable
             name="itemTextDetailsClickHandlers"
-            type="co.marcelje.hackernews.handlers.ItemTextDetailsClickHandlers" />
+            type="com.marcelljee.hackernews.handlers.ItemTextDetailsClickHandlers" />
 
         <variable
             name="activity"
-            type="co.marcelje.hackernews.activity.ToolbarActivity" />
+            type="com.marcelljee.hackernews.activity.ToolbarActivity" />
 
         <variable
             name="text"

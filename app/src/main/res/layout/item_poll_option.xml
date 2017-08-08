@@ -5,7 +5,7 @@
 
         <variable
             name="item"
-            type="co.marcelje.hackernews.model.Item" />
+            type="com.marcelljee.hackernews.model.Item" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

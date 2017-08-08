@@ -7,11 +7,11 @@
 
         <import type="android.text.TextUtils" />
 
-        <import type="co.marcelje.hackernews.utils.ItemUtils" />
+        <import type="com.marcelljee.hackernews.utils.ItemUtils" />
 
         <variable
             name="user"
-            type="co.marcelje.hackernews.model.User" />
+            type="com.marcelljee.hackernews.model.User" />
     </data>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -119,7 +119,7 @@
                 android:elevation="@dimen/card_elevation"
                 app:cardCornerRadius="@dimen/card_radius">
 
-                <co.marcelje.hackernews.view.SimpleRecyclerView
+                <com.marcelljee.hackernews.view.SimpleRecyclerView
                     android:id="@+id/rv_submission_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />

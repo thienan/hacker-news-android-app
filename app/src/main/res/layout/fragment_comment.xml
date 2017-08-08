@@ -7,19 +7,19 @@
 
         <import type="android.text.TextUtils" />
 
-        <import type="co.marcelje.hackernews.utils.ItemUtils" />
+        <import type="com.marcelljee.hackernews.utils.ItemUtils" />
 
         <variable
             name="item"
-            type="co.marcelje.hackernews.model.Item" />
+            type="com.marcelljee.hackernews.model.Item" />
 
         <variable
             name="itemUserClickHandlers"
-            type="co.marcelje.hackernews.handlers.ItemUserClickHandlers" />
+            type="com.marcelljee.hackernews.handlers.ItemUserClickHandlers" />
 
         <variable
             name="activity"
-            type="co.marcelje.hackernews.activity.ToolbarActivity" />
+            type="com.marcelljee.hackernews.activity.ToolbarActivity" />
 
         <variable
             name="itemParentName"

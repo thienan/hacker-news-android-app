@@ -62,15 +62,13 @@
 
     <string name="about_text"><![CDATA[
         Hacker News Android app.<br/><br/>
-        This is an unofficial Android app for reading Hacker News.<br/><br/>
+        This is the unofficial Android app for reading Hacker News from Y Combinator.<br/><br/>
         Hacker News is a social news website focusing on computer science and entrepreneurship.
         In general, the content is about \"anything that gratifies one\'s intellectual curiosity\".<br/><br/>
-        The official website can be found on
-        <a href="https://news.ycombinator.com">https://news.ycombinator.com</a><br/><br/>
-        This project is open source. Crash reports are automatically reported back to us.
+        Crash reports are automatically reported back to us.
         Bugs, or feature requests can be reported on this project\'s
-        <a href="https://github.com/marcelje/hacker-news-android-app">Github page</a>.
-        Contributors are also welcomed.
+        <a href="https://github.com/marcelljee/hacker-news-android-app">Github page</a>.<br/><br/>
+        This project is open source and neither affiliated with nor endorsed by Y Combinator. Contributors are welcomed.
     ]]></string>
 
     <string name="desc_app_logo">App Logo</string>

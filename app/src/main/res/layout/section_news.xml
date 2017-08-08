@@ -9,19 +9,19 @@
 
         <variable
             name="item"
-            type="co.marcelje.hackernews.model.Item" />
+            type="com.marcelljee.hackernews.model.Item" />
 
         <variable
             name="itemUserClickHandlers"
-            type="co.marcelje.hackernews.handlers.ItemUserClickHandlers" />
+            type="com.marcelljee.hackernews.handlers.ItemUserClickHandlers" />
 
         <variable
             name="itemTextClickHandlers"
-            type="co.marcelje.hackernews.handlers.ItemTextClickHandlers" />
+            type="com.marcelljee.hackernews.handlers.ItemTextClickHandlers" />
 
         <variable
             name="itemBookmarkClickHandlers"
-            type="co.marcelje.hackernews.handlers.ItemBookmarkClickHandlers" />
+            type="com.marcelljee.hackernews.handlers.ItemBookmarkClickHandlers" />
     </data>
 
     <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"

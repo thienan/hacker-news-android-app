@@ -5,9 +5,9 @@
 
         <import type="android.view.View" />
 
-        <import type="co.marcelje.hackernews.utils.ItemUtils" />
+        <import type="com.marcelljee.hackernews.utils.ItemUtils" />
 
-        <import type="co.marcelje.hackernews.database.DatabaseDao" />
+        <import type="com.marcelljee.hackernews.database.DatabaseDao" />
 
         <variable
             name="activity"
@@ -19,19 +19,19 @@
 
         <variable
             name="item"
-            type="co.marcelje.hackernews.model.Item" />
+            type="com.marcelljee.hackernews.model.Item" />
 
         <variable
             name="itemUserClickHandlers"
-            type="co.marcelje.hackernews.handlers.ItemUserClickHandlers" />
+            type="com.marcelljee.hackernews.handlers.ItemUserClickHandlers" />
 
         <variable
             name="itemTextClickHandlers"
-            type="co.marcelje.hackernews.handlers.ItemTextClickHandlers" />
+            type="com.marcelljee.hackernews.handlers.ItemTextClickHandlers" />
 
         <variable
             name="itemBookmarkClickHandlers"
-            type="co.marcelje.hackernews.handlers.ItemBookmarkClickHandlers" />
+            type="com.marcelljee.hackernews.handlers.ItemBookmarkClickHandlers" />
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -49,7 +49,7 @@
             android:paddingTop="@dimen/text_spacing"
             android:visibility="@{item.deleted || item.dead ? View.GONE : View.VISIBLE}">
 
-            <co.marcelje.hackernews.view.ScoreView
+            <com.marcelljee.hackernews.view.ScoreView
                 android:layout_width="@dimen/score_size"
                 android:layout_height="@dimen/score_size"
                 android:layout_margin="@dimen/view_margin"
