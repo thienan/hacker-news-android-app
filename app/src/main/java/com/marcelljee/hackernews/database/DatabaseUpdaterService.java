@@ -17,7 +17,6 @@ public class DatabaseUpdaterService extends IntentService {
     private static final String ACTION_BULK_INSERT = "com.marcelljee.hackernews.database.action.BULK_INSERT";
     private static final String ACTION_DELETE = "com.marcelljee.hackernews.database.action.DELETE";
 
-    private static final String EXTRA_LISTENER = "com.marcelljee.hackernews.database.extra.LISTENER";
     private static final String EXTRA_VALUES = "com.marcelljee.hackernews.database.extra.VALUES";
     private static final String EXTRA_WHERE = "com.marcelljee.hackernews.database.extra.WHERE";
     private static final String EXTRA_ARGS = "com.marcelljee.hackernews.database.extra.ARGS";

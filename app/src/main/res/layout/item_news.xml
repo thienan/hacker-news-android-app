@@ -50,6 +50,7 @@
             android:visibility="@{item.deleted || item.dead ? View.GONE : View.VISIBLE}">
 
             <com.marcelljee.hackernews.view.ScoreView
+                android:id="@+id/sv_score"
                 android:layout_width="@dimen/score_size"
                 android:layout_height="@dimen/score_size"
                 android:layout_margin="@dimen/view_margin"

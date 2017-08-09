@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.marcelljee.hackernews.BR;
 import com.marcelljee.hackernews.database.DatabaseDao;
+import com.marcelljee.hackernews.databinding.ItemNewsBinding;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.screen.news.item.BaseItemActivity;
 
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.marcelljee.hackernews.activity.ToolbarActivity;
+import com.marcelljee.hackernews.utils.SettingsUtils;
 
 public abstract class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
@@ -115,14 +117,16 @@ public abstract class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemV
             Item data = mItems.get(getAdapterPosition());
             BaseItemActivity.startActivity(mActivity, data, mItemParentName, mItemPosterName);
 
-            switch (data.getType()) {
-                case ITEM_TYPE_STORY:
-                case ITEM_TYPE_POLL:
-                case ITEM_TYPE_JOB:
+            switch (getItemViewType()) {
+                case VIEW_TYPE_NEWS:
                     DatabaseDao.insertHistoryItem(mActivity, data);
                     DatabaseDao.insertReadIndicatorItem(mActivity, data);
-                    //TODO: find a better way to update the UI
-                    notifyItemChanged(getAdapterPosition());
+
+                    if (SettingsUtils.readIndicatorEnabled(mActivity)) {
+                        ItemNewsBinding itemNewsBinding = (ItemNewsBinding) binding;
+                        itemNewsBinding.svScore.setRead(true);
+                    }
+
                     break;
                 default:
                     //do nothing
