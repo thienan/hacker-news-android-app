@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.marcelljee.hackernews.R;
+import com.marcelljee.hackernews.adapter.ItemAdapter;
 import com.marcelljee.hackernews.databinding.FragmentUserBinding;
 import com.marcelljee.hackernews.event.ItemBookmarkEvent;
 import com.marcelljee.hackernews.factory.SnackbarFactory;
@@ -48,7 +49,7 @@ public class UserFragment extends ToolbarFragment
     private String mUserId;
 
     private FragmentUserBinding mBinding;
-    private SubmissionAdapter mAdapter;
+    private ItemAdapter mAdapter;
 
     private int mCurrentPage = 1;
 
@@ -86,7 +87,7 @@ public class UserFragment extends ToolbarFragment
         mBinding = FragmentUserBinding.inflate(inflater, container, false);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new SubmissionAdapter(getToolbarActivity());
+        mAdapter = new ItemAdapter(getToolbarActivity());
 
         mBinding.rvSubmissionList.setLayoutManager(layoutManager);
         mBinding.rvSubmissionList.setAdapter(mAdapter);

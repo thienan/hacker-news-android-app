@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.marcelljee.hackernews.adapter.ItemAdapter;
 import com.marcelljee.hackernews.databinding.FragmentItemCommentBinding;
 import com.marcelljee.hackernews.factory.SnackbarFactory;
 import com.marcelljee.hackernews.fragment.ToolbarFragment;
@@ -41,7 +42,7 @@ public class ItemCommentFragment extends ToolbarFragment
     private String mItemPosterName;
 
     private FragmentItemCommentBinding mBinding;
-    private CommentAdapter mAdapter;
+    private ItemAdapter mAdapter;
 
     private int mCurrentPage = 1;
 
@@ -69,9 +70,9 @@ public class ItemCommentFragment extends ToolbarFragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
 
         if (TextUtils.isEmpty(mItemParentName) && TextUtils.isEmpty(mItemPosterName)) {
-            mAdapter = new CommentAdapter(getToolbarActivity(), null, mItem.getBy());
+            mAdapter = new ItemAdapter(getToolbarActivity(), null, mItem.getBy());
         } else {
-            mAdapter = new CommentAdapter(getToolbarActivity(), mItem.getBy(), mItemPosterName);
+            mAdapter = new ItemAdapter(getToolbarActivity(), mItem.getBy(), mItemPosterName);
         }
 
         mBinding.rvCommentList.setLayoutManager(layoutManager);

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.marcelljee.hackernews.adapter.ItemAdapter;
 import com.marcelljee.hackernews.chrome.CustomTabsHelper;
 import com.marcelljee.hackernews.databinding.FragmentStoryBinding;
 import com.marcelljee.hackernews.handlers.ItemBookmarkClickHandlers;
@@ -40,7 +41,7 @@ public class StoryFragment extends ItemHeadFragment
 
     private FragmentStoryBinding mBinding;
 
-    private PollOptionAdapter mAdapter;
+    private ItemAdapter mAdapter;
 
     private Item mItem;
 
@@ -77,7 +78,7 @@ public class StoryFragment extends ItemHeadFragment
             mBinding.sectionNews.itemNews.tvText.setBackground(null);
         }
 
-        mAdapter = new PollOptionAdapter(getToolbarActivity());
+        mAdapter = new ItemAdapter(getToolbarActivity());
 
         mBinding.sectionPollOptions.rvPollOptionList.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.sectionPollOptions.rvPollOptionList.setAdapter(mAdapter);

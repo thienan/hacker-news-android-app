@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.marcelljee.hackernews.adapter.ItemAdapter;
 import com.marcelljee.hackernews.event.ItemBookmarkEvent;
 import com.marcelljee.hackernews.fragment.ToolbarFragment;
 import com.marcelljee.hackernews.R;
@@ -63,7 +64,7 @@ public class NewsFragment extends ToolbarFragment
     private List<Long> mItemIds;
 
     private FragmentNewsBinding mBinding;
-    private NewsAdapter mAdapter;
+    private ItemAdapter mAdapter;
 
     private int mCurrentPage = 1;
 
@@ -77,7 +78,7 @@ public class NewsFragment extends ToolbarFragment
         mBinding = FragmentNewsBinding.inflate(inflater, container, false);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new NewsAdapter(getToolbarActivity());
+        mAdapter = new ItemAdapter(getToolbarActivity());
 
         mBinding.rvItemList.setLayoutManager(layoutManager);
         mBinding.rvItemList.setAdapter(mAdapter);
