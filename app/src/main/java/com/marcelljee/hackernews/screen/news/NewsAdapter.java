@@ -9,11 +9,15 @@ import com.marcelljee.hackernews.databinding.ItemNewsBinding;
 import com.marcelljee.hackernews.handlers.ItemBookmarkClickHandlers;
 import com.marcelljee.hackernews.handlers.ItemTextClickHandlers;
 import com.marcelljee.hackernews.handlers.ItemUserClickHandlers;
+import com.marcelljee.hackernews.menu.ActionModeMenu;
 
 class NewsAdapter extends ItemAdapter {
 
+    private final ActionModeMenu actionModeMenu;
+
     public NewsAdapter(ToolbarActivity activity) {
         super(activity);
+        actionModeMenu = new ActionModeMenu();
     }
 
     @Override
@@ -27,5 +31,11 @@ class NewsAdapter extends ItemAdapter {
         binding.setItemBookmarkClickHandlers(new ItemBookmarkClickHandlers(getActivity()));
 
         return new ItemViewHolder(binding, true);
+    }
+
+    @Override
+    public void onBindViewHolder(ItemViewHolder holder, int position) {
+        super.onBindViewHolder(holder, position);
+        holder.itemView.setOnLongClickListener((v) -> actionModeMenu.start(this, holder));
     }
 }

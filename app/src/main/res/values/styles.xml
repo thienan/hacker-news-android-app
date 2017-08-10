@@ -9,6 +9,9 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/colorBackground</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+
+        <item name="android:actionModeBackground">@color/colorPrimary</item>
+        <item name="windowActionModeOverlay">true</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

@@ -18,8 +18,8 @@ import com.marcelljee.hackernews.utils.SettingsUtils;
 
 public abstract class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
-    protected static final int VIEW_TYPE_NEWS = 1;
-    protected static final int VIEW_TYPE_COMMENT = 2;
+    public static final int VIEW_TYPE_NEWS = 1;
+    public static final int VIEW_TYPE_COMMENT = 2;
 
     private static final String ITEM_TYPE_COMMENT = "comment";
     private static final String ITEM_TYPE_STORY = "story";
@@ -69,10 +69,12 @@ public abstract class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemV
         return mItems.size();
     }
 
-    protected ToolbarActivity getActivity() {
-        return mActivity;
+    @Override
+    public long getItemId(int position) {
+        return mItems.get(position).getId();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public Item getItem(int position) {
         return mItems.get(position);
     }
@@ -97,6 +99,10 @@ public abstract class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemV
         notifyItemRangeInserted(mItems.size() - items.size(), items.size());
     }
 
+    public ToolbarActivity getActivity() {
+        return mActivity;
+    }
+
     public class ItemViewHolder<T extends ViewDataBinding>
             extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final T binding;
@@ -114,13 +120,14 @@ public abstract class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemV
 
         @Override
         public void onClick(View view) {
+            itemView.setSelected(false);
             Item data = mItems.get(getAdapterPosition());
             BaseItemActivity.startActivity(mActivity, data, mItemParentName, mItemPosterName);
 
             switch (getItemViewType()) {
                 case VIEW_TYPE_NEWS:
                     DatabaseDao.insertHistoryItem(mActivity, data);
-                    DatabaseDao.insertReadIndicatorItem(mActivity, data);
+                    DatabaseDao.insertReadIndicatorItem(mActivity, data.getId());
 
                     if (SettingsUtils.readIndicatorEnabled(mActivity)) {
                         ItemNewsBinding itemNewsBinding = (ItemNewsBinding) binding;

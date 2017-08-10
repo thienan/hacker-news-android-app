@@ -9,6 +9,7 @@ import com.marcelljee.hackernews.model.Item;
 import java.util.List;
 
 import io.reactivex.Observable;
+import timber.log.Timber;
 
 public class ItemListLoader extends AsyncTaskLoader<HackerNewsResponse<List<Item>>> {
 
@@ -24,7 +25,7 @@ public class ItemListLoader extends AsyncTaskLoader<HackerNewsResponse<List<Item
         Observable.fromIterable(mItemIds)
                 .flatMap(itemId -> HackerNewsApi.getInstance().getItem(itemId))
                 .toList()
-                .subscribe(data -> items[0] = HackerNewsResponse.ok(data));
+                .subscribe(data -> items[0] = HackerNewsResponse.ok(data), Timber::e);
 
         return items[0];
     }

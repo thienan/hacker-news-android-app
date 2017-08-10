@@ -38,7 +38,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground">
+        android:background="?android:selectableItemBackground">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,13 +49,31 @@
             android:paddingTop="@dimen/text_spacing"
             android:visibility="@{item.deleted || item.dead ? View.GONE : View.VISIBLE}">
 
-            <com.marcelljee.hackernews.view.ScoreView
-                android:id="@+id/sv_score"
-                android:layout_width="@dimen/score_size"
-                android:layout_height="@dimen/score_size"
-                android:layout_margin="@dimen/view_margin"
-                android:text="@{String.valueOf(item.score)}"
-                app:read="@{showReadIndicator ? DatabaseDao.isItemRead(context, item.id) : false}" />
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.marcelljee.hackernews.view.ScoreView
+                    android:id="@+id/sv_score"
+                    android:layout_width="@dimen/score_size"
+                    android:layout_height="@dimen/score_size"
+                    android:layout_margin="@dimen/view_margin"
+                    android:text="@{String.valueOf(item.score)}"
+                    app:read="@{showReadIndicator ? DatabaseDao.isItemRead(context, item.id) : false}" />
+
+                <ImageView
+                    android:id="@+id/iv_selected"
+                    android:layout_width="@dimen/score_size"
+                    android:layout_height="@dimen/score_size"
+                    android:layout_margin="@dimen/view_margin"
+                    android:background="@drawable/ic_circle"
+                    android:backgroundTint="@{showReadIndicator &amp;&amp; DatabaseDao.isItemRead(context, item.id) ? @color/colorPrimaryLight : @color/colorAccent}"
+                    android:contentDescription="@string/desc_selected_item"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_check"
+                    android:visibility="gone" />
+            </FrameLayout>
+
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -66,7 +84,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
+                    android:background="?android:selectableItemBackground"
                     android:onClick="@{() -> itemUserClickHandlers.onClick(item.by)}"
                     android:orientation="horizontal"
                     android:paddingBottom="@dimen/text_spacing"
@@ -93,7 +111,7 @@
                     android:id="@+id/tv_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
+                    android:background="?android:selectableItemBackground"
                     android:onClick="@{() -> itemTextClickHandlers.onClick(item)}"
                     android:paddingBottom="@dimen/text_spacing"
                     android:paddingEnd="@dimen/view_margin"

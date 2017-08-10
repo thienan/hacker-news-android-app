@@ -11,9 +11,9 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
     private static final int STARTING_PAGE_INDEX = 1;
     // The current offset index of data you have loaded
     private int currentPage = 1;
-    // The total number of items in the data set after the last load
+    // The total number of items in the data start after the last load
     private int previousTotalItemCount = 0;
-    // True if we are still waiting for the last set of data to load.
+    // True if we are still waiting for the last start of data to load.
     private boolean loading = true;
 
     private final LinearLayoutManager mLinearLayoutManager;
@@ -40,7 +40,7 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
                 this.loading = true;
             }
         }
-        // If it’s still loading, we check to see if the data set count has
+        // If it’s still loading, we check to see if the data start count has
         // changed, if so we conclude it has finished loading and update the current page
         // number and total item count.
         if (loading && (totalItemCount > previousTotalItemCount)) {

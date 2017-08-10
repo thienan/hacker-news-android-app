@@ -146,13 +146,13 @@ public final class DatabaseDao {
                 null, BaseColumns._ID + "=?", new String[]{String.valueOf(itemId)}, null);
     }
 
-    public static void insertReadIndicatorItem(Context context, Item item) {
+    public static void insertReadIndicatorItem(Context context, long itemId) {
         if (!SettingsUtils.readIndicatorEnabled(context)) return;
 
-        if (isItemRead(context, item.getId())) return;
+        if (isItemRead(context, itemId)) return;
 
         ContentValues values = new ContentValues();
-        values.put(DatabaseContract.ItemReadEntry._ID, item.getId());
+        values.put(DatabaseContract.ItemReadEntry._ID, itemId);
 
         DatabaseUpdaterService.startActionInsert(context,
                 DatabaseContract.ItemReadEntry.CONTENT_URI, values);

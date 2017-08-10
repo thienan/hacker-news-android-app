@@ -10,11 +10,15 @@ import com.marcelljee.hackernews.databinding.ItemCommentBinding;
 import com.marcelljee.hackernews.databinding.ItemNewsBinding;
 import com.marcelljee.hackernews.handlers.ItemBookmarkClickHandlers;
 import com.marcelljee.hackernews.handlers.ItemTextClickHandlers;
+import com.marcelljee.hackernews.menu.ActionModeMenu;
 
 class SubmissionAdapter extends ItemAdapter {
 
+    private final ActionModeMenu actionModeMenu;
+
     public SubmissionAdapter(ToolbarActivity mActivity) {
         super(mActivity);
+        actionModeMenu = new ActionModeMenu();
     }
 
     @Override
@@ -37,5 +41,11 @@ class SubmissionAdapter extends ItemAdapter {
             default:
                 return null;
         }
+    }
+
+    @Override
+    public void onBindViewHolder(ItemViewHolder holder, int position) {
+        super.onBindViewHolder(holder, position);
+        holder.itemView.setOnLongClickListener((v) -> actionModeMenu.start(this, holder));
     }
 }
