@@ -12,6 +12,7 @@ import com.marcelljee.hackernews.database.DatabaseDao;
 import com.marcelljee.hackernews.databinding.ItemNewsBinding;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.utils.MenuUtils;
+import com.marcelljee.hackernews.utils.SettingsUtils;
 
 public class ActionModeMenu {
 
@@ -32,6 +33,12 @@ public class ActionModeMenu {
                     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                         MenuInflater inflater = mode.getMenuInflater();
                         inflater.inflate(R.menu.menu_context_story, menu);
+
+                        if (!SettingsUtils.readIndicatorEnabled(adapter.getActivity())) {
+                            menu.findItem(R.id.action_mark_read).setVisible(false);
+                            menu.findItem(R.id.action_mark_unread).setVisible(false);
+                        }
+
                         return true;
                     }
 
