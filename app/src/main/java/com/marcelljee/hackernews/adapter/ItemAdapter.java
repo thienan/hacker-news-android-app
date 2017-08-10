@@ -43,7 +43,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     private final String mItemParentName;
     private final String mItemPosterName;
 
-    private final ActionModeMenu actionModeMenu;
+    private final ActionModeMenu mActionModeMenu;
 
     public ItemAdapter(ToolbarActivity activity) {
         this(activity, null, null);
@@ -55,7 +55,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         mItemParentName = itemParentName;
         mItemPosterName = itemPosterName;
 
-        actionModeMenu = new ActionModeMenu();
+        mActionModeMenu = new ActionModeMenu();
     }
 
     @Override
@@ -97,7 +97,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     public void onBindViewHolder(ItemViewHolder holder, int position) {
         Item item = getItem(position);
         holder.binding.setVariable(BR.item, item);
-        holder.itemView.setOnLongClickListener((v) -> actionModeMenu.start(this, holder, item));
+        holder.itemView.setOnLongClickListener((v) -> mActionModeMenu.start(this, holder, item));
     }
 
     @Override
@@ -174,6 +174,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             itemView.setSelected(false);
             Item data = mItems.get(getAdapterPosition());
             BaseItemActivity.startActivity(mActivity, data, mItemParentName, mItemPosterName);
+            mActionModeMenu.finish();
 
             switch (getItemViewType()) {
                 case VIEW_TYPE_NEWS:

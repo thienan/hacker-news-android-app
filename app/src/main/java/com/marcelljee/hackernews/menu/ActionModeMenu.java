@@ -85,4 +85,10 @@ public class ActionModeMenu {
                 return false;
         }
     }
+
+    public void finish() {
+        if (mActionMode != null) {
+            mActionMode.finish();
+        }
+    }
 }
