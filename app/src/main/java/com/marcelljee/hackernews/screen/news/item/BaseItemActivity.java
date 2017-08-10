@@ -16,8 +16,6 @@ import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.screen.news.NewsActivity;
 import com.marcelljee.hackernews.screen.news.item.comment.ItemCommentFragment;
 import com.marcelljee.hackernews.screen.news.item.head.ItemHeadFragment;
-import com.marcelljee.hackernews.chrome.CustomTabsBrowser;
-import com.marcelljee.hackernews.utils.HackerNewsUtils;
 import com.marcelljee.hackernews.utils.ItemUtils;
 import com.marcelljee.hackernews.utils.MenuUtils;
 
@@ -146,9 +144,6 @@ public class BaseItemActivity extends ToolbarActivity
             case R.id.action_share:
                 share();
                 return true;
-            case R.id.action_open_page:
-                openPage();
-                return true;
             default:
                 return super.onOptionsItemSelected(menuItem);
         }
@@ -258,10 +253,6 @@ public class BaseItemActivity extends ToolbarActivity
 
     private void share() {
         MenuUtils.openShareHackerNewsLinkChooser(this, mItem);
-    }
-
-    private void openPage() {
-        CustomTabsBrowser.openTab(this, HackerNewsUtils.geItemUrl(mItem.getId()));
     }
 
     public Item getItem() {
