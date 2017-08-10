@@ -10,12 +10,14 @@ import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.adapter.ItemAdapter;
 import com.marcelljee.hackernews.database.DatabaseDao;
 import com.marcelljee.hackernews.databinding.ItemNewsBinding;
+import com.marcelljee.hackernews.model.Item;
+import com.marcelljee.hackernews.utils.MenuUtils;
 
 public class ActionModeMenu {
 
     private ActionMode mActionMode;
 
-    public boolean start(ItemAdapter adapter, ItemAdapter.ItemViewHolder holder) {
+    public boolean start(ItemAdapter adapter, ItemAdapter.ItemViewHolder holder, Item item) {
         if (mActionMode != null) {
             mActionMode.finish();
         }
@@ -46,8 +48,11 @@ public class ActionModeMenu {
                     }
 
                     @Override
-                    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                        switch (item.getItemId()) {
+                    public boolean onActionItemClicked(ActionMode mode, MenuItem menuItem) {
+                        switch (menuItem.getItemId()) {
+                            case R.id.action_share:
+                                MenuUtils.openShareHackerNewsLinkChooser(adapter.getActivity(), item);
+                                return true;
                             case R.id.action_mark_read:
                                 DatabaseDao.insertReadIndicatorItem(adapter.getActivity(),
                                         adapter.getItemId(holder.getAdapterPosition()));

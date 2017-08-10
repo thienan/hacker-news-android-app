@@ -97,7 +97,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     public void onBindViewHolder(ItemViewHolder holder, int position) {
         Item item = getItem(position);
         holder.binding.setVariable(BR.item, item);
-        holder.itemView.setOnLongClickListener((v) -> actionModeMenu.start(this, holder));
+        holder.itemView.setOnLongClickListener((v) -> actionModeMenu.start(this, holder, item));
     }
 
     @Override
