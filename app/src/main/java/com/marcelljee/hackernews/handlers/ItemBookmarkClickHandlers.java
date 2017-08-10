@@ -9,7 +9,6 @@ import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.activity.ToolbarActivity;
 import com.marcelljee.hackernews.database.DatabaseDao;
 import com.marcelljee.hackernews.event.ItemBookmarkEvent;
-import com.marcelljee.hackernews.factory.SnackbarFactory;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.screen.news.item.StoryActivity;
 import com.marcelljee.hackernews.screen.user.UserActivity;
@@ -28,11 +27,9 @@ public class ItemBookmarkClickHandlers {
 
             if (DatabaseDao.isItemBookmarked(mActivity, data.getId())) {
                 DatabaseDao.deleteBookmarkedItem(mActivity, data.getId());
-                SnackbarFactory.createUnbookmarkedSuccessSnackBar(view).show();
                 bookmarkButton.setImageResource(R.drawable.ic_bookmark_border);
             } else {
                 DatabaseDao.insertBookmarkedItem(mActivity, data);
-                SnackbarFactory.createBookmarkedSuccessSnackBar(view).show();
                 bookmarkButton.setImageResource(R.drawable.ic_bookmark);
             }
 

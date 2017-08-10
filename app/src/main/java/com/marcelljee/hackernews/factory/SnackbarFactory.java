@@ -13,20 +13,11 @@ public class SnackbarFactory {
         return createSnackBar(view, R.string.message_error_retrieve_data, R.string.action_retry, listener);
     }
 
-    public static Snackbar createBookmarkedSuccessSnackBar(View view) {
-        return createSnackBar(view, R.string.message_bookmarked, -1, null);
-    }
-
-    public static Snackbar createUnbookmarkedSuccessSnackBar(View view) {
-        return createSnackBar(view, R.string.message_unbookmarked, -1, null);
-    }
-
     public static Snackbar createSnackBar(View view, @StringRes
             int messageResId, @StringRes int actionResId, View.OnClickListener listener) {
-        Snackbar snackbar = Snackbar.make(view, messageResId, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(view, messageResId, Snackbar.LENGTH_SHORT);
         if (actionResId > 0 && listener != null) snackbar.setAction(actionResId, listener);
 
         return snackbar;
     }
-
 }
