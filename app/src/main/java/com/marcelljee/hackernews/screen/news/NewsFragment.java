@@ -166,89 +166,89 @@ public class NewsFragment extends ToolbarFragment
                                Object data) {
         HackerNewsResponse response = (HackerNewsResponse) data;
 
-        if (!response.isSuccessful()) {
-            SnackbarFactory.createRetrieveErrorSnackbar(mBinding.rvItemList, (v) -> retrieveNews()).show();
-            return;
-        }
-
-        switch (loader.getId()) {
-            case LOADER_ID_STORIES_TOP:
-                mItemIds = (List<Long>) response.getData();
-                getActivity().getSupportLoaderManager()
-                        .restartLoader(LOADER_ID_STORIES_TOP_ITEM, null, this);
-                return;
-            case LOADER_ID_STORIES_BEST:
-                mItemIds = (List<Long>) response.getData();
-                getActivity().getSupportLoaderManager()
-                        .restartLoader(LOADER_ID_STORIES_BEST_ITEM, null, this);
-                return;
-            case LOADER_ID_STORIES_NEW:
-                mItemIds = (List<Long>) response.getData();
-                getActivity().getSupportLoaderManager()
-                        .restartLoader(LOADER_ID_STORIES_NEW_ITEM, null, this);
-                return;
-            case LOADER_ID_STORIES_SHOW:
-                mItemIds = (List<Long>) response.getData();
-                getActivity().getSupportLoaderManager()
-                        .restartLoader(LOADER_ID_STORIES_SHOW_ITEM, null, this);
-                return;
-            case LOADER_ID_STORIES_ASK:
-                mItemIds = (List<Long>) response.getData();
-                getActivity().getSupportLoaderManager()
-                        .restartLoader(LOADER_ID_STORIES_ASK_ITEM, null, this);
-                return;
-            case LOADER_ID_STORIES_JOB:
-                mItemIds = (List<Long>) response.getData();
-                getActivity().getSupportLoaderManager()
-                        .restartLoader(LOADER_ID_STORIES_JOB_ITEM, null, this);
-                return;
-            case LOADER_ID_HISTORY:
-                mItemIds = (List<Long>) response.getData();
-                getActivity().getSupportLoaderManager()
-                        .restartLoader(LOADER_ID_HISTORY_ITEM, null, this);
-                return;
-            case LOADER_ID_STORIES_TOP_ITEM:
-                if (getString(R.string.settings_type_option_top).equals(mNewsType)) {
-                    mAdapter.addItems((List<Item>) response.getData());
-                }
-                break;
-            case LOADER_ID_STORIES_BEST_ITEM:
-                if (getString(R.string.settings_type_option_best).equals(mNewsType)) {
-                    mAdapter.addItems((List<Item>) response.getData());
-                }
-                break;
-            case LOADER_ID_STORIES_NEW_ITEM:
-                if (getString(R.string.settings_type_option_new).equals(mNewsType)) {
-                    mAdapter.addItems((List<Item>) response.getData());
-                }
-                break;
-            case LOADER_ID_STORIES_SHOW_ITEM:
-                if (getString(R.string.settings_type_option_show).equals(mNewsType)) {
-                    mAdapter.addItems((List<Item>) response.getData());
-                }
-                break;
-            case LOADER_ID_STORIES_ASK_ITEM:
-                if (getString(R.string.settings_type_option_ask).equals(mNewsType)) {
-                    mAdapter.addItems((List<Item>) response.getData());
-                }
-                break;
-            case LOADER_ID_STORIES_JOB_ITEM:
-                if (getString(R.string.settings_type_option_jobs).equals(mNewsType)) {
-                    mAdapter.addItems((List<Item>) response.getData());
-                }
-                break;
-            case LOADER_ID_HISTORY_ITEM:
-                if (getString(R.string.settings_type_option_history).equals(mNewsType)) {
-                    mAdapter.swapItems((List<Item>) response.getData());
-                }
-                break;
-            case LOADER_ID_BOOKMARKED_ITEM:
-                if (getString(R.string.settings_type_option_bookmarked).equals(mNewsType)) {
-                    mAdapter.swapItems((List<Item>) response.getData());
-                }
-                break;
-            default:
-                //do nothing
+        if (response.isSuccessful()) {
+            switch (loader.getId()) {
+                case LOADER_ID_STORIES_TOP:
+                    mItemIds = (List<Long>) response.getData();
+                    getActivity().getSupportLoaderManager()
+                            .restartLoader(LOADER_ID_STORIES_TOP_ITEM, null, this);
+                    return;
+                case LOADER_ID_STORIES_BEST:
+                    mItemIds = (List<Long>) response.getData();
+                    getActivity().getSupportLoaderManager()
+                            .restartLoader(LOADER_ID_STORIES_BEST_ITEM, null, this);
+                    return;
+                case LOADER_ID_STORIES_NEW:
+                    mItemIds = (List<Long>) response.getData();
+                    getActivity().getSupportLoaderManager()
+                            .restartLoader(LOADER_ID_STORIES_NEW_ITEM, null, this);
+                    return;
+                case LOADER_ID_STORIES_SHOW:
+                    mItemIds = (List<Long>) response.getData();
+                    getActivity().getSupportLoaderManager()
+                            .restartLoader(LOADER_ID_STORIES_SHOW_ITEM, null, this);
+                    return;
+                case LOADER_ID_STORIES_ASK:
+                    mItemIds = (List<Long>) response.getData();
+                    getActivity().getSupportLoaderManager()
+                            .restartLoader(LOADER_ID_STORIES_ASK_ITEM, null, this);
+                    return;
+                case LOADER_ID_STORIES_JOB:
+                    mItemIds = (List<Long>) response.getData();
+                    getActivity().getSupportLoaderManager()
+                            .restartLoader(LOADER_ID_STORIES_JOB_ITEM, null, this);
+                    return;
+                case LOADER_ID_HISTORY:
+                    mItemIds = (List<Long>) response.getData();
+                    getActivity().getSupportLoaderManager()
+                            .restartLoader(LOADER_ID_HISTORY_ITEM, null, this);
+                    return;
+                case LOADER_ID_STORIES_TOP_ITEM:
+                    if (getString(R.string.settings_type_option_top).equals(mNewsType)) {
+                        mAdapter.addItems((List<Item>) response.getData());
+                    }
+                    break;
+                case LOADER_ID_STORIES_BEST_ITEM:
+                    if (getString(R.string.settings_type_option_best).equals(mNewsType)) {
+                        mAdapter.addItems((List<Item>) response.getData());
+                    }
+                    break;
+                case LOADER_ID_STORIES_NEW_ITEM:
+                    if (getString(R.string.settings_type_option_new).equals(mNewsType)) {
+                        mAdapter.addItems((List<Item>) response.getData());
+                    }
+                    break;
+                case LOADER_ID_STORIES_SHOW_ITEM:
+                    if (getString(R.string.settings_type_option_show).equals(mNewsType)) {
+                        mAdapter.addItems((List<Item>) response.getData());
+                    }
+                    break;
+                case LOADER_ID_STORIES_ASK_ITEM:
+                    if (getString(R.string.settings_type_option_ask).equals(mNewsType)) {
+                        mAdapter.addItems((List<Item>) response.getData());
+                    }
+                    break;
+                case LOADER_ID_STORIES_JOB_ITEM:
+                    if (getString(R.string.settings_type_option_jobs).equals(mNewsType)) {
+                        mAdapter.addItems((List<Item>) response.getData());
+                    }
+                    break;
+                case LOADER_ID_HISTORY_ITEM:
+                    if (getString(R.string.settings_type_option_history).equals(mNewsType)) {
+                        mAdapter.swapItems((List<Item>) response.getData());
+                    }
+                    break;
+                case LOADER_ID_BOOKMARKED_ITEM:
+                    if (getString(R.string.settings_type_option_bookmarked).equals(mNewsType)) {
+                        mAdapter.swapItems((List<Item>) response.getData());
+                    }
+                    break;
+                default:
+                    //do nothing
+            }
+        } else {
+            SnackbarFactory.createRetrieveErrorSnackbar(
+                    mBinding.rvItemList, (v) -> retrieveNews()).show();
         }
 
         mBinding.rvItemList.hideProgressBar();
