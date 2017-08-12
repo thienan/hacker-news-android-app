@@ -14,7 +14,10 @@ import java.util.List;
 @SuppressWarnings("WeakerAccess")
 @Parcel(Parcel.Serialization.BEAN)
 public class Item {
-    private long id = -1;
+
+    public static final long NO_ID = -1;
+
+    private long id = NO_ID;
     private boolean deleted = false;
     private String type = "";
     private String by = "";

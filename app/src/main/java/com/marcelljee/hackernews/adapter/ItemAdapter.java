@@ -97,7 +97,19 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     public void onBindViewHolder(ItemViewHolder holder, int position) {
         Item item = getItem(position);
         holder.binding.setVariable(BR.item, item);
-        holder.itemView.setOnLongClickListener((v) -> mActionModeMenu.start(this, holder, item));
+
+        switch (holder.getItemViewType()) {
+            case VIEW_TYPE_NEWS:
+                ItemNewsBinding itemNewsBinding = (ItemNewsBinding) holder.binding;
+                itemNewsBinding.svScore.setOnClickListener((v)
+                        -> mActionModeMenu.start(getActivity(), holder, item));
+                itemNewsBinding.getRoot().setOnLongClickListener((v)
+                        -> mActionModeMenu.start(getActivity(), holder, item));
+                break;
+            default:
+                //do nothing
+        }
+
     }
 
     @Override
@@ -184,6 +196,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
                     if (SettingsUtils.readIndicatorEnabled(mActivity)) {
                         ItemNewsBinding itemNewsBinding = (ItemNewsBinding) binding;
                         itemNewsBinding.svScore.setRead(true);
+                        itemNewsBinding.ivSelected.setRead(true);
                     }
 
                     break;

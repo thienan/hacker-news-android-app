@@ -148,7 +148,6 @@ public final class DatabaseDao {
 
     public static void insertReadIndicatorItem(Context context, long itemId) {
         if (!SettingsUtils.readIndicatorEnabled(context)) return;
-
         if (isItemRead(context, itemId)) return;
 
         ContentValues values = new ContentValues();

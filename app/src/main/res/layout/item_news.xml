@@ -61,17 +61,14 @@
                     android:text="@{String.valueOf(item.score)}"
                     app:read="@{showReadIndicator ? DatabaseDao.isItemRead(context, item.id) : false}" />
 
-                <ImageView
+                <com.marcelljee.hackernews.view.CheckedScoreView
                     android:id="@+id/iv_selected"
                     android:layout_width="@dimen/score_size"
                     android:layout_height="@dimen/score_size"
                     android:layout_margin="@dimen/view_margin"
-                    android:background="@drawable/ic_circle"
-                    android:backgroundTint="@{showReadIndicator &amp;&amp; DatabaseDao.isItemRead(context, item.id) ? @color/colorPrimaryLight : @color/colorAccent}"
                     android:contentDescription="@string/desc_selected_item"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_check"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    app:read="@{showReadIndicator ? DatabaseDao.isItemRead(context, item.id) : false}" />
             </FrameLayout>
 
 

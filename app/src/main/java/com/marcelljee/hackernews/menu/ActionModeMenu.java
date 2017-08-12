@@ -1,5 +1,6 @@
 package com.marcelljee.hackernews.menu;
 
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,24 +18,29 @@ import com.marcelljee.hackernews.utils.SettingsUtils;
 public class ActionModeMenu {
 
     private ActionMode mActionMode;
+    private long itemId;
 
-    public boolean start(ItemAdapter adapter, ItemAdapter.ItemViewHolder holder, Item item) {
-        if (mActionMode != null) {
-            mActionMode.finish();
+    public boolean start(AppCompatActivity activity, ItemAdapter.ItemViewHolder holder, Item item) {
+        finish();
+
+        if (itemId == item.getId()) {
+            itemId = Item.NO_ID;
+            return false;
         }
 
-        switch (adapter.getItemViewType(holder.getAdapterPosition())) {
+        switch (holder.getItemViewType()) {
             case ItemAdapter.VIEW_TYPE_NEWS:
                 ItemNewsBinding binding = (ItemNewsBinding) holder.binding;
                 binding.ivSelected.setVisibility(View.VISIBLE);
 
-                mActionMode = adapter.getActivity().startSupportActionMode(new ActionMode.Callback() {
+                itemId = item.getId();
+                mActionMode = activity.startSupportActionMode(new ActionMode.Callback() {
                     @Override
                     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                         MenuInflater inflater = mode.getMenuInflater();
                         inflater.inflate(R.menu.menu_context_story, menu);
 
-                        if (!SettingsUtils.readIndicatorEnabled(adapter.getActivity())) {
+                        if (!SettingsUtils.readIndicatorEnabled(activity)) {
                             menu.findItem(R.id.action_mark_read).setVisible(false);
                             menu.findItem(R.id.action_mark_unread).setVisible(false);
                         }
@@ -44,8 +50,7 @@ public class ActionModeMenu {
 
                     @Override
                     public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                        if (DatabaseDao.isItemRead(adapter.getActivity(),
-                                adapter.getItemId(holder.getAdapterPosition()))) {
+                        if (DatabaseDao.isItemRead(activity, item.getId())) {
                             menu.findItem(R.id.action_mark_read).setVisible(false);
                         } else {
                             menu.findItem(R.id.action_mark_unread).setVisible(false);
@@ -58,20 +63,18 @@ public class ActionModeMenu {
                     public boolean onActionItemClicked(ActionMode mode, MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.action_share:
-                                MenuUtils.openShareHackerNewsLinkChooser(adapter.getActivity(), item);
+                                MenuUtils.openShareHackerNewsLinkChooser(activity, item);
                                 return true;
                             case R.id.action_mark_read:
-                                DatabaseDao.insertReadIndicatorItem(adapter.getActivity(),
-                                        adapter.getItemId(holder.getAdapterPosition()));
+                                DatabaseDao.insertReadIndicatorItem(activity, item.getId());
                                 binding.svScore.setRead(true);
-                                adapter.notifyItemChanged(holder.getAdapterPosition(), binding.ivSelected);
+                                binding.ivSelected.setRead(true);
                                 mode.finish();
                                 return true;
                             case R.id.action_mark_unread:
-                                DatabaseDao.deleteReadIndicatorItem(adapter.getActivity(),
-                                        adapter.getItemId(holder.getAdapterPosition()));
+                                DatabaseDao.deleteReadIndicatorItem(activity, item.getId());
                                 binding.svScore.setRead(false);
-                                adapter.notifyItemChanged(holder.getAdapterPosition(), binding.ivSelected);
+                                binding.ivSelected.setRead(false);
                                 mode.finish();
                                 return true;
                             default:
@@ -94,8 +97,12 @@ public class ActionModeMenu {
     }
 
     public void finish() {
-        if (mActionMode != null) {
+        if (isStarted()) {
             mActionMode.finish();
         }
+    }
+
+    private boolean isStarted() {
+        return mActionMode != null;
     }
 }
