@@ -28,9 +28,9 @@ import com.marcelljee.hackernews.utils.SettingsUtils;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
-    public static final int VIEW_TYPE_NEWS = 1;
-    public static final int VIEW_TYPE_COMMENT = 2;
-    public static final int VIEW_TYPE_POLL_OPTION = 3;
+    private static final int VIEW_TYPE_NEWS = 1;
+    private static final int VIEW_TYPE_COMMENT = 2;
+    private static final int VIEW_TYPE_POLL_OPTION = 3;
 
     private static final String ITEM_TYPE_COMMENT = "comment";
     private static final String ITEM_TYPE_POLL_OPTION = "pollopt";
@@ -102,9 +102,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             case VIEW_TYPE_NEWS:
                 ItemNewsBinding itemNewsBinding = (ItemNewsBinding) holder.binding;
                 itemNewsBinding.svScore.setOnClickListener((v)
-                        -> mActionModeMenu.start(getActivity(), holder, item));
+                        -> mActionModeMenu.start(getActivity(), itemNewsBinding, item));
                 itemNewsBinding.getRoot().setOnLongClickListener((v)
-                        -> mActionModeMenu.start(getActivity(), holder, item));
+                        -> mActionModeMenu.start(getActivity(), itemNewsBinding, item));
                 break;
             default:
                 //do nothing

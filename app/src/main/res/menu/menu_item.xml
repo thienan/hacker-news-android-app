@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_refresh"
-        android:title="@string/menu_item_refresh" />
+        android:title="@string/menu_item_refresh"
+        app:showAsAction="never" />
     <item
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share"
@@ -11,5 +12,6 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_open_page"
-        android:title="@string/menu_item_open_page" />
+        android:title="@string/menu_item_open_page"
+        app:showAsAction="never" />
 </menu>

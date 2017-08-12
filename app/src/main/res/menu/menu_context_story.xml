@@ -18,5 +18,6 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_open_page"
-        android:title="@string/menu_item_open_page" />
+        android:title="@string/menu_item_open_page"
+        app:showAsAction="never" />
 </menu>

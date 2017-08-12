@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.marcelljee.hackernews.R;
-import com.marcelljee.hackernews.adapter.ItemAdapter;
 import com.marcelljee.hackernews.chrome.CustomTabsBrowser;
 import com.marcelljee.hackernews.database.DatabaseDao;
 import com.marcelljee.hackernews.databinding.ItemNewsBinding;
@@ -22,84 +21,80 @@ public class ActionModeMenu {
     private ActionMode mActionMode;
     private long itemId;
 
-    public boolean start(AppCompatActivity activity, ItemAdapter.ItemViewHolder holder, Item item) {
+    public boolean start(AppCompatActivity activity, ItemNewsBinding binding, Item item) {
         finish();
 
         if (itemId == item.getId()) {
             itemId = Item.NO_ID;
             return false;
+        } else {
+            itemId = item.getId();
         }
 
-        switch (holder.getItemViewType()) {
-            case ItemAdapter.VIEW_TYPE_NEWS:
-                ItemNewsBinding binding = (ItemNewsBinding) holder.binding;
-                binding.ivSelected.setVisibility(View.VISIBLE);
+        binding.ivSelected.setVisibility(View.VISIBLE);
+        binding.getRoot().setSelected(true);
 
-                itemId = item.getId();
-                mActionMode = activity.startSupportActionMode(new ActionMode.Callback() {
-                    @Override
-                    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                        MenuInflater inflater = mode.getMenuInflater();
-                        inflater.inflate(R.menu.menu_context_story, menu);
+        mActionMode = activity.startSupportActionMode(new ActionMode.Callback() {
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater inflater = mode.getMenuInflater();
+                inflater.inflate(R.menu.menu_context_story, menu);
 
-                        if (!SettingsUtils.readIndicatorEnabled(activity)) {
-                            menu.findItem(R.id.action_mark_read).setVisible(false);
-                            menu.findItem(R.id.action_mark_unread).setVisible(false);
-                        }
+                if (!SettingsUtils.readIndicatorEnabled(activity)) {
+                    menu.findItem(R.id.action_mark_read).setVisible(false);
+                    menu.findItem(R.id.action_mark_unread).setVisible(false);
+                }
 
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                        if (DatabaseDao.isItemRead(activity, item.getId())) {
-                            menu.findItem(R.id.action_mark_read).setVisible(false);
-                        } else {
-                            menu.findItem(R.id.action_mark_unread).setVisible(false);
-                        }
-
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onActionItemClicked(ActionMode mode, MenuItem menuItem) {
-                        switch (menuItem.getItemId()) {
-                            case R.id.action_share:
-                                MenuUtils.openShareHackerNewsLinkChooser(activity, item);
-                                return true;
-                            case R.id.action_mark_read:
-                                DatabaseDao.insertReadIndicatorItem(activity, item.getId());
-                                binding.svScore.setRead(true);
-                                binding.ivSelected.setRead(true);
-                                mode.finish();
-                                return true;
-                            case R.id.action_mark_unread:
-                                DatabaseDao.deleteReadIndicatorItem(activity, item.getId());
-                                binding.svScore.setRead(false);
-                                binding.ivSelected.setRead(false);
-                                mode.finish();
-                                return true;
-                            case R.id.action_open_page:
-                                CustomTabsBrowser.openTab(activity,
-                                        HackerNewsUtils.geItemUrl(item.getId()));
-                                return true;
-                            default:
-                                return false;
-                        }
-                    }
-
-                    @Override
-                    public void onDestroyActionMode(ActionMode mode) {
-                        binding.ivSelected.setVisibility(View.GONE);
-                        holder.itemView.setSelected(false);
-                        mActionMode = null;
-                    }
-                });
-                holder.itemView.setSelected(true);
                 return true;
-            default:
-                return false;
-        }
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                if (DatabaseDao.isItemRead(activity, itemId)) {
+                    menu.findItem(R.id.action_mark_read).setVisible(false);
+                } else {
+                    menu.findItem(R.id.action_mark_unread).setVisible(false);
+                }
+
+                return true;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.action_share:
+                        MenuUtils.openShareHackerNewsLinkChooser(activity, item);
+                        return true;
+                    case R.id.action_mark_read:
+                        DatabaseDao.insertReadIndicatorItem(activity, itemId);
+                        binding.svScore.setRead(true);
+                        binding.ivSelected.setRead(true);
+                        mode.finish();
+                        return true;
+                    case R.id.action_mark_unread:
+                        DatabaseDao.deleteReadIndicatorItem(activity, itemId);
+                        binding.svScore.setRead(false);
+                        binding.ivSelected.setRead(false);
+                        mode.finish();
+                        return true;
+                    case R.id.action_open_page:
+                        CustomTabsBrowser.openTab(activity,
+                                HackerNewsUtils.geItemUrl(itemId));
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                binding.ivSelected.setVisibility(View.GONE);
+                binding.getRoot().setSelected(false);
+                mActionMode = null;
+            }
+        });
+
+        return true;
     }
 
     public void finish() {
