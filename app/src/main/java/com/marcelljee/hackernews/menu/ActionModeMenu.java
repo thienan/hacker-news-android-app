@@ -18,22 +18,21 @@ import com.marcelljee.hackernews.utils.SettingsUtils;
 
 public class ActionModeMenu {
 
-    private ActionMode mActionMode;
     private long itemId;
+    private ActionMode mActionMode;
 
     public boolean start(AppCompatActivity activity, ItemNewsBinding binding, Item item) {
-        finish();
-
         if (itemId == item.getId()) {
-            itemId = Item.NO_ID;
+            finish();
             return false;
         } else {
-            itemId = item.getId();
+            finish();
         }
 
         binding.ivSelected.setVisibility(View.VISIBLE);
         binding.getRoot().setSelected(true);
 
+        itemId = item.getId();
         mActionMode = activity.startSupportActionMode(new ActionMode.Callback() {
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -90,6 +89,8 @@ public class ActionModeMenu {
             public void onDestroyActionMode(ActionMode mode) {
                 binding.ivSelected.setVisibility(View.GONE);
                 binding.getRoot().setSelected(false);
+
+                itemId = Item.NO_ID;
                 mActionMode = null;
             }
         });
