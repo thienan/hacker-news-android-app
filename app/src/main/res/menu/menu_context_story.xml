@@ -16,4 +16,7 @@
         android:icon="@drawable/ic_mark_read"
         android:title="@string/menu_item_mark_read"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_open_page"
+        android:title="@string/menu_item_open_page" />
 </menu>

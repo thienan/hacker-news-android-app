@@ -9,9 +9,11 @@ import android.view.View;
 
 import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.adapter.ItemAdapter;
+import com.marcelljee.hackernews.chrome.CustomTabsBrowser;
 import com.marcelljee.hackernews.database.DatabaseDao;
 import com.marcelljee.hackernews.databinding.ItemNewsBinding;
 import com.marcelljee.hackernews.model.Item;
+import com.marcelljee.hackernews.utils.HackerNewsUtils;
 import com.marcelljee.hackernews.utils.MenuUtils;
 import com.marcelljee.hackernews.utils.SettingsUtils;
 
@@ -76,6 +78,10 @@ public class ActionModeMenu {
                                 binding.svScore.setRead(false);
                                 binding.ivSelected.setRead(false);
                                 mode.finish();
+                                return true;
+                            case R.id.action_open_page:
+                                CustomTabsBrowser.openTab(activity,
+                                        HackerNewsUtils.geItemUrl(item.getId()));
                                 return true;
                             default:
                                 return false;
