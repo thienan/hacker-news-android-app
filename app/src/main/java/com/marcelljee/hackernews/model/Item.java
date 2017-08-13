@@ -36,6 +36,7 @@ public class Item extends BaseObservable {
     private List<Long> parts = new ArrayList<>();
     private int descendants = 0;
 
+    private boolean bookmarked = false;
     private boolean read = false;
 
     @Bindable
@@ -196,6 +197,16 @@ public class Item extends BaseObservable {
     public void setDescendants(int descendants) {
         this.descendants = descendants;
         notifyPropertyChanged(BR.descendants);
+    }
+
+    @Bindable
+    public boolean isBookmarked() {
+        return bookmarked;
+    }
+
+    public void setBookmarked(boolean bookmarked) {
+        this.bookmarked = bookmarked;
+        notifyPropertyChanged(BR.bookmarked);
     }
 
     @Bindable

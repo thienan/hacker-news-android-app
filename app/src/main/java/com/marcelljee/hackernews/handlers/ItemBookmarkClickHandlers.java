@@ -1,11 +1,7 @@
 package com.marcelljee.hackernews.handlers;
 
-import android.view.View;
-import android.widget.ImageButton;
-
 import org.greenrobot.eventbus.EventBus;
 
-import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.activity.ToolbarActivity;
 import com.marcelljee.hackernews.database.DatabaseDao;
 import com.marcelljee.hackernews.event.ItemBookmarkEvent;
@@ -21,23 +17,19 @@ public class ItemBookmarkClickHandlers {
         mActivity = activity;
     }
 
-    public void onClick(View view, Item data) {
-        if (view instanceof ImageButton) {
-            ImageButton bookmarkButton = (ImageButton) view;
+    public void onClick(Item item) {
+        if (DatabaseDao.isItemBookmarked(mActivity, item.getId())) {
+            DatabaseDao.deleteBookmarkedItem(mActivity, item.getId());
+            item.setBookmarked(false);
+        } else {
+            DatabaseDao.insertBookmarkedItem(mActivity, item);
+            item.setBookmarked(true);
+        }
 
-            if (DatabaseDao.isItemBookmarked(mActivity, data.getId())) {
-                DatabaseDao.deleteBookmarkedItem(mActivity, data.getId());
-                bookmarkButton.setImageResource(R.drawable.ic_bookmark_border);
-            } else {
-                DatabaseDao.insertBookmarkedItem(mActivity, data);
-                bookmarkButton.setImageResource(R.drawable.ic_bookmark);
-            }
-
-            if (StoryActivity.class.getName().equals(mActivity.getClass().getName())) {
-                EventBus.getDefault().post(new ItemBookmarkEvent.StoryActivityEvent());
-            } else if (UserActivity.class.getName().equals(mActivity.getClass().getName())) {
-                EventBus.getDefault().post(new ItemBookmarkEvent.UserActivityEvent());
-            }
+        if (StoryActivity.class.getName().equals(mActivity.getClass().getName())) {
+            EventBus.getDefault().post(new ItemBookmarkEvent.StoryActivityEvent());
+        } else if (UserActivity.class.getName().equals(mActivity.getClass().getName())) {
+            EventBus.getDefault().post(new ItemBookmarkEvent.UserActivityEvent());
         }
     }
 }

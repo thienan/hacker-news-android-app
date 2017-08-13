@@ -7,8 +7,6 @@
 
         <import type="com.marcelljee.hackernews.utils.ItemUtils" />
 
-        <import type="com.marcelljee.hackernews.database.DatabaseDao" />
-
         <variable
             name="activity"
             type="android.app.Activity" />
@@ -135,9 +133,9 @@
                 android:layout_height="wrap_content"
                 android:background="?android:selectableItemBackground"
                 android:contentDescription="@string/desc_bookmark"
-                android:onClick="@{(v) -> itemBookmarkClickHandlers.onClick(v, item)}"
+                android:onClick="@{() -> itemBookmarkClickHandlers.onClick(item)}"
                 android:padding="@dimen/view_margin"
-                android:src="@{DatabaseDao.isItemBookmarked(activity, item.getId) ? @drawable/ic_bookmark : @drawable/ic_bookmark_border}"
+                android:src="@{item.bookmarked ? @drawable/ic_bookmark : @drawable/ic_bookmark_border}"
                 android:tint="@color/colorIcons" />
 
         </LinearLayout>

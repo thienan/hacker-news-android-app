@@ -96,6 +96,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
         Item item = getItem(position);
+        item.setBookmarked(DatabaseDao.isItemBookmarked(mActivity, item.getId()));
         item.setRead(DatabaseDao.isItemRead(mActivity, item.getId()));
         holder.binding.setVariable(BR.item, item);
 
