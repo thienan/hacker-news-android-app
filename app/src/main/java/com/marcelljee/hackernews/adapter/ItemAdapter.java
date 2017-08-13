@@ -12,7 +12,6 @@ import com.marcelljee.hackernews.database.DatabaseDao;
 import com.marcelljee.hackernews.databinding.ItemCommentBinding;
 import com.marcelljee.hackernews.databinding.ItemNewsBinding;
 import com.marcelljee.hackernews.databinding.ItemPollOptionBinding;
-import com.marcelljee.hackernews.handlers.ItemUserClickHandlers;
 import com.marcelljee.hackernews.menu.ActionModeMenu;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.screen.news.item.BaseItemActivity;
@@ -21,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.marcelljee.hackernews.activity.ToolbarActivity;
-import com.marcelljee.hackernews.screen.user.UserActivity;
 import com.marcelljee.hackernews.utils.SettingsUtils;
+import com.marcelljee.hackernews.viewmodel.ItemCommentViewModel;
 import com.marcelljee.hackernews.viewmodel.ItemNewsViewModel;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
@@ -68,8 +67,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
                 return new ItemViewHolder(newsBinding, true);
             case VIEW_TYPE_COMMENT:
                 ItemCommentBinding commentBinding = ItemCommentBinding.inflate(inflater, parent, false);
-                commentBinding.setActivity(getActivity());
-                commentBinding.setItemUserClickHandlers(new ItemUserClickHandlers(getActivity()));
+                commentBinding.setViewModel(new ItemCommentViewModel(getActivity()));
                 commentBinding.tvText.setMovementMethod(LinkMovementMethod.getInstance());
                 return new ItemViewHolder(commentBinding, true);
             case VIEW_TYPE_POLL_OPTION:

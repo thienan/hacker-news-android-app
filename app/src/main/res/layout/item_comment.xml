@@ -3,25 +3,13 @@
 
     <data>
 
-        <import type="android.text.Html" />
-
-        <import type="android.text.TextUtils" />
-
-        <import type="android.view.View" />
-
-        <import type="com.marcelljee.hackernews.utils.ItemUtils" />
-
         <variable
-            name="activity"
-            type="com.marcelljee.hackernews.activity.ToolbarActivity" />
+            name="viewModel"
+            type="com.marcelljee.hackernews.viewmodel.ItemCommentViewModel" />
 
         <variable
             name="item"
             type="com.marcelljee.hackernews.model.Item" />
-
-        <variable
-            name="itemUserClickHandlers"
-            type="com.marcelljee.hackernews.handlers.ItemUserClickHandlers" />
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -33,14 +21,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="@{item.deleted || item.dead ? View.GONE : View.VISIBLE}">
+            android:visibility="@{viewModel.isItemViewVisible(item)}">
 
             <LinearLayout
                 android:id="@+id/layout_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:onClick="@{() -> itemUserClickHandlers.onClick(item.by)}"
+                android:onClick="@{() -> viewModel.userClick(item.by)}"
                 android:orientation="horizontal"
                 android:padding="@dimen/view_margin">
 
@@ -48,8 +36,8 @@
                     android:id="@+id/tv_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/view_margin"
                     android:layout_marginEnd="@dimen/view_margin"
+                    android:layout_marginRight="@dimen/view_margin"
                     android:text="@{item.by}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
@@ -57,7 +45,7 @@
                     android:id="@+id/tv_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{ItemUtils.getRelativeDate(context, item)}"
+                    android:text="@{viewModel.getRelativeDate(item)}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
             </LinearLayout>
 
@@ -68,7 +56,7 @@
                 android:ellipsize="end"
                 android:maxLines="10"
                 android:padding="@dimen/view_margin"
-                android:text='@{ItemUtils.fromHtml(activity, item.text)}'
+                android:text='@{viewModel.getStyledText(item)}'
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
             <TextView
@@ -86,7 +74,7 @@
             android:padding="@dimen/view_margin"
             android:text="@string/text_deleted"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:visibility="@{item.deleted ? View.VISIBLE : View.GONE}" />
+            android:visibility="@{viewModel.isDeletedViewVisible(item)}" />
 
         <TextView
             android:layout_width="match_parent"
@@ -94,7 +82,7 @@
             android:padding="@dimen/view_margin"
             android:text="@string/text_dead"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:visibility="@{item.dead &amp;&amp; !item.deleted ? View.VISIBLE : View.GONE}" />
+            android:visibility="@{viewModel.isDeadViewVisible(item)}" />
 
     </FrameLayout>
 </layout>

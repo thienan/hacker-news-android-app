@@ -38,7 +38,6 @@ public class DetailsTextFragment extends ToolbarFragment {
         binding.setActivity(getToolbarActivity());
         binding.setText(mText);
 
-        // TODO: find a better way to remove maxLines
         binding.sectionNewsDetails.tvNewsDetails.setMaxLines(Integer.MAX_VALUE);
         binding.sectionNewsDetails.tvNewsDetails.setMovementMethod(LinkMovementMethod.getInstance());
         binding.sectionNewsDetails.tvNewsDetails.setBackground(null);

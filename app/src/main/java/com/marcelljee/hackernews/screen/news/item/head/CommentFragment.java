@@ -15,6 +15,7 @@ import com.marcelljee.hackernews.handlers.ItemUserClickHandlers;
 import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.loader.HackerNewsResponse;
 import com.marcelljee.hackernews.model.Item;
+import com.marcelljee.hackernews.viewmodel.ItemCommentViewModel;
 
 import org.parceler.Parcels;
 
@@ -59,11 +60,10 @@ public class CommentFragment extends ItemHeadFragment
         mBinding.setActivity(getToolbarActivity());
         mBinding.setItemParentName(mItemParentName);
         mBinding.setItemPosterName(mItemPosterName);
-        mBinding.setItemUserClickHandlers(new ItemUserClickHandlers(getToolbarActivity()));
 
         mBinding.tvCommentInfo.setMovementMethod(LinkMovementMethod.getInstance());
 
-        // TODO: find a better way to remove maxLines
+        mBinding.commentHead.setViewModel(new ItemCommentViewModel(getToolbarActivity()));
         mBinding.commentHead.tvText.setMaxLines(Integer.MAX_VALUE);
         mBinding.commentHead.tvText.setMovementMethod(LinkMovementMethod.getInstance());
 
