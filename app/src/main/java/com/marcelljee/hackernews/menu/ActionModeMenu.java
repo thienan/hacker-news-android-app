@@ -18,10 +18,17 @@ import com.marcelljee.hackernews.utils.SettingsUtils;
 
 public class ActionModeMenu {
 
+    private AppCompatActivity activity;
     private long itemId;
     private ActionMode mActionMode;
 
-    public boolean start(AppCompatActivity activity, ItemNewsBinding binding, Item item) {
+    public ActionModeMenu(AppCompatActivity activity) {
+        this.activity = activity;
+    }
+
+    public boolean start(ItemNewsBinding newsBinding) {
+        Item item = newsBinding.getItem();
+
         if (itemId == item.getId()) {
             finish();
             return false;
@@ -29,8 +36,8 @@ public class ActionModeMenu {
             finish();
         }
 
-        binding.ivSelected.setVisibility(View.VISIBLE);
-        binding.getRoot().setSelected(true);
+        newsBinding.ivSelected.setVisibility(View.VISIBLE);
+        newsBinding.getRoot().setSelected(true);
 
         itemId = item.getId();
         mActionMode = activity.startSupportActionMode(new ActionMode.Callback() {
@@ -66,14 +73,14 @@ public class ActionModeMenu {
                         return true;
                     case R.id.action_mark_read:
                         DatabaseDao.insertReadIndicatorItem(activity, itemId);
-                        binding.svScore.setRead(true);
-                        binding.ivSelected.setRead(true);
+                        newsBinding.svScore.setRead(true);
+                        newsBinding.ivSelected.setRead(true);
                         mode.finish();
                         return true;
                     case R.id.action_mark_unread:
                         DatabaseDao.deleteReadIndicatorItem(activity, itemId);
-                        binding.svScore.setRead(false);
-                        binding.ivSelected.setRead(false);
+                        newsBinding.svScore.setRead(false);
+                        newsBinding.ivSelected.setRead(false);
                         mode.finish();
                         return true;
                     case R.id.action_open_page:
@@ -87,8 +94,8 @@ public class ActionModeMenu {
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
-                binding.ivSelected.setVisibility(View.GONE);
-                binding.getRoot().setSelected(false);
+                newsBinding.ivSelected.setVisibility(View.GONE);
+                newsBinding.getRoot().setSelected(false);
 
                 itemId = Item.NO_ID;
                 mActionMode = null;

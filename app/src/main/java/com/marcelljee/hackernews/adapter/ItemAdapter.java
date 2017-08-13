@@ -55,7 +55,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         mItemParentName = itemParentName;
         mItemPosterName = itemPosterName;
 
-        mActionModeMenu = new ActionModeMenu();
+        mActionModeMenu = new ActionModeMenu(getActivity());
     }
 
     @Override
@@ -100,11 +100,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
         switch (holder.getItemViewType()) {
             case VIEW_TYPE_NEWS:
-                ItemNewsBinding itemNewsBinding = (ItemNewsBinding) holder.binding;
-                itemNewsBinding.svScore.setOnClickListener((v)
-                        -> mActionModeMenu.start(getActivity(), itemNewsBinding, item));
-                itemNewsBinding.getRoot().setOnLongClickListener((v)
-                        -> mActionModeMenu.start(getActivity(), itemNewsBinding, item));
+                ItemNewsBinding newsBinding = (ItemNewsBinding) holder.binding;
+                newsBinding.svScore.setOnClickListener((v) -> mActionModeMenu.start(newsBinding));
+                newsBinding.getRoot().setOnLongClickListener((v) -> mActionModeMenu.start(newsBinding));
                 break;
             default:
                 //do nothing
@@ -166,6 +164,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         return mActivity;
     }
 
+    public void closeActionModeMenu() {
+        mActionModeMenu.finish();
+    }
+
     public class ItemViewHolder<T extends ViewDataBinding>
             extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final T binding;
@@ -186,7 +188,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             itemView.setSelected(false);
             Item data = mItems.get(getAdapterPosition());
             BaseItemActivity.startActivity(mActivity, data, mItemParentName, mItemPosterName);
-            mActionModeMenu.finish();
 
             switch (getItemViewType()) {
                 case VIEW_TYPE_NEWS:
@@ -194,9 +195,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
                     DatabaseDao.insertReadIndicatorItem(mActivity, data.getId());
 
                     if (SettingsUtils.readIndicatorEnabled(mActivity)) {
-                        ItemNewsBinding itemNewsBinding = (ItemNewsBinding) binding;
-                        itemNewsBinding.svScore.setRead(true);
-                        itemNewsBinding.ivSelected.setRead(true);
+                        ItemNewsBinding newsBinding = (ItemNewsBinding) binding;
+                        newsBinding.svScore.setRead(true);
+                        newsBinding.ivSelected.setRead(true);
                     }
 
                     break;

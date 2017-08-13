@@ -73,6 +73,12 @@ public class UserFragment extends ToolbarFragment
     }
 
     @Override
+    public void onStop() {
+        mAdapter.closeActionModeMenu();
+        super.onStop();
+    }
+
+    @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
         PreferenceManager.getDefaultSharedPreferences(getContext())
