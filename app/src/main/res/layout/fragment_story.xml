@@ -14,18 +14,6 @@
             type="com.marcelljee.hackernews.model.Item" />
 
         <variable
-            name="itemUserClickHandlers"
-            type="com.marcelljee.hackernews.handlers.ItemUserClickHandlers" />
-
-        <variable
-            name="itemTextClickHandlers"
-            type="com.marcelljee.hackernews.handlers.ItemTextClickHandlers" />
-
-        <variable
-            name="itemBookmarkClickHandlers"
-            type="com.marcelljee.hackernews.handlers.ItemBookmarkClickHandlers" />
-
-        <variable
             name="itemTextDetailsClickHandlers"
             type="com.marcelljee.hackernews.handlers.ItemTextDetailsClickHandlers" />
     </data>
@@ -38,11 +26,7 @@
         <include
             android:id="@+id/section_news"
             layout="@layout/section_news"
-            app:activity="@{activity}"
-            app:item="@{item}"
-            app:itemTextClickHandlers="@{itemTextClickHandlers}"
-            app:itemUserClickHandlers="@{itemUserClickHandlers}"
-            app:itemBookmarkClickHandlers="@{itemBookmarkClickHandlers}"/>
+            app:item="@{item}"/>
 
         <include
             android:id="@+id/section_news_details"

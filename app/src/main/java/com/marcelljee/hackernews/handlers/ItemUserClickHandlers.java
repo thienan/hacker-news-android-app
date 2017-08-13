@@ -12,6 +12,8 @@ public class ItemUserClickHandlers {
     }
 
     public void onClick(String userId) {
-        UserActivity.startActivity(mActivity, userId);
+        if (!UserActivity.class.getName().equals(mActivity.getClass().getName())) {
+            UserActivity.startActivity(mActivity, userId);
+        }
     }
 }

@@ -2,34 +2,13 @@
 <layout>
 
     <data>
-
-        <import type="android.view.View" />
-
-        <import type="com.marcelljee.hackernews.utils.ItemUtils" />
-
         <variable
-            name="activity"
-            type="android.app.Activity" />
-
-        <variable
-            name="showReadIndicator"
-            type="Boolean" />
+            name="viewModel"
+            type="com.marcelljee.hackernews.viewmodel.ItemNewsViewModel" />
 
         <variable
             name="item"
             type="com.marcelljee.hackernews.model.Item" />
-
-        <variable
-            name="itemUserClickHandlers"
-            type="com.marcelljee.hackernews.handlers.ItemUserClickHandlers" />
-
-        <variable
-            name="itemTextClickHandlers"
-            type="com.marcelljee.hackernews.handlers.ItemTextClickHandlers" />
-
-        <variable
-            name="itemBookmarkClickHandlers"
-            type="com.marcelljee.hackernews.handlers.ItemBookmarkClickHandlers" />
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -45,7 +24,7 @@
             android:orientation="horizontal"
             android:paddingBottom="@dimen/text_spacing"
             android:paddingTop="@dimen/text_spacing"
-            android:visibility="@{item.deleted || item.dead ? View.GONE : View.VISIBLE}">
+            android:visibility="@{viewModel.isItemViewVisible(item)}">
 
             <FrameLayout
                 android:layout_width="wrap_content"
@@ -56,8 +35,8 @@
                     android:layout_width="@dimen/score_size"
                     android:layout_height="@dimen/score_size"
                     android:layout_margin="@dimen/view_margin"
-                    android:text="@{String.valueOf(item.score)}"
-                    app:read="@{showReadIndicator ? item.read : false}" />
+                    android:text="@{viewModel.getScoreText(item)}"
+                    app:read="@{viewModel.isItemRead(item)}" />
 
                 <com.marcelljee.hackernews.view.CheckedScoreView
                     android:id="@+id/iv_selected"
@@ -66,7 +45,7 @@
                     android:layout_margin="@dimen/view_margin"
                     android:contentDescription="@string/desc_selected_item"
                     android:visibility="gone"
-                    app:read="@{showReadIndicator ? item.read : false}" />
+                    app:read="@{viewModel.isItemRead(item)}" />
             </FrameLayout>
 
 
@@ -80,7 +59,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?android:selectableItemBackground"
-                    android:onClick="@{() -> itemUserClickHandlers.onClick(item.by)}"
+                    android:onClick="@{() -> viewModel.userClick(item.by)}"
                     android:orientation="horizontal"
                     android:paddingBottom="@dimen/text_spacing"
                     android:paddingEnd="@dimen/view_margin"
@@ -93,13 +72,13 @@
                         android:layout_marginEnd="@dimen/view_margin"
                         android:layout_marginRight="@dimen/view_margin"
                         android:text="@{item.by}"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{ItemUtils.getRelativeDate(context, item)}"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+                        android:text="@{viewModel.getRelativeDate(item)}"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
                 </LinearLayout>
 
                 <TextView
@@ -107,12 +86,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?android:selectableItemBackground"
-                    android:onClick="@{() -> itemTextClickHandlers.onClick(item)}"
+                    android:onClick="@{() -> viewModel.textClick(item)}"
                     android:paddingBottom="@dimen/text_spacing"
                     android:paddingEnd="@dimen/view_margin"
                     android:paddingStart="@dimen/view_margin"
                     android:paddingTop="@dimen/text_spacing"
-                    android:text="@{ItemUtils.getTitle(context, item)}"
+                    android:text="@{viewModel.getTitle(item)}"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
 
                 <TextView
@@ -123,20 +102,19 @@
                     android:paddingStart="@dimen/view_margin"
                     android:paddingTop="@dimen/text_spacing"
                     android:text="@{@plurals/total_comments(item.descendants, item.descendants)}"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                    android:visibility="@{item.descendants > 0 ? View.VISIBLE : View.GONE}" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    android:visibility="@{viewModel.isCommentViewVisible(item)}" />
             </LinearLayout>
 
-            <ImageButton
+            <com.marcelljee.hackernews.view.BookmarkView
                 android:id="@+id/ib_bookmark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="?android:selectableItemBackground"
                 android:contentDescription="@string/desc_bookmark"
-                android:onClick="@{() -> itemBookmarkClickHandlers.onClick(item)}"
+                android:onClick="@{() -> viewModel.bookmarkClick(item)}"
                 android:padding="@dimen/view_margin"
-                android:src="@{item.bookmarked ? @drawable/ic_bookmark : @drawable/ic_bookmark_border}"
-                android:tint="@color/colorIcons" />
+                app:bookmarked="@{item.bookmarked}" />
 
         </LinearLayout>
 
@@ -146,7 +124,7 @@
             android:padding="@dimen/view_margin"
             android:text="@string/text_deleted"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:visibility="@{item.deleted ? View.VISIBLE : View.GONE}" />
+            android:visibility="@{viewModel.isDeletedViewVisible(item)}" />
 
         <TextView
             android:layout_width="match_parent"
@@ -154,7 +132,7 @@
             android:padding="@dimen/view_margin"
             android:text="@string/text_dead"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:visibility="@{item.dead &amp;&amp; !item.deleted ? View.VISIBLE : View.GONE}" />
+            android:visibility="@{viewModel.isDeadViewVisible(item)}" />
 
     </FrameLayout>
 </layout>

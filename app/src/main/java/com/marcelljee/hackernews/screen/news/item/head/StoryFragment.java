@@ -14,13 +14,11 @@ import android.view.ViewGroup;
 import com.marcelljee.hackernews.adapter.ItemAdapter;
 import com.marcelljee.hackernews.chrome.CustomTabsHelper;
 import com.marcelljee.hackernews.databinding.FragmentStoryBinding;
-import com.marcelljee.hackernews.handlers.ItemBookmarkClickHandlers;
-import com.marcelljee.hackernews.handlers.ItemTextClickHandlers;
 import com.marcelljee.hackernews.handlers.ItemTextDetailsClickHandlers;
-import com.marcelljee.hackernews.handlers.ItemUserClickHandlers;
 import com.marcelljee.hackernews.loader.HackerNewsResponse;
 import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.model.Item;
+import com.marcelljee.hackernews.viewmodel.ItemNewsViewModel;
 
 import org.parceler.Parcels;
 
@@ -68,10 +66,8 @@ public class StoryFragment extends ItemHeadFragment
         mBinding = FragmentStoryBinding.inflate(inflater, container, false);
         mBinding.setActivity(getToolbarActivity());
         mBinding.setItem(mItem);
-        mBinding.setItemUserClickHandlers(new ItemUserClickHandlers(getToolbarActivity()));
-        mBinding.setItemTextClickHandlers(
-                new ItemTextClickHandlers(getToolbarActivity(), customTabsHelper.getSession()));
-        mBinding.setItemBookmarkClickHandlers(new ItemBookmarkClickHandlers(getToolbarActivity()));
+        mBinding.sectionNews.itemNews.setViewModel(
+                new ItemNewsViewModel(getToolbarActivity(), false, customTabsHelper.getSession()));
         mBinding.setItemTextDetailsClickHandlers(new ItemTextDetailsClickHandlers(getToolbarActivity()));
 
         if (TextUtils.isEmpty(mItem.getUrl())) {

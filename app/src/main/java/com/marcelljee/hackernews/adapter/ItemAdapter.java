@@ -12,8 +12,6 @@ import com.marcelljee.hackernews.database.DatabaseDao;
 import com.marcelljee.hackernews.databinding.ItemCommentBinding;
 import com.marcelljee.hackernews.databinding.ItemNewsBinding;
 import com.marcelljee.hackernews.databinding.ItemPollOptionBinding;
-import com.marcelljee.hackernews.handlers.ItemBookmarkClickHandlers;
-import com.marcelljee.hackernews.handlers.ItemTextClickHandlers;
 import com.marcelljee.hackernews.handlers.ItemUserClickHandlers;
 import com.marcelljee.hackernews.menu.ActionModeMenu;
 import com.marcelljee.hackernews.model.Item;
@@ -25,6 +23,7 @@ import java.util.List;
 import com.marcelljee.hackernews.activity.ToolbarActivity;
 import com.marcelljee.hackernews.screen.user.UserActivity;
 import com.marcelljee.hackernews.utils.SettingsUtils;
+import com.marcelljee.hackernews.viewmodel.ItemNewsViewModel;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
@@ -65,24 +64,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         switch (viewType) {
             case VIEW_TYPE_NEWS:
                 ItemNewsBinding newsBinding = ItemNewsBinding.inflate(inflater, parent, false);
-                newsBinding.setActivity(getActivity());
-                newsBinding.setShowReadIndicator(true);
-
-                if (!UserActivity.class.getName().equals(mActivity.getClass().getName())) {
-                    newsBinding.setItemUserClickHandlers(new ItemUserClickHandlers(getActivity()));
-                }
-
-                newsBinding.setItemTextClickHandlers(new ItemTextClickHandlers(getActivity()));
-                newsBinding.setItemBookmarkClickHandlers(new ItemBookmarkClickHandlers(getActivity()));
+                newsBinding.setViewModel(new ItemNewsViewModel(getActivity(), true, null));
                 return new ItemViewHolder(newsBinding, true);
             case VIEW_TYPE_COMMENT:
                 ItemCommentBinding commentBinding = ItemCommentBinding.inflate(inflater, parent, false);
                 commentBinding.setActivity(getActivity());
-
-                if (!UserActivity.class.getName().equals(mActivity.getClass().getName())) {
-                    commentBinding.setItemUserClickHandlers(new ItemUserClickHandlers(getActivity()));
-                }
-
+                commentBinding.setItemUserClickHandlers(new ItemUserClickHandlers(getActivity()));
                 commentBinding.tvText.setMovementMethod(LinkMovementMethod.getInstance());
                 return new ItemViewHolder(commentBinding, true);
             case VIEW_TYPE_POLL_OPTION:

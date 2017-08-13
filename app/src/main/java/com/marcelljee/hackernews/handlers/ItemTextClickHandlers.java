@@ -15,10 +15,6 @@ public class ItemTextClickHandlers {
     private final ToolbarActivity mActivity;
     private final CustomTabsSession mSession;
 
-    public ItemTextClickHandlers(ToolbarActivity activity) {
-        this(activity, null);
-    }
-
     public ItemTextClickHandlers(ToolbarActivity activity, CustomTabsSession session) {
         mActivity = activity;
         mSession = session;

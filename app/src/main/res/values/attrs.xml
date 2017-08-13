@@ -3,4 +3,7 @@
     <declare-styleable name="ScoreView">
         <attr name="read" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="BookmarkView">
+        <attr name="bookmarked" format="boolean" />
+    </declare-styleable>
 </resources>
