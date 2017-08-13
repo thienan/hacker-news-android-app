@@ -10,8 +10,8 @@ import com.marcelljee.hackernews.utils.ItemUtils;
 
 public class SectionNewsDetailsViewModel {
 
-    private ToolbarActivity mActivity;
-    private ItemTextDetailsClickHandlers mTextDetailsClickHandlers;
+    private final ToolbarActivity mActivity;
+    private final ItemTextDetailsClickHandlers mTextDetailsClickHandlers;
 
     public SectionNewsDetailsViewModel(ToolbarActivity activity) {
         mActivity = activity;

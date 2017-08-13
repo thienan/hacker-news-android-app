@@ -9,9 +9,9 @@ import com.marcelljee.hackernews.utils.ItemUtils;
 
 public class FragmentCommentViewModel {
 
-    private ToolbarActivity mActivity;
-    private String mItemParentName;
-    private String mItemPosterName;
+    private final ToolbarActivity mActivity;
+    private final String mItemParentName;
+    private final String mItemPosterName;
 
     public FragmentCommentViewModel(ToolbarActivity activity, String itemParentName, String itemPosterName) {
         mActivity = activity;

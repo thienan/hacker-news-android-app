@@ -44,7 +44,6 @@
                 android:padding="@dimen/view_margin"
                 android:text='@{viewModel.getStyledText(text)}'
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
         </android.support.v7.widget.CardView>
     </LinearLayout>
 </layout>

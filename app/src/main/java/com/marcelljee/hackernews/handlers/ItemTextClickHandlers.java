@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import com.marcelljee.hackernews.activity.ToolbarActivity;
 import com.marcelljee.hackernews.database.DatabaseDao;
 import com.marcelljee.hackernews.model.Item;
-import com.marcelljee.hackernews.screen.news.item.BaseItemActivity;
+import com.marcelljee.hackernews.screen.news.item.ItemActivity;
 import com.marcelljee.hackernews.chrome.CustomTabsBrowser;
 import com.marcelljee.hackernews.utils.SettingsUtils;
 
@@ -22,7 +22,7 @@ public class ItemTextClickHandlers {
 
     public void onClick(Item item) {
         if (TextUtils.isEmpty(item.getUrl())) {
-            BaseItemActivity.startActivity(mActivity, item);
+            ItemActivity.startActivity(mActivity, item);
         } else {
             CustomTabsBrowser.openTab(mActivity, mSession, item.getUrl());
         }

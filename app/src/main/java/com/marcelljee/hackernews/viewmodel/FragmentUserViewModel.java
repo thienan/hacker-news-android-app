@@ -8,7 +8,7 @@ import com.marcelljee.hackernews.utils.ItemUtils;
 
 public class FragmentUserViewModel {
 
-    private ToolbarActivity mActivity;
+    private final ToolbarActivity mActivity;
 
     public FragmentUserViewModel(ToolbarActivity activity) {
        mActivity = activity;

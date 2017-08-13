@@ -27,6 +27,5 @@
             android:layout_height="wrap_content"
             android:text="@{@plurals/total_scores(item.score, item.score)}"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
-
     </LinearLayout>
 </layout>

@@ -6,7 +6,7 @@ import com.marcelljee.hackernews.activity.ToolbarActivity;
 import com.marcelljee.hackernews.database.DatabaseDao;
 import com.marcelljee.hackernews.event.ItemBookmarkEvent;
 import com.marcelljee.hackernews.model.Item;
-import com.marcelljee.hackernews.screen.news.item.StoryActivity;
+import com.marcelljee.hackernews.screen.news.item.ItemActivity;
 import com.marcelljee.hackernews.screen.user.UserActivity;
 
 public class ItemBookmarkClickHandlers {
@@ -26,7 +26,7 @@ public class ItemBookmarkClickHandlers {
             item.setBookmarked(true);
         }
 
-        if (StoryActivity.class.getName().equals(mActivity.getClass().getName())) {
+        if (ItemActivity.StoryActivity.class.getName().equals(mActivity.getClass().getName())) {
             EventBus.getDefault().post(new ItemBookmarkEvent.StoryActivityEvent());
         } else if (UserActivity.class.getName().equals(mActivity.getClass().getName())) {
             EventBus.getDefault().post(new ItemBookmarkEvent.UserActivityEvent());

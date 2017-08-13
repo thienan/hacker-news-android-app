@@ -83,6 +83,5 @@
             android:text="@string/text_dead"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:visibility="@{viewModel.isDeadViewVisible(item)}" />
-
     </FrameLayout>
 </layout>

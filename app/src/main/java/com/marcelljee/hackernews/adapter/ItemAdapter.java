@@ -14,7 +14,7 @@ import com.marcelljee.hackernews.databinding.ItemNewsBinding;
 import com.marcelljee.hackernews.databinding.ItemPollOptionBinding;
 import com.marcelljee.hackernews.menu.ActionModeMenu;
 import com.marcelljee.hackernews.model.Item;
-import com.marcelljee.hackernews.screen.news.item.BaseItemActivity;
+import com.marcelljee.hackernews.screen.news.item.ItemActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -173,7 +173,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         public void onClick(View view) {
             itemView.setSelected(false);
             Item item = mItems.get(getAdapterPosition());
-            BaseItemActivity.startActivity(mActivity, item, mItemParentName, mItemPosterName);
+            ItemActivity.startActivity(mActivity, item, mItemParentName, mItemPosterName);
 
             switch (getItemViewType()) {
                 case VIEW_TYPE_NEWS:

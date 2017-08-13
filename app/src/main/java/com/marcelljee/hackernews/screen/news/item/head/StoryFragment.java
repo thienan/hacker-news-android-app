@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import com.marcelljee.hackernews.adapter.ItemAdapter;
 import com.marcelljee.hackernews.chrome.CustomTabsHelper;
 import com.marcelljee.hackernews.databinding.FragmentStoryBinding;
-import com.marcelljee.hackernews.handlers.ItemTextDetailsClickHandlers;
 import com.marcelljee.hackernews.loader.HackerNewsResponse;
 import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.model.Item;

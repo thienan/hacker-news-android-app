@@ -1,6 +1,7 @@
 package com.marcelljee.hackernews.screen.news.item;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -15,8 +16,10 @@ import com.marcelljee.hackernews.loader.HackerNewsResponse;
 import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.screen.news.NewsActivity;
 import com.marcelljee.hackernews.screen.news.item.comment.ItemCommentFragment;
+import com.marcelljee.hackernews.screen.news.item.head.CommentFragment;
 import com.marcelljee.hackernews.screen.news.item.head.ItemHeadFragment;
 import com.marcelljee.hackernews.chrome.CustomTabsBrowser;
+import com.marcelljee.hackernews.screen.news.item.head.StoryFragment;
 import com.marcelljee.hackernews.utils.HackerNewsUtils;
 import com.marcelljee.hackernews.utils.ItemUtils;
 import com.marcelljee.hackernews.utils.MenuUtils;
@@ -29,7 +32,7 @@ import java.util.List;
 import com.marcelljee.hackernews.activity.ToolbarActivity;
 import com.marcelljee.hackernews.model.Item;
 
-public class BaseItemActivity extends ToolbarActivity
+public class ItemActivity extends ToolbarActivity
         implements LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> {
 
     private static final String EXTRA_ROOT_CALLER_ACTIVITY = "com.marcelljee.hackernews.screen.news.item.extra.ROOT_CALLER_ACTIVITY";
@@ -53,7 +56,7 @@ public class BaseItemActivity extends ToolbarActivity
     private String mRootCallerActivity;
     private Item mItem;
     private String mItemParentName;
-    private String mItemParentPoster;
+    private String mItemPosterName;
 
     private long mParentId;
     private Item mParentItem;
@@ -66,19 +69,21 @@ public class BaseItemActivity extends ToolbarActivity
                                      String itemParentName, String itemPosterName) {
         switch (item.getType()) {
             case ITEM_TYPE_COMMENT:
-                CommentActivity.startActivity(activity, item, itemParentName, itemPosterName);
+                startActivity(activity,
+                        CommentActivity.createIntent(activity), item, itemParentName, itemPosterName);
                 break;
             case ITEM_TYPE_STORY:
             case ITEM_TYPE_POLL:
             case ITEM_TYPE_JOB:
             default:
-                StoryActivity.startActivity(activity, item, itemParentName, itemPosterName);
+                startActivity(activity,
+                        StoryActivity.createIntent(activity), item, itemParentName, itemPosterName);
                 break;
         }
     }
 
-    static void startActivity(ToolbarActivity activity, Intent intent, Item item,
-                              String itemParentName, String itemPosterName) {
+    private static void startActivity(ToolbarActivity activity, Intent intent, Item item,
+                                      String itemParentName, String itemPosterName) {
         Bundle extras = createExtras(activity, item, itemParentName, itemPosterName);
         intent.putExtras(extras);
         activity.startActivity(intent);
@@ -96,6 +101,18 @@ public class BaseItemActivity extends ToolbarActivity
 
         if (savedInstanceState == null) {
             loadParentItem();
+
+            switch (mItem.getType()) {
+                case ITEM_TYPE_COMMENT:
+                    loadFragment(CommentFragment.newInstance(mItem, mItemParentName, mItemPosterName));
+                    break;
+                case ITEM_TYPE_STORY:
+                case ITEM_TYPE_POLL:
+                case ITEM_TYPE_JOB:
+                default:
+                    loadFragment(StoryFragment.newInstance(mItem));
+                    break;
+            }
         }
     }
 
@@ -183,7 +200,10 @@ public class BaseItemActivity extends ToolbarActivity
 
     }
 
-    void loadFragment(ItemHeadFragment headFragment, ItemCommentFragment commentFragment) {
+    private void loadFragment(ItemHeadFragment headFragment) {
+        ItemCommentFragment commentFragment = ItemCommentFragment
+                .newInstance(mItem, mItemParentName, mItemPosterName);
+
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.item_head_container, headFragment, TAG_HEAD_FRAGMENT)
                 .add(R.id.item_comment_container, commentFragment, TAG_COMMENT_FRAGMENT)
@@ -247,7 +267,7 @@ public class BaseItemActivity extends ToolbarActivity
         }
 
         if (intent.hasExtra(EXTRA_ITEM_POSTER_NAME)) {
-            mItemParentPoster = intent.getStringExtra(EXTRA_ITEM_POSTER_NAME);
+            mItemPosterName = intent.getStringExtra(EXTRA_ITEM_POSTER_NAME);
         }
     }
 
@@ -264,15 +284,15 @@ public class BaseItemActivity extends ToolbarActivity
         CustomTabsBrowser.openTab(this, HackerNewsUtils.geItemUrl(mItem.getId()));
     }
 
-    public Item getItem() {
-        return mItem;
+    public static class StoryActivity extends ItemActivity {
+        public static Intent createIntent(Context context) {
+            return new Intent(context, StoryActivity.class);
+        }
     }
 
-    public String getItemParentName() {
-        return mItemParentName;
-    }
-
-    public String getItemPosterName() {
-        return mItemParentPoster;
+    public static class CommentActivity extends ItemActivity {
+        public static Intent createIntent(Context context) {
+            return new Intent(context, CommentActivity.class);
+        }
     }
 }

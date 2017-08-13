@@ -11,7 +11,7 @@ import android.text.TextUtils;
 import android.widget.RemoteViews;
 
 import com.marcelljee.hackernews.screen.news.NewsActivity;
-import com.marcelljee.hackernews.screen.news.item.StoryActivity;
+import com.marcelljee.hackernews.screen.news.item.ItemActivity;
 
 public class NewsWidgetUpdaterService extends IntentService {
     private static final String ACTION_WIDGET_UPDATE = "com.marcelljee.hackernews.widget.action.WIDGET_UPDATE";
@@ -82,7 +82,7 @@ public class NewsWidgetUpdaterService extends IntentService {
     private static void setItemClick(Context context, RemoteViews views, String newsType) {
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addNextIntent(NewsActivity.createIntent(context, newsType));
-        stackBuilder.addNextIntent(StoryActivity.createIntent(context));
+        stackBuilder.addNextIntent(ItemActivity.StoryActivity.createIntent(context));
 
         PendingIntent itemPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 

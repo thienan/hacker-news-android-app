@@ -13,7 +13,7 @@ import com.marcelljee.hackernews.api.HackerNewsApi;
 import com.marcelljee.hackernews.database.DatabaseDao;
 import com.marcelljee.hackernews.loader.HackerNewsResponse;
 import com.marcelljee.hackernews.model.Item;
-import com.marcelljee.hackernews.screen.news.item.BaseItemActivity;
+import com.marcelljee.hackernews.screen.news.item.ItemActivity;
 import com.marcelljee.hackernews.utils.CollectionUtils;
 import com.marcelljee.hackernews.utils.ItemUtils;
 
@@ -130,7 +130,7 @@ public class NewsWidgetItemService extends RemoteViewsService {
             views.setViewVisibility(R.id.tv_comment_total, item.getDescendants() > 0 ? View.VISIBLE : View.GONE);
 
             Bundle extras = new Bundle();
-            extras.putParcelable(BaseItemActivity.EXTRA_ITEM, Parcels.wrap(item));
+            extras.putParcelable(ItemActivity.EXTRA_ITEM, Parcels.wrap(item));
             Intent fillInIntent = new Intent();
             fillInIntent.putExtras(extras);
             views.setOnClickFillInIntent(R.id.news_widget_item, fillInIntent);

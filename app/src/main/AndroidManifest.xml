@@ -18,7 +18,7 @@
         <activity android:name="com.marcelljee.hackernews.activity.ToolbarActivity" />
         <activity android:name="com.marcelljee.hackernews.activity.WebToolbarActivity" />
         <activity android:name="com.marcelljee.hackernews.activity.FragmentActivity" />
-        <activity android:name="com.marcelljee.hackernews.screen.news.item.BaseItemActivity" />
+        <activity android:name="com.marcelljee.hackernews.screen.news.item.ItemActivity" />
 
         <activity
             android:name="com.marcelljee.hackernews.screen.news.NewsActivity"
@@ -32,7 +32,7 @@
         </activity>
 
         <activity
-            android:name="com.marcelljee.hackernews.screen.news.item.StoryActivity"
+            android:name="com.marcelljee.hackernews.screen.news.item.ItemActivity$StoryActivity"
             android:launchMode="singleTop"
             android:parentActivityName="com.marcelljee.hackernews.screen.news.NewsActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -42,22 +42,22 @@
         </activity>
 
         <activity
-            android:name="com.marcelljee.hackernews.screen.news.item.CommentActivity"
-            android:parentActivityName="com.marcelljee.hackernews.screen.news.item.StoryActivity"
+            android:name="com.marcelljee.hackernews.screen.news.item.ItemActivity$CommentActivity"
+            android:parentActivityName="com.marcelljee.hackernews.screen.news.item.ItemActivity$StoryActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.marcelljee.hackernews.screen.news.item.StoryActivity" />
+                android:value="com.marcelljee.hackernews.screen.news.item.ItemActivity$StoryActivity" />
         </activity>
 
         <activity
             android:name="com.marcelljee.hackernews.screen.news.item.text.DetailsTextActivity"
             android:label="@string/title_activity_details_text"
-            android:parentActivityName="com.marcelljee.hackernews.screen.news.item.BaseItemActivity"
+            android:parentActivityName="com.marcelljee.hackernews.screen.news.item.ItemActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.marcelljee.hackernews.screen.news.item.BaseItemActivity" />
+                android:value="com.marcelljee.hackernews.screen.news.item.ItemActivity" />
         </activity>
 
         <activity
