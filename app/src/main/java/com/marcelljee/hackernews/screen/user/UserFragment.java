@@ -91,6 +91,7 @@ public class UserFragment extends ToolbarFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = FragmentUserBinding.inflate(inflater, container, false);
+        mBinding.setUser(User.createTempUser(mUserId));
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mAdapter = new ItemAdapter(getToolbarActivity());

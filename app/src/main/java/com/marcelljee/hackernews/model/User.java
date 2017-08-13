@@ -1,12 +1,17 @@
 package com.marcelljee.hackernews.model;
 
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
+
+import com.marcelljee.hackernews.BR;
+
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Parcel(Parcel.Serialization.BEAN)
-public class User {
+public class User extends BaseObservable {
     private String id = "";
     private int delay = 0;
     private long created = 0;
@@ -14,51 +19,69 @@ public class User {
     private String about = "";
     private List<Long> submitted = new ArrayList<>();
 
+    public static User createTempUser(String id) {
+        User user = new User();
+        user.setId(id);
+        return user;
+    }
+
+    @Bindable
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
+        notifyPropertyChanged(BR.id);
     }
 
+    @Bindable
     public int getDelay() {
         return delay;
     }
 
     public void setDelay(int delay) {
         this.delay = delay;
+        notifyPropertyChanged(BR.delay);
     }
 
+    @Bindable
     public long getCreated() {
         return created;
     }
 
     public void setCreated(long created) {
         this.created = created;
+        notifyPropertyChanged(BR.created);
     }
 
+    @Bindable
     public int getKarma() {
         return karma;
     }
 
     public void setKarma(int karma) {
         this.karma = karma;
+        notifyPropertyChanged(BR.karma);
     }
 
+    @Bindable
     public String getAbout() {
         return about;
     }
 
     public void setAbout(String about) {
         this.about = about;
+        notifyPropertyChanged(BR.about);
     }
 
+    @Bindable
     public List<Long> getSubmitted() {
         return submitted;
     }
 
     public void setSubmitted(List<Long> submitted) {
         this.submitted = submitted;
+        notifyPropertyChanged(BR.submitted);
     }
 }
