@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.marcelljee.hackernews.databinding.FragmentDetailsTextBinding;
 import com.marcelljee.hackernews.fragment.ToolbarFragment;
+import com.marcelljee.hackernews.viewmodel.SectionNewsDetailsViewModel;
 
 public class DetailsTextFragment extends ToolbarFragment {
 
@@ -35,9 +36,8 @@ public class DetailsTextFragment extends ToolbarFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentDetailsTextBinding binding = FragmentDetailsTextBinding.inflate(inflater, container, false);
-        binding.setActivity(getToolbarActivity());
         binding.setText(mText);
-
+        binding.sectionNewsDetails.setViewModel(new SectionNewsDetailsViewModel(getToolbarActivity()));
         binding.sectionNewsDetails.tvNewsDetails.setMaxLines(Integer.MAX_VALUE);
         binding.sectionNewsDetails.tvNewsDetails.setMovementMethod(LinkMovementMethod.getInstance());
         binding.sectionNewsDetails.tvNewsDetails.setBackground(null);

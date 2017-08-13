@@ -9,7 +9,6 @@ import com.marcelljee.hackernews.handlers.ItemBookmarkClickHandlers;
 import com.marcelljee.hackernews.handlers.ItemTextClickHandlers;
 import com.marcelljee.hackernews.handlers.ItemUserClickHandlers;
 import com.marcelljee.hackernews.model.Item;
-import com.marcelljee.hackernews.screen.user.UserActivity;
 import com.marcelljee.hackernews.utils.ItemUtils;
 
 public class ItemNewsViewModel {

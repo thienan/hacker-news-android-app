@@ -4,10 +4,6 @@
     <data>
 
         <variable
-            name="activity"
-            type="com.marcelljee.hackernews.activity.ToolbarActivity" />
-
-        <variable
             name="text"
             type="String" />
     </data>
@@ -22,7 +18,6 @@
         <include
             android:id="@+id/section_news_details"
             layout="@layout/section_news_details"
-            app:activity="@{activity}"
             app:text="@{text}" />
     </ScrollView>
 </layout>

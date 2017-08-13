@@ -3,21 +3,9 @@
 
     <data>
 
-        <import type="android.text.Html" />
-
-        <import type="android.view.View" />
-
-        <import type="android.text.TextUtils" />
-
-        <import type="com.marcelljee.hackernews.utils.ItemUtils" />
-
         <variable
-            name="itemTextDetailsClickHandlers"
-            type="com.marcelljee.hackernews.handlers.ItemTextDetailsClickHandlers" />
-
-        <variable
-            name="activity"
-            type="com.marcelljee.hackernews.activity.ToolbarActivity" />
+            name="viewModel"
+            type="com.marcelljee.hackernews.viewmodel.SectionNewsDetailsViewModel" />
 
         <variable
             name="text"
@@ -30,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/view_margin"
         android:orientation="vertical"
-        android:visibility="@{TextUtils.isEmpty(text) ? View.GONE : View.VISIBLE}">
+        android:visibility="@{viewModel.isViewVisible(text)}">
 
         <TextView
             android:layout_width="match_parent"
@@ -52,9 +40,9 @@
                 android:background="?attr/selectableItemBackground"
                 android:ellipsize="end"
                 android:maxLines="5"
-                android:onClick="@{() -> itemTextDetailsClickHandlers.onClick(text)}"
+                android:onClick="@{() -> viewModel.textDetailsClick(text)}"
                 android:padding="@dimen/view_margin"
-                android:text='@{ItemUtils.fromHtml(activity, text)}'
+                android:text='@{viewModel.getStyledText(text)}'
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
         </android.support.v7.widget.CardView>

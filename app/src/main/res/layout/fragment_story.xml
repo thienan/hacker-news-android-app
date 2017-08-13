@@ -6,16 +6,8 @@
         <import type="android.view.View" />
 
         <variable
-            name="activity"
-            type="com.marcelljee.hackernews.activity.ToolbarActivity" />
-
-        <variable
             name="item"
             type="com.marcelljee.hackernews.model.Item" />
-
-        <variable
-            name="itemTextDetailsClickHandlers"
-            type="com.marcelljee.hackernews.handlers.ItemTextDetailsClickHandlers" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -23,16 +15,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <include
             android:id="@+id/section_news"
             layout="@layout/section_news"
-            app:item="@{item}"/>
+            app:item="@{item}" />
 
         <include
             android:id="@+id/section_news_details"
             layout="@layout/section_news_details"
-            app:activity="@{activity}"
-            app:itemTextDetailsClickHandlers="@{itemTextDetailsClickHandlers}"
             app:text="@{item.text}" />
 
         <include

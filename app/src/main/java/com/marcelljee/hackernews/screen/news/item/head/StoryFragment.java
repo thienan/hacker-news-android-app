@@ -19,6 +19,7 @@ import com.marcelljee.hackernews.loader.HackerNewsResponse;
 import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.viewmodel.ItemNewsViewModel;
+import com.marcelljee.hackernews.viewmodel.SectionNewsDetailsViewModel;
 
 import org.parceler.Parcels;
 
@@ -64,11 +65,10 @@ public class StoryFragment extends ItemHeadFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = FragmentStoryBinding.inflate(inflater, container, false);
-        mBinding.setActivity(getToolbarActivity());
         mBinding.setItem(mItem);
         mBinding.sectionNews.itemNews.setViewModel(
                 new ItemNewsViewModel(getToolbarActivity(), false, customTabsHelper.getSession()));
-        mBinding.setItemTextDetailsClickHandlers(new ItemTextDetailsClickHandlers(getToolbarActivity()));
+        mBinding.sectionNewsDetails.setViewModel(new SectionNewsDetailsViewModel(getToolbarActivity()));
 
         if (TextUtils.isEmpty(mItem.getUrl())) {
             mBinding.sectionNews.itemNews.tvText.setBackground(null);
