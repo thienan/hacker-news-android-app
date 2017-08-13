@@ -96,6 +96,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
         Item item = getItem(position);
+        item.setRead(DatabaseDao.isItemRead(mActivity, item.getId()));
         holder.binding.setVariable(BR.item, item);
 
         switch (holder.getItemViewType()) {
@@ -107,7 +108,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             default:
                 //do nothing
         }
-
     }
 
     @Override
@@ -186,18 +186,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         @Override
         public void onClick(View view) {
             itemView.setSelected(false);
-            Item data = mItems.get(getAdapterPosition());
-            BaseItemActivity.startActivity(mActivity, data, mItemParentName, mItemPosterName);
+            Item item = mItems.get(getAdapterPosition());
+            BaseItemActivity.startActivity(mActivity, item, mItemParentName, mItemPosterName);
 
             switch (getItemViewType()) {
                 case VIEW_TYPE_NEWS:
-                    DatabaseDao.insertHistoryItem(mActivity, data);
-                    DatabaseDao.insertReadIndicatorItem(mActivity, data.getId());
+                    DatabaseDao.insertHistoryItem(mActivity, item);
+                    DatabaseDao.insertReadIndicatorItem(mActivity, item.getId());
 
                     if (SettingsUtils.readIndicatorEnabled(mActivity)) {
-                        ItemNewsBinding newsBinding = (ItemNewsBinding) binding;
-                        newsBinding.svScore.setRead(true);
-                        newsBinding.ivSelected.setRead(true);
+                        item.setRead(true);
                     }
 
                     break;

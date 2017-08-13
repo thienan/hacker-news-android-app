@@ -59,7 +59,7 @@
                     android:layout_height="@dimen/score_size"
                     android:layout_margin="@dimen/view_margin"
                     android:text="@{String.valueOf(item.score)}"
-                    app:read="@{showReadIndicator ? DatabaseDao.isItemRead(context, item.id) : false}" />
+                    app:read="@{showReadIndicator ? item.read : false}" />
 
                 <com.marcelljee.hackernews.view.CheckedScoreView
                     android:id="@+id/iv_selected"
@@ -68,7 +68,7 @@
                     android:layout_margin="@dimen/view_margin"
                     android:contentDescription="@string/desc_selected_item"
                     android:visibility="gone"
-                    app:read="@{showReadIndicator ? DatabaseDao.isItemRead(context, item.id) : false}" />
+                    app:read="@{showReadIndicator ? item.read : false}" />
             </FrameLayout>
 
 

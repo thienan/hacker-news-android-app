@@ -2,7 +2,10 @@ package com.marcelljee.hackernews.model;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 
+import com.marcelljee.hackernews.BR;
 import com.marcelljee.hackernews.database.DatabaseContract;
 import com.marcelljee.hackernews.utils.DatabaseUtils;
 
@@ -13,7 +16,7 @@ import java.util.List;
 
 @SuppressWarnings("WeakerAccess")
 @Parcel(Parcel.Serialization.BEAN)
-public class Item {
+public class Item extends BaseObservable {
 
     public static final long NO_ID = -1;
 
@@ -33,132 +36,176 @@ public class Item {
     private List<Long> parts = new ArrayList<>();
     private int descendants = 0;
 
+    private boolean read = false;
+
+    @Bindable
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
+        notifyPropertyChanged(BR.id);
     }
 
+    @Bindable
     public boolean isDeleted() {
         return deleted;
     }
 
+    @Bindable
     public boolean isNotDeleted() {
         return !deleted;
     }
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+        notifyPropertyChanged(BR.deleted);
     }
 
+    @Bindable
     public String getType() {
         return type;
     }
 
     public void setType(String type) {
         this.type = type;
+        notifyPropertyChanged(BR.type);
     }
 
+    @Bindable
     public String getBy() {
         return by;
     }
 
     public void setBy(String by) {
         this.by = by;
+        notifyPropertyChanged(BR.by);
     }
 
+    @Bindable
     public long getTime() {
         return time;
     }
 
     public void setTime(long time) {
         this.time = time;
+        notifyPropertyChanged(BR.time);
     }
 
+    @Bindable
     public String getText() {
         return text;
     }
 
     public void setText(String text) {
         this.text = text;
+        notifyPropertyChanged(BR.text);
     }
 
+    @Bindable
     public boolean isDead() {
         return dead;
     }
 
+    @Bindable
     public boolean isNotDead() {
         return !dead;
     }
 
     public void setDead(boolean dead) {
         this.dead = dead;
+        notifyPropertyChanged(BR.dead);
     }
 
+    @Bindable
     public long getParent() {
         return parent;
     }
 
     public void setParent(long parent) {
         this.parent = parent;
+        notifyPropertyChanged(BR.parent);
     }
 
+    @Bindable
     public long getPoll() {
         return poll;
     }
 
     public void setPoll(long poll) {
         this.poll = poll;
+        notifyPropertyChanged(BR.poll);
     }
 
+    @Bindable
     public List<Long> getKids() {
         return kids;
     }
 
     public void setKids(List<Long> kids) {
         this.kids = kids;
+        notifyPropertyChanged(BR.kids);
     }
 
+    @Bindable
     public String getUrl() {
         return url;
     }
 
     public void setUrl(String url) {
         this.url = url;
+        notifyPropertyChanged(BR.url);
     }
 
+    @Bindable
     public int getScore() {
         return score;
     }
 
     public void setScore(int score) {
         this.score = score;
+        notifyPropertyChanged(BR.score);
     }
 
+    @Bindable
     public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
+        notifyPropertyChanged(BR.title);
     }
 
+    @Bindable
     public List<Long> getParts() {
         return parts;
     }
 
     public void setParts(List<Long> parts) {
         this.parts = parts;
+        notifyPropertyChanged(BR.parts);
     }
 
+    @Bindable
     public int getDescendants() {
         return descendants;
     }
 
     public void setDescendants(int descendants) {
         this.descendants = descendants;
+        notifyPropertyChanged(BR.descendants);
+    }
+
+    @Bindable
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
+        notifyPropertyChanged(BR.read);
     }
 
     public static class Factory {

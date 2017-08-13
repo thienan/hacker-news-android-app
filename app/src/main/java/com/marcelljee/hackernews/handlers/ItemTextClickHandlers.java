@@ -4,9 +4,11 @@ import android.support.customtabs.CustomTabsSession;
 import android.text.TextUtils;
 
 import com.marcelljee.hackernews.activity.ToolbarActivity;
+import com.marcelljee.hackernews.database.DatabaseDao;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.screen.news.item.BaseItemActivity;
 import com.marcelljee.hackernews.chrome.CustomTabsBrowser;
+import com.marcelljee.hackernews.utils.SettingsUtils;
 
 public class ItemTextClickHandlers {
 
@@ -22,11 +24,18 @@ public class ItemTextClickHandlers {
         mSession = session;
     }
 
-    public void onClick(Item data) {
-        if (TextUtils.isEmpty(data.getUrl())) {
-            BaseItemActivity.startActivity(mActivity, data);
+    public void onClick(Item item) {
+        if (TextUtils.isEmpty(item.getUrl())) {
+            BaseItemActivity.startActivity(mActivity, item);
         } else {
-            CustomTabsBrowser.openTab(mActivity, mSession, data.getUrl());
+            CustomTabsBrowser.openTab(mActivity, mSession, item.getUrl());
+        }
+
+        DatabaseDao.insertHistoryItem(mActivity, item);
+        DatabaseDao.insertReadIndicatorItem(mActivity, item.getId());
+
+        if (SettingsUtils.readIndicatorEnabled(mActivity)) {
+            item.setRead(true);
         }
     }
 }

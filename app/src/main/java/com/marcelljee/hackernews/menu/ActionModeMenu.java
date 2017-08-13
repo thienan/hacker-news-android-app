@@ -18,7 +18,7 @@ import com.marcelljee.hackernews.utils.SettingsUtils;
 
 public class ActionModeMenu {
 
-    private AppCompatActivity activity;
+    private final AppCompatActivity activity;
     private long itemId;
     private ActionMode mActionMode;
 
@@ -36,8 +36,7 @@ public class ActionModeMenu {
             finish();
         }
 
-        newsBinding.ivSelected.setVisibility(View.VISIBLE);
-        newsBinding.getRoot().setSelected(true);
+        setSelected(newsBinding, true);
 
         itemId = item.getId();
         mActionMode = activity.startSupportActionMode(new ActionMode.Callback() {
@@ -73,14 +72,12 @@ public class ActionModeMenu {
                         return true;
                     case R.id.action_mark_read:
                         DatabaseDao.insertReadIndicatorItem(activity, itemId);
-                        newsBinding.svScore.setRead(true);
-                        newsBinding.ivSelected.setRead(true);
+                        item.setRead(true);
                         mode.finish();
                         return true;
                     case R.id.action_mark_unread:
                         DatabaseDao.deleteReadIndicatorItem(activity, itemId);
-                        newsBinding.svScore.setRead(false);
-                        newsBinding.ivSelected.setRead(false);
+                        item.setRead(false);
                         mode.finish();
                         return true;
                     case R.id.action_open_page:
@@ -94,8 +91,7 @@ public class ActionModeMenu {
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
-                newsBinding.ivSelected.setVisibility(View.GONE);
-                newsBinding.getRoot().setSelected(false);
+                setSelected(newsBinding, false);
 
                 itemId = Item.NO_ID;
                 mActionMode = null;
@@ -113,5 +109,15 @@ public class ActionModeMenu {
 
     private boolean isStarted() {
         return mActionMode != null;
+    }
+
+    private void setSelected(ItemNewsBinding newsBinding, boolean selected) {
+        if (selected) {
+            newsBinding.ivSelected.setVisibility(View.VISIBLE);
+            newsBinding.getRoot().setSelected(true);
+        } else {
+            newsBinding.ivSelected.setVisibility(View.GONE);
+            newsBinding.getRoot().setSelected(false);
+        }
     }
 }
