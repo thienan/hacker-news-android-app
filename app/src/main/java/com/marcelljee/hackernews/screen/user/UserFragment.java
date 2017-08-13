@@ -23,6 +23,7 @@ import com.marcelljee.hackernews.loader.UserLoader;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.model.User;
 import com.marcelljee.hackernews.utils.CollectionUtils;
+import com.marcelljee.hackernews.viewmodel.FragmentUserViewModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -91,6 +92,7 @@ public class UserFragment extends ToolbarFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = FragmentUserBinding.inflate(inflater, container, false);
+        mBinding.setViewModel(new FragmentUserViewModel(getToolbarActivity()));
         mBinding.setUser(User.createTempUser(mUserId));
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
