@@ -45,8 +45,8 @@ public class ItemNewsViewModel {
         return item.getDescendants() > 0 ? View.VISIBLE : View.GONE;
     }
 
-    public boolean isItemRead(Item item) {
-        return mReadIndicator && item.isRead();
+    public boolean getReadIndicator() {
+        return mReadIndicator;
     }
 
     public String getScoreText(Item item) {
