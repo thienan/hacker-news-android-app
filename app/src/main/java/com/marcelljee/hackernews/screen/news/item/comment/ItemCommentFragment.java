@@ -65,7 +65,12 @@ public class ItemCommentFragment extends ToolbarFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = FragmentItemCommentBinding.inflate(inflater, container, false);
-        mBinding.setTotal(mItem.getKids().size());
+
+        if (mItem.getKids().size() > 0) {
+            mBinding.getRoot().setVisibility(View.VISIBLE);
+        } else {
+            mBinding.getRoot().setVisibility(View.GONE);
+        }
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
 

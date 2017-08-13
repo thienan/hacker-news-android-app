@@ -3,8 +3,6 @@
 
     <data>
 
-        <import type="android.view.View" />
-
         <variable
             name="item"
             type="com.marcelljee.hackernews.model.Item" />
@@ -28,7 +26,6 @@
 
         <include
             android:id="@+id/section_poll_options"
-            layout="@layout/section_poll_options"
-            android:visibility="@{item.parts.size() > 0 ? View.VISIBLE : View.GONE}" />
+            layout="@layout/section_poll_options" />
     </LinearLayout>
 </layout>

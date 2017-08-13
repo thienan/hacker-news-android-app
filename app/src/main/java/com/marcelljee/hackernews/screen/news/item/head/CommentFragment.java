@@ -15,6 +15,7 @@ import com.marcelljee.hackernews.handlers.ItemUserClickHandlers;
 import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.loader.HackerNewsResponse;
 import com.marcelljee.hackernews.model.Item;
+import com.marcelljee.hackernews.viewmodel.FragmentCommentViewModel;
 import com.marcelljee.hackernews.viewmodel.ItemCommentViewModel;
 
 import org.parceler.Parcels;
@@ -56,10 +57,8 @@ public class CommentFragment extends ItemHeadFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = FragmentCommentBinding.inflate(inflater, container, false);
+        mBinding.setViewModel(new FragmentCommentViewModel(getToolbarActivity(), mItemParentName, mItemPosterName));
         mBinding.setItem(mItem);
-        mBinding.setActivity(getToolbarActivity());
-        mBinding.setItemParentName(mItemParentName);
-        mBinding.setItemPosterName(mItemPosterName);
 
         mBinding.tvCommentInfo.setMovementMethod(LinkMovementMethod.getInstance());
 
