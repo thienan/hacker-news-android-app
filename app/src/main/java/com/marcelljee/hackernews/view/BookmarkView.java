@@ -14,19 +14,16 @@ public class BookmarkView extends AppCompatImageButton {
 
     public BookmarkView(Context context) {
         super(context);
-        initView();
     }
 
     public BookmarkView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initAttr(context, attrs);
-        initView();
     }
 
     public BookmarkView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initAttr(context, attrs);
-        initView();
     }
 
     private void initAttr(Context context, AttributeSet attrs) {
@@ -42,10 +39,6 @@ public class BookmarkView extends AppCompatImageButton {
         }
     }
 
-    private void initView() {
-        setColorFilter(ContextCompat.getColor(getContext(), R.color.colorIcons));
-    }
-
     public void setBookmarked(boolean bookmarked) {
         mBookmarked = bookmarked;
         updateImage();
@@ -53,9 +46,9 @@ public class BookmarkView extends AppCompatImageButton {
 
     private void updateImage() {
         if (mBookmarked) {
-            setImageResource(R.drawable.ic_bookmark);
+            setImageResource(R.drawable.ic_bookmarked);
         } else {
-            setImageResource(R.drawable.ic_bookmark_border);
+            setImageResource(R.drawable.ic_unbookmarked);
         }
     }
 
