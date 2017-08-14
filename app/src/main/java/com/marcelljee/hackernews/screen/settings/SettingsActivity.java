@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.marcelljee.hackernews.activity.FragmentActivity;
 
-public class SettingsActivity extends FragmentActivity {
+public class SettingsActivity extends FragmentActivity<SettingsFragment> {
 
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, SettingsActivity.class);

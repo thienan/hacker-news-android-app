@@ -7,7 +7,7 @@ import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.activity.ToolbarActivity;
 import com.marcelljee.hackernews.activity.FragmentActivity;
 
-public class UserActivity extends FragmentActivity {
+public class UserActivity extends FragmentActivity<UserFragment> {
 
     private static final String EXTRA_USER_ID = "com.marcelljee.hackernews.screen.user.extra.USER_ID";
 

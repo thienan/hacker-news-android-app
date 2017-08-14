@@ -12,14 +12,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.marcelljee.hackernews.R;
+import com.marcelljee.hackernews.activity.FragmentActivity;
 import com.marcelljee.hackernews.loader.HackerNewsResponse;
 import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.screen.news.NewsActivity;
-import com.marcelljee.hackernews.screen.news.item.comment.ItemCommentFragment;
-import com.marcelljee.hackernews.screen.news.item.head.CommentFragment;
-import com.marcelljee.hackernews.screen.news.item.head.ItemHeadFragment;
 import com.marcelljee.hackernews.chrome.CustomTabsBrowser;
-import com.marcelljee.hackernews.screen.news.item.head.StoryFragment;
 import com.marcelljee.hackernews.utils.HackerNewsUtils;
 import com.marcelljee.hackernews.utils.ItemUtils;
 import com.marcelljee.hackernews.utils.MenuUtils;
@@ -32,7 +29,7 @@ import java.util.List;
 import com.marcelljee.hackernews.activity.ToolbarActivity;
 import com.marcelljee.hackernews.model.Item;
 
-public class ItemActivity extends ToolbarActivity
+public class ItemActivity extends FragmentActivity<ItemFragment>
         implements LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> {
 
     private static final String EXTRA_ROOT_CALLER_ACTIVITY = "com.marcelljee.hackernews.screen.news.item.extra.ROOT_CALLER_ACTIVITY";
@@ -40,16 +37,13 @@ public class ItemActivity extends ToolbarActivity
     private static final String EXTRA_ITEM_PARENT_NAME = "com.marcelljee.hackernews.screen.news.item.extra.ITEM_PARENT_NAME";
     private static final String EXTRA_ITEM_POSTER_NAME = "com.marcelljee.hackernews.screen.news.item.extra.ITEM_POSTER_NAME";
 
-    private static final String TAG_HEAD_FRAGMENT = "com.marcelljee.hackernews.screen.news.item.tag.HEAD_FRAGMENT";
-    private static final String TAG_COMMENT_FRAGMENT = "com.marcelljee.hackernews.screen.news.item.tag.COMMENT_FRAGMENT";
-
     private static final String STATE_PARENT_ID = "com.marcelljee.hackernews.screen.news.item.state.PARENT_ID";
     private static final String STATE_PARENT_ITEM = "com.marcelljee.hackernews.screen.news.item.state.PARENT_ITEM";
 
-    private static final String ITEM_TYPE_COMMENT = "comment";
-    private static final String ITEM_TYPE_STORY = "story";
-    private static final String ITEM_TYPE_POLL = "poll";
-    private static final String ITEM_TYPE_JOB = "job";
+    public static final String ITEM_TYPE_COMMENT = "comment";
+    public static final String ITEM_TYPE_STORY = "story";
+    public static final String ITEM_TYPE_POLL = "poll";
+    public static final String ITEM_TYPE_JOB = "job";
 
     private static final int LOADER_PARENT_ITEM = 300;
 
@@ -92,7 +86,6 @@ public class ItemActivity extends ToolbarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item);
         setDisplayHomeAsUpEnabled(true);
 
         extractExtras();
@@ -100,19 +93,8 @@ public class ItemActivity extends ToolbarActivity
         setTitle(ItemUtils.getTypeAsTitle(mItem));
 
         if (savedInstanceState == null) {
+            setFragment(ItemFragment.newInstance(mItem, mItemParentName, mItemPosterName));
             loadParentItem();
-
-            switch (mItem.getType()) {
-                case ITEM_TYPE_COMMENT:
-                    loadFragment(CommentFragment.newInstance(mItem, mItemParentName, mItemPosterName));
-                    break;
-                case ITEM_TYPE_STORY:
-                case ITEM_TYPE_POLL:
-                case ITEM_TYPE_JOB:
-                default:
-                    loadFragment(StoryFragment.newInstance(mItem));
-                    break;
-            }
         }
     }
 
@@ -200,26 +182,6 @@ public class ItemActivity extends ToolbarActivity
 
     }
 
-    private void loadFragment(ItemHeadFragment headFragment) {
-        ItemCommentFragment commentFragment = ItemCommentFragment
-                .newInstance(mItem, mItemParentName, mItemPosterName);
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.item_head_container, headFragment, TAG_HEAD_FRAGMENT)
-                .add(R.id.item_comment_container, commentFragment, TAG_COMMENT_FRAGMENT)
-                .commit();
-    }
-
-    private ItemHeadFragment getHeadFragment() {
-        return (ItemHeadFragment) getSupportFragmentManager()
-                .findFragmentByTag(TAG_HEAD_FRAGMENT);
-    }
-
-    private ItemCommentFragment getCommentFragment() {
-        return (ItemCommentFragment) getSupportFragmentManager()
-                .findFragmentByTag(TAG_COMMENT_FRAGMENT);
-    }
-
     private void loadParentItem() {
         mParentId = mItem.getParent();
 
@@ -272,8 +234,7 @@ public class ItemActivity extends ToolbarActivity
     }
 
     private void refresh() {
-        getHeadFragment().refresh();
-        getCommentFragment().refresh();
+        getFragment().refresh();
     }
 
     private void share() {
