@@ -21,6 +21,7 @@ public class SimpleRecyclerView extends FrameLayout {
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private View mEmptyView;
+    private EndlessRecyclerViewScrollListener mScrollListener;
 
     public interface OnLoadMoreListener {
         void onLoadMore(int page, int totalItemsCount);
@@ -67,12 +68,19 @@ public class SimpleRecyclerView extends FrameLayout {
     }
 
     public void setOnLoadMoreListener(OnLoadMoreListener listener) {
-        mRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener((LinearLayoutManager) mRecyclerView.getLayoutManager()) {
+        mScrollListener = new EndlessRecyclerViewScrollListener(
+                (LinearLayoutManager) mRecyclerView.getLayoutManager()) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 listener.onLoadMore(page, totalItemsCount);
             }
-        });
+        };
+
+        mRecyclerView.addOnScrollListener(mScrollListener);
+    }
+
+    public void restartOnLoadMoreListener() {
+        mScrollListener.restart();
     }
 
     public void showProgressBar() {

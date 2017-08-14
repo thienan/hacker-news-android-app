@@ -299,6 +299,7 @@ public class NewsFragment extends ToolbarFragment
         mCurrentPage = 1;
         mNewsType = type;
 
+        mBinding.rvItemList.restartOnLoadMoreListener();
         mBinding.rvItemList.showProgressBar();
         retrieveNews();
     }

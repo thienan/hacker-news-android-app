@@ -193,6 +193,7 @@ public class UserFragment extends ToolbarFragment
     private void refreshSubmissions() {
         mAdapter.clearItems();
         mCurrentPage = 1;
+        mBinding.rvSubmissionList.restartOnLoadMoreListener();
         mBinding.rvSubmissionList.showProgressBar();
         retrieveSubmissions();
     }
@@ -204,8 +205,7 @@ public class UserFragment extends ToolbarFragment
 
     private void retrieveSubmissions() {
         if (mBinding.getUser().getSubmitted() == null) return;
-        getActivity().getSupportLoaderManager().destroyLoader(LOADER_ID_SUBMISSIONS);
-        getActivity().getSupportLoaderManager().initLoader(LOADER_ID_SUBMISSIONS, null, getCallback());
+        getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_SUBMISSIONS, null, getCallback());
     }
 
     private LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> getCallback() {

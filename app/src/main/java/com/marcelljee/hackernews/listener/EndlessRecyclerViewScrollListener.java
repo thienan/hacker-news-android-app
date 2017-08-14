@@ -9,17 +9,19 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
     private static final int VISIBLE_THRESHOLD = 5;
     // Sets the starting page index
     private static final int STARTING_PAGE_INDEX = 1;
+
     // The current offset index of data you have loaded
-    private int currentPage = 1;
+    private int currentPage;
     // The total number of items in the data start after the last load
-    private int previousTotalItemCount = 0;
+    private int previousTotalItemCount;
     // True if we are still waiting for the last start of data to load.
-    private boolean loading = true;
+    private boolean loading;
 
     private final LinearLayoutManager mLinearLayoutManager;
 
     public EndlessRecyclerViewScrollListener(LinearLayoutManager layoutManager) {
         this.mLinearLayoutManager = layoutManager;
+        restart();
     }
 
     // This happens many times a second during a scroll, so be wary of the code you place here.
@@ -61,5 +63,11 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
     // Defines the process for actually loading more data based on page
     @SuppressWarnings("UnusedParameters")
     public abstract void onLoadMore(int page, int totalItemsCount);
+
+    public void restart() {
+        currentPage = STARTING_PAGE_INDEX;
+        previousTotalItemCount = 0;
+        loading = true;
+    }
 
 }

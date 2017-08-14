@@ -151,6 +151,7 @@ public class ItemCommentFragment extends ToolbarFragment
     public void refresh() {
         mAdapter.clearItems();
         mCurrentPage = 1;
+        mBinding.rvCommentList.restartOnLoadMoreListener();
         mBinding.rvCommentList.showProgressBar();
         retrieveComments();
     }
@@ -162,8 +163,7 @@ public class ItemCommentFragment extends ToolbarFragment
 
     private void retrieveComments() {
         if (mItem.getKids() == null) return;
-        getActivity().getSupportLoaderManager().destroyLoader(LOADER_ID_COMMENT_ITEM);
-        getActivity().getSupportLoaderManager().initLoader(LOADER_ID_COMMENT_ITEM, null, this);
+        getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_COMMENT_ITEM, null, this);
     }
 
     private static Bundle createArguments(Item item, String itemParentName, String itemPosterName) {

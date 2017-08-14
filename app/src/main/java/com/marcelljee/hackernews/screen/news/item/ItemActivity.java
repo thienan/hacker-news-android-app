@@ -126,11 +126,7 @@ public class ItemActivity extends FragmentActivity<ItemFragment>
                 if (!NewsActivity.class.getName().equals(mRootCallerActivity)
                         && mItem.getParent() > 0) {
                     if (mParentItem != null) {
-                        if (ITEM_TYPE_COMMENT.equals(mParentItem.getType())) {
-                            CommentActivity.startActivity(this, mParentItem);
-                        } else {
-                            StoryActivity.startActivity(this, mParentItem);
-                        }
+                        ItemActivity.startActivity(this, mParentItem);
                     } else {
                         loadParentItem();
                     }
