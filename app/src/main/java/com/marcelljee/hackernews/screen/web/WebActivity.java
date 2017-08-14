@@ -1,14 +1,11 @@
 package com.marcelljee.hackernews.screen.web;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
 
 import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.activity.WebToolbarActivity;
@@ -18,9 +15,10 @@ import com.marcelljee.hackernews.utils.MenuUtils;
 
 public class WebActivity extends WebToolbarActivity {
 
+    private static final String TAG_FRAGMENT = "com.marcelljee.hackernews.screen.web.tag.FRAGMENT";
+
     private static final String EXTRA_URL = "com.marcelljee.hackernews.screen.web.extra.URL";
 
-    private WebView wvWebPage;
     private String mUrl;
 
     public static void startActivity(Activity activity, String url) {
@@ -35,18 +33,16 @@ public class WebActivity extends WebToolbarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_web);
+        setContentView(R.layout.activity_base);
         setDisplayHomeAsCloseEnabled(true);
 
         extractExtras();
-        updateTitle();
-        setUpWebView(savedInstanceState);
-    }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        wvWebPage.saveState(outState);
-        super.onSaveInstanceState(outState);
+        setTitle(mUrl);
+
+        if (savedInstanceState == null) {
+            setFragment(WebFragment.newInstance(mUrl));
+        }
     }
 
     @Override
@@ -59,13 +55,13 @@ public class WebActivity extends WebToolbarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_copy:
-                ClipboardUtils.copyLink(this, wvWebPage.getUrl());
+                ClipboardUtils.copyLink(this, getFragment().getWebView().getUrl());
                 return true;
             case R.id.action_share:
-                MenuUtils.openShareTextChooser(this, wvWebPage.getUrl());
+                MenuUtils.openShareTextChooser(this, getFragment().getWebView().getUrl());
                 return true;
             case R.id.action_open_in_browser:
-                IntentUtils.openBrowser(this, wvWebPage.getUrl());
+                IntentUtils.openBrowser(this, getFragment().getWebView().getUrl());
                 return true;
             default:
         }
@@ -75,8 +71,8 @@ public class WebActivity extends WebToolbarActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_BACK) && wvWebPage.canGoBack()) {
-            wvWebPage.goBack();
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && getFragment().getWebView().canGoBack()) {
+            getFragment().getWebView().goBack();
             return true;
         }
 
@@ -98,25 +94,13 @@ public class WebActivity extends WebToolbarActivity {
         }
     }
 
-    private void updateTitle() {
-        setTitle(mUrl);
+    private void setFragment(WebFragment fragment) {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, fragment, TAG_FRAGMENT)
+                .commit();
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
-    private void setUpWebView(Bundle savedInstanceState) {
-        wvWebPage = (WebView) findViewById(R.id.wv_web_page);
-
-        WebSettings webSettings = wvWebPage.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setLoadWithOverviewMode(true);
-        webSettings.setUseWideViewPort(true);
-
-        wvWebPage.setWebViewClient(new WebActivityClient(this));
-
-        if (savedInstanceState == null) {
-            wvWebPage.loadUrl(mUrl);
-        } else {
-            wvWebPage.restoreState(savedInstanceState);
-        }
+    private WebFragment getFragment() {
+        return (WebFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT);
     }
 }
