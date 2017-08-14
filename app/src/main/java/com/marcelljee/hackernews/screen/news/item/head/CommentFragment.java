@@ -11,12 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.marcelljee.hackernews.databinding.FragmentCommentBinding;
+import com.marcelljee.hackernews.event.ItemRefreshEvent;
 import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.loader.HackerNewsResponse;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.viewmodel.FragmentCommentViewModel;
 import com.marcelljee.hackernews.viewmodel.ItemCommentViewModel;
 
+import org.greenrobot.eventbus.EventBus;
 import org.parceler.Parcels;
 
 import java.util.Collections;
@@ -92,6 +94,7 @@ public class CommentFragment extends ItemHeadFragment
                 case LOADER_ID_COMMENT_HEAD:
                     mItem = response.getData().get(0);
                     mBinding.setItem(mItem);
+                    EventBus.getDefault().post(new ItemRefreshEvent(mItem));
                     break;
                 default:
             }

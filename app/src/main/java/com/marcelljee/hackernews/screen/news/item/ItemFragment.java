@@ -102,13 +102,7 @@ public class ItemFragment extends Fragment {
                 .findFragmentByTag(TAG_HEAD_FRAGMENT);
     }
 
-    private ItemCommentFragment getCommentFragment() {
-        return (ItemCommentFragment) getActivity().getSupportFragmentManager()
-                .findFragmentByTag(TAG_COMMENT_FRAGMENT);
-    }
-
     public void refresh() {
         getHeadFragment().refresh();
-        getCommentFragment().refresh();
     }
 }

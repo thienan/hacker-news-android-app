@@ -14,12 +14,14 @@ import android.view.ViewGroup;
 import com.marcelljee.hackernews.adapter.ItemAdapter;
 import com.marcelljee.hackernews.chrome.CustomTabsHelper;
 import com.marcelljee.hackernews.databinding.FragmentStoryBinding;
+import com.marcelljee.hackernews.event.ItemRefreshEvent;
 import com.marcelljee.hackernews.loader.HackerNewsResponse;
 import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.viewmodel.ItemNewsViewModel;
 import com.marcelljee.hackernews.viewmodel.SectionNewsDetailsViewModel;
 
+import org.greenrobot.eventbus.EventBus;
 import org.parceler.Parcels;
 
 import java.util.Collections;
@@ -143,6 +145,7 @@ public class StoryFragment extends ItemHeadFragment
                     mItem = response.getData().get(0);
                     mBinding.setItem(mItem);
 
+                    EventBus.getDefault().post(new ItemRefreshEvent(mItem));
                     getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_POLL_OPTIONS, null, this);
                     break;
                 case LOADER_ID_POLL_OPTIONS:

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.marcelljee.hackernews.adapter.ItemAdapter;
 import com.marcelljee.hackernews.databinding.FragmentItemCommentBinding;
+import com.marcelljee.hackernews.event.ItemRefreshEvent;
 import com.marcelljee.hackernews.factory.SnackbarFactory;
 import com.marcelljee.hackernews.fragment.ToolbarFragment;
 import com.marcelljee.hackernews.loader.HackerNewsResponse;
@@ -19,6 +20,8 @@ import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.utils.CollectionUtils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.parceler.Parcels;
 
 import java.util.List;
@@ -58,7 +61,14 @@ public class ItemCommentFragment extends ToolbarFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         extractArguments();
+    }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 
     @Override
@@ -86,7 +96,7 @@ public class ItemCommentFragment extends ToolbarFragment
         mBinding.rvCommentList.setOnLoadMoreListener((page, totalItemsCount) -> nextPageComments());
 
         if (savedInstanceState == null) {
-            refresh();
+            refreshComments();
         } else {
             onRestoreInstanceState(savedInstanceState);
         }
@@ -98,7 +108,7 @@ public class ItemCommentFragment extends ToolbarFragment
         mAdapter.swapItems(Parcels.unwrap(inState.getParcelable(STATE_COMMENT_DATA)));
         mCurrentPage = inState.getInt(STATE_CURRENT_PAGE);
 
-        if (mAdapter.getItemCount() <= 0) refresh();
+        if (mAdapter.getItemCount() <= 0) refreshComments();
     }
 
     @Override
@@ -148,7 +158,14 @@ public class ItemCommentFragment extends ToolbarFragment
 
     }
 
-    public void refresh() {
+    @Subscribe
+    @SuppressWarnings({"unused"})
+    public void onItemRefreshEvent(ItemRefreshEvent event) {
+        mItem = event.getItem();
+        refreshComments();
+    }
+
+    private void refreshComments() {
         mAdapter.clearItems();
         mCurrentPage = 1;
         mBinding.rvCommentList.restartOnLoadMoreListener();
