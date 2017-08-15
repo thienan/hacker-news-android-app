@@ -212,9 +212,9 @@ public class UserFragment extends ToolbarFragment
         return new LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>>() {
             @Override
             public Loader<HackerNewsResponse<List<Item>>> onCreateLoader(int id, Bundle args) {
-                List<Long> kids = mBinding.getUser().getSubmitted();
+                List<Long> submissions = mBinding.getUser().getSubmitted();
 
-                List<Long> list = CollectionUtils.subList(kids,
+                List<Long> list = CollectionUtils.subList(submissions,
                         (mCurrentPage - 1) * ITEM_COUNT,
                         mCurrentPage * ITEM_COUNT);
 
