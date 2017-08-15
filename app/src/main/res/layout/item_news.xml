@@ -36,8 +36,8 @@
                     android:layout_width="@dimen/score_size"
                     android:layout_height="@dimen/score_size"
                     android:layout_margin="@dimen/view_margin"
-                    android:text="@{viewModel.getScoreText(item)}"
-                    app:read="@{viewModel.readIndicator &amp;&amp; item.read}" />
+                    android:text="@{String.valueOf(item.getScore())}"
+                    app:read="@{viewModel.readIndicatorEnabled &amp;&amp; item.read}" />
 
                 <com.marcelljee.hackernews.view.CheckedScoreView
                     android:id="@+id/iv_selected"
@@ -46,7 +46,7 @@
                     android:layout_margin="@dimen/view_margin"
                     android:contentDescription="@string/desc_selected_item"
                     android:visibility="gone"
-                    app:read="@{viewModel.readIndicator &amp;&amp; item.read}" />
+                    app:read="@{viewModel.readIndicatorEnabled &amp;&amp; item.read}" />
             </FrameLayout>
 
             <LinearLayout

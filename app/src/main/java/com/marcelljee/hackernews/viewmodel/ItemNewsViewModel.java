@@ -17,85 +17,57 @@ import com.marcelljee.hackernews.utils.SettingsUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
-public class ItemNewsViewModel {
+public class ItemNewsViewModel extends ItemViewModel {
 
-    private final ToolbarActivity mActivity;
     private final CustomTabsSession mCustomTabsSession;
 
-    private final boolean mReadIndicator;
+    private final boolean mReadIndicatorEnabled;
 
     public ItemNewsViewModel(ToolbarActivity activity, boolean readIndicator, CustomTabsSession customTabsSession) {
-        mActivity = activity;
+        super(activity);
         mCustomTabsSession = customTabsSession;
-
-        mReadIndicator = readIndicator;
+        mReadIndicatorEnabled = readIndicator;
     }
 
-    public int isItemViewVisible(Item item) {
-        return item.isDeleted() || item.isDead() ? View.GONE : View.VISIBLE;
-    }
-
-    public int isDeletedViewVisible(Item item) {
-        return item.isDeleted() ? View.VISIBLE : View.GONE;
-    }
-
-    public int isDeadViewVisible(Item item) {
-        return item.isDead() && !item.isDeleted() ? View.VISIBLE : View.GONE;
+    public boolean getReadIndicatorEnabled() {
+        return mReadIndicatorEnabled;
     }
 
     public int isCommentViewVisible(Item item) {
         return item.getDescendants() > 0 ? View.VISIBLE : View.GONE;
     }
 
-    public boolean getReadIndicator() {
-        return mReadIndicator;
-    }
-
-    public String getScoreText(Item item) {
-        return String.valueOf(item.getScore());
-    }
-
-    public CharSequence getRelativeDate(Item item) {
-        return ItemUtils.getRelativeDate(mActivity, item);
-    }
-
     public SpannableStringBuilder getTitle(Item item) {
-        return ItemUtils.getTitle(mActivity, item);
-    }
-
-    public void userClick(String userId) {
-        if (!UserActivity.class.getName().equals(mActivity.getClass().getName())) {
-            UserActivity.startActivity(mActivity, userId);
-        }
+        return ItemUtils.getTitle(getActivity(), item);
     }
 
     public void textClick(Item item) {
         if (TextUtils.isEmpty(item.getUrl())) {
-            ItemActivity.startActivity(mActivity, item);
+            ItemActivity.startActivity(getActivity(), item);
         } else {
-            CustomTabsBrowser.openTab(mActivity, mCustomTabsSession, item.getUrl());
+            CustomTabsBrowser.openTab(getActivity(), mCustomTabsSession, item.getUrl());
         }
 
-        DatabaseDao.insertHistoryItem(mActivity, item);
-        DatabaseDao.insertReadIndicatorItem(mActivity, item.getId());
+        DatabaseDao.insertHistoryItem(getActivity(), item);
+        DatabaseDao.insertReadIndicatorItem(getActivity(), item.getId());
 
-        if (SettingsUtils.readIndicatorEnabled(mActivity)) {
+        if (SettingsUtils.readIndicatorEnabled(getActivity())) {
             item.setRead(true);
         }
     }
 
     public void bookmarkClick(Item item) {
-        if (DatabaseDao.isItemBookmarked(mActivity, item.getId())) {
-            DatabaseDao.deleteBookmarkedItem(mActivity, item.getId());
+        if (DatabaseDao.isItemBookmarked(getActivity(), item.getId())) {
+            DatabaseDao.deleteBookmarkedItem(getActivity(), item.getId());
             item.setBookmarked(false);
         } else {
-            DatabaseDao.insertBookmarkedItem(mActivity, item);
+            DatabaseDao.insertBookmarkedItem(getActivity(), item);
             item.setBookmarked(true);
         }
 
-        if (ItemActivity.StoryActivity.class.getName().equals(mActivity.getClass().getName())) {
+        if (ItemActivity.StoryActivity.class.getName().equals(getActivity().getClass().getName())) {
             EventBus.getDefault().post(new ItemBookmarkEvent.StoryActivityEvent());
-        } else if (UserActivity.class.getName().equals(mActivity.getClass().getName())) {
+        } else if (UserActivity.class.getName().equals(getActivity().getClass().getName())) {
             EventBus.getDefault().post(new ItemBookmarkEvent.UserActivityEvent());
         }
     }
