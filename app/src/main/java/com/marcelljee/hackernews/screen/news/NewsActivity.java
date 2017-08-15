@@ -106,6 +106,11 @@ public class NewsActivity extends FragmentActivity<NewsFragment>
             }
         }
 
+        if (!SettingsUtils.readIndicatorEnabled(this)) {
+            menu.findItem(R.id.action_show_all).setVisible(false);
+            menu.findItem(R.id.action_show_unread).setVisible(false);
+        }
+
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -168,6 +173,8 @@ public class NewsActivity extends FragmentActivity<NewsFragment>
             } else {
                 adapter.remove(getString(R.string.settings_type_option_history));
             }
+        } else if (getString(R.string.settings_read_indicator_key).equals(key)) {
+            supportInvalidateOptionsMenu();
         }
     }
 
