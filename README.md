@@ -1,4 +1,4 @@
-Hacker News Android App [![Build Status](https://travis-ci.org/marcelljee/hacker-news-android-app.svg?branch=master)](https://travis-ci.org/marcelljee/hacker-news-android-app)
+Hacker News Android App [![Build Status](https://travis-ci.org/marcelljee/hacker-news-android-app.svg?branch=master)](https://travis-ci.org/marcelljee/hacker-news-android-app) [![Coverage Status](https://coveralls.io/repos/github/marcelljee/hacker-news-android-app/badge.svg?branch=master)](https://coveralls.io/github/marcelljee/hacker-news-android-app?branch=master)
 =======================
 
 Hacker News is a social news website focusing on computer science and entrepreneurship. 
