@@ -39,7 +39,7 @@ Use the [issue tracker](https://github.com/marcelje/hacker-news-android-app/issu
 
 <h2>License</h2>
 
-    Copyright (C) 2017  marcelje
+    Copyright (C) 2017  marcelljee
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
