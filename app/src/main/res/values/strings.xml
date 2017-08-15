@@ -38,6 +38,8 @@
     <string name="menu_item_next">Next</string>
     <string name="menu_item_mark_unread">Mark as unread</string>
     <string name="menu_item_mark_read">Mark as read</string>
+    <string name="menu_item_show_unread">Show unread</string>
+    <string name="menu_item_show_all">Show All</string>
 
     <string name="settings_type_key">settings_type</string>
     <string name="settings_type_title">Default news</string>

@@ -32,6 +32,7 @@ public class NewsActivity extends FragmentActivity<NewsFragment>
     private String mNewsType;
 
     private boolean isNewState = false;
+    private boolean isShowAll = true;
 
     public static Intent createIntent(Context context, String newsType) {
         Intent intent = new Intent(context, NewsActivity.class);
@@ -90,8 +91,19 @@ public class NewsActivity extends FragmentActivity<NewsFragment>
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (getString(R.string.settings_type_option_history).equals(mNewsType)) {
             menu.findItem(R.id.action_clear_history).setVisible(true);
+
+            menu.findItem(R.id.action_show_all).setVisible(false);
+            menu.findItem(R.id.action_show_unread).setVisible(false);
         } else {
             menu.findItem(R.id.action_clear_history).setVisible(false);
+
+            if (isShowAll) {
+                menu.findItem(R.id.action_show_all).setVisible(false);
+                menu.findItem(R.id.action_show_unread).setVisible(true);
+            } else {
+                menu.findItem(R.id.action_show_all).setVisible(true);
+                menu.findItem(R.id.action_show_unread).setVisible(false);
+            }
         }
 
         return super.onPrepareOptionsMenu(menu);
@@ -100,12 +112,22 @@ public class NewsActivity extends FragmentActivity<NewsFragment>
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.action_clear_history:
-                DatabaseDao.deleteAllHistoryItem(this);
-                getFragment().refresh();
-                return true;
             case R.id.action_refresh:
                 getFragment().refresh();
+                return true;
+            case R.id.action_clear_history:
+                DatabaseDao.deleteAllHistoryItem(this);
+                getFragment().clearItems();
+                return true;
+            case R.id.action_show_all:
+                isShowAll = true;
+                getFragment().showAllItems();
+                supportInvalidateOptionsMenu();
+                return true;
+            case R.id.action_show_unread:
+                isShowAll = false;
+                getFragment().showUnreadItems();
+                supportInvalidateOptionsMenu();
                 return true;
             case R.id.action_about:
                 AboutActivity.startActivity(this);

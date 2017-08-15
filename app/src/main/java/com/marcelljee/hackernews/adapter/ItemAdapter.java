@@ -24,6 +24,8 @@ import com.marcelljee.hackernews.utils.SettingsUtils;
 import com.marcelljee.hackernews.viewmodel.ItemCommentViewModel;
 import com.marcelljee.hackernews.viewmodel.ItemNewsViewModel;
 
+import io.reactivex.Observable;
+
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
     private static final int VIEW_TYPE_NEWS = 1;
@@ -37,11 +39,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     private static final String ITEM_TYPE_JOB = "job";
 
     private final ToolbarActivity mActivity;
+    private final List<Item> mAllItems;
     private final List<Item> mItems;
     private final String mItemParentName;
     private final String mItemPosterName;
 
     private final ActionModeMenu mActionModeMenu;
+
+    private boolean isShowAll = true;
 
     public ItemAdapter(ToolbarActivity activity) {
         this(activity, null, null);
@@ -49,6 +54,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     public ItemAdapter(ToolbarActivity activity, String itemParentName, String itemPosterName) {
         mActivity = activity;
+        mAllItems = new ArrayList<>();
         mItems = new ArrayList<>();
         mItemParentName = itemParentName;
         mItemPosterName = itemPosterName;
@@ -131,17 +137,68 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     }
 
     public void swapItems(List<Item> items) {
+        mAllItems.clear();
+        mAllItems.addAll(items);
+
+        if (isShowAll) {
+            showAll();
+        } else {
+            showUnread();
+        }
+    }
+
+    public void clearItems() {
+        mAllItems.clear();
+
+        if (isShowAll) {
+            showAll();
+        } else {
+            showUnread();
+        }
+    }
+
+    public void showAll() {
+        isShowAll = true;
+        show(mAllItems);
+    }
+
+    public void showUnread() {
+        isShowAll = false;
+
+        Observable.fromIterable(mAllItems)
+                .filter(item -> !DatabaseDao.isItemRead(mActivity, item.getId()))
+                .toList()
+                .subscribe(this::show);
+    }
+
+    private void show(List<Item> items) {
         mItems.clear();
         mItems.addAll(items);
         notifyDataSetChanged();
     }
 
-    public void clearItems() {
-        mItems.clear();
-        notifyDataSetChanged();
+    public void addItems(List<Item> items) {
+        mAllItems.addAll(items);
+
+        if (isShowAll) {
+            insertAll(items);
+        } else {
+            insertUnread(items);
+        }
     }
 
-    public void addItems(List<Item> items) {
+    private void insertAll(List<Item> items) {
+        insert(items);
+    }
+
+    private void insertUnread(List<Item> items) {
+        Observable.fromIterable(items)
+                .filter(item -> !DatabaseDao.isItemRead(mActivity, item.getId()))
+                .toList()
+                .subscribe(this::insert);
+    }
+
+    private void insert(List<Item> items) {
         mItems.addAll(items);
         notifyItemRangeInserted(mItems.size() - items.size(), items.size());
     }
@@ -154,12 +211,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         mActionModeMenu.finish();
     }
 
-    public class ItemViewHolder<T extends ViewDataBinding>
+    class ItemViewHolder<T extends ViewDataBinding>
             extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final T binding;
         private final boolean mClickable;
 
-        public ItemViewHolder(T binding, boolean clickable) {
+        ItemViewHolder(T binding, boolean clickable) {
             super(binding.getRoot());
             this.binding = binding;
             mClickable = clickable;

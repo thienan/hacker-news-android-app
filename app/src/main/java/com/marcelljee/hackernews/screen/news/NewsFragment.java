@@ -290,16 +290,27 @@ public class NewsFragment extends ToolbarFragment
         refreshNews();
     }
 
+    public void clearItems() {
+        mAdapter.clearItems();
+        mCurrentPage = 1;
+        mBinding.rvItemList.restartOnLoadMoreListener();
+    }
+
+    public void showAllItems() {
+        mAdapter.showAll();
+    }
+
+    public void showUnreadItems() {
+        mAdapter.showUnread();
+    }
+
     private void refreshNews() {
         changeNewsType(mNewsType);
     }
 
     public void changeNewsType(String type) {
-        mAdapter.clearItems();
-        mCurrentPage = 1;
+        clearItems();
         mNewsType = type;
-
-        mBinding.rvItemList.restartOnLoadMoreListener();
         mBinding.rvItemList.showProgressBar();
         retrieveNews();
     }
