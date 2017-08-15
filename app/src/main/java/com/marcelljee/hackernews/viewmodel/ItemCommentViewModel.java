@@ -4,18 +4,16 @@ import android.text.SpannableStringBuilder;
 import android.view.View;
 
 import com.marcelljee.hackernews.activity.ToolbarActivity;
-import com.marcelljee.hackernews.handlers.ItemUserClickHandlers;
 import com.marcelljee.hackernews.model.Item;
+import com.marcelljee.hackernews.screen.user.UserActivity;
 import com.marcelljee.hackernews.utils.ItemUtils;
 
 public class ItemCommentViewModel {
 
     private final ToolbarActivity mActivity;
-    private final ItemUserClickHandlers mUserClickHandlers;
 
     public ItemCommentViewModel(ToolbarActivity activity) {
         mActivity = activity;
-        mUserClickHandlers = new ItemUserClickHandlers(activity);
     }
 
     public int isItemViewVisible(Item item) {
@@ -39,6 +37,8 @@ public class ItemCommentViewModel {
     }
 
     public void userClick(String userId) {
-        mUserClickHandlers.onClick(userId);
+        if (!UserActivity.class.getName().equals(mActivity.getClass().getName())) {
+            UserActivity.startActivity(mActivity, userId);
+        }
     }
 }

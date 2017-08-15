@@ -3,12 +3,12 @@ package com.marcelljee.hackernews.screen.news.item;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.marcelljee.hackernews.R;
+import com.marcelljee.hackernews.fragment.ToolbarFragment;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.screen.news.item.comment.ItemCommentFragment;
 import com.marcelljee.hackernews.screen.news.item.head.CommentFragment;
@@ -17,7 +17,7 @@ import com.marcelljee.hackernews.screen.news.item.head.StoryFragment;
 
 import org.parceler.Parcels;
 
-public class ItemFragment extends Fragment {
+public class ItemFragment extends ToolbarFragment {
 
     private static final String ARG_ITEM = "com.marcelljee.hackernews.screen.news.item.arg.ITEM";
     private static final String ARG_ITEM_PARENT_NAME = "com.marcelljee.hackernews.screen.news.item.arg.ITEM_PARENT_NAME";

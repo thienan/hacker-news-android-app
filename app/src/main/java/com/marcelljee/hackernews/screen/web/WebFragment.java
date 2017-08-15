@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,9 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.marcelljee.hackernews.R;
+import com.marcelljee.hackernews.fragment.ToolbarFragment;
 
-public class WebFragment extends Fragment {
+public class WebFragment extends ToolbarFragment {
 
     private static final String ARG_URL = "com.marcelljee.hackernews.screen.web.arg.URL";
 

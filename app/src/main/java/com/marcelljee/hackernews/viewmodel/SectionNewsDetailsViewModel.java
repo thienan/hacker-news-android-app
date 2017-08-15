@@ -5,17 +5,15 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.marcelljee.hackernews.activity.ToolbarActivity;
-import com.marcelljee.hackernews.handlers.ItemTextDetailsClickHandlers;
+import com.marcelljee.hackernews.screen.news.item.text.DetailsTextActivity;
 import com.marcelljee.hackernews.utils.ItemUtils;
 
 public class SectionNewsDetailsViewModel {
 
     private final ToolbarActivity mActivity;
-    private final ItemTextDetailsClickHandlers mTextDetailsClickHandlers;
 
     public SectionNewsDetailsViewModel(ToolbarActivity activity) {
         mActivity = activity;
-        mTextDetailsClickHandlers = new ItemTextDetailsClickHandlers(activity);
     }
 
     public int isViewVisible(String text) {
@@ -27,6 +25,6 @@ public class SectionNewsDetailsViewModel {
     }
 
     public void textDetailsClick(String text) {
-        mTextDetailsClickHandlers.onClick(text);
+        DetailsTextActivity.startActivity(mActivity, text);
     }
 }

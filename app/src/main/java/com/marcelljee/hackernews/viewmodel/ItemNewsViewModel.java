@@ -2,29 +2,31 @@ package com.marcelljee.hackernews.viewmodel;
 
 import android.support.customtabs.CustomTabsSession;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.marcelljee.hackernews.activity.ToolbarActivity;
-import com.marcelljee.hackernews.handlers.ItemBookmarkClickHandlers;
-import com.marcelljee.hackernews.handlers.ItemTextClickHandlers;
-import com.marcelljee.hackernews.handlers.ItemUserClickHandlers;
+import com.marcelljee.hackernews.chrome.CustomTabsBrowser;
+import com.marcelljee.hackernews.database.DatabaseDao;
+import com.marcelljee.hackernews.event.ItemBookmarkEvent;
 import com.marcelljee.hackernews.model.Item;
+import com.marcelljee.hackernews.screen.news.item.ItemActivity;
+import com.marcelljee.hackernews.screen.user.UserActivity;
 import com.marcelljee.hackernews.utils.ItemUtils;
+import com.marcelljee.hackernews.utils.SettingsUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class ItemNewsViewModel {
 
     private final ToolbarActivity mActivity;
-    private final ItemUserClickHandlers mUserClickHandlers;
-    private final ItemTextClickHandlers mTextClickHandlers;
-    private final ItemBookmarkClickHandlers mBookmarkClickHandlers;
+    private final CustomTabsSession mCustomTabsSession;
 
     private final boolean mReadIndicator;
 
-    public ItemNewsViewModel(ToolbarActivity activity, boolean readIndicator, CustomTabsSession session) {
+    public ItemNewsViewModel(ToolbarActivity activity, boolean readIndicator, CustomTabsSession customTabsSession) {
         mActivity = activity;
-        mUserClickHandlers = new ItemUserClickHandlers(activity);
-        mTextClickHandlers = new ItemTextClickHandlers(activity, session);
-        mBookmarkClickHandlers = new ItemBookmarkClickHandlers(activity);
+        mCustomTabsSession = customTabsSession;
 
         mReadIndicator = readIndicator;
     }
@@ -62,14 +64,39 @@ public class ItemNewsViewModel {
     }
 
     public void userClick(String userId) {
-        mUserClickHandlers.onClick(userId);
+        if (!UserActivity.class.getName().equals(mActivity.getClass().getName())) {
+            UserActivity.startActivity(mActivity, userId);
+        }
     }
 
     public void textClick(Item item) {
-        mTextClickHandlers.onClick(item);
+        if (TextUtils.isEmpty(item.getUrl())) {
+            ItemActivity.startActivity(mActivity, item);
+        } else {
+            CustomTabsBrowser.openTab(mActivity, mCustomTabsSession, item.getUrl());
+        }
+
+        DatabaseDao.insertHistoryItem(mActivity, item);
+        DatabaseDao.insertReadIndicatorItem(mActivity, item.getId());
+
+        if (SettingsUtils.readIndicatorEnabled(mActivity)) {
+            item.setRead(true);
+        }
     }
 
     public void bookmarkClick(Item item) {
-        mBookmarkClickHandlers.onClick(item);
+        if (DatabaseDao.isItemBookmarked(mActivity, item.getId())) {
+            DatabaseDao.deleteBookmarkedItem(mActivity, item.getId());
+            item.setBookmarked(false);
+        } else {
+            DatabaseDao.insertBookmarkedItem(mActivity, item);
+            item.setBookmarked(true);
+        }
+
+        if (ItemActivity.StoryActivity.class.getName().equals(mActivity.getClass().getName())) {
+            EventBus.getDefault().post(new ItemBookmarkEvent.StoryActivityEvent());
+        } else if (UserActivity.class.getName().equals(mActivity.getClass().getName())) {
+            EventBus.getDefault().post(new ItemBookmarkEvent.UserActivityEvent());
+        }
     }
 }
