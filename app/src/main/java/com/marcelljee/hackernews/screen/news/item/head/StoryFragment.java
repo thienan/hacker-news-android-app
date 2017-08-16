@@ -32,18 +32,15 @@ public class StoryFragment extends ItemHeadFragment
 
     private static final String ARG_ITEM = "com.marcelljee.hackernews.screen.news.item.head.arg.ITEM";
 
-    private static final String STATE_POLL_OPTIONS_DATA = "com.marcelljee.hackernews.screen.news.item.head.state.POLL_OPTION_DATA";
-
     private static final int LOADER_ID_STORIES_ITEM = 200;
     private static final int LOADER_ID_POLL_OPTIONS = 250;
 
-    private CustomTabsHelper customTabsHelper;
+    private Item mItem;
+
+    private ItemAdapter mPollOptionsAdapter;
 
     private FragmentStoryBinding mBinding;
-
-    private ItemAdapter mAdapter;
-
-    private Item mItem;
+    private CustomTabsHelper customTabsHelper;
 
     public static StoryFragment newInstance(Item item) {
         StoryFragment fragment = new StoryFragment();
@@ -75,10 +72,10 @@ public class StoryFragment extends ItemHeadFragment
             mBinding.sectionNews.itemNews.tvText.setBackground(null);
         }
 
-        mAdapter = new ItemAdapter(getToolbarActivity());
+        mPollOptionsAdapter = new ItemAdapter(getToolbarActivity());
 
         mBinding.sectionPollOptions.rvPollOptionList.setLayoutManager(new LinearLayoutManager(getContext()));
-        mBinding.sectionPollOptions.rvPollOptionList.setAdapter(mAdapter);
+        mBinding.sectionPollOptions.rvPollOptionList.setAdapter(mPollOptionsAdapter);
         mBinding.sectionPollOptions.rvPollOptionList.showDivider();
 
         mBinding.sectionPollOptions.getRoot().setVisibility(View.GONE);
@@ -109,12 +106,12 @@ public class StoryFragment extends ItemHeadFragment
     }
 
     private void onRestoreInstanceState(Bundle inState) {
-        mAdapter.swapItems(Parcels.unwrap(inState.getParcelable(STATE_POLL_OPTIONS_DATA)));
+        mPollOptionsAdapter.restoreState(inState);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(STATE_POLL_OPTIONS_DATA, Parcels.wrap(mAdapter.getItems()));
+        mPollOptionsAdapter.saveState(outState);
         super.onSaveInstanceState(outState);
     }
 
@@ -150,7 +147,7 @@ public class StoryFragment extends ItemHeadFragment
                     break;
                 case LOADER_ID_POLL_OPTIONS:
                     if (response.getData().size() > 0) {
-                        mAdapter.swapItems(response.getData());
+                        mPollOptionsAdapter.swapItems(response.getData());
                         mBinding.sectionPollOptions.getRoot().setVisibility(View.VISIBLE);
                     }
 

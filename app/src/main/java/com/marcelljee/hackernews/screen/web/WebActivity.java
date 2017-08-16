@@ -96,7 +96,7 @@ public class WebActivity extends WebToolbarActivity {
 
     private void setFragment(WebFragment fragment) {
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, fragment, TAG_FRAGMENT)
+                .replace(R.id.fragment_container, fragment, TAG_FRAGMENT)
                 .commit();
     }
 

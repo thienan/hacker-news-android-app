@@ -33,11 +33,11 @@ public class CommentFragment extends ItemHeadFragment
 
     private static final int LOADER_ID_COMMENT_HEAD = 100;
 
-    private FragmentCommentBinding mBinding;
-
     private Item mItem;
     private String mItemParentName;
     private String mItemPosterName;
+
+    private FragmentCommentBinding mBinding;
 
     public static CommentFragment newInstance(Item item, String itemParentName, String itemPosterName) {
         CommentFragment fragment = new CommentFragment();

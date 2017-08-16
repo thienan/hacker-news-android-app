@@ -33,7 +33,6 @@ public class ItemCommentFragment extends ToolbarFragment
     private static final String ARG_ITEM_PARENT_NAME = "com.marcelljee.hackernews.screen.news.item.arg.ITEM_PARENT_NAME";
     private static final String ARG_ITEM_POSTER_NAME = "com.marcelljee.hackernews.screen.news.item.arg.ITEM_POSTER_NAME";
 
-    private static final String STATE_COMMENT_DATA = "com.marcelljee.hackernews.screen.news.item.state.COMMENT_DATA";
     private static final String STATE_CURRENT_PAGE = "com.marcelljee.hackernews.screen.news.item.state.CURRENT_PAGE";
 
     private static final int LOADER_ID_COMMENT_ITEM = 400;
@@ -44,10 +43,10 @@ public class ItemCommentFragment extends ToolbarFragment
     private String mItemParentName;
     private String mItemPosterName;
 
-    private FragmentItemCommentBinding mBinding;
-    private ItemAdapter mAdapter;
-
     private int mCurrentPage = 1;
+    private ItemAdapter mCommentAdapter;
+
+    private FragmentItemCommentBinding mBinding;
 
     public static ItemCommentFragment newInstance(Item item, String itemParentName, String itemPosterName) {
         ItemCommentFragment fragment = new ItemCommentFragment();
@@ -85,13 +84,13 @@ public class ItemCommentFragment extends ToolbarFragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
 
         if (TextUtils.isEmpty(mItemParentName) && TextUtils.isEmpty(mItemPosterName)) {
-            mAdapter = new ItemAdapter(getToolbarActivity(), null, mItem.getBy());
+            mCommentAdapter = new ItemAdapter(getToolbarActivity(), null, mItem.getBy());
         } else {
-            mAdapter = new ItemAdapter(getToolbarActivity(), mItem.getBy(), mItemPosterName);
+            mCommentAdapter = new ItemAdapter(getToolbarActivity(), mItem.getBy(), mItemPosterName);
         }
 
         mBinding.rvCommentList.setLayoutManager(layoutManager);
-        mBinding.rvCommentList.setAdapter(mAdapter);
+        mBinding.rvCommentList.setAdapter(mCommentAdapter);
         mBinding.rvCommentList.showDivider();
         mBinding.rvCommentList.setOnLoadMoreListener((page, totalItemsCount) -> nextPageComments());
 
@@ -105,16 +104,16 @@ public class ItemCommentFragment extends ToolbarFragment
     }
 
     private void onRestoreInstanceState(Bundle inState) {
-        mAdapter.swapItems(Parcels.unwrap(inState.getParcelable(STATE_COMMENT_DATA)));
         mCurrentPage = inState.getInt(STATE_CURRENT_PAGE);
+        mCommentAdapter.restoreState(inState);
 
-        if (mAdapter.getItemCount() <= 0) refreshComments();
+        if (mCommentAdapter.getItemCount() <= 0) refreshComments();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(STATE_COMMENT_DATA, Parcels.wrap(mAdapter.getItems()));
         outState.putInt(STATE_CURRENT_PAGE, mCurrentPage);
+        mCommentAdapter.saveState(outState);
         super.onSaveInstanceState(outState);
     }
 
@@ -141,7 +140,7 @@ public class ItemCommentFragment extends ToolbarFragment
         if (response.isSuccessful()) {
             switch (loader.getId()) {
                 case LOADER_ID_COMMENT_ITEM:
-                    mAdapter.addItems(response.getData());
+                    mCommentAdapter.addItems(response.getData());
                     mBinding.rvCommentList.hideProgressBar();
                     break;
                 default:
@@ -166,7 +165,7 @@ public class ItemCommentFragment extends ToolbarFragment
     }
 
     private void refreshComments() {
-        mAdapter.clearItems();
+        mCommentAdapter.clearItems();
         mCurrentPage = 1;
         mBinding.rvCommentList.restartOnLoadMoreListener();
         mBinding.rvCommentList.showProgressBar();

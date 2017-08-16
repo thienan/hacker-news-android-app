@@ -1,6 +1,8 @@
 package com.marcelljee.hackernews.view;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -42,16 +44,32 @@ public class SimpleRecyclerView extends FrameLayout {
         initView();
     }
 
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        if (!(state instanceof SavedState)) {
+            super.onRestoreInstanceState(state);
+            return;
+        }
+
+        SavedState ss = (SavedState) state;
+        super.onRestoreInstanceState(ss.getSuperState());
+        mRecyclerView.getLayoutManager().onRestoreInstanceState(ss.layoutManagerState);
+    }
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Parcelable superState = super.onSaveInstanceState();
+        SavedState ss = new SavedState(superState);
+        ss.layoutManagerState = mRecyclerView.getLayoutManager().onSaveInstanceState();
+        return ss;
+    }
+
     private void initView() {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.simple_recycler_view, this);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         mEmptyView = view.findViewById(R.id.empty_view);
-    }
-
-    public RecyclerView.LayoutManager getLayoutManager() {
-        return mRecyclerView.getLayoutManager();
     }
 
     public void setLayoutManager(RecyclerView.LayoutManager manager) {
@@ -99,5 +117,35 @@ public class SimpleRecyclerView extends FrameLayout {
             mRecyclerView.setVisibility(View.GONE);
             mEmptyView.setVisibility(VISIBLE);
         }
+    }
+
+    private static class SavedState extends BaseSavedState {
+        Parcelable layoutManagerState;
+
+        SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        private SavedState(Parcel in) {
+            super(in);
+            layoutManagerState = in.readParcelable(RecyclerView.LayoutManager.class.getClassLoader());
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeParcelable(layoutManagerState, flags);
+        }
+
+        public static final Parcelable.Creator<SavedState> CREATOR
+                = new Parcelable.Creator<SavedState>() {
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
     }
 }

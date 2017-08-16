@@ -1,6 +1,7 @@
 package com.marcelljee.hackernews.adapter;
 
 import android.databinding.ViewDataBinding;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
@@ -26,9 +27,17 @@ import com.marcelljee.hackernews.utils.SettingsUtils;
 import com.marcelljee.hackernews.viewmodel.ItemCommentViewModel;
 import com.marcelljee.hackernews.viewmodel.ItemNewsViewModel;
 
+import org.parceler.Parcels;
+
 import io.reactivex.Observable;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
+
+    private static final String STATE_ITEMS = "com.marcelljee.hackernews.adapter.state.ITEMS";
+    private static final String STATE_READ_ITEMS = "com.marcelljee.hackernews.adapter.state.READ_ITEMS";
+    private static final String STATE_ITEM_PARENT_NAME = "com.marcelljee.hackernews.adapter.state.ITEM_PARENT_NAME";
+    private static final String STATE_ITEM_POSTER_NAME = "com.marcelljee.hackernews.adapter.state.ITEM_POSTER_NAME";
+    private static final String STATE_SHOW_ALL = "com.marcelljee.hackernews.adapter.state.SHOW_ALL";
 
     private static final int VIEW_TYPE_NEWS = 1;
     private static final int VIEW_TYPE_COMMENT = 2;
@@ -41,14 +50,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     private static final String ITEM_TYPE_JOB = "job";
 
     private final ToolbarActivity mActivity;
+
     private final List<Item> mItems;
     private final Map<Integer, Item> mReadItems;
-    private final String mItemParentName;
-    private final String mItemPosterName;
+    private String mItemParentName;
+    private String mItemPosterName;
+    private boolean isShowAll = true;
 
     private final ActionModeMenu mActionModeMenu;
-
-    private boolean isShowAll = true;
 
     public ItemAdapter(ToolbarActivity activity) {
         this(activity, null, null);
@@ -131,10 +140,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     @SuppressWarnings("WeakerAccess")
     public Item getItem(int position) {
         return mItems.get(position);
-    }
-
-    public List<Item> getItems() {
-        return mItems;
     }
 
     public void swapItems(List<Item> items) {
@@ -226,6 +231,22 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     public void closeActionModeMenu() {
         mActionModeMenu.finish();
+    }
+
+    public void saveState(Bundle outState) {
+        outState.putParcelable(STATE_ITEMS, Parcels.wrap(mItems));
+        outState.putParcelable(STATE_READ_ITEMS, Parcels.wrap(mReadItems));
+        outState.putString(STATE_ITEM_PARENT_NAME, mItemParentName);
+        outState.putString(STATE_ITEM_POSTER_NAME, mItemPosterName);
+        outState.putBoolean(STATE_SHOW_ALL, isShowAll);
+    }
+
+    public void restoreState(Bundle inState) {
+        swapItems(Parcels.unwrap(inState.getParcelable(STATE_ITEMS)));
+        mReadItems.putAll(Parcels.unwrap(inState.getParcelable(STATE_READ_ITEMS)));
+        mItemParentName = inState.getString(STATE_ITEM_PARENT_NAME);
+        mItemPosterName = inState.getString(STATE_ITEM_POSTER_NAME);
+        isShowAll = inState.getBoolean(STATE_SHOW_ALL);
     }
 
     class ItemViewHolder<T extends ViewDataBinding>

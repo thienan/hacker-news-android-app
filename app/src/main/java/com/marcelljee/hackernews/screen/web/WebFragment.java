@@ -20,8 +20,8 @@ public class WebFragment extends ToolbarFragment {
 
     private static final String ARG_URL = "com.marcelljee.hackernews.screen.web.arg.URL";
 
-    private WebView wvWebPage;
     private String mUrl;
+    private WebView wvWebPage;
 
     public static WebFragment newInstance(String url) {
         WebFragment fragment = new WebFragment();

@@ -28,11 +28,12 @@ public class NewsActivity extends FragmentActivity<NewsFragment>
     private static final String EXTRA_NEWS_TYPE = "com.marcelljee.hackernews.screen.news.extra.NEWS_TYPE";
 
     private static final String STATE_NEWS_TYPE = "com.marcelljee.hackernews.screen.news.state.NEWS_TYPE";
+    private static final String STATE_NEWS_SHOW_ALL = "com.marcelljee.hackernews.screen.news.state.NEWS_SHOW_ALL";
 
     private String mNewsType;
+    private boolean isShowAll = true;
 
     private boolean isNewState = false;
-    private boolean isShowAll = true;
 
     public static Intent createIntent(Context context, String newsType) {
         Intent intent = new Intent(context, NewsActivity.class);
@@ -71,12 +72,14 @@ public class NewsActivity extends FragmentActivity<NewsFragment>
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         mNewsType = savedInstanceState.getString(STATE_NEWS_TYPE);
+        isShowAll = savedInstanceState.getBoolean(STATE_NEWS_SHOW_ALL);
         super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putString(STATE_NEWS_TYPE, mNewsType);
+        outState.putBoolean(STATE_NEWS_SHOW_ALL, isShowAll);
         super.onSaveInstanceState(outState);
     }
 

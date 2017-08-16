@@ -29,7 +29,6 @@ import com.marcelljee.hackernews.utils.SettingsUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -38,8 +37,6 @@ public class NewsFragment extends ToolbarFragment
 
     private static final String STATE_NEWS_TYPE = "com.marcelljee.hackernews.screen.news.state.NEWS_TYPE";
     private static final String STATE_NEWS_DATA_IDS = "com.marcelljee.hackernews.screen.news.state.NEWS_DATA_IDS";
-    private static final String STATE_NEWS_DATA = "com.marcelljee.hackernews.screen.news.state.NEWS_DATA";
-    private static final String STATE_NEWS_VIEW = "com.marcelljee.hackernews.screen.news.state.NEWS_VIEW";
     private static final String STATE_CURRENT_PAGE = "com.marcelljee.hackernews.screen.news.state.CURRENT_PAGE";
 
     private static final int LOADER_ID_STORIES_TOP = 510;
@@ -63,11 +60,10 @@ public class NewsFragment extends ToolbarFragment
 
     private String mNewsType;
     private List<Long> mItemIds;
+    private int mCurrentPage = 1;
+    private ItemAdapter mNewsAdapter;
 
     private FragmentNewsBinding mBinding;
-    private ItemAdapter mAdapter;
-
-    private int mCurrentPage = 1;
 
     public static NewsFragment newInstance() {
         return new NewsFragment();
@@ -79,10 +75,10 @@ public class NewsFragment extends ToolbarFragment
         mBinding = FragmentNewsBinding.inflate(inflater, container, false);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new ItemAdapter(getToolbarActivity());
+        mNewsAdapter = new ItemAdapter(getToolbarActivity());
 
         mBinding.rvItemList.setLayoutManager(layoutManager);
-        mBinding.rvItemList.setAdapter(mAdapter);
+        mBinding.rvItemList.setAdapter(mNewsAdapter);
         mBinding.rvItemList.showDivider();
         mBinding.rvItemList.setOnLoadMoreListener((page, totalItemsCount) -> nextPageNews());
 
@@ -106,7 +102,7 @@ public class NewsFragment extends ToolbarFragment
 
     @Override
     public void onStop() {
-        mAdapter.closeActionModeMenu();
+        mNewsAdapter.closeActionModeMenu();
         super.onStop();
     }
 
@@ -122,18 +118,16 @@ public class NewsFragment extends ToolbarFragment
     private void onRestoreInstanceState(Bundle inState) {
         mNewsType = inState.getString(STATE_NEWS_TYPE);
         mItemIds = CollectionUtils.toLongList(inState.getLongArray(STATE_NEWS_DATA_IDS));
-        mAdapter.swapItems(Parcels.unwrap(inState.getParcelable(STATE_NEWS_DATA)));
-        mBinding.rvItemList.getLayoutManager().onRestoreInstanceState(inState.getParcelable(STATE_NEWS_VIEW));
         mCurrentPage = inState.getInt(STATE_CURRENT_PAGE);
+        mNewsAdapter.restoreState(inState);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putString(STATE_NEWS_TYPE, mNewsType);
         outState.putLongArray(STATE_NEWS_DATA_IDS, CollectionUtils.toLongArray(mItemIds));
-        outState.putParcelable(STATE_NEWS_DATA, Parcels.wrap(mAdapter.getItems()));
-        outState.putParcelable(STATE_NEWS_VIEW, mBinding.rvItemList.getLayoutManager().onSaveInstanceState());
         outState.putInt(STATE_CURRENT_PAGE, mCurrentPage);
+        mNewsAdapter.saveState(outState);
         super.onSaveInstanceState(outState);
     }
 
@@ -212,42 +206,42 @@ public class NewsFragment extends ToolbarFragment
                     return;
                 case LOADER_ID_STORIES_TOP_ITEM:
                     if (getString(R.string.settings_type_option_top).equals(mNewsType)) {
-                        mAdapter.addItems((List<Item>) response.getData());
+                        mNewsAdapter.addItems((List<Item>) response.getData());
                     }
                     break;
                 case LOADER_ID_STORIES_BEST_ITEM:
                     if (getString(R.string.settings_type_option_best).equals(mNewsType)) {
-                        mAdapter.addItems((List<Item>) response.getData());
+                        mNewsAdapter.addItems((List<Item>) response.getData());
                     }
                     break;
                 case LOADER_ID_STORIES_NEW_ITEM:
                     if (getString(R.string.settings_type_option_new).equals(mNewsType)) {
-                        mAdapter.addItems((List<Item>) response.getData());
+                        mNewsAdapter.addItems((List<Item>) response.getData());
                     }
                     break;
                 case LOADER_ID_STORIES_SHOW_ITEM:
                     if (getString(R.string.settings_type_option_show).equals(mNewsType)) {
-                        mAdapter.addItems((List<Item>) response.getData());
+                        mNewsAdapter.addItems((List<Item>) response.getData());
                     }
                     break;
                 case LOADER_ID_STORIES_ASK_ITEM:
                     if (getString(R.string.settings_type_option_ask).equals(mNewsType)) {
-                        mAdapter.addItems((List<Item>) response.getData());
+                        mNewsAdapter.addItems((List<Item>) response.getData());
                     }
                     break;
                 case LOADER_ID_STORIES_JOB_ITEM:
                     if (getString(R.string.settings_type_option_jobs).equals(mNewsType)) {
-                        mAdapter.addItems((List<Item>) response.getData());
+                        mNewsAdapter.addItems((List<Item>) response.getData());
                     }
                     break;
                 case LOADER_ID_HISTORY_ITEM:
                     if (getString(R.string.settings_type_option_history).equals(mNewsType)) {
-                        mAdapter.swapItems((List<Item>) response.getData());
+                        mNewsAdapter.swapItems((List<Item>) response.getData());
                     }
                     break;
                 case LOADER_ID_BOOKMARKED_ITEM:
                     if (getString(R.string.settings_type_option_bookmarked).equals(mNewsType)) {
-                        mAdapter.swapItems((List<Item>) response.getData());
+                        mNewsAdapter.swapItems((List<Item>) response.getData());
                     }
                     break;
                 default:
@@ -271,20 +265,20 @@ public class NewsFragment extends ToolbarFragment
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (getString(R.string.settings_read_indicator_key).equals(key)
                 && !SettingsUtils.readIndicatorEnabled(getContext())) {
-            mAdapter.clearReadIndicator();
+            mNewsAdapter.clearReadIndicator();
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     @SuppressWarnings({"UnusedParameters", "unused"})
     public void onBookmarkEvent(ItemBookmarkEvent.StoryActivityEvent event) {
-        mAdapter.notifyDataSetChanged();
+        mNewsAdapter.notifyDataSetChanged();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     @SuppressWarnings({"UnusedParameters", "unused"})
     public void onBookmarkEvent(ItemBookmarkEvent.UserActivityEvent event) {
-        mAdapter.notifyDataSetChanged();
+        mNewsAdapter.notifyDataSetChanged();
     }
 
     public void refresh() {
@@ -293,17 +287,17 @@ public class NewsFragment extends ToolbarFragment
     }
 
     public void clearItems() {
-        mAdapter.clearItems();
+        mNewsAdapter.clearItems();
         mCurrentPage = 1;
         mBinding.rvItemList.restartOnLoadMoreListener();
     }
 
     public void showAllItems() {
-        mAdapter.showAll();
+        mNewsAdapter.showAll();
     }
 
     public void showUnreadItems() {
-        mAdapter.showUnread();
+        mNewsAdapter.showUnread();
     }
 
     private void refreshNews() {

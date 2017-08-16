@@ -18,7 +18,7 @@ public class FragmentActivity<T extends Fragment> extends ToolbarActivity {
 
     protected void setFragment(T fragment) {
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, fragment, TAG_FRAGMENT)
+                .replace(R.id.fragment_container, fragment, TAG_FRAGMENT)
                 .commit();
     }
 

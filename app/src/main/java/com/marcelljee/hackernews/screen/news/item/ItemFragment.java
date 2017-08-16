@@ -44,16 +44,18 @@ public class ItemFragment extends ToolbarFragment {
         super.onCreate(savedInstanceState);
         extractArguments();
 
-        switch (mItem.getType()) {
-            case ItemActivity.ITEM_TYPE_COMMENT:
-                loadFragment(CommentFragment.newInstance(mItem, mItemParentName, mItemPosterName));
-                break;
-            case ItemActivity.ITEM_TYPE_STORY:
-            case ItemActivity.ITEM_TYPE_POLL:
-            case ItemActivity.ITEM_TYPE_JOB:
-            default:
-                loadFragment(StoryFragment.newInstance(mItem));
-                break;
+        if (savedInstanceState == null) {
+            switch (mItem.getType()) {
+                case ItemActivity.ITEM_TYPE_COMMENT:
+                    loadFragment(CommentFragment.newInstance(mItem, mItemParentName, mItemPosterName));
+                    break;
+                case ItemActivity.ITEM_TYPE_STORY:
+                case ItemActivity.ITEM_TYPE_POLL:
+                case ItemActivity.ITEM_TYPE_JOB:
+                default:
+                    loadFragment(StoryFragment.newInstance(mItem));
+                    break;
+            }
         }
     }
 
@@ -92,8 +94,8 @@ public class ItemFragment extends ToolbarFragment {
                 .newInstance(mItem, mItemParentName, mItemPosterName);
 
         getActivity().getSupportFragmentManager().beginTransaction()
-                .add(R.id.item_head_container, headFragment, TAG_HEAD_FRAGMENT)
-                .add(R.id.item_comment_container, commentFragment, TAG_COMMENT_FRAGMENT)
+                .replace(R.id.item_head_container, headFragment, TAG_HEAD_FRAGMENT)
+                .replace(R.id.item_comment_container, commentFragment, TAG_COMMENT_FRAGMENT)
                 .commit();
     }
 

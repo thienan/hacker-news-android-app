@@ -40,7 +40,6 @@ public class UserFragment extends ToolbarFragment
     private static final String ARG_USER_ID = "com.marcelljee.hackernews.screen.user.arg.USER_ID";
 
     private static final String STATE_USER = "com.marcelljee.hackernews.screen.user.state.USER";
-    private static final String STATE_SUBMISSION_DATA = "com.marcelljee.hackernews.screen.user.state.SUBMISSION_DATA";
     private static final String STATE_CURRENT_PAGE = "com.marcelljee.hackernews.screen.user.state.CURRENT_PAGE";
 
     private static final int LOADER_ID_USER_ITEM = 800;
@@ -50,10 +49,11 @@ public class UserFragment extends ToolbarFragment
 
     private String mUserId;
 
-    private FragmentUserBinding mBinding;
-    private ItemAdapter mAdapter;
-
+    private User mUser;
     private int mCurrentPage = 1;
+    private ItemAdapter mUserSubmissionAdapter;
+
+    private FragmentUserBinding mBinding;
 
     public static UserFragment newInstance(String userId) {
         UserFragment fragment = new UserFragment();
@@ -76,7 +76,7 @@ public class UserFragment extends ToolbarFragment
 
     @Override
     public void onStop() {
-        mAdapter.closeActionModeMenu();
+        mUserSubmissionAdapter.closeActionModeMenu();
         super.onStop();
     }
 
@@ -97,10 +97,10 @@ public class UserFragment extends ToolbarFragment
         mBinding.setUser(User.createTempUser(mUserId));
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new ItemAdapter(getToolbarActivity());
+        mUserSubmissionAdapter = new ItemAdapter(getToolbarActivity());
 
         mBinding.rvSubmissionList.setLayoutManager(layoutManager);
-        mBinding.rvSubmissionList.setAdapter(mAdapter);
+        mBinding.rvSubmissionList.setAdapter(mUserSubmissionAdapter);
         mBinding.rvSubmissionList.showDivider();
         mBinding.rvSubmissionList.setOnLoadMoreListener((page, totalItemsCount) -> nextPageSubmissions());
 
@@ -114,16 +114,18 @@ public class UserFragment extends ToolbarFragment
     }
 
     private void onRestoreInstanceState(Bundle inState) {
-        mBinding.setUser(Parcels.unwrap(inState.getParcelable(STATE_USER)));
-        mAdapter.swapItems(Parcels.unwrap(inState.getParcelable(STATE_SUBMISSION_DATA)));
+        mUser = Parcels.unwrap(inState.getParcelable(STATE_USER));
         mCurrentPage = inState.getInt(STATE_CURRENT_PAGE);
+        mUserSubmissionAdapter.restoreState(inState);
+
+        mBinding.setUser(mUser);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(STATE_USER, Parcels.wrap(mBinding.getUser()));
-        outState.putParcelable(STATE_SUBMISSION_DATA, Parcels.wrap(mAdapter.getItems()));
+        outState.putParcelable(STATE_USER, Parcels.wrap(mUser));
         outState.putInt(STATE_CURRENT_PAGE, mCurrentPage);
+        mUserSubmissionAdapter.saveState(outState);
         super.onSaveInstanceState(outState);
     }
 
@@ -141,9 +143,10 @@ public class UserFragment extends ToolbarFragment
     @Override
     public void onLoadFinished(Loader<HackerNewsResponse<User>> loader, HackerNewsResponse<User> response) {
         if (response.isSuccessful()) {
-            mBinding.setUser(response.getData());
+            mUser = response.getData();
+            mBinding.setUser(mUser);
             // check if this comes after configuration changes and the submissions is not loaded yet.
-            if (mAdapter.getItemCount() == 0 && mBinding.getUser().getSubmitted().size() > 0) {
+            if (mUserSubmissionAdapter.getItemCount() == 0 && mBinding.getUser().getSubmitted().size() > 0) {
                 refreshSubmissions();
             }
         } else {
@@ -162,7 +165,7 @@ public class UserFragment extends ToolbarFragment
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (getString(R.string.settings_read_indicator_key).equals(key)
                 && !SettingsUtils.readIndicatorEnabled(getContext())) {
-            mAdapter.clearReadIndicator();
+            mUserSubmissionAdapter.clearReadIndicator();
         }
     }
 
@@ -174,7 +177,7 @@ public class UserFragment extends ToolbarFragment
     @Subscribe(threadMode = ThreadMode.MAIN)
     @SuppressWarnings({"UnusedParameters", "unused"})
     public void onBookmarkEvent(ItemBookmarkEvent.StoryActivityEvent event) {
-        mAdapter.notifyDataSetChanged();
+        mUserSubmissionAdapter.notifyDataSetChanged();
     }
 
     private static Bundle createArguments(String userId) {
@@ -193,7 +196,7 @@ public class UserFragment extends ToolbarFragment
     }
 
     private void refreshSubmissions() {
-        mAdapter.clearItems();
+        mUserSubmissionAdapter.clearItems();
         mCurrentPage = 1;
         mBinding.rvSubmissionList.restartOnLoadMoreListener();
         mBinding.rvSubmissionList.showProgressBar();
@@ -225,7 +228,7 @@ public class UserFragment extends ToolbarFragment
 
             @Override
             public void onLoadFinished(Loader<HackerNewsResponse<List<Item>>> loader, HackerNewsResponse<List<Item>> data) {
-                mAdapter.addItems(data.getData());
+                mUserSubmissionAdapter.addItems(data.getData());
                 mBinding.rvSubmissionList.hideProgressBar();
             }
 
