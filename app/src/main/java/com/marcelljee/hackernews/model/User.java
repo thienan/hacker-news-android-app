@@ -92,24 +92,13 @@ public class User extends BaseObservable {
 
         User user = (User) o;
 
-        if (delay != user.delay) return false;
-        if (created != user.created) return false;
-        if (karma != user.karma) return false;
-        if (!id.equals(user.id)) return false;
-        if (about != null ? !about.equals(user.about) : user.about != null) return false;
-        return submitted != null ? submitted.equals(user.submitted) : user.submitted == null;
+        return id.equals(user.id);
 
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + delay;
-        result = 31 * result + (int) (created ^ (created >>> 32));
-        result = 31 * result + karma;
-        result = 31 * result + (about != null ? about.hashCode() : 0);
-        result = 31 * result + (submitted != null ? submitted.hashCode() : 0);
-        return result;
+        return id.hashCode();
     }
 
     @Override
