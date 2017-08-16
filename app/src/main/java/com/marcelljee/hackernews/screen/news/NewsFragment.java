@@ -24,6 +24,7 @@ import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.loader.StoriesLoader;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.utils.CollectionUtils;
+import com.marcelljee.hackernews.utils.SettingsUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -268,8 +269,9 @@ public class NewsFragment extends ToolbarFragment
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (getString(R.string.settings_read_indicator_key).equals(key)) {
-            mAdapter.notifyDataSetChanged();
+        if (getString(R.string.settings_read_indicator_key).equals(key)
+                && !SettingsUtils.readIndicatorEnabled(getContext())) {
+            mAdapter.clearReadIndicator();
         }
     }
 

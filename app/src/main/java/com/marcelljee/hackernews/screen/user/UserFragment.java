@@ -23,6 +23,7 @@ import com.marcelljee.hackernews.loader.UserLoader;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.model.User;
 import com.marcelljee.hackernews.utils.CollectionUtils;
+import com.marcelljee.hackernews.utils.SettingsUtils;
 import com.marcelljee.hackernews.viewmodel.FragmentUserViewModel;
 
 import org.greenrobot.eventbus.EventBus;
@@ -159,8 +160,9 @@ public class UserFragment extends ToolbarFragment
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (getString(R.string.settings_read_indicator_key).equals(key)) {
-            mAdapter.notifyDataSetChanged();
+        if (getString(R.string.settings_read_indicator_key).equals(key)
+                && !SettingsUtils.readIndicatorEnabled(getContext())) {
+            mAdapter.clearReadIndicator();
         }
     }
 
