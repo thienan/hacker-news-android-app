@@ -138,6 +138,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     }
 
     public void swapItems(List<Item> items) {
+        isShowAll = true;
         clearItems();
         addItems(items);
     }
@@ -212,6 +213,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     }
 
     public void clearReadIndicator() {
+        showAll();
+
         for (Item item : mItems) {
             item.setRead(false);
         }
