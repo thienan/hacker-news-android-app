@@ -17,7 +17,9 @@ import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.screen.news.item.ItemActivity;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.marcelljee.hackernews.activity.ToolbarActivity;
 import com.marcelljee.hackernews.utils.SettingsUtils;
@@ -39,8 +41,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     private static final String ITEM_TYPE_JOB = "job";
 
     private final ToolbarActivity mActivity;
-    private final List<Item> mAllItems;
     private final List<Item> mItems;
+    private final Map<Integer, Item> mReadItems;
     private final String mItemParentName;
     private final String mItemPosterName;
 
@@ -54,7 +56,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     public ItemAdapter(ToolbarActivity activity, String itemParentName, String itemPosterName) {
         mActivity = activity;
-        mAllItems = new ArrayList<>();
+        mReadItems = new LinkedHashMap<>();
         mItems = new ArrayList<>();
         mItemParentName = itemParentName;
         mItemPosterName = itemPosterName;
@@ -137,70 +139,77 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     }
 
     public void swapItems(List<Item> items) {
-        mAllItems.clear();
-        mAllItems.addAll(items);
-
-        if (isShowAll) {
-            showAll();
-        } else {
-            showUnread();
-        }
+        clearItems();
+        addItems(items);
     }
 
     public void clearItems() {
-        mAllItems.clear();
+        int num = mItems.size();
+        mItems.clear();
+        mReadItems.clear();
+        notifyItemRangeRemoved(0, num);
+    }
 
-        if (isShowAll) {
-            showAll();
-        } else {
-            showUnread();
+    public void addItems(List<Item> items) {
+        Observable.fromIterable(items)
+                .map(item -> {
+                    item.setBookmarked(DatabaseDao.isItemBookmarked(mActivity, item.getId()));
+                    item.setRead(DatabaseDao.isItemRead(mActivity, item.getId()));
+                    return item;
+                }).toList()
+                .subscribe(itemList -> {
+                    if (isShowAll) {
+                        insertAll(itemList);
+                    } else {
+                        insertUnread(itemList);
+                    }
+                });
+    }
+
+    private void insertAll(List<Item> items) {
+        mItems.addAll(items);
+        notifyItemRangeInserted(mItems.size() - items.size(), items.size());
+    }
+
+    private void insertUnread(List<Item> items) {
+        for (int pos = 0; pos < items.size(); pos++) {
+            Item item = items.get(pos);
+
+            if (item.isRead()) {
+                mReadItems.put(mItems.size() + mReadItems.size(), item);
+            } else {
+                mItems.add(item);
+                notifyItemInserted(mItems.size());
+            }
         }
     }
 
     public void showAll() {
         isShowAll = true;
-        show(mAllItems);
+
+        Map<Integer, Item> readItems = new LinkedHashMap<>(mReadItems);
+
+        for (Map.Entry<Integer, Item> readItem : readItems.entrySet()) {
+            mReadItems.remove(readItem.getKey());
+            mItems.add(readItem.getKey(), readItem.getValue());
+            notifyItemInserted(readItem.getKey());
+        }
     }
 
     public void showUnread() {
         isShowAll = false;
 
-        Observable.fromIterable(mAllItems)
-                .filter(item -> !DatabaseDao.isItemRead(mActivity, item.getId()))
-                .toList()
-                .subscribe(this::show);
-    }
+        List<Item> allItems = new ArrayList<>(mItems);
 
-    private void show(List<Item> items) {
-        mItems.clear();
-        mItems.addAll(items);
-        notifyDataSetChanged();
-    }
+        for (int pos = 0; pos < allItems.size(); pos++) {
+            Item item = allItems.get(pos);
 
-    public void addItems(List<Item> items) {
-        mAllItems.addAll(items);
-
-        if (isShowAll) {
-            insertAll(items);
-        } else {
-            insertUnread(items);
+            if (item.isRead()) {
+                mReadItems.put(pos, item);
+                notifyItemRemoved(mItems.indexOf(item));
+                mItems.remove(item);
+            }
         }
-    }
-
-    private void insertAll(List<Item> items) {
-        insert(items);
-    }
-
-    private void insertUnread(List<Item> items) {
-        Observable.fromIterable(items)
-                .filter(item -> !DatabaseDao.isItemRead(mActivity, item.getId()))
-                .toList()
-                .subscribe(this::insert);
-    }
-
-    private void insert(List<Item> items) {
-        mItems.addAll(items);
-        notifyItemRangeInserted(mItems.size() - items.size(), items.size());
     }
 
     public ToolbarActivity getActivity() {

@@ -219,6 +219,78 @@ public class Item extends BaseObservable {
         notifyPropertyChanged(BR.read);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Item item = (Item) o;
+
+        if (id != item.id) return false;
+        if (deleted != item.deleted) return false;
+        if (time != item.time) return false;
+        if (dead != item.dead) return false;
+        if (parent != item.parent) return false;
+        if (poll != item.poll) return false;
+        if (score != item.score) return false;
+        if (descendants != item.descendants) return false;
+        if (bookmarked != item.bookmarked) return false;
+        if (read != item.read) return false;
+        if (type != null ? !type.equals(item.type) : item.type != null) return false;
+        if (!by.equals(item.by)) return false;
+        if (text != null ? !text.equals(item.text) : item.text != null) return false;
+        if (kids != null ? !kids.equals(item.kids) : item.kids != null) return false;
+        if (url != null ? !url.equals(item.url) : item.url != null) return false;
+        if (title != null ? !title.equals(item.title) : item.title != null) return false;
+        return parts != null ? parts.equals(item.parts) : item.parts == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (deleted ? 1 : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + by.hashCode();
+        result = 31 * result + (int) (time ^ (time >>> 32));
+        result = 31 * result + (text != null ? text.hashCode() : 0);
+        result = 31 * result + (dead ? 1 : 0);
+        result = 31 * result + (int) (parent ^ (parent >>> 32));
+        result = 31 * result + (int) (poll ^ (poll >>> 32));
+        result = 31 * result + (kids != null ? kids.hashCode() : 0);
+        result = 31 * result + (url != null ? url.hashCode() : 0);
+        result = 31 * result + score;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (parts != null ? parts.hashCode() : 0);
+        result = 31 * result + descendants;
+        result = 31 * result + (bookmarked ? 1 : 0);
+        result = 31 * result + (read ? 1 : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", deleted=" + deleted +
+                ", type='" + type + '\'' +
+                ", by='" + by + '\'' +
+                ", time=" + time +
+                ", text='" + text + '\'' +
+                ", dead=" + dead +
+                ", parent=" + parent +
+                ", poll=" + poll +
+                ", kids=" + kids +
+                ", url='" + url + '\'' +
+                ", score=" + score +
+                ", title='" + title + '\'' +
+                ", parts=" + parts +
+                ", descendants=" + descendants +
+                ", bookmarked=" + bookmarked +
+                ", read=" + read +
+                '}';
+    }
+
     public static class Factory {
         public static ContentValues toValues(Item item) {
             ContentValues values = new ContentValues();
