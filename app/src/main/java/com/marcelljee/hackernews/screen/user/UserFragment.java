@@ -32,7 +32,7 @@ import org.parceler.Parcels;
 import java.util.List;
 
 public class UserFragment extends ToolbarFragment
-        implements LoaderManager.LoaderCallbacks<HackerNewsResponse<User>>,
+        implements LoaderManager.LoaderCallbacks,
         SharedPreferences.OnSharedPreferenceChangeListener, View.OnClickListener {
 
     private static final String ARG_USER_ID = "com.marcelljee.hackernews.screen.user.arg.USER_ID";
@@ -127,10 +127,18 @@ public class UserFragment extends ToolbarFragment
     }
 
     @Override
-    public Loader<HackerNewsResponse<User>> onCreateLoader(int id, Bundle args) {
+    public Loader onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_ID_USER_ITEM:
                 return new UserLoader(getContext(), mUserId);
+            case LOADER_ID_SUBMISSIONS:
+                List<Long> submissions = mUser.getSubmitted();
+
+                List<Long> list = CollectionUtils.subList(submissions,
+                        (mCurrentPage - 1) * ITEM_COUNT,
+                        mCurrentPage * ITEM_COUNT);
+
+                return new ItemListLoader(getContext(), list);
             default:
                 return null;
 
@@ -138,20 +146,33 @@ public class UserFragment extends ToolbarFragment
     }
 
     @Override
-    public void onLoadFinished(Loader<HackerNewsResponse<User>> loader, HackerNewsResponse<User> response) {
+    public void onLoadFinished(Loader loader, Object data) {
+        HackerNewsResponse response = (HackerNewsResponse) data;
+
         if (response.isSuccessful()) {
-            mUser.update(response.getData());
-            // check if this comes after configuration changes and the submissions is not loaded yet.
-            if (mUserSubmissionAdapter.getItemCount() == 0 && mUser.getSubmitted().size() > 0) {
-                refreshSubmissions();
+            switch (loader.getId()) {
+                case LOADER_ID_USER_ITEM:
+                    mUser.update((User) response.getData());
+                    // check if this comes after configuration changes and the submissions is not loaded yet.
+                    if (mUserSubmissionAdapter.getItemCount() == 0 && mUser.getSubmitted().size() > 0) {
+                        refreshSubmissions();
+                    }
+                    break;
+                case LOADER_ID_SUBMISSIONS:
+                    mUserSubmissionAdapter.addItems((List<Item>) response.getData());
+                    mBinding.rvSubmissionList.hideProgressBar();
+                    break;
+                default:
+                    //do nothing
             }
+
         } else {
             SnackbarFactory.createRetrieveErrorSnackbar(mBinding.getRoot(), UserFragment.this).show();
         }
     }
 
     @Override
-    public void onLoaderReset(Loader<HackerNewsResponse<User>> loader) {
+    public void onLoaderReset(Loader loader) {
 
     }
 
@@ -204,32 +225,6 @@ public class UserFragment extends ToolbarFragment
 
     private void retrieveSubmissions() {
         if (mUser.getSubmitted() == null) return;
-        getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_SUBMISSIONS, null, getCallback());
-    }
-
-    private LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> getCallback() {
-        return new LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>>() {
-            @Override
-            public Loader<HackerNewsResponse<List<Item>>> onCreateLoader(int id, Bundle args) {
-                List<Long> submissions = mUser.getSubmitted();
-
-                List<Long> list = CollectionUtils.subList(submissions,
-                        (mCurrentPage - 1) * ITEM_COUNT,
-                        mCurrentPage * ITEM_COUNT);
-
-                return new ItemListLoader(getContext(), list);
-            }
-
-            @Override
-            public void onLoadFinished(Loader<HackerNewsResponse<List<Item>>> loader, HackerNewsResponse<List<Item>> data) {
-                mUserSubmissionAdapter.addItems(data.getData());
-                mBinding.rvSubmissionList.hideProgressBar();
-            }
-
-            @Override
-            public void onLoaderReset(Loader<HackerNewsResponse<List<Item>>> loader) {
-
-            }
-        };
+        getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_SUBMISSIONS, null, this);
     }
 }
