@@ -57,6 +57,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     private boolean isShowAll = true;
 
     private final ActionModeMenu mActionModeMenu;
+    private final ItemViewModel itemNewsViewModel;
 
     public ItemAdapter(ToolbarActivity activity) {
         this(activity, null, null);
@@ -70,6 +71,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         mItemPosterName = itemPosterName;
 
         mActionModeMenu = new ActionModeMenu(mActivity);
+        itemNewsViewModel = new ItemViewModel(mActivity, mItems, true, null);
     }
 
     @Override
@@ -79,7 +81,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         switch (viewType) {
             case VIEW_TYPE_NEWS:
                 ItemNewsBinding newsBinding = ItemNewsBinding.inflate(inflater, parent, false);
-                newsBinding.setViewModel(new ItemViewModel(mActivity, mItems, true, null));
+                newsBinding.setViewModel(itemNewsViewModel);
                 return new ItemViewHolder(newsBinding, true);
             case VIEW_TYPE_COMMENT:
                 ItemCommentBinding commentBinding = ItemCommentBinding.inflate(inflater, parent, false);
@@ -97,7 +99,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
         Item item = getItem(position);
-        item.setBookmarked(DatabaseDao.isItemBookmarked(mActivity, item.getId()));
         holder.binding.setVariable(BR.item, item);
 
         switch (holder.getItemViewType()) {
@@ -145,6 +146,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     public void updateItem(Item item) {
         int pos = mItems.indexOf(item);
         mItems.get(pos).update(item);
+
+        itemNewsViewModel.updateItem(item);
     }
 
     public void swapItems(List<Item> items) {
@@ -179,6 +182,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     private void insertAll(List<Item> items) {
         mItems.addAll(items);
         notifyItemRangeInserted(mItems.size() - items.size(), items.size());
+
+        itemNewsViewModel.swapItems(mItems);
     }
 
     private void insertUnread(List<Item> items) {
@@ -192,6 +197,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
                 notifyItemInserted(mItems.size());
             }
         }
+
+        itemNewsViewModel.swapItems(mItems);
     }
 
     public void showAll() {
@@ -204,6 +211,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             mItems.add(readItem.getKey(), readItem.getValue());
             notifyItemInserted(readItem.getKey());
         }
+
+        itemNewsViewModel.swapItems(mItems);
     }
 
     public void showUnread() {
@@ -220,6 +229,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
                 mItems.remove(item);
             }
         }
+
+        itemNewsViewModel.swapItems(mItems);
     }
 
     public void clearReadIndicator() {

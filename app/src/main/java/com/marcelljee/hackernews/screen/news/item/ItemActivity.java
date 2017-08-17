@@ -6,13 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.marcelljee.hackernews.R;
-import com.marcelljee.hackernews.activity.FragmentActivity;
+import com.marcelljee.hackernews.event.ItemUpdateEvent;
 import com.marcelljee.hackernews.loader.HackerNewsResponse;
 import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.screen.news.NewsActivity;
@@ -22,6 +23,7 @@ import com.marcelljee.hackernews.utils.HackerNewsUtils;
 import com.marcelljee.hackernews.utils.ItemUtils;
 import com.marcelljee.hackernews.utils.MenuUtils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.parceler.Parcels;
 
 import java.util.List;
@@ -29,7 +31,7 @@ import java.util.List;
 import com.marcelljee.hackernews.activity.ToolbarActivity;
 import com.marcelljee.hackernews.model.Item;
 
-public class ItemActivity extends FragmentActivity<ItemFragment>
+public class ItemActivity extends ToolbarActivity
         implements LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> {
 
     private static final String EXTRA_ROOT_CALLER_ACTIVITY = "com.marcelljee.hackernews.screen.news.item.extra.ROOT_CALLER_ACTIVITY";
@@ -56,6 +58,9 @@ public class ItemActivity extends FragmentActivity<ItemFragment>
 
     private long mParentId;
     private Item mParentItem;
+
+    private ItemPagerAdapter mItemPagerAdapter;
+    private ViewPager mItemPager;
 
     public static void startActivity(ToolbarActivity activity, List<Item> items, int itemPosition) {
         startActivity(activity, items, itemPosition, null, null);
@@ -88,14 +93,33 @@ public class ItemActivity extends FragmentActivity<ItemFragment>
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_item);
         setDisplayHomeAsUpEnabled(true);
 
         extractExtras();
 
         setTitle(ItemUtils.getTypeAsTitle(getItem()));
 
+        //TODO: use the following code to enabling paging news
+        //mItemPagerAdapter = new ItemPagerAdapter(getSupportFragmentManager(), mItems, mItemParentName, mItemPosterName);
+        mItemPagerAdapter = new ItemPagerAdapter(getSupportFragmentManager(),
+                CollectionUtils.singleItemList(mItems.get(mItemPosition)), mItemParentName, mItemPosterName);
+
+        mItemPager = (ViewPager) findViewById(R.id.item_pager);
+        mItemPager.setAdapter(mItemPagerAdapter);
+        mItemPager.setCurrentItem(mItemPosition);
+        mItemPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                mItemPosition = position;
+
+                Item item = mItems.get(position);
+                item.setRead(true);
+                EventBus.getDefault().post(new ItemUpdateEvent(item));
+            }
+        });
+
         if (savedInstanceState == null) {
-            setFragment(ItemFragment.newInstance(getItem(), mItemParentName, mItemPosterName));
             loadParentItem();
         }
     }
@@ -139,7 +163,7 @@ public class ItemActivity extends FragmentActivity<ItemFragment>
 
                 return super.onOptionsItemSelected(menuItem);
             case R.id.action_refresh:
-                getFragment().refresh();
+                mItemPagerAdapter.getCurrentFragment(mItemPager).refresh();
                 return true;
             case R.id.action_share:
                 MenuUtils.openShareHackerNewsLinkChooser(this, getItem());

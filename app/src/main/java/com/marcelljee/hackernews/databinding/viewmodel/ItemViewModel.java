@@ -14,6 +14,7 @@ import com.marcelljee.hackernews.utils.SettingsUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ItemViewModel {
@@ -29,9 +30,18 @@ public class ItemViewModel {
 
     public ItemViewModel(ToolbarActivity activity, List<Item> items, boolean readIndicator, CustomTabsSession customTabsSession) {
         mActivity = activity;
-        mItems = items;
+        mItems = new ArrayList<>(items);
         mCustomTabsSession = customTabsSession;
         mReadIndicatorEnabled = readIndicator;
+    }
+
+    public void swapItems(List<Item> items) {
+        mItems.clear();
+        mItems.addAll(items);
+    }
+
+    public void updateItem(Item item) {
+        mItems.set(mItems.indexOf(item), item);
     }
 
     public boolean getReadIndicatorEnabled() {

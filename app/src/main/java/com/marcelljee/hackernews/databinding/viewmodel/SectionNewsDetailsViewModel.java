@@ -12,6 +12,8 @@ public class SectionNewsDetailsViewModel {
     }
 
     public void textDetailsClick(String text) {
-        DetailsTextActivity.startActivity(mActivity, text);
+        if (!DetailsTextActivity.class.getName().equals(mActivity.getClass().getName())) {
+            DetailsTextActivity.startActivity(mActivity, text);
+        }
     }
 }
