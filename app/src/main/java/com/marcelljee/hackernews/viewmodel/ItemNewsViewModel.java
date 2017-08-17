@@ -8,10 +8,9 @@ import android.view.View;
 import com.marcelljee.hackernews.activity.ToolbarActivity;
 import com.marcelljee.hackernews.chrome.CustomTabsBrowser;
 import com.marcelljee.hackernews.database.DatabaseDao;
-import com.marcelljee.hackernews.event.ItemBookmarkEvent;
+import com.marcelljee.hackernews.event.ItemUpdateEvent;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.screen.news.item.ItemActivity;
-import com.marcelljee.hackernews.screen.user.UserActivity;
 import com.marcelljee.hackernews.utils.ItemUtils;
 import com.marcelljee.hackernews.utils.SettingsUtils;
 
@@ -65,10 +64,6 @@ public class ItemNewsViewModel extends ItemViewModel {
             item.setBookmarked(true);
         }
 
-        if (ItemActivity.StoryActivity.class.getName().equals(getActivity().getClass().getName())) {
-            EventBus.getDefault().post(new ItemBookmarkEvent.StoryActivityEvent());
-        } else if (UserActivity.class.getName().equals(getActivity().getClass().getName())) {
-            EventBus.getDefault().post(new ItemBookmarkEvent.UserActivityEvent());
-        }
+        EventBus.getDefault().post(new ItemUpdateEvent(item));
     }
 }

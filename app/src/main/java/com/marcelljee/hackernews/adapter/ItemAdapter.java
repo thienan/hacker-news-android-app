@@ -142,6 +142,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         return mItems.get(position);
     }
 
+    public void updateItem(Item item) {
+        int pos = mItems.indexOf(item);
+        mItems.get(pos).update(item);
+    }
+
     public void swapItems(List<Item> items) {
         isShowAll = true;
         clearItems();

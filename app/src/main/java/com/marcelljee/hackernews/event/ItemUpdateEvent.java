@@ -2,11 +2,11 @@ package com.marcelljee.hackernews.event;
 
 import com.marcelljee.hackernews.model.Item;
 
-public final class ItemRefreshEvent {
+public class ItemUpdateEvent {
 
-    private final Item mItem;
+    private Item mItem;
 
-    public ItemRefreshEvent(Item item) {
+    public ItemUpdateEvent(Item item) {
         mItem = item;
     }
 

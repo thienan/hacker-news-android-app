@@ -219,6 +219,26 @@ public class Item extends BaseObservable {
         notifyPropertyChanged(BR.read);
     }
 
+    public void update(Item item) {
+        if (id != item.getId()) return;
+        if (deleted != item.isDeleted()) setDeleted(item.isDeleted());
+        if (!type.equals(item.getType())) setType(item.getType());
+        if (!by.equals(item.getBy())) setBy(item.getBy());
+        if (time != item.getTime()) setTime(item.getTime());
+        if (!text.equals(item.getText())) setText(item.getText());
+        if (dead != item.isDead()) setDead(item.isDead());
+        if (parent != item.getParent()) setParent(item.getParent());
+        if (poll != item.getPoll()) setPoll(item.getPoll());
+        if (!kids.equals(item.getKids())) setKids(item.getKids());
+        if (!url.equals(item.getUrl())) setUrl(item.getUrl());
+        if (score != item.getScore()) setScore(item.getScore());
+        if (!title.equals(item.getTitle())) setTitle(item.getTitle());
+        if (!parts.equals(item.getParts())) setParts(item.getParts());
+        if (descendants != item.getDescendants()) setDescendants(item.getDescendants());
+        if (bookmarked != item.isBookmarked()) setBookmarked(item.isBookmarked());
+        if (read != item.isRead()) setRead(item.isRead());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.marcelljee.hackernews.adapter.ItemAdapter;
-import com.marcelljee.hackernews.event.ItemBookmarkEvent;
+import com.marcelljee.hackernews.event.ItemUpdateEvent;
 import com.marcelljee.hackernews.fragment.ToolbarFragment;
 import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.databinding.FragmentNewsBinding;
@@ -28,7 +28,6 @@ import com.marcelljee.hackernews.utils.SettingsUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -269,16 +268,10 @@ public class NewsFragment extends ToolbarFragment
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    @SuppressWarnings({"UnusedParameters", "unused"})
-    public void onBookmarkEvent(ItemBookmarkEvent.StoryActivityEvent event) {
-        mNewsAdapter.notifyDataSetChanged();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    @SuppressWarnings({"UnusedParameters", "unused"})
-    public void onBookmarkEvent(ItemBookmarkEvent.UserActivityEvent event) {
-        mNewsAdapter.notifyDataSetChanged();
+    @Subscribe()
+    @SuppressWarnings({"unused"})
+    public void onItemUpdateEvent(ItemUpdateEvent event) {
+        mNewsAdapter.updateItem(event.getItem());
     }
 
     public void refresh() {

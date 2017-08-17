@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.adapter.ItemAdapter;
 import com.marcelljee.hackernews.databinding.FragmentUserBinding;
-import com.marcelljee.hackernews.event.ItemBookmarkEvent;
+import com.marcelljee.hackernews.event.ItemUpdateEvent;
 import com.marcelljee.hackernews.factory.SnackbarFactory;
 import com.marcelljee.hackernews.fragment.ToolbarFragment;
 import com.marcelljee.hackernews.loader.HackerNewsResponse;
@@ -28,7 +28,6 @@ import com.marcelljee.hackernews.viewmodel.FragmentUserViewModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.parceler.Parcels;
 
 import java.util.List;
@@ -174,10 +173,10 @@ public class UserFragment extends ToolbarFragment
         getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_USER_ITEM, null, this);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    @SuppressWarnings({"UnusedParameters", "unused"})
-    public void onBookmarkEvent(ItemBookmarkEvent.StoryActivityEvent event) {
-        mUserSubmissionAdapter.notifyDataSetChanged();
+    @Subscribe()
+    @SuppressWarnings({"unused"})
+    public void onItemUpdateEvent(ItemUpdateEvent event) {
+        mUserSubmissionAdapter.updateItem(event.getItem());
     }
 
     private static Bundle createArguments(String userId) {
