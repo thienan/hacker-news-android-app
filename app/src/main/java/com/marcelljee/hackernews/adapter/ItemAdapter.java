@@ -69,7 +69,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         mItemParentName = itemParentName;
         mItemPosterName = itemPosterName;
 
-        mActionModeMenu = new ActionModeMenu(getActivity());
+        mActionModeMenu = new ActionModeMenu(mActivity);
     }
 
     @Override
@@ -79,11 +79,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         switch (viewType) {
             case VIEW_TYPE_NEWS:
                 ItemNewsBinding newsBinding = ItemNewsBinding.inflate(inflater, parent, false);
-                newsBinding.setViewModel(new ItemViewModel(getActivity(), true, null));
+                newsBinding.setViewModel(new ItemViewModel(mActivity, mItems, true, null));
                 return new ItemViewHolder(newsBinding, true);
             case VIEW_TYPE_COMMENT:
                 ItemCommentBinding commentBinding = ItemCommentBinding.inflate(inflater, parent, false);
-                commentBinding.setViewModel(new ItemViewModel(getActivity()));
+                commentBinding.setViewModel(new ItemViewModel(mActivity, mItems));
                 commentBinding.tvText.setMovementMethod(LinkMovementMethod.getInstance());
                 return new ItemViewHolder(commentBinding, true);
             case VIEW_TYPE_POLL_OPTION:
@@ -103,6 +103,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         switch (holder.getItemViewType()) {
             case VIEW_TYPE_NEWS:
                 ItemNewsBinding newsBinding = (ItemNewsBinding) holder.binding;
+                newsBinding.setItemPosition(position);
                 newsBinding.svScore.setOnClickListener((v) -> mActionModeMenu.start(newsBinding));
                 newsBinding.getRoot().setOnLongClickListener((v) -> mActionModeMenu.start(newsBinding));
                 break;
@@ -229,10 +230,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         }
     }
 
-    public ToolbarActivity getActivity() {
-        return mActivity;
-    }
-
     public void closeActionModeMenu() {
         mActionModeMenu.finish();
     }
@@ -272,7 +269,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         public void onClick(View view) {
             itemView.setSelected(false);
             Item item = mItems.get(getAdapterPosition());
-            ItemActivity.startActivity(mActivity, item, mItemParentName, mItemPosterName);
+            ItemActivity.startActivity(mActivity, mItems, getAdapterPosition(), mItemParentName, mItemPosterName);
 
             switch (getItemViewType()) {
                 case VIEW_TYPE_NEWS:

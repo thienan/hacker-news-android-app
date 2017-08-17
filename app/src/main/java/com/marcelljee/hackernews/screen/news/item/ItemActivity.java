@@ -17,13 +17,13 @@ import com.marcelljee.hackernews.loader.HackerNewsResponse;
 import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.screen.news.NewsActivity;
 import com.marcelljee.hackernews.chrome.CustomTabsBrowser;
+import com.marcelljee.hackernews.utils.CollectionUtils;
 import com.marcelljee.hackernews.utils.HackerNewsUtils;
 import com.marcelljee.hackernews.utils.ItemUtils;
 import com.marcelljee.hackernews.utils.MenuUtils;
 
 import org.parceler.Parcels;
 
-import java.util.Collections;
 import java.util.List;
 
 import com.marcelljee.hackernews.activity.ToolbarActivity;
@@ -33,7 +33,8 @@ public class ItemActivity extends FragmentActivity<ItemFragment>
         implements LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> {
 
     private static final String EXTRA_ROOT_CALLER_ACTIVITY = "com.marcelljee.hackernews.screen.news.item.extra.ROOT_CALLER_ACTIVITY";
-    public static final String EXTRA_ITEM = "com.marcelljee.hackernews.screen.news.item.extra.ITEM";
+    public static final String EXTRA_ITEMS = "com.marcelljee.hackernews.screen.news.item.extra.ITEMS";
+    public static final String EXTRA_ITEM_POSITION = "com.marcelljee.hackernews.screen.news.item.extra.ITEM_POSITION";
     private static final String EXTRA_ITEM_PARENT_NAME = "com.marcelljee.hackernews.screen.news.item.extra.ITEM_PARENT_NAME";
     private static final String EXTRA_ITEM_POSTER_NAME = "com.marcelljee.hackernews.screen.news.item.extra.ITEM_POSTER_NAME";
 
@@ -48,37 +49,38 @@ public class ItemActivity extends FragmentActivity<ItemFragment>
     private static final int LOADER_PARENT_ITEM = 300;
 
     private String mRootCallerActivity;
-    private Item mItem;
+    private List<Item> mItems;
+    private int mItemPosition;
     private String mItemParentName;
     private String mItemPosterName;
 
     private long mParentId;
     private Item mParentItem;
 
-    public static void startActivity(ToolbarActivity activity, Item item) {
-        startActivity(activity, item, null, null);
+    public static void startActivity(ToolbarActivity activity, List<Item> items, int itemPosition) {
+        startActivity(activity, items, itemPosition, null, null);
     }
 
-    public static void startActivity(ToolbarActivity activity, Item item,
+    public static void startActivity(ToolbarActivity activity, List<Item> items, int itemPosition,
                                      String itemParentName, String itemPosterName) {
-        switch (item.getType()) {
+        switch (items.get(itemPosition).getType()) {
             case ITEM_TYPE_COMMENT:
                 startActivity(activity,
-                        CommentActivity.createIntent(activity), item, itemParentName, itemPosterName);
+                        CommentActivity.createIntent(activity), items, itemPosition, itemParentName, itemPosterName);
                 break;
             case ITEM_TYPE_STORY:
             case ITEM_TYPE_POLL:
             case ITEM_TYPE_JOB:
             default:
                 startActivity(activity,
-                        StoryActivity.createIntent(activity), item, itemParentName, itemPosterName);
+                        StoryActivity.createIntent(activity), items, itemPosition, itemParentName, itemPosterName);
                 break;
         }
     }
 
-    private static void startActivity(ToolbarActivity activity, Intent intent, Item item,
+    private static void startActivity(ToolbarActivity activity, Intent intent, List<Item> items, int itemPosition,
                                       String itemParentName, String itemPosterName) {
-        Bundle extras = createExtras(activity, item, itemParentName, itemPosterName);
+        Bundle extras = createExtras(activity, items, itemPosition, itemParentName, itemPosterName);
         intent.putExtras(extras);
         activity.startActivity(intent);
     }
@@ -90,10 +92,10 @@ public class ItemActivity extends FragmentActivity<ItemFragment>
 
         extractExtras();
 
-        setTitle(ItemUtils.getTypeAsTitle(mItem));
+        setTitle(ItemUtils.getTypeAsTitle(getItem()));
 
         if (savedInstanceState == null) {
-            setFragment(ItemFragment.newInstance(mItem, mItemParentName, mItemPosterName));
+            setFragment(ItemFragment.newInstance(getItem(), mItemParentName, mItemPosterName));
             loadParentItem();
         }
     }
@@ -124,9 +126,10 @@ public class ItemActivity extends FragmentActivity<ItemFragment>
         switch (menuItem.getItemId()) {
             case android.R.id.home:
                 if (!NewsActivity.class.getName().equals(mRootCallerActivity)
-                        && mItem.getParent() > 0) {
+                        && getItem().getParent() > 0) {
                     if (mParentItem != null) {
-                        ItemActivity.startActivity(this, mParentItem);
+                        ItemActivity.startActivity(this,
+                                CollectionUtils.singleItemList(mParentItem), 0);
                     } else {
                         loadParentItem();
                     }
@@ -136,13 +139,13 @@ public class ItemActivity extends FragmentActivity<ItemFragment>
 
                 return super.onOptionsItemSelected(menuItem);
             case R.id.action_refresh:
-                refresh();
+                getFragment().refresh();
                 return true;
             case R.id.action_share:
-                share();
+                MenuUtils.openShareHackerNewsLinkChooser(this, getItem());
                 return true;
             case R.id.action_open_page:
-                openPage();
+                CustomTabsBrowser.openTab(this, HackerNewsUtils.geItemUrl(getItem().getId()));
                 return true;
             default:
                 return super.onOptionsItemSelected(menuItem);
@@ -153,7 +156,7 @@ public class ItemActivity extends FragmentActivity<ItemFragment>
     public Loader<HackerNewsResponse<List<Item>>> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_PARENT_ITEM:
-                return new ItemListLoader(this, Collections.singletonList(mParentId));
+                return new ItemListLoader(this, CollectionUtils.singleItemList(mParentId));
             default:
                 return null;
 
@@ -179,14 +182,14 @@ public class ItemActivity extends FragmentActivity<ItemFragment>
     }
 
     private void loadParentItem() {
-        mParentId = mItem.getParent();
+        mParentId = getItem().getParent();
 
         if (mParentId > 0) {
             getSupportLoaderManager().restartLoader(LOADER_PARENT_ITEM, null, this);
         }
     }
 
-    private static Bundle createExtras(Activity activity, Item item,
+    private static Bundle createExtras(Activity activity, List<Item> items, int itemPosition,
                                        String itemParentName, String itemPosterName) {
         Bundle extras = new Bundle();
         if (activity != null) {
@@ -199,7 +202,8 @@ public class ItemActivity extends FragmentActivity<ItemFragment>
             }
             extras.putString(EXTRA_ROOT_CALLER_ACTIVITY, rootCallerActivity);
         }
-        if (item != null) extras.putParcelable(EXTRA_ITEM, Parcels.wrap(item));
+        if (items != null) extras.putParcelable(EXTRA_ITEMS, Parcels.wrap(items));
+        if (itemPosition >= 0) extras.putInt(EXTRA_ITEM_POSITION, itemPosition);
         if (!TextUtils.isEmpty(itemParentName))
             extras.putString(EXTRA_ITEM_PARENT_NAME, itemParentName);
         if (!TextUtils.isEmpty(itemPosterName))
@@ -215,9 +219,13 @@ public class ItemActivity extends FragmentActivity<ItemFragment>
             mRootCallerActivity = intent.getStringExtra(EXTRA_ROOT_CALLER_ACTIVITY);
         }
 
-        if (intent.hasExtra(EXTRA_ITEM)) {
-            mItem = Parcels.unwrap(intent.getParcelableExtra(EXTRA_ITEM));
-            mParentId = mItem.getParent();
+        if (intent.hasExtra(EXTRA_ITEM_POSITION)) {
+            mItemPosition = intent.getIntExtra(EXTRA_ITEM_POSITION, -1);
+        }
+
+        if (intent.hasExtra(EXTRA_ITEMS)) {
+            mItems = Parcels.unwrap(intent.getParcelableExtra(EXTRA_ITEMS));
+            mParentId = getItem().getParent();
         }
 
         if (intent.hasExtra(EXTRA_ITEM_PARENT_NAME)) {
@@ -229,16 +237,8 @@ public class ItemActivity extends FragmentActivity<ItemFragment>
         }
     }
 
-    private void refresh() {
-        getFragment().refresh();
-    }
-
-    private void share() {
-        MenuUtils.openShareHackerNewsLinkChooser(this, mItem);
-    }
-
-    private void openPage() {
-        CustomTabsBrowser.openTab(this, HackerNewsUtils.geItemUrl(mItem.getId()));
+    private Item getItem() {
+        return mItems.get(mItemPosition);
     }
 
     public static class StoryActivity extends ItemActivity {

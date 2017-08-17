@@ -111,10 +111,10 @@ public class NewsWidgetItemService extends RemoteViewsService {
         }
 
         @Override
-        public RemoteViews getViewAt(int i) {
+        public RemoteViews getViewAt(int viewPosition) {
             if (mItems == null || mItems.size() == 0) return null;
 
-            Item item = mItems.get(i);
+            Item item = mItems.get(viewPosition);
 
             RemoteViews views = new RemoteViews(getPackageName(), R.layout.widget_news_item);
             views.setTextViewText(R.id.tv_user, item.getBy());
@@ -130,7 +130,8 @@ public class NewsWidgetItemService extends RemoteViewsService {
             views.setViewVisibility(R.id.tv_comment_total, item.getDescendants() > 0 ? View.VISIBLE : View.GONE);
 
             Bundle extras = new Bundle();
-            extras.putParcelable(ItemActivity.EXTRA_ITEM, Parcels.wrap(item));
+            extras.putParcelable(ItemActivity.EXTRA_ITEMS, Parcels.wrap(mItems));
+            extras.putInt(ItemActivity.EXTRA_ITEM_POSITION, viewPosition);
             Intent fillInIntent = new Intent();
             fillInIntent.putExtras(extras);
             views.setOnClickFillInIntent(R.id.news_widget_item, fillInIntent);
@@ -149,8 +150,8 @@ public class NewsWidgetItemService extends RemoteViewsService {
         }
 
         @Override
-        public long getItemId(int i) {
-            return i;
+        public long getItemId(int itemPosition) {
+            return mItems.get(itemPosition).getId();
         }
 
         @Override

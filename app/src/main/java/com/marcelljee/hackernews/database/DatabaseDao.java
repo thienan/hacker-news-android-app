@@ -86,6 +86,8 @@ public final class DatabaseDao {
     }
 
     public static void insertBookmarkedItem(Context context, Item item) {
+        if (isItemBookmarked(context, item.getId())) return;
+
         DatabaseUpdaterService.startActionBulkInsert(context,
                 DatabaseContract.BookmarkedKidEntry.CONTENT_URI, Item.Factory.kidsToValues(item));
 

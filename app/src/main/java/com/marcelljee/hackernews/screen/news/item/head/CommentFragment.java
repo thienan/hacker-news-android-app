@@ -17,11 +17,11 @@ import com.marcelljee.hackernews.loader.HackerNewsResponse;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.databinding.viewmodel.FragmentCommentViewModel;
 import com.marcelljee.hackernews.databinding.viewmodel.ItemViewModel;
+import com.marcelljee.hackernews.utils.CollectionUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.parceler.Parcels;
 
-import java.util.Collections;
 import java.util.List;
 
 public class CommentFragment extends ItemHeadFragment
@@ -61,7 +61,7 @@ public class CommentFragment extends ItemHeadFragment
 
         binding.tvCommentInfo.setMovementMethod(LinkMovementMethod.getInstance());
 
-        binding.commentHead.setViewModel(new ItemViewModel(getToolbarActivity()));
+        binding.commentHead.setViewModel(new ItemViewModel(getToolbarActivity(), CollectionUtils.singleItemList(mItem)));
         binding.commentHead.tvText.setMaxLines(Integer.MAX_VALUE);
         binding.commentHead.tvText.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -77,7 +77,7 @@ public class CommentFragment extends ItemHeadFragment
     public Loader<HackerNewsResponse<List<Item>>> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_ID_COMMENT_HEAD:
-                return new ItemListLoader(getContext(), Collections.singletonList(mItem.getId()));
+                return new ItemListLoader(getContext(), CollectionUtils.singleItemList(mItem.getId()));
             default:
                 return null;
 

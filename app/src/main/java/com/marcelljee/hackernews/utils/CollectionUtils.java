@@ -47,4 +47,8 @@ public class CollectionUtils {
         return list;
     }
 
+    public static <E> List<E> singleItemList(E o) {
+        return new ArrayList<>(Collections.singletonList(o));
+    }
+
 }

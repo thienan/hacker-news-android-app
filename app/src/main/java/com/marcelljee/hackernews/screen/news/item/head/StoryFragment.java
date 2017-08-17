@@ -21,11 +21,11 @@ import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.databinding.viewmodel.ItemViewModel;
 import com.marcelljee.hackernews.databinding.viewmodel.SectionNewsDetailsViewModel;
+import com.marcelljee.hackernews.utils.CollectionUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.parceler.Parcels;
 
-import java.util.Collections;
 import java.util.List;
 
 public class StoryFragment extends ItemHeadFragment
@@ -65,8 +65,9 @@ public class StoryFragment extends ItemHeadFragment
                              Bundle savedInstanceState) {
         mBinding = FragmentStoryBinding.inflate(inflater, container, false);
         mBinding.setItem(mItem);
-        mBinding.sectionNews.itemNews.setViewModel(
-                new ItemViewModel(getToolbarActivity(), false, customTabsHelper.getSession()));
+        mBinding.sectionNews.itemNews.setViewModel(new ItemViewModel(getToolbarActivity(),
+                CollectionUtils.singleItemList(mItem), false, customTabsHelper.getSession()));
+        mBinding.sectionNews.itemNews.setItemPosition(0);
         mBinding.sectionNewsDetails.setViewModel(new SectionNewsDetailsViewModel(getToolbarActivity()));
 
         if (TextUtils.isEmpty(mItem.getUrl())) {
@@ -125,7 +126,7 @@ public class StoryFragment extends ItemHeadFragment
     public Loader<HackerNewsResponse<List<Item>>> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_ID_STORIES_ITEM:
-                return new ItemListLoader(getContext(), Collections.singletonList(mItem.getId()));
+                return new ItemListLoader(getContext(), CollectionUtils.singleItemList(mItem.getId()));
             case LOADER_ID_POLL_OPTIONS:
                 return new ItemListLoader(getContext(), mItem.getParts());
             default:

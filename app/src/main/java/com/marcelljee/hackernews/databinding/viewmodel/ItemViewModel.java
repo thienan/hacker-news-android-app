@@ -14,18 +14,22 @@ import com.marcelljee.hackernews.utils.SettingsUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.List;
+
 public class ItemViewModel {
 
     private final ToolbarActivity mActivity;
+    private final List<Item> mItems;
     private final CustomTabsSession mCustomTabsSession;
     private final boolean mReadIndicatorEnabled;
 
-    public ItemViewModel(ToolbarActivity activity) {
-        this(activity, false, null);
+    public ItemViewModel(ToolbarActivity activity, List<Item> items) {
+        this(activity, items, false, null);
     }
 
-    public ItemViewModel(ToolbarActivity activity, boolean readIndicator, CustomTabsSession customTabsSession) {
+    public ItemViewModel(ToolbarActivity activity, List<Item> items, boolean readIndicator, CustomTabsSession customTabsSession) {
         mActivity = activity;
+        mItems = items;
         mCustomTabsSession = customTabsSession;
         mReadIndicatorEnabled = readIndicator;
     }
@@ -34,9 +38,11 @@ public class ItemViewModel {
         return mReadIndicatorEnabled;
     }
 
-    public void textClick(Item item) {
+    public void textClick(int itemPosition) {
+        Item item = mItems.get(itemPosition);
+
         if (TextUtils.isEmpty(item.getUrl())) {
-            ItemActivity.startActivity(mActivity, item);
+            ItemActivity.startActivity(mActivity, mItems, itemPosition);
         } else {
             CustomTabsBrowser.openTab(mActivity, mCustomTabsSession, item.getUrl());
         }

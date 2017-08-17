@@ -10,6 +10,10 @@
         <variable
             name="item"
             type="com.marcelljee.hackernews.model.Item" />
+
+        <variable
+            name="itemPosition"
+            type="Integer" />
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -86,7 +90,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?android:selectableItemBackground"
-                    android:onClick="@{() -> viewModel.textClick(item)}"
+                    android:onClick="@{() -> viewModel.textClick(itemPosition)}"
                     android:paddingBottom="@dimen/text_spacing"
                     android:paddingEnd="@dimen/view_margin"
                     android:paddingStart="@dimen/view_margin"
