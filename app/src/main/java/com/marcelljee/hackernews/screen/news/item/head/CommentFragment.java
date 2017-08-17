@@ -37,8 +37,6 @@ public class CommentFragment extends ItemHeadFragment
     private String mItemParentName;
     private String mItemPosterName;
 
-    private FragmentCommentBinding mBinding;
-
     public static CommentFragment newInstance(Item item, String itemParentName, String itemPosterName) {
         CommentFragment fragment = new CommentFragment();
 
@@ -57,17 +55,17 @@ public class CommentFragment extends ItemHeadFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mBinding = FragmentCommentBinding.inflate(inflater, container, false);
-        mBinding.setViewModel(new FragmentCommentViewModel(getToolbarActivity(), mItemParentName, mItemPosterName));
-        mBinding.setItem(mItem);
+        FragmentCommentBinding binding = FragmentCommentBinding.inflate(inflater, container, false);
+        binding.setViewModel(new FragmentCommentViewModel(getToolbarActivity(), mItemParentName, mItemPosterName));
+        binding.setItem(mItem);
 
-        mBinding.tvCommentInfo.setMovementMethod(LinkMovementMethod.getInstance());
+        binding.tvCommentInfo.setMovementMethod(LinkMovementMethod.getInstance());
 
-        mBinding.commentHead.setViewModel(new ItemCommentViewModel(getToolbarActivity()));
-        mBinding.commentHead.tvText.setMaxLines(Integer.MAX_VALUE);
-        mBinding.commentHead.tvText.setMovementMethod(LinkMovementMethod.getInstance());
+        binding.commentHead.setViewModel(new ItemCommentViewModel(getToolbarActivity()));
+        binding.commentHead.tvText.setMaxLines(Integer.MAX_VALUE);
+        binding.commentHead.tvText.setMovementMethod(LinkMovementMethod.getInstance());
 
-        return mBinding.getRoot();
+        return binding.getRoot();
     }
 
     @Override
@@ -92,8 +90,7 @@ public class CommentFragment extends ItemHeadFragment
         if (response.isSuccessful()) {
             switch (loader.getId()) {
                 case LOADER_ID_COMMENT_HEAD:
-                    mItem = response.getData().get(0);
-                    mBinding.setItem(mItem);
+                    mItem.update(response.getData().get(0));
                     EventBus.getDefault().post(new ItemRefreshEvent(mItem));
                     break;
                 default:

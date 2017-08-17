@@ -4,7 +4,7 @@ import com.marcelljee.hackernews.model.Item;
 
 public class ItemUpdateEvent {
 
-    private Item mItem;
+    private final Item mItem;
 
     public ItemUpdateEvent(Item item) {
         mItem = item;

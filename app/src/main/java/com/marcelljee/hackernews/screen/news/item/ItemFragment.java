@@ -93,15 +93,14 @@ public class ItemFragment extends ToolbarFragment {
         ItemCommentFragment commentFragment = ItemCommentFragment
                 .newInstance(mItem, mItemParentName, mItemPosterName);
 
-        getActivity().getSupportFragmentManager().beginTransaction()
+        getChildFragmentManager().beginTransaction()
                 .replace(R.id.item_head_container, headFragment, TAG_HEAD_FRAGMENT)
                 .replace(R.id.item_comment_container, commentFragment, TAG_COMMENT_FRAGMENT)
                 .commit();
     }
 
     private ItemHeadFragment getHeadFragment() {
-        return (ItemHeadFragment) getActivity().getSupportFragmentManager()
-                .findFragmentByTag(TAG_HEAD_FRAGMENT);
+        return (ItemHeadFragment) getChildFragmentManager().findFragmentByTag(TAG_HEAD_FRAGMENT);
     }
 
     public void refresh() {

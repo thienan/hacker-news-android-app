@@ -15,6 +15,7 @@ import com.marcelljee.hackernews.adapter.ItemAdapter;
 import com.marcelljee.hackernews.chrome.CustomTabsHelper;
 import com.marcelljee.hackernews.databinding.FragmentStoryBinding;
 import com.marcelljee.hackernews.event.ItemRefreshEvent;
+import com.marcelljee.hackernews.event.ItemUpdateEvent;
 import com.marcelljee.hackernews.loader.HackerNewsResponse;
 import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.model.Item;
@@ -139,10 +140,10 @@ public class StoryFragment extends ItemHeadFragment
         if (response.isSuccessful()) {
             switch (loader.getId()) {
                 case LOADER_ID_STORIES_ITEM:
-                    mItem = response.getData().get(0);
-                    mBinding.setItem(mItem);
+                    mItem.update(response.getData().get(0));
 
                     EventBus.getDefault().post(new ItemRefreshEvent(mItem));
+                    EventBus.getDefault().post(new ItemUpdateEvent(mItem));
                     getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_POLL_OPTIONS, null, this);
                     break;
                 case LOADER_ID_POLL_OPTIONS:

@@ -160,7 +160,7 @@ public class ItemCommentFragment extends ToolbarFragment
     @Subscribe
     @SuppressWarnings({"unused"})
     public void onItemRefreshEvent(ItemRefreshEvent event) {
-        mItem = event.getItem();
+        mItem.update(event.getItem());
         refreshComments();
     }
 
