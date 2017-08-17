@@ -30,7 +30,6 @@ public class ItemCommentFragment extends ToolbarFragment
         implements LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> {
 
     private static final String ARG_ITEM = "com.marcelljee.hackernews.screen.news.item.arg.ITEM";
-    private static final String ARG_ITEM_PARENT_NAME = "com.marcelljee.hackernews.screen.news.item.arg.ITEM_PARENT_NAME";
     private static final String ARG_ITEM_POSTER_NAME = "com.marcelljee.hackernews.screen.news.item.arg.ITEM_POSTER_NAME";
 
     private static final String STATE_CURRENT_PAGE = "com.marcelljee.hackernews.screen.news.item.state.CURRENT_PAGE";
@@ -40,7 +39,6 @@ public class ItemCommentFragment extends ToolbarFragment
     private static final int ITEM_COUNT = 10;
 
     private Item mItem;
-    private String mItemParentName;
     private String mItemPosterName;
 
     private int mCurrentPage = 1;
@@ -48,10 +46,10 @@ public class ItemCommentFragment extends ToolbarFragment
 
     private FragmentItemCommentBinding mBinding;
 
-    public static ItemCommentFragment newInstance(Item item, String itemParentName, String itemPosterName) {
+    public static ItemCommentFragment newInstance(Item item, String itemPosterName) {
         ItemCommentFragment fragment = new ItemCommentFragment();
 
-        Bundle args = createArguments(item, itemParentName, itemPosterName);
+        Bundle args = createArguments(item, itemPosterName);
         fragment.setArguments(args);
 
         return fragment;
@@ -74,22 +72,15 @@ public class ItemCommentFragment extends ToolbarFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = FragmentItemCommentBinding.inflate(inflater, container, false);
+        mBinding.setItem(mItem);
 
-        if (mItem.getKids().size() > 0) {
-            mBinding.getRoot().setVisibility(View.VISIBLE);
-        } else {
-            mBinding.getRoot().setVisibility(View.GONE);
-        }
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-
-        if (TextUtils.isEmpty(mItemParentName) && TextUtils.isEmpty(mItemPosterName)) {
+        if (TextUtils.isEmpty(mItemPosterName)) {
             mCommentAdapter = new ItemAdapter(getToolbarActivity(), null, mItem.getBy());
         } else {
             mCommentAdapter = new ItemAdapter(getToolbarActivity(), mItem.getBy(), mItemPosterName);
         }
 
-        mBinding.rvCommentList.setLayoutManager(layoutManager);
+        mBinding.rvCommentList.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.rvCommentList.setAdapter(mCommentAdapter);
         mBinding.rvCommentList.showDivider();
         mBinding.rvCommentList.setOnLoadMoreListener((page, totalItemsCount) -> nextPageComments());
@@ -182,11 +173,11 @@ public class ItemCommentFragment extends ToolbarFragment
         getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_COMMENT_ITEM, null, this);
     }
 
-    private static Bundle createArguments(Item item, String itemParentName, String itemPosterName) {
+    private static Bundle createArguments(Item item, String itemPosterName) {
         Bundle args = new Bundle();
         if (item != null) args.putParcelable(ARG_ITEM, Parcels.wrap(item));
-        if (!TextUtils.isEmpty(itemParentName)) args.putString(ARG_ITEM_PARENT_NAME, itemParentName);
-        if (!TextUtils.isEmpty(itemPosterName)) args.putString(ARG_ITEM_POSTER_NAME, itemPosterName);
+        if (!TextUtils.isEmpty(itemPosterName))
+            args.putString(ARG_ITEM_POSTER_NAME, itemPosterName);
 
         return args;
     }
@@ -196,10 +187,6 @@ public class ItemCommentFragment extends ToolbarFragment
 
         if (args.containsKey(ARG_ITEM)) {
             mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
-        }
-
-        if (args.containsKey(ARG_ITEM_PARENT_NAME)) {
-            mItemParentName = args.getString(ARG_ITEM_PARENT_NAME);
         }
 
         if (args.containsKey(ARG_ITEM_POSTER_NAME)) {

@@ -4,7 +4,6 @@ import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,6 @@ import com.marcelljee.hackernews.event.ItemRefreshEvent;
 import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.loader.HackerNewsResponse;
 import com.marcelljee.hackernews.model.Item;
-import com.marcelljee.hackernews.databinding.viewmodel.FragmentCommentViewModel;
 import com.marcelljee.hackernews.databinding.viewmodel.ItemViewModel;
 import com.marcelljee.hackernews.utils.CollectionUtils;
 
@@ -28,19 +26,15 @@ public class CommentFragment extends ItemHeadFragment
         implements LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> {
 
     private static final String ARG_ITEM = "com.marcelljee.hackernews.screen.news.item.head.arg.ITEM";
-    private static final String ARG_ITEM_PARENT_NAME = "com.marcelljee.hackernews.screen.news.item.head.arg.ITEM_PARENT_NAME";
-    private static final String ARG_ITEM_POSTER_NAME = "com.marcelljee.hackernews.screen.news.item.head.arg.ITEM_POSTER_NAME";
 
     private static final int LOADER_ID_COMMENT_HEAD = 100;
 
     private Item mItem;
-    private String mItemParentName;
-    private String mItemPosterName;
 
-    public static CommentFragment newInstance(Item item, String itemParentName, String itemPosterName) {
+    public static CommentFragment newInstance(Item item) {
         CommentFragment fragment = new CommentFragment();
 
-        Bundle args = createArguments(item, itemParentName, itemPosterName);
+        Bundle args = createArguments(item);
         fragment.setArguments(args);
 
         return fragment;
@@ -56,10 +50,7 @@ public class CommentFragment extends ItemHeadFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentCommentBinding binding = FragmentCommentBinding.inflate(inflater, container, false);
-        binding.setViewModel(new FragmentCommentViewModel(getToolbarActivity(), mItemParentName, mItemPosterName));
         binding.setItem(mItem);
-
-        binding.tvCommentInfo.setMovementMethod(LinkMovementMethod.getInstance());
 
         binding.commentHead.setViewModel(new ItemViewModel(getToolbarActivity(), CollectionUtils.singleItemList(mItem)));
         binding.commentHead.tvText.setMaxLines(Integer.MAX_VALUE);
@@ -103,11 +94,9 @@ public class CommentFragment extends ItemHeadFragment
 
     }
 
-    private static Bundle createArguments(Item item, String itemParentName, String itemPosterName) {
+    private static Bundle createArguments(Item item) {
         Bundle args = new Bundle();
         if (item != null) args.putParcelable(ARG_ITEM, Parcels.wrap(item));
-        if (!TextUtils.isEmpty(itemParentName)) args.putString(ARG_ITEM_PARENT_NAME, itemParentName);
-        if (!TextUtils.isEmpty(itemPosterName)) args.putString(ARG_ITEM_POSTER_NAME, itemPosterName);
 
         return args;
     }
@@ -117,14 +106,6 @@ public class CommentFragment extends ItemHeadFragment
 
         if (args.containsKey(ARG_ITEM)) {
             mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
-        }
-
-        if (args.containsKey(ARG_ITEM_PARENT_NAME)) {
-            mItemParentName = args.getString(ARG_ITEM_PARENT_NAME);
-        }
-
-        if (args.containsKey(ARG_ITEM_POSTER_NAME)) {
-            mItemPosterName = args.getString(ARG_ITEM_POSTER_NAME);
         }
     }
 }

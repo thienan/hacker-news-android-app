@@ -33,17 +33,22 @@
             android:elevation="@dimen/card_elevation"
             app:cardCornerRadius="@dimen/card_radius">
 
-            <TextView
-                android:id="@+id/tv_news_details"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:ellipsize="end"
-                android:maxLines="5"
-                android:onClick="@{() -> viewModel.textDetailsClick(text)}"
-                android:padding="@dimen/view_margin"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                app:htmlText="@{text}" />
+                android:onClick="@{() -> viewModel.textDetailsClick(text)}">
+
+                <com.marcelljee.hackernews.view.LinkifiedTextView
+                    android:id="@+id/tv_news_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="5"
+                    android:padding="@dimen/view_margin"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    app:htmlText="@{text}" />
+            </FrameLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>
 </layout>

@@ -8,9 +8,12 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.event.ItemUpdateEvent;
@@ -100,10 +103,20 @@ public class ItemActivity extends ToolbarActivity
 
         setTitle(ItemUtils.getTypeAsTitle(getItem()));
 
+        TextView tvCommentInfo = (TextView) findViewById(R.id.tv_comment_info);
+
+        if (TextUtils.isEmpty(mItemParentName) && TextUtils.isEmpty(mItemPosterName)) {
+            tvCommentInfo.setVisibility(View.GONE);
+        } else {
+            tvCommentInfo.setVisibility(View.VISIBLE);
+            tvCommentInfo.setText(ItemUtils.getCommentInfo(this, mItemParentName, mItemPosterName));
+            tvCommentInfo.setMovementMethod(LinkMovementMethod.getInstance());
+        }
+
         //TODO: use the following code to enabling paging news
-        //mItemPagerAdapter = new ItemPagerAdapter(getSupportFragmentManager(), mItems, mItemParentName, mItemPosterName);
+        //mItemPagerAdapter = new ItemPagerAdapter(getSupportFragmentManager(), mItems, mItemPosterName);
         mItemPagerAdapter = new ItemPagerAdapter(getSupportFragmentManager(),
-                CollectionUtils.singleItemList(mItems.get(mItemPosition)), mItemParentName, mItemPosterName);
+                CollectionUtils.singleItemList(mItems.get(mItemPosition)), mItemPosterName);
 
         mItemPager = (ViewPager) findViewById(R.id.item_pager);
         mItemPager.setAdapter(mItemPagerAdapter);

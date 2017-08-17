@@ -91,7 +91,7 @@ public final class ItemUtils {
         }
 
         if (!TextUtils.isEmpty(itemPosterName)) {
-            SpannableString post = new SpannableString(String.format("%s's post", itemPosterName));
+            SpannableString post = new SpannableString(String.format("%s's story", itemPosterName));
             post.setSpan(new StyleSpan(Typeface.BOLD),
                     0, itemPosterName.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             post.setSpan(new UserClickableSpan(activity, itemPosterName),

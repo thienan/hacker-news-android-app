@@ -9,22 +9,20 @@ import com.marcelljee.hackernews.model.Item;
 
 import java.util.List;
 
-public class ItemPagerAdapter extends FragmentStatePagerAdapter {
+class ItemPagerAdapter extends FragmentStatePagerAdapter {
 
     private final List<Item> mItems;
-    private final String mItemParentName;
     private final String mItemPosterName;
 
-    public ItemPagerAdapter(FragmentManager fm, List<Item> mItems, String mItemParentName, String mItemPosterName) {
+    public ItemPagerAdapter(FragmentManager fm, List<Item> mItems, String mItemPosterName) {
         super(fm);
         this.mItems = mItems;
-        this.mItemParentName = mItemParentName;
         this.mItemPosterName = mItemPosterName;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return ItemFragment.newInstance(mItems.get(position), mItemParentName, mItemPosterName);
+        return ItemFragment.newInstance(mItems.get(position), mItemPosterName);
     }
 
     @Override

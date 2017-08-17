@@ -5,7 +5,6 @@ import android.support.v7.widget.AppCompatTextView;
 import android.text.Layout;
 import android.text.Selection;
 import android.text.Spannable;
-import android.text.Spanned;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.TextView;
@@ -23,7 +22,7 @@ public class LinkifiedTextView extends AppCompatTextView {
     public boolean onTouchEvent(MotionEvent event) {
         TextView widget = this;
         Object text = widget.getText();
-        if (text instanceof Spanned) {
+        if (text instanceof Spannable) {
             Spannable buffer = (Spannable) text;
 
             int action = event.getAction();

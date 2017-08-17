@@ -3,6 +3,7 @@ package com.marcelljee.hackernews.adapter;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -280,6 +281,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         public void onClick(View view) {
             itemView.setSelected(false);
             Item item = mItems.get(getAdapterPosition());
+
             ItemActivity.startActivity(mActivity, mItems, getAdapterPosition(), mItemParentName, mItemPosterName);
 
             switch (getItemViewType()) {

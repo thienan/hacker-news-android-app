@@ -27,7 +27,7 @@ public class Item extends BaseObservable {
     private long time = 0;
     private String text = "";
     private boolean dead = false;
-    private long parent = -1;
+    private long parent = NO_ID;
     private long poll = -1;
     private List<Long> kids = new ArrayList<>();
     private String url = "";

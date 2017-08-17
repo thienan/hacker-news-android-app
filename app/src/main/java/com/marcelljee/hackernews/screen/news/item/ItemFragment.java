@@ -20,20 +20,18 @@ import org.parceler.Parcels;
 public class ItemFragment extends ToolbarFragment {
 
     private static final String ARG_ITEM = "com.marcelljee.hackernews.screen.news.item.arg.ITEM";
-    private static final String ARG_ITEM_PARENT_NAME = "com.marcelljee.hackernews.screen.news.item.arg.ITEM_PARENT_NAME";
     private static final String ARG_ITEM_POSTER_NAME = "com.marcelljee.hackernews.screen.news.item.arg.ITEM_POSTER_NAME";
 
     private static final String TAG_HEAD_FRAGMENT = "com.marcelljee.hackernews.screen.news.item.tag.HEAD_FRAGMENT";
     private static final String TAG_COMMENT_FRAGMENT = "com.marcelljee.hackernews.screen.news.item.tag.COMMENT_FRAGMENT";
 
     private Item mItem;
-    private String mItemParentName;
     private String mItemPosterName;
 
-    public static ItemFragment newInstance(Item item, String itemParentName, String itemPosterName) {
+    public static ItemFragment newInstance(Item item, String itemPosterName) {
         ItemFragment fragment = new ItemFragment();
 
-        Bundle args = createArguments(item, itemParentName, itemPosterName);
+        Bundle args = createArguments(item, itemPosterName);
         fragment.setArguments(args);
 
         return fragment;
@@ -47,7 +45,7 @@ public class ItemFragment extends ToolbarFragment {
         if (savedInstanceState == null) {
             switch (mItem.getType()) {
                 case ItemActivity.ITEM_TYPE_COMMENT:
-                    loadFragment(CommentFragment.newInstance(mItem, mItemParentName, mItemPosterName));
+                    loadFragment(CommentFragment.newInstance(mItem));
                     break;
                 case ItemActivity.ITEM_TYPE_STORY:
                 case ItemActivity.ITEM_TYPE_POLL:
@@ -64,10 +62,9 @@ public class ItemFragment extends ToolbarFragment {
         return inflater.inflate(R.layout.fragment_item, container, false);
     }
 
-    private static Bundle createArguments(Item item, String itemParentName, String itemPosterName) {
+    private static Bundle createArguments(Item item, String itemPosterName) {
         Bundle args = new Bundle();
         args.putParcelable(ARG_ITEM, Parcels.wrap(item));
-        args.putString(ARG_ITEM_PARENT_NAME, itemParentName);
         args.putString(ARG_ITEM_POSTER_NAME, itemPosterName);
 
         return args;
@@ -80,18 +77,13 @@ public class ItemFragment extends ToolbarFragment {
             mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
         }
 
-        if (args.containsKey(ARG_ITEM_PARENT_NAME)) {
-            mItemParentName = args.getString(ARG_ITEM_PARENT_NAME);
-        }
-
         if (args.containsKey(ARG_ITEM_POSTER_NAME)) {
             mItemPosterName = args.getString(ARG_ITEM_POSTER_NAME);
         }
     }
 
     private void loadFragment(ItemHeadFragment headFragment) {
-        ItemCommentFragment commentFragment = ItemCommentFragment
-                .newInstance(mItem, mItemParentName, mItemPosterName);
+        ItemCommentFragment commentFragment = ItemCommentFragment.newInstance(mItem, mItemPosterName);
 
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.item_head_container, headFragment, TAG_HEAD_FRAGMENT)
