@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.marcelljee.hackernews.viewmodel.FragmentCommentViewModel" />
+            type="com.marcelljee.hackernews.databinding.viewmodel.FragmentCommentViewModel" />
 
         <variable
             name="item"

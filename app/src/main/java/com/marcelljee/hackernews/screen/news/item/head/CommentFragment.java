@@ -15,8 +15,8 @@ import com.marcelljee.hackernews.event.ItemRefreshEvent;
 import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.loader.HackerNewsResponse;
 import com.marcelljee.hackernews.model.Item;
-import com.marcelljee.hackernews.viewmodel.FragmentCommentViewModel;
-import com.marcelljee.hackernews.viewmodel.ItemCommentViewModel;
+import com.marcelljee.hackernews.databinding.viewmodel.FragmentCommentViewModel;
+import com.marcelljee.hackernews.databinding.viewmodel.ItemViewModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.parceler.Parcels;
@@ -61,7 +61,7 @@ public class CommentFragment extends ItemHeadFragment
 
         binding.tvCommentInfo.setMovementMethod(LinkMovementMethod.getInstance());
 
-        binding.commentHead.setViewModel(new ItemCommentViewModel(getToolbarActivity()));
+        binding.commentHead.setViewModel(new ItemViewModel(getToolbarActivity()));
         binding.commentHead.tvText.setMaxLines(Integer.MAX_VALUE);
         binding.commentHead.tvText.setMovementMethod(LinkMovementMethod.getInstance());
 

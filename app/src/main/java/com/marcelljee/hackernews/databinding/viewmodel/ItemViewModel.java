@@ -1,9 +1,7 @@
-package com.marcelljee.hackernews.viewmodel;
+package com.marcelljee.hackernews.databinding.viewmodel;
 
 import android.support.customtabs.CustomTabsSession;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.view.View;
 
 import com.marcelljee.hackernews.activity.ToolbarActivity;
 import com.marcelljee.hackernews.chrome.CustomTabsBrowser;
@@ -11,19 +9,23 @@ import com.marcelljee.hackernews.database.DatabaseDao;
 import com.marcelljee.hackernews.event.ItemUpdateEvent;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.screen.news.item.ItemActivity;
-import com.marcelljee.hackernews.utils.ItemUtils;
+import com.marcelljee.hackernews.screen.user.UserActivity;
 import com.marcelljee.hackernews.utils.SettingsUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
-public class ItemNewsViewModel extends ItemViewModel {
+public class ItemViewModel {
 
+    private final ToolbarActivity mActivity;
     private final CustomTabsSession mCustomTabsSession;
-
     private final boolean mReadIndicatorEnabled;
 
-    public ItemNewsViewModel(ToolbarActivity activity, boolean readIndicator, CustomTabsSession customTabsSession) {
-        super(activity);
+    public ItemViewModel(ToolbarActivity activity) {
+        this(activity, false, null);
+    }
+
+    public ItemViewModel(ToolbarActivity activity, boolean readIndicator, CustomTabsSession customTabsSession) {
+        mActivity = activity;
         mCustomTabsSession = customTabsSession;
         mReadIndicatorEnabled = readIndicator;
     }
@@ -32,38 +34,36 @@ public class ItemNewsViewModel extends ItemViewModel {
         return mReadIndicatorEnabled;
     }
 
-    public int isCommentViewVisible(Item item) {
-        return item.getDescendants() > 0 ? View.VISIBLE : View.GONE;
-    }
-
-    public SpannableStringBuilder getTitle(Item item) {
-        return ItemUtils.getTitle(getActivity(), item);
-    }
-
     public void textClick(Item item) {
         if (TextUtils.isEmpty(item.getUrl())) {
-            ItemActivity.startActivity(getActivity(), item);
+            ItemActivity.startActivity(mActivity, item);
         } else {
-            CustomTabsBrowser.openTab(getActivity(), mCustomTabsSession, item.getUrl());
+            CustomTabsBrowser.openTab(mActivity, mCustomTabsSession, item.getUrl());
         }
 
-        DatabaseDao.insertHistoryItem(getActivity(), item);
-        DatabaseDao.insertReadIndicatorItem(getActivity(), item.getId());
+        DatabaseDao.insertHistoryItem(mActivity, item);
+        DatabaseDao.insertReadIndicatorItem(mActivity, item.getId());
 
-        if (SettingsUtils.readIndicatorEnabled(getActivity())) {
+        if (SettingsUtils.readIndicatorEnabled(mActivity)) {
             item.setRead(true);
         }
     }
 
     public void bookmarkClick(Item item) {
-        if (DatabaseDao.isItemBookmarked(getActivity(), item.getId())) {
-            DatabaseDao.deleteBookmarkedItem(getActivity(), item.getId());
+        if (DatabaseDao.isItemBookmarked(mActivity, item.getId())) {
+            DatabaseDao.deleteBookmarkedItem(mActivity, item.getId());
             item.setBookmarked(false);
         } else {
-            DatabaseDao.insertBookmarkedItem(getActivity(), item);
+            DatabaseDao.insertBookmarkedItem(mActivity, item);
             item.setBookmarked(true);
         }
 
         EventBus.getDefault().post(new ItemUpdateEvent(item));
+    }
+
+    public void userClick(String userId) {
+        if (!UserActivity.class.getName().equals(mActivity.getClass().getName())) {
+            UserActivity.startActivity(mActivity, userId);
+        }
     }
 }

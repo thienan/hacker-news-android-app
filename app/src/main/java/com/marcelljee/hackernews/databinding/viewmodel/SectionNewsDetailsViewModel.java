@@ -1,12 +1,7 @@
-package com.marcelljee.hackernews.viewmodel;
-
-import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
-import android.view.View;
+package com.marcelljee.hackernews.databinding.viewmodel;
 
 import com.marcelljee.hackernews.activity.ToolbarActivity;
 import com.marcelljee.hackernews.screen.news.item.text.DetailsTextActivity;
-import com.marcelljee.hackernews.utils.ItemUtils;
 
 public class SectionNewsDetailsViewModel {
 
@@ -14,14 +9,6 @@ public class SectionNewsDetailsViewModel {
 
     public SectionNewsDetailsViewModel(ToolbarActivity activity) {
         mActivity = activity;
-    }
-
-    public int isViewVisible(String text) {
-        return TextUtils.isEmpty(text) ? View.GONE : View.VISIBLE;
-    }
-
-    public SpannableStringBuilder getStyledText(String text) {
-        return ItemUtils.fromHtml(mActivity, text);
     }
 
     public void textDetailsClick(String text) {

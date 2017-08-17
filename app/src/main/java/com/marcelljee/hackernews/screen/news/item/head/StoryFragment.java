@@ -19,8 +19,8 @@ import com.marcelljee.hackernews.event.ItemUpdateEvent;
 import com.marcelljee.hackernews.loader.HackerNewsResponse;
 import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.model.Item;
-import com.marcelljee.hackernews.viewmodel.ItemNewsViewModel;
-import com.marcelljee.hackernews.viewmodel.SectionNewsDetailsViewModel;
+import com.marcelljee.hackernews.databinding.viewmodel.ItemViewModel;
+import com.marcelljee.hackernews.databinding.viewmodel.SectionNewsDetailsViewModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.parceler.Parcels;
@@ -66,7 +66,7 @@ public class StoryFragment extends ItemHeadFragment
         mBinding = FragmentStoryBinding.inflate(inflater, container, false);
         mBinding.setItem(mItem);
         mBinding.sectionNews.itemNews.setViewModel(
-                new ItemNewsViewModel(getToolbarActivity(), false, customTabsHelper.getSession()));
+                new ItemViewModel(getToolbarActivity(), false, customTabsHelper.getSession()));
         mBinding.sectionNewsDetails.setViewModel(new SectionNewsDetailsViewModel(getToolbarActivity()));
 
         if (TextUtils.isEmpty(mItem.getUrl())) {

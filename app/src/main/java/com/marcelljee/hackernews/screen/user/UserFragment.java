@@ -24,7 +24,6 @@ import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.model.User;
 import com.marcelljee.hackernews.utils.CollectionUtils;
 import com.marcelljee.hackernews.utils.SettingsUtils;
-import com.marcelljee.hackernews.viewmodel.FragmentUserViewModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -71,6 +70,8 @@ public class UserFragment extends ToolbarFragment
                 .registerOnSharedPreferenceChangeListener(this);
 
         extractArguments();
+
+        mUser = User.createTempUser(mUserId);
     }
 
     @Override
@@ -92,8 +93,7 @@ public class UserFragment extends ToolbarFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = FragmentUserBinding.inflate(inflater, container, false);
-        mBinding.setViewModel(new FragmentUserViewModel(getToolbarActivity()));
-        mBinding.setUser(User.createTempUser(mUserId));
+        mBinding.setUser(mUser);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mUserSubmissionAdapter = new ItemAdapter(getToolbarActivity());
@@ -113,11 +113,9 @@ public class UserFragment extends ToolbarFragment
     }
 
     private void onRestoreInstanceState(Bundle inState) {
-        mUser = Parcels.unwrap(inState.getParcelable(STATE_USER));
+        mUser.update(Parcels.unwrap(inState.getParcelable(STATE_USER)));
         mCurrentPage = inState.getInt(STATE_CURRENT_PAGE);
         mUserSubmissionAdapter.restoreState(inState);
-
-        mBinding.setUser(mUser);
     }
 
     @Override
@@ -142,16 +140,13 @@ public class UserFragment extends ToolbarFragment
     @Override
     public void onLoadFinished(Loader<HackerNewsResponse<User>> loader, HackerNewsResponse<User> response) {
         if (response.isSuccessful()) {
-            mUser = response.getData();
-            mBinding.setUser(mUser);
+            mUser.update(response.getData());
             // check if this comes after configuration changes and the submissions is not loaded yet.
-            if (mUserSubmissionAdapter.getItemCount() == 0 && mBinding.getUser().getSubmitted().size() > 0) {
+            if (mUserSubmissionAdapter.getItemCount() == 0 && mUser.getSubmitted().size() > 0) {
                 refreshSubmissions();
             }
         } else {
-            SnackbarFactory
-                    .createRetrieveErrorSnackbar(mBinding.getRoot(),
-                            UserFragment.this).show();
+            SnackbarFactory.createRetrieveErrorSnackbar(mBinding.getRoot(), UserFragment.this).show();
         }
     }
 
@@ -208,7 +203,7 @@ public class UserFragment extends ToolbarFragment
     }
 
     private void retrieveSubmissions() {
-        if (mBinding.getUser().getSubmitted() == null) return;
+        if (mUser.getSubmitted() == null) return;
         getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_SUBMISSIONS, null, getCallback());
     }
 
@@ -216,7 +211,7 @@ public class UserFragment extends ToolbarFragment
         return new LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>>() {
             @Override
             public Loader<HackerNewsResponse<List<Item>>> onCreateLoader(int id, Bundle args) {
-                List<Long> submissions = mBinding.getUser().getSubmitted();
+                List<Long> submissions = mUser.getSubmitted();
 
                 List<Long> list = CollectionUtils.subList(submissions,
                         (mCurrentPage - 1) * ITEM_COUNT,

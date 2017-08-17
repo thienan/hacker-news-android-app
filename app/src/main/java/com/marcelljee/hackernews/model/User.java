@@ -85,6 +85,15 @@ public class User extends BaseObservable {
         notifyPropertyChanged(BR.submitted);
     }
 
+    public void update(User user) {
+        if (!id.equals(user.getId())) return;
+        if (delay != user.getDelay()) setDelay(user.getDelay());
+        if (created != user.getCreated()) setCreated(user.getCreated());
+        if (karma != user.getKarma()) setKarma(user.getKarma());
+        if (!about.equals(user.getAbout())) setAbout(user.getAbout());
+        if (!submitted.equals(user.getSubmitted())) setSubmitted(user.getSubmitted());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

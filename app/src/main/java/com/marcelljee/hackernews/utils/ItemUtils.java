@@ -18,7 +18,6 @@ import android.text.style.URLSpan;
 import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.activity.ToolbarActivity;
 import com.marcelljee.hackernews.model.Item;
-import com.marcelljee.hackernews.model.User;
 import com.marcelljee.hackernews.span.CustomTabUrlSpan;
 import com.marcelljee.hackernews.span.UserClickableSpan;
 
@@ -39,31 +38,31 @@ public final class ItemUtils {
 
     public static CharSequence getRelativeDate(Context context, Item item) {
         if (context == null || item == null) return "";
-
-        return DateUtils.getRelativeDateTimeString(context,
-                item.getTime() * DateUtils.SECOND_IN_MILLIS,
-                DateUtils.SECOND_IN_MILLIS,
-                DateUtils.WEEK_IN_MILLIS, 0);
+        return getWeekRelativeDate(context, item.getTime());
     }
 
-    public static CharSequence getRelativeDate(Context context, User user) {
-        if (context == null || user == null) return "";
-
-        return DateUtils.getRelativeDateTimeString(context,
-                user.getCreated() * DateUtils.SECOND_IN_MILLIS,
-                DateUtils.SECOND_IN_MILLIS,
-                DateUtils.YEAR_IN_MILLIS, 0);
+    public static CharSequence getWeekRelativeDate(Context context, long timeInMillis) {
+        return getRelativeDate(context, timeInMillis, DateUtils.WEEK_IN_MILLIS);
     }
 
-    public static SpannableStringBuilder getTitle(Context context, Item item) {
+    public static CharSequence getYearRelativeDate(Context context, long timeInMillis) {
+        return getRelativeDate(context, timeInMillis, DateUtils.YEAR_IN_MILLIS);
+    }
+
+    public static CharSequence getRelativeDate(Context context, long timeInMillis, long transitionResolution) {
+        return DateUtils.getRelativeDateTimeString(context,
+                timeInMillis * DateUtils.SECOND_IN_MILLIS,
+                DateUtils.SECOND_IN_MILLIS,
+                transitionResolution, 0);
+    }
+
+    public static SpannableStringBuilder getTitle(Context context, String text, String link) {
         SpannableStringBuilder title = new SpannableStringBuilder();
+        if (context == null) return title;
+        title.append(text);
 
-        if (context == null || item == null) return title;
-
-        title.append(item.getTitle());
-
-        if (!TextUtils.isEmpty(item.getUrl())) {
-            String host = Uri.parse(item.getUrl()).getHost();
+        if (!TextUtils.isEmpty(link)) {
+            String host = Uri.parse(link).getHost();
 
             SpannableString url = new SpannableString(BRACKET_OPEN + host + BRACKET_CLOSE);
             url.setSpan(new ForegroundColorSpan(

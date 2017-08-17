@@ -119,7 +119,7 @@ public class NewsWidgetItemService extends RemoteViewsService {
             RemoteViews views = new RemoteViews(getPackageName(), R.layout.widget_news_item);
             views.setTextViewText(R.id.tv_user, item.getBy());
             views.setTextViewText(R.id.tv_time, ItemUtils.getRelativeDate(getApplicationContext(), item));
-            views.setTextViewText(R.id.tv_text, ItemUtils.getTitle(getApplicationContext(), item));
+            views.setTextViewText(R.id.tv_text, ItemUtils.getTitle(getApplicationContext(), item.getTitle(), item.getUrl()));
             views.setTextViewText(R.id.tv_score,
                     getResources().getQuantityString(R.plurals.total_scores,
                             item.getScore(), item.getScore()));

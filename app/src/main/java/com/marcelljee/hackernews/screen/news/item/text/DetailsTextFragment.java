@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.marcelljee.hackernews.databinding.FragmentDetailsTextBinding;
 import com.marcelljee.hackernews.fragment.ToolbarFragment;
-import com.marcelljee.hackernews.viewmodel.SectionNewsDetailsViewModel;
+import com.marcelljee.hackernews.databinding.viewmodel.SectionNewsDetailsViewModel;
 
 public class DetailsTextFragment extends ToolbarFragment {
 

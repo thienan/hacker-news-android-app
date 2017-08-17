@@ -24,8 +24,7 @@ import java.util.Map;
 
 import com.marcelljee.hackernews.activity.ToolbarActivity;
 import com.marcelljee.hackernews.utils.SettingsUtils;
-import com.marcelljee.hackernews.viewmodel.ItemCommentViewModel;
-import com.marcelljee.hackernews.viewmodel.ItemNewsViewModel;
+import com.marcelljee.hackernews.databinding.viewmodel.ItemViewModel;
 
 import org.parceler.Parcels;
 
@@ -80,11 +79,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         switch (viewType) {
             case VIEW_TYPE_NEWS:
                 ItemNewsBinding newsBinding = ItemNewsBinding.inflate(inflater, parent, false);
-                newsBinding.setViewModel(new ItemNewsViewModel(getActivity(), true, null));
+                newsBinding.setViewModel(new ItemViewModel(getActivity(), true, null));
                 return new ItemViewHolder(newsBinding, true);
             case VIEW_TYPE_COMMENT:
                 ItemCommentBinding commentBinding = ItemCommentBinding.inflate(inflater, parent, false);
-                commentBinding.setViewModel(new ItemCommentViewModel(getActivity()));
+                commentBinding.setViewModel(new ItemViewModel(getActivity()));
                 commentBinding.tvText.setMovementMethod(LinkMovementMethod.getInstance());
                 return new ItemViewHolder(commentBinding, true);
             case VIEW_TYPE_POLL_OPTION:

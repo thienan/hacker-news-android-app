@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.marcelljee.hackernews.viewmodel.ItemNewsViewModel" />
+            type="com.marcelljee.hackernews.databinding.viewmodel.ItemViewModel" />
 
         <variable
             name="item"
@@ -25,7 +25,7 @@
             android:orientation="horizontal"
             android:paddingBottom="@dimen/text_spacing"
             android:paddingTop="@dimen/text_spacing"
-            android:visibility="@{viewModel.isItemViewVisible(item)}">
+            android:visibility="@{item.notDeleted &amp;&amp; item.notDead}">
 
             <FrameLayout
                 android:layout_width="wrap_content"
@@ -77,8 +77,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{viewModel.getRelativeDate(item)}"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                        app:weekRelativeDate="@{item.time}" />
                 </LinearLayout>
 
                 <TextView
@@ -91,7 +91,7 @@
                     android:paddingEnd="@dimen/view_margin"
                     android:paddingStart="@dimen/view_margin"
                     android:paddingTop="@dimen/text_spacing"
-                    android:text="@{viewModel.getTitle(item)}"
+                    app:title="@{item}"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
 
                 <TextView
@@ -103,7 +103,7 @@
                     android:paddingTop="@dimen/text_spacing"
                     android:text="@{@plurals/total_comments(item.descendants, item.descendants)}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                    android:visibility="@{viewModel.isCommentViewVisible(item)}" />
+                    android:visibility="@{item.getDescendants() > 0}" />
             </LinearLayout>
 
             <com.marcelljee.hackernews.view.BookmarkView
@@ -124,7 +124,7 @@
             android:padding="@dimen/view_margin"
             android:text="@string/text_deleted"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:visibility="@{viewModel.isDeletedViewVisible(item)}" />
+            android:visibility="@{item.deleted}" />
 
         <TextView
             android:layout_width="match_parent"
@@ -132,6 +132,6 @@
             android:padding="@dimen/view_margin"
             android:text="@string/text_dead"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:visibility="@{viewModel.isDeadViewVisible(item)}" />
+            android:visibility="@{item.dead &amp;&amp; !item.deleted}" />
     </FrameLayout>
 </layout>

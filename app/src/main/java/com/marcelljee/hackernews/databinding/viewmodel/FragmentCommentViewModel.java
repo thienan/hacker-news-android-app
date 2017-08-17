@@ -1,4 +1,4 @@
-package com.marcelljee.hackernews.viewmodel;
+package com.marcelljee.hackernews.databinding.viewmodel;
 
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
