@@ -248,7 +248,7 @@ public class NewsFragment extends ToolbarFragment
             }
         } else {
             SnackbarFactory.createRetrieveErrorSnackbar(
-                    mBinding.rvItemList, (v) -> retrieveNews()).show();
+                    mBinding.rvItemList, (v) -> refreshNews()).show();
         }
 
         mBinding.rvItemList.hideProgressBar();
@@ -274,9 +274,12 @@ public class NewsFragment extends ToolbarFragment
         mNewsAdapter.updateItem(event.getItem());
     }
 
-    public void refresh() {
-        mBinding.srlRefresh.setRefreshing(true);
-        refreshNews();
+    public void showAllItems() {
+        mNewsAdapter.showAll();
+    }
+
+    public void showUnreadItems() {
+        mNewsAdapter.showUnread();
     }
 
     public void clearItems() {
@@ -285,12 +288,9 @@ public class NewsFragment extends ToolbarFragment
         mBinding.rvItemList.restartOnLoadMoreListener();
     }
 
-    public void showAllItems() {
-        mNewsAdapter.showAll();
-    }
-
-    public void showUnreadItems() {
-        mNewsAdapter.showUnread();
+    public void refresh() {
+        mBinding.srlRefresh.setRefreshing(true);
+        refreshNews();
     }
 
     private void refreshNews() {
@@ -301,36 +301,59 @@ public class NewsFragment extends ToolbarFragment
         clearItems();
         mNewsType = type;
         mBinding.rvItemList.showProgressBar();
-        retrieveNews();
+
+        int loaderId;
+
+        if (getString(R.string.settings_type_option_top).equals(mNewsType)) {
+            loaderId = LOADER_ID_STORIES_TOP;
+        } else if (getString(R.string.settings_type_option_best).equals(mNewsType)) {
+            loaderId = LOADER_ID_STORIES_BEST;
+        } else if (getString(R.string.settings_type_option_new).equals(mNewsType)) {
+            loaderId = LOADER_ID_STORIES_NEW;
+        } else if (getString(R.string.settings_type_option_show).equals(mNewsType)) {
+            loaderId = LOADER_ID_STORIES_SHOW;
+        } else if (getString(R.string.settings_type_option_ask).equals(mNewsType)) {
+            loaderId = LOADER_ID_STORIES_ASK;
+        } else if (getString(R.string.settings_type_option_jobs).equals(mNewsType)) {
+            loaderId = LOADER_ID_STORIES_JOB;
+        } else if (getString(R.string.settings_type_option_history).equals(mNewsType)) {
+            loaderId = LOADER_ID_HISTORY;
+        } else if (getString(R.string.settings_type_option_bookmarked).equals(mNewsType)) {
+            loaderId = LOADER_ID_BOOKMARKED_ITEM;
+        } else {
+            mBinding.rvItemList.hideProgressBar();
+            mBinding.srlRefresh.setRefreshing(false);
+            return;
+        }
+
+        getActivity().getSupportLoaderManager().restartLoader(loaderId, null, this);
     }
 
     private void nextPageNews() {
         mCurrentPage++;
-        retrieveNews();
-    }
 
-    private void retrieveNews() {
-        LoaderManager loaderManager = getActivity().getSupportLoaderManager();
+        int loaderId;
 
         if (getString(R.string.settings_type_option_top).equals(mNewsType)) {
-            loaderManager.restartLoader(LOADER_ID_STORIES_TOP, null, this);
+            loaderId = LOADER_ID_STORIES_TOP_ITEM;
         } else if (getString(R.string.settings_type_option_best).equals(mNewsType)) {
-            loaderManager.restartLoader(LOADER_ID_STORIES_BEST, null, this);
+            loaderId = LOADER_ID_STORIES_BEST_ITEM;
         } else if (getString(R.string.settings_type_option_new).equals(mNewsType)) {
-            loaderManager.restartLoader(LOADER_ID_STORIES_NEW, null, this);
+            loaderId = LOADER_ID_STORIES_NEW_ITEM;
         } else if (getString(R.string.settings_type_option_show).equals(mNewsType)) {
-            loaderManager.restartLoader(LOADER_ID_STORIES_SHOW, null, this);
+            loaderId = LOADER_ID_STORIES_SHOW_ITEM;
         } else if (getString(R.string.settings_type_option_ask).equals(mNewsType)) {
-            loaderManager.restartLoader(LOADER_ID_STORIES_ASK, null, this);
+            loaderId = LOADER_ID_STORIES_ASK_ITEM;
         } else if (getString(R.string.settings_type_option_jobs).equals(mNewsType)) {
-            loaderManager.restartLoader(LOADER_ID_STORIES_JOB, null, this);
+            loaderId = LOADER_ID_STORIES_JOB_ITEM;
         } else if (getString(R.string.settings_type_option_history).equals(mNewsType)) {
-            loaderManager.restartLoader(LOADER_ID_HISTORY, null, this);
-        } else if (getString(R.string.settings_type_option_bookmarked).equals(mNewsType)) {
-            loaderManager.restartLoader(LOADER_ID_BOOKMARKED_ITEM, null, this);
+            loaderId = LOADER_ID_HISTORY_ITEM;
         } else {
             mBinding.rvItemList.hideProgressBar();
             mBinding.srlRefresh.setRefreshing(false);
+            return;
         }
+
+        getActivity().getSupportLoaderManager().restartLoader(loaderId, null, this);
     }
 }
