@@ -1,40 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/view_margin"
-            android:paddingRight="@dimen/view_margin">
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_comment_info"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/view_margin"
-                android:layout_marginTop="@dimen/view_margin"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/view_margin"
+                android:paddingRight="@dimen/view_margin">
 
-            <include
-                android:id="@+id/item_poster"
-                layout="@layout/section_news"
-                android:visibility="gone" />
+                <TextView
+                    android:id="@+id/tv_comment_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/view_margin"
+                    android:layout_marginTop="@dimen/view_margin"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-            <include
-                android:id="@+id/item_parent"
-                layout="@layout/fragment_comment"
-                android:visibility="gone" />
+                <include
+                    android:id="@+id/item_poster"
+                    layout="@layout/section_news"
+                    android:visibility="gone" />
+
+                <include
+                    android:id="@+id/item_parent"
+                    layout="@layout/fragment_comment"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <com.marcelljee.hackernews.view.ScrollableViewPager
+                android:id="@+id/item_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </LinearLayout>
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/item_pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
+    </ScrollView>
 </layout>

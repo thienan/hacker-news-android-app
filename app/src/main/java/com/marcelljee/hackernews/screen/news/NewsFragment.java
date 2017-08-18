@@ -168,7 +168,7 @@ public class NewsFragment extends ToolbarFragment
                                Object data) {
         AppResponse response = (AppResponse) data;
 
-        if (response.isSuccessful()) {
+        if (response != null && response.isSuccessful()) {
             switch (loader.getId()) {
                 case LOADER_ID_STORIES_TOP:
                     mItemIds = (List<Long>) response.getData();

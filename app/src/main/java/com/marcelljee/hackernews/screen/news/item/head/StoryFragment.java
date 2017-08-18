@@ -142,7 +142,7 @@ public class StoryFragment extends ItemHeadFragment
     @Override
     public void onLoadFinished(Loader<AppResponse<List<Item>>> loader,
                                AppResponse<List<Item>> response) {
-        if (response.isSuccessful()) {
+        if (response != null && response.isSuccessful()) {
             switch (loader.getId()) {
                 case LOADER_ID_STORIES_ITEM:
                     mItem.update(response.getData().get(0));

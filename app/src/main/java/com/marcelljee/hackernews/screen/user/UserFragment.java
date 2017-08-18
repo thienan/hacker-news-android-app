@@ -151,7 +151,7 @@ public class UserFragment extends ToolbarFragment
     public void onLoadFinished(Loader loader, Object data) {
         AppResponse response = (AppResponse) data;
 
-        if (response.isSuccessful()) {
+        if (response != null && response.isSuccessful()) {
             switch (loader.getId()) {
                 case LOADER_ID_USER_ITEM:
                     mUser.update((User) response.getData());

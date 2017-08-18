@@ -3,6 +3,7 @@ package com.marcelljee.hackernews.loader;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
+import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.api.HackerNewsApi;
 import com.marcelljee.hackernews.model.Item;
 
@@ -25,7 +26,10 @@ public class ItemListLoader extends AsyncTaskLoader<AppResponse<List<Item>>> {
         Observable.fromIterable(mItemIds)
                 .flatMap(itemId -> HackerNewsApi.getInstance().getItem(itemId))
                 .toList()
-                .subscribe(data -> items[0] = AppResponse.ok(data), Timber::e);
+                .subscribe(data -> items[0] = AppResponse.ok(data), (t) -> {
+                    Timber.e(t);
+                    items[0] = AppResponse.error(t.getMessage());
+                });
 
         return items[0];
     }

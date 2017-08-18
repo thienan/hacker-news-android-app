@@ -127,7 +127,7 @@ public class ItemCommentFragment extends ToolbarFragment
     @Override
     public void onLoadFinished(Loader<AppResponse<List<Item>>> loader,
                                AppResponse<List<Item>> response) {
-        if (response.isSuccessful()) {
+        if (response != null && response.isSuccessful()) {
             if (loader.getId() == mCommentItemLoaderId) {
                 mCommentAdapter.addItems(response.getData());
                 mBinding.rvCommentList.hideProgressBar();
