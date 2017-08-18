@@ -6,21 +6,21 @@ import android.support.v4.content.AsyncTaskLoader;
 import com.marcelljee.hackernews.api.HackerNewsApi;
 import com.marcelljee.hackernews.model.User;
 
-public class UserLoader extends AsyncTaskLoader<HackerNewsResponse<User>> {
+public class UserLoader extends AsyncTaskLoader<AppResponse<User>> {
 
     private final String mUserId;
 
-    private HackerNewsResponse<User> mUser;
+    private AppResponse<User> mUser;
 
     /* Runs on a worker thread */
     @Override
-    public HackerNewsResponse<User> loadInBackground() {
+    public AppResponse<User> loadInBackground() {
         return HackerNewsApi.getInstance().getUser(mUserId);
     }
 
     /* Runs on the UI thread */
     @Override
-    public void deliverResult(HackerNewsResponse<User> user) {
+    public void deliverResult(AppResponse<User> user) {
         if (isReset()) {
             return;
         }

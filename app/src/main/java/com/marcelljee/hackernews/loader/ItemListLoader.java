@@ -11,28 +11,28 @@ import java.util.List;
 import io.reactivex.Observable;
 import timber.log.Timber;
 
-public class ItemListLoader extends AsyncTaskLoader<HackerNewsResponse<List<Item>>> {
+public class ItemListLoader extends AsyncTaskLoader<AppResponse<List<Item>>> {
 
     private final List<Long> mItemIds;
 
-    private HackerNewsResponse<List<Item>> mItems;
+    private AppResponse<List<Item>> mItems;
 
     /* Runs on a worker thread */
     @Override
-    public HackerNewsResponse<List<Item>> loadInBackground() {
-        final HackerNewsResponse[] items = new HackerNewsResponse[1];
+    public AppResponse<List<Item>> loadInBackground() {
+        final AppResponse[] items = new AppResponse[1];
 
         Observable.fromIterable(mItemIds)
                 .flatMap(itemId -> HackerNewsApi.getInstance().getItem(itemId))
                 .toList()
-                .subscribe(data -> items[0] = HackerNewsResponse.ok(data), Timber::e);
+                .subscribe(data -> items[0] = AppResponse.ok(data), Timber::e);
 
         return items[0];
     }
 
     /* Runs on the UI thread */
     @Override
-    public void deliverResult(HackerNewsResponse<List<Item>> items) {
+    public void deliverResult(AppResponse<List<Item>> items) {
         if (isReset()) {
             return;
         }

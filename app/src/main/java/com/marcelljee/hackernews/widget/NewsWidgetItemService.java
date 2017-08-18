@@ -11,7 +11,7 @@ import android.widget.RemoteViewsService;
 import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.api.HackerNewsApi;
 import com.marcelljee.hackernews.database.DatabaseDao;
-import com.marcelljee.hackernews.loader.HackerNewsResponse;
+import com.marcelljee.hackernews.loader.AppResponse;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.screen.news.item.ItemActivity;
 import com.marcelljee.hackernews.utils.CollectionUtils;
@@ -71,7 +71,7 @@ public class NewsWidgetItemService extends RemoteViewsService {
                 return;
             }
 
-            HackerNewsResponse<List<Long>> itemIds = HackerNewsResponse.error("Unknown type");
+            AppResponse<List<Long>> itemIds = AppResponse.error("Unknown type");
 
             if (getString(R.string.settings_type_option_top).equals(newsType)) {
                 itemIds = HackerNewsApi.getInstance().getTopStories();
@@ -86,7 +86,7 @@ public class NewsWidgetItemService extends RemoteViewsService {
             } else if (getString(R.string.settings_type_option_jobs).equals(newsType)) {
                 itemIds = HackerNewsApi.getInstance().getJobStories();
             } else if (getString(R.string.settings_type_option_history).equals(newsType)) {
-                itemIds = HackerNewsResponse.ok(DatabaseDao.getHistoryItems(getApplicationContext()));
+                itemIds = AppResponse.ok(DatabaseDao.getHistoryItems(getApplicationContext()));
             }
 
             mItems = new ArrayList<>();

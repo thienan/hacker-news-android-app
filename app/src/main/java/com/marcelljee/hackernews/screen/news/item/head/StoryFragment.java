@@ -16,7 +16,7 @@ import com.marcelljee.hackernews.chrome.CustomTabsHelper;
 import com.marcelljee.hackernews.databinding.FragmentStoryBinding;
 import com.marcelljee.hackernews.event.ItemRefreshEvent;
 import com.marcelljee.hackernews.event.ItemUpdateEvent;
-import com.marcelljee.hackernews.loader.HackerNewsResponse;
+import com.marcelljee.hackernews.loader.AppResponse;
 import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.databinding.viewmodel.ItemViewModel;
@@ -29,12 +29,12 @@ import org.parceler.Parcels;
 import java.util.List;
 
 public class StoryFragment extends ItemHeadFragment
-        implements LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> {
+        implements LoaderManager.LoaderCallbacks<AppResponse<List<Item>>> {
 
     private static final String ARG_ITEM = "com.marcelljee.hackernews.screen.news.item.head.arg.ITEM";
 
-    private static final int LOADER_ID_STORIES_ITEM = 200;
-    private static final int LOADER_ID_POLL_OPTIONS = 250;
+    private static final int LOADER_ID_STORIES_ITEM = 3000;
+    private static final int LOADER_ID_POLL_OPTIONS = 4000;
 
     private Item mItem;
 
@@ -123,7 +123,7 @@ public class StoryFragment extends ItemHeadFragment
     }
 
     @Override
-    public Loader<HackerNewsResponse<List<Item>>> onCreateLoader(int id, Bundle args) {
+    public Loader<AppResponse<List<Item>>> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_ID_STORIES_ITEM:
                 return new ItemListLoader(getContext(), CollectionUtils.singleItemList(mItem.getId()));
@@ -136,8 +136,8 @@ public class StoryFragment extends ItemHeadFragment
     }
 
     @Override
-    public void onLoadFinished(Loader<HackerNewsResponse<List<Item>>> loader,
-                               HackerNewsResponse<List<Item>> response) {
+    public void onLoadFinished(Loader<AppResponse<List<Item>>> loader,
+                               AppResponse<List<Item>> response) {
         if (response.isSuccessful()) {
             switch (loader.getId()) {
                 case LOADER_ID_STORIES_ITEM:
@@ -161,7 +161,7 @@ public class StoryFragment extends ItemHeadFragment
     }
 
     @Override
-    public void onLoaderReset(Loader<HackerNewsResponse<List<Item>>> loader) {
+    public void onLoaderReset(Loader<AppResponse<List<Item>>> loader) {
 
     }
 

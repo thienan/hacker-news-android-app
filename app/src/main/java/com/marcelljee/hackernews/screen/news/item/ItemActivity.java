@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.event.ItemUpdateEvent;
-import com.marcelljee.hackernews.loader.HackerNewsResponse;
+import com.marcelljee.hackernews.loader.AppResponse;
 import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.screen.news.NewsActivity;
 import com.marcelljee.hackernews.chrome.CustomTabsBrowser;
@@ -35,7 +35,7 @@ import com.marcelljee.hackernews.activity.ToolbarActivity;
 import com.marcelljee.hackernews.model.Item;
 
 public class ItemActivity extends ToolbarActivity
-        implements LoaderManager.LoaderCallbacks<HackerNewsResponse<List<Item>>> {
+        implements LoaderManager.LoaderCallbacks<AppResponse<List<Item>>> {
 
     private static final String EXTRA_ROOT_CALLER_ACTIVITY = "com.marcelljee.hackernews.screen.news.item.extra.ROOT_CALLER_ACTIVITY";
     public static final String EXTRA_ITEMS = "com.marcelljee.hackernews.screen.news.item.extra.ITEMS";
@@ -51,7 +51,7 @@ public class ItemActivity extends ToolbarActivity
     public static final String ITEM_TYPE_POLL = "poll";
     public static final String ITEM_TYPE_JOB = "job";
 
-    private static final int LOADER_PARENT_ITEM = 300;
+    private static final int LOADER_PARENT_ITEM = 5000;
 
     private String mRootCallerActivity;
     private List<Item> mItems;
@@ -113,10 +113,7 @@ public class ItemActivity extends ToolbarActivity
             tvCommentInfo.setMovementMethod(LinkMovementMethod.getInstance());
         }
 
-        //TODO: use the following code to enabling paging news
-        //mItemPagerAdapter = new ItemPagerAdapter(getSupportFragmentManager(), mItems, mItemPosterName);
-        mItemPagerAdapter = new ItemPagerAdapter(getSupportFragmentManager(),
-                CollectionUtils.singleItemList(mItems.get(mItemPosition)), mItemPosterName);
+        mItemPagerAdapter = new ItemPagerAdapter(getSupportFragmentManager(), mItems, mItemPosterName);
 
         mItemPager = (ViewPager) findViewById(R.id.item_pager);
         mItemPager.setAdapter(mItemPagerAdapter);
@@ -190,7 +187,7 @@ public class ItemActivity extends ToolbarActivity
     }
 
     @Override
-    public Loader<HackerNewsResponse<List<Item>>> onCreateLoader(int id, Bundle args) {
+    public Loader<AppResponse<List<Item>>> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_PARENT_ITEM:
                 return new ItemListLoader(this, CollectionUtils.singleItemList(mParentId));
@@ -201,8 +198,8 @@ public class ItemActivity extends ToolbarActivity
     }
 
     @Override
-    public void onLoadFinished(Loader<HackerNewsResponse<List<Item>>> loader,
-                               HackerNewsResponse<List<Item>> response) {
+    public void onLoadFinished(Loader<AppResponse<List<Item>>> loader,
+                               AppResponse<List<Item>> response) {
         if (response.isSuccessful()) {
             switch (loader.getId()) {
                 case LOADER_PARENT_ITEM:
@@ -214,7 +211,7 @@ public class ItemActivity extends ToolbarActivity
     }
 
     @Override
-    public void onLoaderReset(Loader<HackerNewsResponse<List<Item>>> loader) {
+    public void onLoaderReset(Loader<AppResponse<List<Item>>> loader) {
 
     }
 

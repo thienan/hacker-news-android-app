@@ -1,7 +1,7 @@
 package com.marcelljee.hackernews.api;
 
 import com.marcelljee.hackernews.HackerNewsApplication;
-import com.marcelljee.hackernews.loader.HackerNewsResponse;
+import com.marcelljee.hackernews.loader.AppResponse;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.model.User;
 
@@ -40,7 +40,7 @@ public final class HackerNewsApi {
         HackerNewsApplication.getInstance().getServiceComponent().inject(this);
     }
 
-    public HackerNewsResponse<User> getUser(String userId) {
+    public AppResponse<User> getUser(String userId) {
         Timber.d("getUser(id=%s)", userId);
         return get(resource.getUser(userId));
     }
@@ -50,45 +50,45 @@ public final class HackerNewsApi {
         return resource.getItem(itemId);
     }
 
-    public HackerNewsResponse<List<Long>> getTopStories() {
+    public AppResponse<List<Long>> getTopStories() {
         Timber.d("getTopStories");
         return get(resource.getTopStories());
     }
 
-    public HackerNewsResponse<List<Long>> getNewStories() {
+    public AppResponse<List<Long>> getNewStories() {
         Timber.d("getNewStories");
         return get(resource.getNewStories());
     }
 
-    public HackerNewsResponse<List<Long>> getBestStories() {
+    public AppResponse<List<Long>> getBestStories() {
         Timber.d("getBestStories");
         return get(resource.getBestStories());
     }
 
-    public HackerNewsResponse<List<Long>> getAskStories() {
+    public AppResponse<List<Long>> getAskStories() {
         Timber.d("getAskStories");
         return get(resource.getAskStories());
     }
 
-    public HackerNewsResponse<List<Long>> getShowStories() {
+    public AppResponse<List<Long>> getShowStories() {
         Timber.d("getShowStories");
         return get(resource.getShowStories());
     }
 
-    public HackerNewsResponse<List<Long>> getJobStories() {
+    public AppResponse<List<Long>> getJobStories() {
         Timber.d("getJobStories");
         return get(resource.getJobStories());
     }
 
-    private <T> HackerNewsResponse<T> get(Observable<T> call) {
-        final HackerNewsResponse<T>[] r = new HackerNewsResponse[1];
+    private <T> AppResponse<T> get(Observable<T> call) {
+        final AppResponse<T>[] r = new AppResponse[1];
 
         call.subscribe(data -> {
             Timber.d(data.toString());
-            r[0] = HackerNewsResponse.ok(data);
+            r[0] = AppResponse.ok(data);
         }, throwable -> {
             Timber.e(throwable);
-            r[0] = HackerNewsResponse.error(throwable.getMessage());
+            r[0] = AppResponse.error(throwable.getMessage());
         });
 
         return r[0];

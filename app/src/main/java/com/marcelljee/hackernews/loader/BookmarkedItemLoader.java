@@ -14,7 +14,7 @@ import com.marcelljee.hackernews.model.Item;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class BookmarkedItemLoader extends AsyncTaskLoader<HackerNewsResponse<List<Item>>> {
+public class BookmarkedItemLoader extends AsyncTaskLoader<AppResponse<List<Item>>> {
     private final ForceLoadContentObserver mObserver;
 
     private Uri mUri;
@@ -23,12 +23,12 @@ public class BookmarkedItemLoader extends AsyncTaskLoader<HackerNewsResponse<Lis
     private String[] mSelectionArgs;
     private String mSortOrder;
 
-    private HackerNewsResponse<List<Item>> mItems;
+    private AppResponse<List<Item>> mItems;
     private CancellationSignal mCancellationSignal;
 
     /* Runs on a worker thread */
     @Override
-    public HackerNewsResponse<List<Item>> loadInBackground() {
+    public AppResponse<List<Item>> loadInBackground() {
         synchronized (this) {
             if (isLoadInBackgroundCanceled()) {
                 throw new OperationCanceledException();
@@ -70,7 +70,7 @@ public class BookmarkedItemLoader extends AsyncTaskLoader<HackerNewsResponse<Lis
                 item.setParts(Item.Factory.partsFromCursor(cursor));
             }
 
-            return HackerNewsResponse.ok(items);
+            return AppResponse.ok(items);
         } finally {
             synchronized (this) {
                 mCancellationSignal = null;
@@ -91,7 +91,7 @@ public class BookmarkedItemLoader extends AsyncTaskLoader<HackerNewsResponse<Lis
 
     /* Runs on the UI thread */
     @Override
-    public void deliverResult(HackerNewsResponse<List<Item>> items) {
+    public void deliverResult(AppResponse<List<Item>> items) {
         if (isReset()) {
             return;
         }

@@ -18,7 +18,7 @@ import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.databinding.FragmentNewsBinding;
 import com.marcelljee.hackernews.factory.SnackbarFactory;
 import com.marcelljee.hackernews.loader.BookmarkedItemLoader;
-import com.marcelljee.hackernews.loader.HackerNewsResponse;
+import com.marcelljee.hackernews.loader.AppResponse;
 import com.marcelljee.hackernews.loader.HistoryLoader;
 import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.loader.StoriesLoader;
@@ -38,22 +38,22 @@ public class NewsFragment extends ToolbarFragment
     private static final String STATE_NEWS_DATA_IDS = "com.marcelljee.hackernews.screen.news.state.NEWS_DATA_IDS";
     private static final String STATE_CURRENT_PAGE = "com.marcelljee.hackernews.screen.news.state.CURRENT_PAGE";
 
-    private static final int LOADER_ID_STORIES_TOP = 510;
-    private static final int LOADER_ID_STORIES_BEST = 520;
-    private static final int LOADER_ID_STORIES_NEW = 530;
-    private static final int LOADER_ID_STORIES_SHOW = 540;
-    private static final int LOADER_ID_STORIES_ASK = 550;
-    private static final int LOADER_ID_STORIES_JOB = 560;
-    private static final int LOADER_ID_HISTORY = 570;
+    private static final int LOADER_ID_STORIES_TOP = 6100;
+    private static final int LOADER_ID_STORIES_BEST = 6200;
+    private static final int LOADER_ID_STORIES_NEW = 6300;
+    private static final int LOADER_ID_STORIES_SHOW = 6400;
+    private static final int LOADER_ID_STORIES_ASK = 6500;
+    private static final int LOADER_ID_STORIES_JOB = 6600;
+    private static final int LOADER_ID_HISTORY = 6700;
 
-    private static final int LOADER_ID_STORIES_TOP_ITEM = 610;
-    private static final int LOADER_ID_STORIES_BEST_ITEM = 620;
-    private static final int LOADER_ID_STORIES_NEW_ITEM = 630;
-    private static final int LOADER_ID_STORIES_SHOW_ITEM = 640;
-    private static final int LOADER_ID_STORIES_ASK_ITEM = 650;
-    private static final int LOADER_ID_STORIES_JOB_ITEM = 660;
-    private static final int LOADER_ID_HISTORY_ITEM = 670;
-    private static final int LOADER_ID_BOOKMARKED_ITEM = 680;
+    private static final int LOADER_ID_STORIES_TOP_ITEM = 7100;
+    private static final int LOADER_ID_STORIES_BEST_ITEM = 7200;
+    private static final int LOADER_ID_STORIES_NEW_ITEM = 7300;
+    private static final int LOADER_ID_STORIES_SHOW_ITEM = 7400;
+    private static final int LOADER_ID_STORIES_ASK_ITEM = 7500;
+    private static final int LOADER_ID_STORIES_JOB_ITEM = 7600;
+    private static final int LOADER_ID_HISTORY_ITEM = 7700;
+    private static final int LOADER_ID_BOOKMARKED_ITEM = 7800;
 
     private static final int ITEM_COUNT = 10;
 
@@ -164,7 +164,7 @@ public class NewsFragment extends ToolbarFragment
     @Override
     public void onLoadFinished(Loader loader,
                                Object data) {
-        HackerNewsResponse response = (HackerNewsResponse) data;
+        AppResponse response = (AppResponse) data;
 
         if (response.isSuccessful()) {
             switch (loader.getId()) {

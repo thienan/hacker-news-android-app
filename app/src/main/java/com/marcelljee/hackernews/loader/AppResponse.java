@@ -1,23 +1,23 @@
 package com.marcelljee.hackernews.loader;
 
-public class HackerNewsResponse<T> {
+public class AppResponse<T> {
 
     private T response;
     private String errorMessage;
 
-    public static <T> HackerNewsResponse ok(T response) {
-        return new HackerNewsResponse(response);
+    public static <T> AppResponse ok(T response) {
+        return new AppResponse(response);
     }
 
-    public static HackerNewsResponse error(String errorMessage) {
-        return new HackerNewsResponse(errorMessage);
+    public static AppResponse error(String errorMessage) {
+        return new AppResponse(errorMessage);
     }
 
-    private HackerNewsResponse(T response) {
+    private AppResponse(T response) {
         this.response = response;
     }
 
-    private HackerNewsResponse(String errorMessage) {
+    private AppResponse(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 

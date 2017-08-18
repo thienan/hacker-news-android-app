@@ -10,22 +10,22 @@ import com.marcelljee.hackernews.activity.ToolbarActivity;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.utils.ItemUtils;
 
-public class HackerNewsDataBindingComponent implements DataBindingComponent {
-    private final HackerNewsBindingAdapter mHackerNewsBindingAdapter;
+public class AppDataBindingComponent implements DataBindingComponent {
+    private final AppBindingAdapter mAppBindingAdapter;
 
-    public HackerNewsDataBindingComponent(ToolbarActivity activity) {
-        mHackerNewsBindingAdapter = new HackerNewsBindingAdapter(activity);
+    public AppDataBindingComponent(ToolbarActivity activity) {
+        mAppBindingAdapter = new AppBindingAdapter(activity);
     }
 
     @Override
-    public HackerNewsBindingAdapter getHackerNewsBindingAdapter() {
-        return mHackerNewsBindingAdapter;
+    public AppBindingAdapter getAppBindingAdapter() {
+        return mAppBindingAdapter;
     }
 
-    public static class HackerNewsBindingAdapter {
+    public static class AppBindingAdapter {
         private final ToolbarActivity mActivity;
 
-        public HackerNewsBindingAdapter(ToolbarActivity activity) {
+        public AppBindingAdapter(ToolbarActivity activity) {
             mActivity = activity;
         }
 

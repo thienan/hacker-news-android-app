@@ -17,7 +17,7 @@ import com.marcelljee.hackernews.databinding.FragmentUserBinding;
 import com.marcelljee.hackernews.event.ItemUpdateEvent;
 import com.marcelljee.hackernews.factory.SnackbarFactory;
 import com.marcelljee.hackernews.fragment.ToolbarFragment;
-import com.marcelljee.hackernews.loader.HackerNewsResponse;
+import com.marcelljee.hackernews.loader.AppResponse;
 import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.loader.UserLoader;
 import com.marcelljee.hackernews.model.Item;
@@ -40,8 +40,8 @@ public class UserFragment extends ToolbarFragment
     private static final String STATE_USER = "com.marcelljee.hackernews.screen.user.state.USER";
     private static final String STATE_CURRENT_PAGE = "com.marcelljee.hackernews.screen.user.state.CURRENT_PAGE";
 
-    private static final int LOADER_ID_USER_ITEM = 800;
-    private static final int LOADER_ID_SUBMISSIONS = 900;
+    private static final int LOADER_ID_USER_ITEM = 8000;
+    private static final int LOADER_ID_SUBMISSIONS = 9000;
 
     private static final int ITEM_COUNT = 10;
 
@@ -147,7 +147,7 @@ public class UserFragment extends ToolbarFragment
 
     @Override
     public void onLoadFinished(Loader loader, Object data) {
-        HackerNewsResponse response = (HackerNewsResponse) data;
+        AppResponse response = (AppResponse) data;
 
         if (response.isSuccessful()) {
             switch (loader.getId()) {

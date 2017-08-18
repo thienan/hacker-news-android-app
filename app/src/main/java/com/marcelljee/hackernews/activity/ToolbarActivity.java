@@ -14,7 +14,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.marcelljee.hackernews.R;
-import com.marcelljee.hackernews.databinding.component.HackerNewsDataBindingComponent;
+import com.marcelljee.hackernews.databinding.component.AppDataBindingComponent;
+import com.marcelljee.hackernews.databinding.component.AppDataBindingComponent;
 
 public class ToolbarActivity extends AppCompatActivity {
 
@@ -31,7 +32,7 @@ public class ToolbarActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DataBindingUtil.setDefaultComponent(new HackerNewsDataBindingComponent(this));
+        DataBindingUtil.setDefaultComponent(new AppDataBindingComponent(this));
     }
 
     @Override

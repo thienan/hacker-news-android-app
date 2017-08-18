@@ -8,16 +8,16 @@ import com.marcelljee.hackernews.api.HackerNewsApi;
 
 import java.util.List;
 
-public class StoriesLoader extends AsyncTaskLoader<HackerNewsResponse<List<Long>>> {
+public class StoriesLoader extends AsyncTaskLoader<AppResponse<List<Long>>> {
 
     private final String mNewsType;
 
-    private HackerNewsResponse<List<Long>> mItems;
+    private AppResponse<List<Long>> mItems;
 
     /* Runs on a worker thread */
     @Override
-    public HackerNewsResponse<List<Long>> loadInBackground() {
-        HackerNewsResponse<List<Long>> itemIds = HackerNewsResponse.error("Unknown type");
+    public AppResponse<List<Long>> loadInBackground() {
+        AppResponse<List<Long>> itemIds = AppResponse.error("Unknown type");
 
         if (getContext().getString(R.string.settings_type_option_top).equals(mNewsType)) {
             itemIds = HackerNewsApi.getInstance().getTopStories();
@@ -38,7 +38,7 @@ public class StoriesLoader extends AsyncTaskLoader<HackerNewsResponse<List<Long>
 
     /* Runs on the UI thread */
     @Override
-    public void deliverResult(HackerNewsResponse<List<Long>> items) {
+    public void deliverResult(AppResponse<List<Long>> items) {
         if (isReset()) {
             return;
         }

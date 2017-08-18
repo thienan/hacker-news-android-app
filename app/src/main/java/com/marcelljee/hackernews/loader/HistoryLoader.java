@@ -16,7 +16,7 @@ import com.marcelljee.hackernews.database.DatabaseContract;
 import com.marcelljee.hackernews.utils.DatabaseUtils;
 
 @SuppressWarnings("unused")
-public class HistoryLoader extends AsyncTaskLoader<HackerNewsResponse<List<Long>>> {
+public class HistoryLoader extends AsyncTaskLoader<AppResponse<List<Long>>> {
     private final ForceLoadContentObserver mObserver;
 
     private Uri mUri;
@@ -25,12 +25,12 @@ public class HistoryLoader extends AsyncTaskLoader<HackerNewsResponse<List<Long>
     private String[] mSelectionArgs;
     private String mSortOrder;
 
-    private HackerNewsResponse<List<Long>> mItems;
+    private AppResponse<List<Long>> mItems;
     private CancellationSignal mCancellationSignal;
 
     /* Runs on a worker thread */
     @Override
-    public HackerNewsResponse<List<Long>> loadInBackground() {
+    public AppResponse<List<Long>> loadInBackground() {
         synchronized (this) {
             if (isLoadInBackgroundCanceled()) {
                 throw new OperationCanceledException();
@@ -53,13 +53,13 @@ public class HistoryLoader extends AsyncTaskLoader<HackerNewsResponse<List<Long>
             }
 
             List<Long> mItemIds = new ArrayList<>();
-            if (cursor == null) return HackerNewsResponse.ok(mItemIds);
+            if (cursor == null) return AppResponse.ok(mItemIds);
 
             while (cursor.moveToNext()) {
                 mItemIds.add(DatabaseUtils.getLong(cursor, DatabaseContract.ItemHistoryEntry.COLUMN_ITEM_ID));
             }
 
-            return HackerNewsResponse.ok(mItemIds);
+            return AppResponse.ok(mItemIds);
         } finally {
             synchronized (this) {
                 mCancellationSignal = null;
@@ -80,7 +80,7 @@ public class HistoryLoader extends AsyncTaskLoader<HackerNewsResponse<List<Long>
 
     /* Runs on the UI thread */
     @Override
-    public void deliverResult(HackerNewsResponse<List<Long>> items) {
+    public void deliverResult(AppResponse<List<Long>> items) {
         if (isReset()) {
             return;
         }
