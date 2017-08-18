@@ -86,7 +86,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tv_text"
+                    android:id="@+id/tv_news_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?android:selectableItemBackground"

@@ -51,7 +51,10 @@ public class AppDataBindingComponent implements DataBindingComponent {
 
         @BindingAdapter("bind:title")
         public void getTitle(TextView textView, Item item) {
-             textView.setText(ItemUtils.getTitle(mActivity, item.getTitle(), item.getUrl()));
+            String title = item != null ? item.getTitle() : "";
+            String url = item != null ? item.getUrl() : "";
+
+            textView.setText(ItemUtils.getTitle(mActivity, title, url));
         }
     }
 }

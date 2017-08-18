@@ -14,11 +14,13 @@ import android.text.format.DateUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
+import android.view.View;
 
 import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.activity.ToolbarActivity;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.span.CustomTabUrlSpan;
+import com.marcelljee.hackernews.span.RevealViewOnClickSpan;
 import com.marcelljee.hackernews.span.UserClickableSpan;
 
 @SuppressWarnings("WeakerAccess")
@@ -77,7 +79,8 @@ public final class ItemUtils {
     }
 
     public static SpannableStringBuilder getCommentInfo(final ToolbarActivity activity,
-                                                        final Item parentItem, final Item posterItem) {
+                                                        final Item parentItem, View parentView,
+                                                        final Item posterItem, View posterView) {
         SpannableStringBuilder commentInfo = new SpannableStringBuilder();
         if (parentItem == null && posterItem == null) return commentInfo;
         commentInfo.append("Reply of ");
@@ -91,6 +94,9 @@ public final class ItemUtils {
                     0, itemParentName.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             comment.setSpan(new UserClickableSpan(activity, itemParentName),
                     0, itemParentName.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            comment.setSpan(new RevealViewOnClickSpan(parentView),
+                    itemParentName.length() + 3, comment.length() - 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+
             commentInfo.append(comment);
         }
 
@@ -103,6 +109,9 @@ public final class ItemUtils {
                     0, itemPosterName.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             post.setSpan(new UserClickableSpan(activity, itemPosterName),
                     0, itemPosterName.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            post.setSpan(new RevealViewOnClickSpan(posterView),
+                    itemPosterName.length() + 3, post.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+
             commentInfo.append(post);
         }
 

@@ -12,9 +12,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import com.marcelljee.hackernews.R;
+import com.marcelljee.hackernews.databinding.ActivityItemBinding;
+import com.marcelljee.hackernews.databinding.viewmodel.ItemViewModel;
 import com.marcelljee.hackernews.event.ItemUpdateEvent;
 import com.marcelljee.hackernews.loader.AppResponse;
 import com.marcelljee.hackernews.loader.ItemListLoader;
@@ -61,7 +62,6 @@ public class ItemActivity extends ToolbarActivity
     private long mParentId;
 
     private ItemPagerAdapter mItemPagerAdapter;
-    private ViewPager mItemPager;
 
     public static void startActivity(ToolbarActivity activity, List<Item> items, int itemPosition) {
         startActivity(activity, items, itemPosition, null, null);
@@ -94,29 +94,41 @@ public class ItemActivity extends ToolbarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item);
+        ActivityItemBinding binding = setContentViewBinding(R.layout.activity_item);
         setDisplayHomeAsUpEnabled(true);
 
         extractExtras();
 
         setTitle(ItemUtils.getTypeAsTitle(getItem()));
 
-        TextView tvCommentInfo = (TextView) findViewById(R.id.tv_comment_info);
-
         if (mParentItem == null && mPosterItem == null) {
-            tvCommentInfo.setVisibility(View.GONE);
+            binding.tvCommentInfo.setVisibility(View.GONE);
         } else {
-            tvCommentInfo.setVisibility(View.VISIBLE);
-            tvCommentInfo.setText(ItemUtils.getCommentInfo(this, mParentItem, mPosterItem));
-            tvCommentInfo.setMovementMethod(LinkMovementMethod.getInstance());
+            binding.itemParent.setItem(mParentItem);
+            binding.itemPoster.setItem(mPosterItem);
+
+            binding.itemParent.commentHead.setViewModel(new ItemViewModel(this,
+                    CollectionUtils.singleItemList(mParentItem)));
+            binding.itemParent.commentHead.tvCommentText.setMaxLines(Integer.MAX_VALUE);
+            binding.itemParent.commentHead.tvCommentText.setMovementMethod(LinkMovementMethod.getInstance());
+
+            binding.itemPoster.itemNews.setViewModel(new ItemViewModel(this,
+                    CollectionUtils.singleItemList(mPosterItem)));
+            binding.itemPoster.itemNews.setItemPosition(0);
+
+            binding.tvCommentInfo.setVisibility(View.VISIBLE);
+            binding.tvCommentInfo.setText(ItemUtils.getCommentInfo(this,
+                    mParentItem, binding.itemParent.getRoot(),
+                    mPosterItem, binding.itemPoster.getRoot()));
+            binding.tvCommentInfo.setMovementMethod(LinkMovementMethod.getInstance());
         }
 
-        mItemPagerAdapter = new ItemPagerAdapter(getSupportFragmentManager(), mItems, mPosterItem);
+        mItemPagerAdapter = new ItemPagerAdapter(binding.itemPager,
+                getSupportFragmentManager(), mItems, mPosterItem);
 
-        mItemPager = (ViewPager) findViewById(R.id.item_pager);
-        mItemPager.setAdapter(mItemPagerAdapter);
-        mItemPager.setCurrentItem(mItemPosition);
-        mItemPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        binding.itemPager.setAdapter(mItemPagerAdapter);
+        binding.itemPager.setCurrentItem(mItemPosition);
+        binding.itemPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 mItemPosition = position;
@@ -171,7 +183,7 @@ public class ItemActivity extends ToolbarActivity
 
                 return super.onOptionsItemSelected(menuItem);
             case R.id.action_refresh:
-                mItemPagerAdapter.getCurrentFragment(mItemPager).refresh();
+                mItemPagerAdapter.getCurrentFragment().refresh();
                 return true;
             case R.id.action_share:
                 MenuUtils.openShareHackerNewsLinkChooser(this, getItem());

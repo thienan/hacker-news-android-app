@@ -67,13 +67,15 @@ public class StoryFragment extends ItemHeadFragment
         mBinding = FragmentStoryBinding.inflate(inflater, container, false,
                 new AppDataBindingComponent(getToolbarActivity()));
         mBinding.setItem(mItem);
+
         mBinding.sectionNews.itemNews.setViewModel(new ItemViewModel(getToolbarActivity(),
                 CollectionUtils.singleItemList(mItem), false, customTabsHelper.getSession()));
         mBinding.sectionNews.itemNews.setItemPosition(0);
+
         mBinding.sectionNewsDetails.setViewModel(new SectionNewsDetailsViewModel(getToolbarActivity()));
 
         if (TextUtils.isEmpty(mItem.getUrl())) {
-            mBinding.sectionNews.itemNews.tvText.setBackground(null);
+            mBinding.sectionNews.itemNews.tvNewsText.setBackground(null);
         }
 
         mPollOptionsAdapter = new ItemAdapter(getToolbarActivity());

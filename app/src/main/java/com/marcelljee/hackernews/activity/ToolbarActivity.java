@@ -2,6 +2,8 @@ package com.marcelljee.hackernews.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.support.annotation.LayoutRes;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.marcelljee.hackernews.R;
+import com.marcelljee.hackernews.databinding.component.AppDataBindingComponent;
 
 public class ToolbarActivity extends AppCompatActivity {
 
@@ -26,7 +29,7 @@ public class ToolbarActivity extends AppCompatActivity {
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
-        setContentView(R.layout.toolbar_item, layoutResID);
+        setContentViewBinding(layoutResID);
     }
 
     @Override
@@ -56,15 +59,21 @@ public class ToolbarActivity extends AppCompatActivity {
         }
     }
 
-    void setContentView(@LayoutRes int toolbarResID, @LayoutRes int layoutResID) {
+    protected <T extends ViewDataBinding> T setContentViewBinding(@LayoutRes int layoutResID) {
+        return setContentView(R.layout.toolbar_item, layoutResID);
+    }
+
+    <T extends ViewDataBinding> T setContentView(@LayoutRes int toolbarResID, @LayoutRes int layoutResID) {
         View toolbar = getLayoutInflater().inflate(toolbarResID, null, false);
         FrameLayout container = (FrameLayout) toolbar.findViewById(R.id.layout_container);
-        getLayoutInflater().inflate(layoutResID, container, true);
+        T binding = DataBindingUtil.inflate(getLayoutInflater(),
+                layoutResID, container, true, new AppDataBindingComponent(this));
 
         mToolbar = (Toolbar) toolbar.findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
-        super.setContentView(toolbar);
+        setContentView(toolbar);
+        return binding;
     }
 
     protected Toolbar getToolbar() {

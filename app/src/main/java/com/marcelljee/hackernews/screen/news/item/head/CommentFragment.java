@@ -54,9 +54,10 @@ public class CommentFragment extends ItemHeadFragment
                 new AppDataBindingComponent(getToolbarActivity()));
         binding.setItem(mItem);
 
-        binding.commentHead.setViewModel(new ItemViewModel(getToolbarActivity(), CollectionUtils.singleItemList(mItem)));
-        binding.commentHead.tvText.setMaxLines(Integer.MAX_VALUE);
-        binding.commentHead.tvText.setMovementMethod(LinkMovementMethod.getInstance());
+        binding.commentHead.setViewModel(new ItemViewModel(getToolbarActivity(),
+                CollectionUtils.singleItemList(mItem)));
+        binding.commentHead.tvCommentText.setMaxLines(Integer.MAX_VALUE);
+        binding.commentHead.tvCommentText.setMovementMethod(LinkMovementMethod.getInstance());
 
         return binding.getRoot();
     }

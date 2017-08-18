@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.marcelljee.hackernews.R;
+import com.marcelljee.hackernews.event.ItemUpdateEvent;
 import com.marcelljee.hackernews.fragment.ToolbarFragment;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.screen.news.item.comment.ItemCommentFragment;
@@ -15,6 +16,8 @@ import com.marcelljee.hackernews.screen.news.item.head.CommentFragment;
 import com.marcelljee.hackernews.screen.news.item.head.ItemHeadFragment;
 import com.marcelljee.hackernews.screen.news.item.head.StoryFragment;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.parceler.Parcels;
 
 public class ItemFragment extends ToolbarFragment {
@@ -42,6 +45,7 @@ public class ItemFragment extends ToolbarFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         extractArguments();
 
         if (savedInstanceState == null) {
@@ -62,6 +66,18 @@ public class ItemFragment extends ToolbarFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_item, container, false);
+    }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Subscribe()
+    @SuppressWarnings({"unused"})
+    public void onItemUpdateEvent(ItemUpdateEvent event) {
+        mItem.update(event.getItem());
     }
 
     private static Bundle createArguments(Item item, Item posterItem, int loaderOffset) {

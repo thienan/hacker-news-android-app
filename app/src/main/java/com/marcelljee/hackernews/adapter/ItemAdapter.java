@@ -89,7 +89,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
                 ItemCommentBinding commentBinding = ItemCommentBinding.inflate(inflater, parent,
                         false, new AppDataBindingComponent(mActivity));
                 commentBinding.setViewModel(new ItemViewModel(mActivity, mItems));
-                commentBinding.tvText.setMovementMethod(LinkMovementMethod.getInstance());
+                commentBinding.tvCommentText.setMovementMethod(LinkMovementMethod.getInstance());
                 return new ItemViewHolder(commentBinding, true);
             case VIEW_TYPE_POLL_OPTION:
                 ItemPollOptionBinding binding = ItemPollOptionBinding.inflate(inflater, parent,

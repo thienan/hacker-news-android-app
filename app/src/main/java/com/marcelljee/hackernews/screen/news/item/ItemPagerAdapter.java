@@ -11,11 +11,13 @@ import java.util.List;
 
 class ItemPagerAdapter extends FragmentStatePagerAdapter {
 
+    private final ViewPager mItemPager;
     private final List<Item> mItems;
     private final Item mPosterItem;
 
-    public ItemPagerAdapter(FragmentManager fm, List<Item> items, Item posterItem) {
+    public ItemPagerAdapter(ViewPager itemPager, FragmentManager fm, List<Item> items, Item posterItem) {
         super(fm);
+        mItemPager = itemPager;
         mItems = items;
         mPosterItem = posterItem;
     }
@@ -30,7 +32,7 @@ class ItemPagerAdapter extends FragmentStatePagerAdapter {
         return mItems.size();
     }
 
-    public ItemFragment getCurrentFragment(ViewPager itemPager) {
-        return (ItemFragment) instantiateItem(itemPager, itemPager.getCurrentItem());
+    public ItemFragment getCurrentFragment() {
+        return (ItemFragment) instantiateItem(mItemPager, mItemPager.getCurrentItem());
     }
 }
