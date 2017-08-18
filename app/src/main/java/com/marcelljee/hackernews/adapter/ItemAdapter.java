@@ -13,6 +13,7 @@ import com.marcelljee.hackernews.database.DatabaseDao;
 import com.marcelljee.hackernews.databinding.ItemCommentBinding;
 import com.marcelljee.hackernews.databinding.ItemNewsBinding;
 import com.marcelljee.hackernews.databinding.ItemPollOptionBinding;
+import com.marcelljee.hackernews.databinding.component.AppDataBindingComponent;
 import com.marcelljee.hackernews.menu.ActionModeMenu;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.screen.news.item.ItemActivity;
@@ -80,16 +81,19 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
         switch (viewType) {
             case VIEW_TYPE_NEWS:
-                ItemNewsBinding newsBinding = ItemNewsBinding.inflate(inflater, parent, false);
+                ItemNewsBinding newsBinding = ItemNewsBinding.inflate(inflater, parent, false,
+                        new AppDataBindingComponent(mActivity));
                 newsBinding.setViewModel(itemNewsViewModel);
                 return new ItemViewHolder(newsBinding, true);
             case VIEW_TYPE_COMMENT:
-                ItemCommentBinding commentBinding = ItemCommentBinding.inflate(inflater, parent, false);
+                ItemCommentBinding commentBinding = ItemCommentBinding.inflate(inflater, parent,
+                        false, new AppDataBindingComponent(mActivity));
                 commentBinding.setViewModel(new ItemViewModel(mActivity, mItems));
                 commentBinding.tvText.setMovementMethod(LinkMovementMethod.getInstance());
                 return new ItemViewHolder(commentBinding, true);
             case VIEW_TYPE_POLL_OPTION:
-                ItemPollOptionBinding binding = ItemPollOptionBinding.inflate(inflater, parent, false);
+                ItemPollOptionBinding binding = ItemPollOptionBinding.inflate(inflater, parent,
+                        false, new AppDataBindingComponent(mActivity));
                 return new ItemViewHolder(binding, false);
             default:
                 return null;

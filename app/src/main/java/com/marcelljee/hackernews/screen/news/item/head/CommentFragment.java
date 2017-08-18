@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.marcelljee.hackernews.databinding.FragmentCommentBinding;
+import com.marcelljee.hackernews.databinding.component.AppDataBindingComponent;
 import com.marcelljee.hackernews.event.ItemRefreshEvent;
 import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.loader.AppResponse;
@@ -49,7 +50,8 @@ public class CommentFragment extends ItemHeadFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FragmentCommentBinding binding = FragmentCommentBinding.inflate(inflater, container, false);
+        FragmentCommentBinding binding = FragmentCommentBinding.inflate(inflater, container, false,
+                new AppDataBindingComponent(getToolbarActivity()));
         binding.setItem(mItem);
 
         binding.commentHead.setViewModel(new ItemViewModel(getToolbarActivity(), CollectionUtils.singleItemList(mItem)));

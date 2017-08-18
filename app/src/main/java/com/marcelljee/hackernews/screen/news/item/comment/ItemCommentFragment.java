@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.marcelljee.hackernews.adapter.ItemAdapter;
 import com.marcelljee.hackernews.databinding.FragmentItemCommentBinding;
+import com.marcelljee.hackernews.databinding.component.AppDataBindingComponent;
 import com.marcelljee.hackernews.event.ItemRefreshEvent;
 import com.marcelljee.hackernews.factory.SnackbarFactory;
 import com.marcelljee.hackernews.fragment.ToolbarFragment;
@@ -70,7 +71,8 @@ public class ItemCommentFragment extends ToolbarFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mBinding = FragmentItemCommentBinding.inflate(inflater, container, false);
+        mBinding = FragmentItemCommentBinding.inflate(inflater, container, false,
+                new AppDataBindingComponent(getToolbarActivity()));
         mBinding.setItem(mItem);
 
         if (mPosterItem == null) {

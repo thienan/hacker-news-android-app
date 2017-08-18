@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.adapter.ItemAdapter;
 import com.marcelljee.hackernews.databinding.FragmentUserBinding;
+import com.marcelljee.hackernews.databinding.component.AppDataBindingComponent;
 import com.marcelljee.hackernews.event.ItemUpdateEvent;
 import com.marcelljee.hackernews.factory.SnackbarFactory;
 import com.marcelljee.hackernews.fragment.ToolbarFragment;
@@ -92,7 +93,8 @@ public class UserFragment extends ToolbarFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mBinding = FragmentUserBinding.inflate(inflater, container, false);
+        mBinding = FragmentUserBinding.inflate(inflater, container, false,
+                new AppDataBindingComponent(getToolbarActivity()));
         mBinding.setUser(mUser);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.databinding.FragmentAboutBinding;
+import com.marcelljee.hackernews.databinding.component.AppDataBindingComponent;
 import com.marcelljee.hackernews.fragment.ToolbarFragment;
 import com.marcelljee.hackernews.utils.ItemUtils;
 
@@ -20,7 +21,8 @@ public class AboutFragment extends ToolbarFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FragmentAboutBinding binding = FragmentAboutBinding.inflate(inflater, container, false);
+        FragmentAboutBinding binding = FragmentAboutBinding.inflate(inflater, container, false,
+                new AppDataBindingComponent(getToolbarActivity()));
         binding.tvAbout.setText(ItemUtils.fromHtml(getToolbarActivity(), getString(R.string.about_text)));
         binding.tvAbout.setMovementMethod(LinkMovementMethod.getInstance());
 

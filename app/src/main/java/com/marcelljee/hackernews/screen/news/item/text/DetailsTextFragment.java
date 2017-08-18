@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.marcelljee.hackernews.databinding.FragmentDetailsTextBinding;
+import com.marcelljee.hackernews.databinding.component.AppDataBindingComponent;
 import com.marcelljee.hackernews.fragment.ToolbarFragment;
 import com.marcelljee.hackernews.databinding.viewmodel.SectionNewsDetailsViewModel;
 
@@ -35,7 +36,8 @@ public class DetailsTextFragment extends ToolbarFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FragmentDetailsTextBinding binding = FragmentDetailsTextBinding.inflate(inflater, container, false);
+        FragmentDetailsTextBinding binding = FragmentDetailsTextBinding.inflate(inflater, container,
+                false, new AppDataBindingComponent(getToolbarActivity()));
         binding.setText(mText);
         binding.sectionNewsDetails.setViewModel(new SectionNewsDetailsViewModel(getToolbarActivity()));
         binding.sectionNewsDetails.tvNewsDetails.setMaxLines(Integer.MAX_VALUE);

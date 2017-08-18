@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.marcelljee.hackernews.adapter.ItemAdapter;
+import com.marcelljee.hackernews.databinding.component.AppDataBindingComponent;
 import com.marcelljee.hackernews.event.ItemUpdateEvent;
 import com.marcelljee.hackernews.fragment.ToolbarFragment;
 import com.marcelljee.hackernews.R;
@@ -71,7 +72,8 @@ public class NewsFragment extends ToolbarFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mBinding = FragmentNewsBinding.inflate(inflater, container, false);
+        mBinding = FragmentNewsBinding.inflate(inflater, container, false,
+                new AppDataBindingComponent(getToolbarActivity()));
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mNewsAdapter = new ItemAdapter(getToolbarActivity());

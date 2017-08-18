@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.marcelljee.hackernews.adapter.ItemAdapter;
 import com.marcelljee.hackernews.chrome.CustomTabsHelper;
 import com.marcelljee.hackernews.databinding.FragmentStoryBinding;
+import com.marcelljee.hackernews.databinding.component.AppDataBindingComponent;
 import com.marcelljee.hackernews.event.ItemRefreshEvent;
 import com.marcelljee.hackernews.event.ItemUpdateEvent;
 import com.marcelljee.hackernews.loader.AppResponse;
@@ -63,7 +64,8 @@ public class StoryFragment extends ItemHeadFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mBinding = FragmentStoryBinding.inflate(inflater, container, false);
+        mBinding = FragmentStoryBinding.inflate(inflater, container, false,
+                new AppDataBindingComponent(getToolbarActivity()));
         mBinding.setItem(mItem);
         mBinding.sectionNews.itemNews.setViewModel(new ItemViewModel(getToolbarActivity(),
                 CollectionUtils.singleItemList(mItem), false, customTabsHelper.getSession()));

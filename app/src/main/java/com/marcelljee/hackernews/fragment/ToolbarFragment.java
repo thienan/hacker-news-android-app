@@ -13,7 +13,6 @@ public class ToolbarFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mActivity = ToolbarActivity.getActivity(getActivity());
     }
 

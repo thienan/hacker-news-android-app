@@ -29,12 +29,6 @@ public class ToolbarActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        DataBindingUtil.setDefaultComponent(new AppDataBindingComponent(this));
-    }
-
-    @Override
     public void setContentView(@LayoutRes int layoutResID) {
         setContentView(R.layout.toolbar_item, layoutResID);
     }
