@@ -41,16 +41,17 @@
     <string name="menu_item_show_unread">Show unread</string>
     <string name="menu_item_show_all">Show All</string>
 
+    <string name="news_type_top">Top</string>
+    <string name="news_type_best">Best</string>
+    <string name="news_type_new">New</string>
+    <string name="news_type_show">Show</string>
+    <string name="news_type_ask">Ask</string>
+    <string name="news_type_jobs">Jobs</string>
+    <string name="news_type_bookmarked">Bookmarked</string>
+    <string name="news_type_history">History</string>
+
     <string name="settings_type_key">settings_type</string>
     <string name="settings_type_title">Default news</string>
-    <string name="settings_type_option_top">Top</string>
-    <string name="settings_type_option_best">Best</string>
-    <string name="settings_type_option_new">New</string>
-    <string name="settings_type_option_show">Show</string>
-    <string name="settings_type_option_ask">Ask</string>
-    <string name="settings_type_option_jobs">Jobs</string>
-    <string name="settings_type_option_bookmarked">Bookmarked</string>
-    <string name="settings_type_option_history">History</string>
 
     <string name="settings_read_indicator_key">settings_read_indicator</string>
     <string name="settings_read_indicator_title">Enable read indicator</string>
@@ -67,6 +68,12 @@
     <string name="label_submissions">Submissions</string>
     <string name="label_poll_options">Poll Options</string>
 
+    <string name="desc_app_logo">App Logo</string>
+    <string name="desc_refresh_widget">Refresh widget</string>
+    <string name="desc_widget_config">Widget config</string>
+    <string name="desc_bookmark">Bookmark</string>
+    <string name="desc_selected_item">Selected item</string>
+
     <string name="about_text"><![CDATA[
         Hacker News Android app.<br/><br/>
         This is the unofficial Android app for reading Hacker News from Y Combinator.<br/><br/>
@@ -77,10 +84,4 @@
         <a href="https://github.com/marcelljee/hacker-news-android-app">Github page</a>.<br/><br/>
         This project is open source and neither affiliated with nor endorsed by Y Combinator. Contributors are welcomed.
     ]]></string>
-
-    <string name="desc_app_logo">App Logo</string>
-    <string name="desc_refresh_widget">Refresh widget</string>
-    <string name="desc_widget_config">Widget config</string>
-    <string name="desc_bookmark">Bookmark</string>
-    <string name="desc_selected_item">Selected item</string>
 </resources>

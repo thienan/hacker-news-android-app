@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <ListPreference
-        android:defaultValue="@string/settings_type_option_top"
+        android:defaultValue="@string/news_type_top"
         android:entries="@array/settings_type_options"
         android:entryValues="@array/settings_type_options"
         android:key="@string/settings_type_key"

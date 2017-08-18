@@ -206,42 +206,42 @@ public class NewsFragment extends ToolbarFragment
                             .restartLoader(LOADER_ID_HISTORY_ITEM, null, this);
                     return;
                 case LOADER_ID_STORIES_TOP_ITEM:
-                    if (getString(R.string.settings_type_option_top).equals(mNewsType)) {
+                    if (getString(R.string.news_type_top).equals(mNewsType)) {
                         mNewsAdapter.addItems((List<Item>) response.getData());
                     }
                     break;
                 case LOADER_ID_STORIES_BEST_ITEM:
-                    if (getString(R.string.settings_type_option_best).equals(mNewsType)) {
+                    if (getString(R.string.news_type_best).equals(mNewsType)) {
                         mNewsAdapter.addItems((List<Item>) response.getData());
                     }
                     break;
                 case LOADER_ID_STORIES_NEW_ITEM:
-                    if (getString(R.string.settings_type_option_new).equals(mNewsType)) {
+                    if (getString(R.string.news_type_new).equals(mNewsType)) {
                         mNewsAdapter.addItems((List<Item>) response.getData());
                     }
                     break;
                 case LOADER_ID_STORIES_SHOW_ITEM:
-                    if (getString(R.string.settings_type_option_show).equals(mNewsType)) {
+                    if (getString(R.string.news_type_show).equals(mNewsType)) {
                         mNewsAdapter.addItems((List<Item>) response.getData());
                     }
                     break;
                 case LOADER_ID_STORIES_ASK_ITEM:
-                    if (getString(R.string.settings_type_option_ask).equals(mNewsType)) {
+                    if (getString(R.string.news_type_ask).equals(mNewsType)) {
                         mNewsAdapter.addItems((List<Item>) response.getData());
                     }
                     break;
                 case LOADER_ID_STORIES_JOB_ITEM:
-                    if (getString(R.string.settings_type_option_jobs).equals(mNewsType)) {
+                    if (getString(R.string.news_type_jobs).equals(mNewsType)) {
                         mNewsAdapter.addItems((List<Item>) response.getData());
                     }
                     break;
                 case LOADER_ID_HISTORY_ITEM:
-                    if (getString(R.string.settings_type_option_history).equals(mNewsType)) {
+                    if (getString(R.string.news_type_history).equals(mNewsType)) {
                         mNewsAdapter.swapItems((List<Item>) response.getData());
                     }
                     break;
                 case LOADER_ID_BOOKMARKED_ITEM:
-                    if (getString(R.string.settings_type_option_bookmarked).equals(mNewsType)) {
+                    if (getString(R.string.news_type_bookmarked).equals(mNewsType)) {
                         mNewsAdapter.swapItems((List<Item>) response.getData());
                     }
                     break;
@@ -306,21 +306,21 @@ public class NewsFragment extends ToolbarFragment
 
         int loaderId;
 
-        if (getString(R.string.settings_type_option_top).equals(mNewsType)) {
+        if (getString(R.string.news_type_top).equals(mNewsType)) {
             loaderId = LOADER_ID_STORIES_TOP;
-        } else if (getString(R.string.settings_type_option_best).equals(mNewsType)) {
+        } else if (getString(R.string.news_type_best).equals(mNewsType)) {
             loaderId = LOADER_ID_STORIES_BEST;
-        } else if (getString(R.string.settings_type_option_new).equals(mNewsType)) {
+        } else if (getString(R.string.news_type_new).equals(mNewsType)) {
             loaderId = LOADER_ID_STORIES_NEW;
-        } else if (getString(R.string.settings_type_option_show).equals(mNewsType)) {
+        } else if (getString(R.string.news_type_show).equals(mNewsType)) {
             loaderId = LOADER_ID_STORIES_SHOW;
-        } else if (getString(R.string.settings_type_option_ask).equals(mNewsType)) {
+        } else if (getString(R.string.news_type_ask).equals(mNewsType)) {
             loaderId = LOADER_ID_STORIES_ASK;
-        } else if (getString(R.string.settings_type_option_jobs).equals(mNewsType)) {
+        } else if (getString(R.string.news_type_jobs).equals(mNewsType)) {
             loaderId = LOADER_ID_STORIES_JOB;
-        } else if (getString(R.string.settings_type_option_history).equals(mNewsType)) {
+        } else if (getString(R.string.news_type_history).equals(mNewsType)) {
             loaderId = LOADER_ID_HISTORY;
-        } else if (getString(R.string.settings_type_option_bookmarked).equals(mNewsType)) {
+        } else if (getString(R.string.news_type_bookmarked).equals(mNewsType)) {
             loaderId = LOADER_ID_BOOKMARKED_ITEM;
         } else {
             mBinding.rvItemList.hideProgressBar();
@@ -336,19 +336,19 @@ public class NewsFragment extends ToolbarFragment
 
         int loaderId;
 
-        if (getString(R.string.settings_type_option_top).equals(mNewsType)) {
+        if (getString(R.string.news_type_top).equals(mNewsType)) {
             loaderId = LOADER_ID_STORIES_TOP_ITEM;
-        } else if (getString(R.string.settings_type_option_best).equals(mNewsType)) {
+        } else if (getString(R.string.news_type_best).equals(mNewsType)) {
             loaderId = LOADER_ID_STORIES_BEST_ITEM;
-        } else if (getString(R.string.settings_type_option_new).equals(mNewsType)) {
+        } else if (getString(R.string.news_type_new).equals(mNewsType)) {
             loaderId = LOADER_ID_STORIES_NEW_ITEM;
-        } else if (getString(R.string.settings_type_option_show).equals(mNewsType)) {
+        } else if (getString(R.string.news_type_show).equals(mNewsType)) {
             loaderId = LOADER_ID_STORIES_SHOW_ITEM;
-        } else if (getString(R.string.settings_type_option_ask).equals(mNewsType)) {
+        } else if (getString(R.string.news_type_ask).equals(mNewsType)) {
             loaderId = LOADER_ID_STORIES_ASK_ITEM;
-        } else if (getString(R.string.settings_type_option_jobs).equals(mNewsType)) {
+        } else if (getString(R.string.news_type_jobs).equals(mNewsType)) {
             loaderId = LOADER_ID_STORIES_JOB_ITEM;
-        } else if (getString(R.string.settings_type_option_history).equals(mNewsType)) {
+        } else if (getString(R.string.news_type_history).equals(mNewsType)) {
             loaderId = LOADER_ID_HISTORY_ITEM;
         } else {
             mBinding.rvItemList.hideProgressBar();

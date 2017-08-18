@@ -66,26 +66,26 @@ public class NewsWidgetItemService extends RemoteViewsService {
             String newsType = NewsWidgetStorage.loadNewsType(getApplicationContext(), mAppWidgetId);
             int newsCount = NewsWidgetStorage.loadNewsCount(getApplicationContext(), mAppWidgetId);
 
-            if (getString(R.string.settings_type_option_bookmarked).equals(newsType)) {
+            if (getString(R.string.news_type_bookmarked).equals(newsType)) {
                 mItems = DatabaseDao.getBookmarkedItems(getApplicationContext());
                 return;
             }
 
             AppResponse<List<Long>> itemIds = AppResponse.error("Unknown type");
 
-            if (getString(R.string.settings_type_option_top).equals(newsType)) {
+            if (getString(R.string.news_type_top).equals(newsType)) {
                 itemIds = HackerNewsApi.getInstance().getTopStories();
-            } else if (getString(R.string.settings_type_option_best).equals(newsType)) {
+            } else if (getString(R.string.news_type_best).equals(newsType)) {
                 itemIds = HackerNewsApi.getInstance().getBestStories();
-            } else if (getString(R.string.settings_type_option_new).equals(newsType)) {
+            } else if (getString(R.string.news_type_new).equals(newsType)) {
                 itemIds = HackerNewsApi.getInstance().getNewStories();
-            } else if (getString(R.string.settings_type_option_show).equals(newsType)) {
+            } else if (getString(R.string.news_type_show).equals(newsType)) {
                 itemIds = HackerNewsApi.getInstance().getShowStories();
-            } else if (getString(R.string.settings_type_option_ask).equals(newsType)) {
+            } else if (getString(R.string.news_type_ask).equals(newsType)) {
                 itemIds = HackerNewsApi.getInstance().getAskStories();
-            } else if (getString(R.string.settings_type_option_jobs).equals(newsType)) {
+            } else if (getString(R.string.news_type_jobs).equals(newsType)) {
                 itemIds = HackerNewsApi.getInstance().getJobStories();
-            } else if (getString(R.string.settings_type_option_history).equals(newsType)) {
+            } else if (getString(R.string.news_type_history).equals(newsType)) {
                 itemIds = AppResponse.ok(DatabaseDao.getHistoryItems(getApplicationContext()));
             }
 

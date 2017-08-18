@@ -92,7 +92,7 @@ public class NewsActivity extends FragmentActivity<NewsFragment>
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (getString(R.string.settings_type_option_history).equals(mNewsType)) {
+        if (getString(R.string.news_type_history).equals(mNewsType)) {
             menu.findItem(R.id.action_clear_history).setVisible(true);
 
             menu.findItem(R.id.action_show_all).setVisible(false);
@@ -172,9 +172,11 @@ public class NewsActivity extends FragmentActivity<NewsFragment>
             ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) spinner.getAdapter();
 
             if (SettingsUtils.historyEnabled(this)) {
-                adapter.add(getString(R.string.settings_type_option_history));
+                if (adapter.getPosition(getString(R.string.news_type_history)) == -1) {
+                    adapter.add(getString(R.string.news_type_history));
+                }
             } else {
-                adapter.remove(getString(R.string.settings_type_option_history));
+                adapter.remove(getString(R.string.news_type_history));
             }
         } else if (getString(R.string.settings_read_indicator_key).equals(key)) {
             supportInvalidateOptionsMenu();

@@ -19,17 +19,17 @@ public class StoriesLoader extends AsyncTaskLoader<AppResponse<List<Long>>> {
     public AppResponse<List<Long>> loadInBackground() {
         AppResponse<List<Long>> itemIds = AppResponse.error("Unknown type");
 
-        if (getContext().getString(R.string.settings_type_option_top).equals(mNewsType)) {
+        if (getContext().getString(R.string.news_type_top).equals(mNewsType)) {
             itemIds = HackerNewsApi.getInstance().getTopStories();
-        } else if (getContext().getString(R.string.settings_type_option_best).equals(mNewsType)) {
+        } else if (getContext().getString(R.string.news_type_best).equals(mNewsType)) {
             itemIds = HackerNewsApi.getInstance().getBestStories();
-        } else if (getContext().getString(R.string.settings_type_option_new).equals(mNewsType)) {
+        } else if (getContext().getString(R.string.news_type_new).equals(mNewsType)) {
             itemIds = HackerNewsApi.getInstance().getNewStories();
-        } else if (getContext().getString(R.string.settings_type_option_show).equals(mNewsType)) {
+        } else if (getContext().getString(R.string.news_type_show).equals(mNewsType)) {
             itemIds = HackerNewsApi.getInstance().getShowStories();
-        } else if (getContext().getString(R.string.settings_type_option_ask).equals(mNewsType)) {
+        } else if (getContext().getString(R.string.news_type_ask).equals(mNewsType)) {
             itemIds = HackerNewsApi.getInstance().getAskStories();
-        } else if (getContext().getString(R.string.settings_type_option_jobs).equals(mNewsType)) {
+        } else if (getContext().getString(R.string.news_type_jobs).equals(mNewsType)) {
             itemIds = HackerNewsApi.getInstance().getJobStories();
         }
 

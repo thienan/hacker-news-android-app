@@ -41,7 +41,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
             ListPreference newsTypePreference = (ListPreference) findPreference(key);
             if (newsTypePreference == null) return;
 
-            String value = sharedPreferences.getString(key, getString(R.string.settings_type_option_top));
+            String value = sharedPreferences.getString(key, getString(R.string.news_type_top));
 
             int prefIndex = newsTypePreference.findIndexOfValue(value);
             if (prefIndex >= 0) {

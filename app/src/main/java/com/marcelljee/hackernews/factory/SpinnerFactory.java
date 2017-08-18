@@ -34,7 +34,7 @@ public class SpinnerFactory {
                 new ArrayAdapter<>(context, R.layout.item_spinner, newsTypeList);
 
         if (SettingsUtils.historyEnabled(context)) {
-            adapter.add(context.getString(R.string.settings_type_option_history));
+            adapter.add(context.getString(R.string.news_type_history));
         }
 
         adapter.setDropDownViewResource(R.layout.item_spinner_dropdown);

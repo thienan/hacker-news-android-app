@@ -81,8 +81,7 @@ public class ActionModeMenu {
                         mode.finish();
                         return true;
                     case R.id.action_open_page:
-                        CustomTabsBrowser.openTab(activity,
-                                HackerNewsUtils.geItemUrl(itemId));
+                        CustomTabsBrowser.openTab(activity, HackerNewsUtils.geItemUrl(itemId));
                         return true;
                     default:
                         return false;
@@ -102,13 +101,9 @@ public class ActionModeMenu {
     }
 
     public void finish() {
-        if (isStarted()) {
+        if (mActionMode != null) {
             mActionMode.finish();
         }
-    }
-
-    private boolean isStarted() {
-        return mActionMode != null;
     }
 
     private void setSelected(ItemNewsBinding newsBinding, boolean selected) {

@@ -14,7 +14,7 @@ public final class SettingsUtils {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         return sharedPreferences.getString(context.getString(R.string.settings_type_key),
-                context.getString(R.string.settings_type_option_top));
+                context.getString(R.string.news_type_top));
     }
 
     public static boolean readIndicatorEnabled(Context context) {
