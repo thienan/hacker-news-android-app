@@ -11,10 +11,6 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.activity.ToolbarActivity;
 
@@ -45,33 +41,15 @@ public class NewsWidgetConfigureActivity extends ToolbarActivity {
             finish();
         }
 
-        setUpNewsTypeSpinner();
-        setUpNewsCountSpinner();
-    }
-
-    private void setUpNewsTypeSpinner() {
         mNewsTypeSpinner = (Spinner) findViewById(R.id.news_type_spinner);
-        List<CharSequence> newsTypeList =
-                new ArrayList<>(Arrays.asList(getResources().getTextArray(R.array.settings_type_options)));
-        ArrayAdapter<CharSequence> newsTypeAdapter =
-                new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, newsTypeList);
-        newsTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mNewsTypeSpinner.setAdapter(newsTypeAdapter);
-        mNewsTypeSpinner.setSelection(newsTypeAdapter
+        mNewsCountSpinner = (Spinner) findViewById(R.id.news_count_spinner);
+
+        mNewsTypeSpinner.setSelection((
+                (ArrayAdapter<String>) mNewsTypeSpinner.getAdapter())
                 .getPosition(NewsWidgetStorage.loadNewsType(this, mAppWidgetId)));
 
-        newsTypeAdapter.remove(getString(R.string.settings_type_option_history));
-    }
-
-    private void setUpNewsCountSpinner() {
-        mNewsCountSpinner = (Spinner) findViewById(R.id.news_count_spinner);
-        List<CharSequence> newsCountList =
-                new ArrayList<>(Arrays.asList(getResources().getTextArray(R.array.widget_config_news_count)));
-        ArrayAdapter<CharSequence> newsCountAdapter =
-                new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, newsCountList);
-        newsCountAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mNewsCountSpinner.setAdapter(newsCountAdapter);
-        mNewsCountSpinner.setSelection(newsCountAdapter
+        mNewsCountSpinner.setSelection((
+                (ArrayAdapter<String>) mNewsCountSpinner.getAdapter())
                 .getPosition(String.valueOf(NewsWidgetStorage.loadNewsCount(this, mAppWidgetId))));
     }
 

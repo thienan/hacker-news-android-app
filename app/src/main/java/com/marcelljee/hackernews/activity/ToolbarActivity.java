@@ -15,7 +15,6 @@ import android.widget.FrameLayout;
 
 import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.databinding.component.AppDataBindingComponent;
-import com.marcelljee.hackernews.databinding.component.AppDataBindingComponent;
 
 public class ToolbarActivity extends AppCompatActivity {
 
