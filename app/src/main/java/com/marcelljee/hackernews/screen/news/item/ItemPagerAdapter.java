@@ -12,17 +12,17 @@ import java.util.List;
 class ItemPagerAdapter extends FragmentStatePagerAdapter {
 
     private final List<Item> mItems;
-    private final String mItemPosterName;
+    private final Item mPosterItem;
 
-    public ItemPagerAdapter(FragmentManager fm, List<Item> mItems, String mItemPosterName) {
+    public ItemPagerAdapter(FragmentManager fm, List<Item> items, Item posterItem) {
         super(fm);
-        this.mItems = mItems;
-        this.mItemPosterName = mItemPosterName;
+        mItems = items;
+        mPosterItem = posterItem;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return ItemFragment.newInstance(mItems.get(position), mItemPosterName, position);
+        return ItemFragment.newInstance(mItems.get(position), mPosterItem, position);
     }
 
     @Override

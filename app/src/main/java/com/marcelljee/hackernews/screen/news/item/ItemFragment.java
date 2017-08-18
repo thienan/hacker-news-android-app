@@ -20,20 +20,20 @@ import org.parceler.Parcels;
 public class ItemFragment extends ToolbarFragment {
 
     private static final String ARG_ITEM = "com.marcelljee.hackernews.screen.news.item.arg.ITEM";
-    private static final String ARG_ITEM_POSTER_NAME = "com.marcelljee.hackernews.screen.news.item.arg.ITEM_POSTER_NAME";
+    private static final String ARG_POSTER_ITEM = "com.marcelljee.hackernews.screen.news.item.arg.POSTER_ITEM";
     private static final String ARG_ITEM_LOADER_OFFSET = "com.marcelljee.hackernews.screen.news.item.arg.ITEM_LOADER_OFFSET";
 
     private static final String TAG_HEAD_FRAGMENT = "com.marcelljee.hackernews.screen.news.item.tag.HEAD_FRAGMENT";
     private static final String TAG_COMMENT_FRAGMENT = "com.marcelljee.hackernews.screen.news.item.tag.COMMENT_FRAGMENT";
 
     private Item mItem;
-    private String mItemPosterName;
+    private Item mPosterItem;
     private int mLoaderOffset;
 
-    public static ItemFragment newInstance(Item item, String itemPosterName, int loaderOffset) {
+    public static ItemFragment newInstance(Item item, Item posterItem, int loaderOffset) {
         ItemFragment fragment = new ItemFragment();
 
-        Bundle args = createArguments(item, itemPosterName, loaderOffset);
+        Bundle args = createArguments(item, posterItem, loaderOffset);
         fragment.setArguments(args);
 
         return fragment;
@@ -64,10 +64,10 @@ public class ItemFragment extends ToolbarFragment {
         return inflater.inflate(R.layout.fragment_item, container, false);
     }
 
-    private static Bundle createArguments(Item item, String itemPosterName, int loaderOffset) {
+    private static Bundle createArguments(Item item, Item posterItem, int loaderOffset) {
         Bundle args = new Bundle();
         args.putParcelable(ARG_ITEM, Parcels.wrap(item));
-        args.putString(ARG_ITEM_POSTER_NAME, itemPosterName);
+        args.putParcelable(ARG_POSTER_ITEM, Parcels.wrap(posterItem));
         args.putInt(ARG_ITEM_LOADER_OFFSET, loaderOffset);
 
         return args;
@@ -80,8 +80,8 @@ public class ItemFragment extends ToolbarFragment {
             mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
         }
 
-        if (args.containsKey(ARG_ITEM_POSTER_NAME)) {
-            mItemPosterName = args.getString(ARG_ITEM_POSTER_NAME);
+        if (args.containsKey(ARG_POSTER_ITEM)) {
+            mPosterItem = Parcels.unwrap(args.getParcelable(ARG_POSTER_ITEM));
         }
 
         if (args.containsKey(ARG_ITEM_LOADER_OFFSET)) {
@@ -90,7 +90,7 @@ public class ItemFragment extends ToolbarFragment {
     }
 
     private void loadFragment(ItemHeadFragment headFragment) {
-        ItemCommentFragment commentFragment = ItemCommentFragment.newInstance(mItem, mItemPosterName, mLoaderOffset);
+        ItemCommentFragment commentFragment = ItemCommentFragment.newInstance(mItem, mPosterItem, mLoaderOffset);
 
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.item_head_container, headFragment, TAG_HEAD_FRAGMENT)

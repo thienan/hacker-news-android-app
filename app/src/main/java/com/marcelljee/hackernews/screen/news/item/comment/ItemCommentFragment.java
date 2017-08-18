@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +29,7 @@ public class ItemCommentFragment extends ToolbarFragment
         implements LoaderManager.LoaderCallbacks<AppResponse<List<Item>>> {
 
     private static final String ARG_ITEM = "com.marcelljee.hackernews.screen.news.item.arg.ITEM";
-    private static final String ARG_ITEM_POSTER_NAME = "com.marcelljee.hackernews.screen.news.item.arg.ITEM_POSTER_NAME";
+    private static final String ARG_POSTER_ITEM = "com.marcelljee.hackernews.screen.news.item.arg.POSTER_ITEM";
     private static final String ARG_ITEM_LOADER_OFFSET = "com.marcelljee.hackernews.screen.news.item.arg.ITEM_LOADER_OFFSET";
 
     private static final String STATE_CURRENT_PAGE = "com.marcelljee.hackernews.screen.news.item.state.CURRENT_PAGE";
@@ -38,7 +37,7 @@ public class ItemCommentFragment extends ToolbarFragment
     private static final int ITEM_COUNT = 10;
 
     private Item mItem;
-    private String mItemPosterName;
+    private Item mPosterItem;
     private int mCommentItemLoaderId = 1000;
 
     private int mCurrentPage = 1;
@@ -46,10 +45,10 @@ public class ItemCommentFragment extends ToolbarFragment
 
     private FragmentItemCommentBinding mBinding;
 
-    public static ItemCommentFragment newInstance(Item item, String itemPosterName, int loaderOffset) {
+    public static ItemCommentFragment newInstance(Item item, Item posterItem, int loaderOffset) {
         ItemCommentFragment fragment = new ItemCommentFragment();
 
-        Bundle args = createArguments(item, itemPosterName, loaderOffset);
+        Bundle args = createArguments(item, posterItem, loaderOffset);
         fragment.setArguments(args);
 
         return fragment;
@@ -74,10 +73,10 @@ public class ItemCommentFragment extends ToolbarFragment
         mBinding = FragmentItemCommentBinding.inflate(inflater, container, false);
         mBinding.setItem(mItem);
 
-        if (TextUtils.isEmpty(mItemPosterName)) {
-            mCommentAdapter = new ItemAdapter(getToolbarActivity(), null, mItem.getBy());
+        if (mPosterItem == null) {
+            mCommentAdapter = new ItemAdapter(getToolbarActivity(), null, mItem);
         } else {
-            mCommentAdapter = new ItemAdapter(getToolbarActivity(), mItem.getBy(), mItemPosterName);
+            mCommentAdapter = new ItemAdapter(getToolbarActivity(), mItem, mPosterItem);
         }
 
         mBinding.rvCommentList.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -168,10 +167,10 @@ public class ItemCommentFragment extends ToolbarFragment
         getActivity().getSupportLoaderManager().restartLoader(mCommentItemLoaderId, null, this);
     }
 
-    private static Bundle createArguments(Item item, String itemPosterName, int loaderOffset) {
+    private static Bundle createArguments(Item item, Item posterItem, int loaderOffset) {
         Bundle args = new Bundle();
         if (item != null) args.putParcelable(ARG_ITEM, Parcels.wrap(item));
-        if (!TextUtils.isEmpty(itemPosterName)) args.putString(ARG_ITEM_POSTER_NAME, itemPosterName);
+        if (posterItem != null) args.putParcelable(ARG_POSTER_ITEM, Parcels.wrap(posterItem));
         if (loaderOffset >= 0) args.putInt(ARG_ITEM_LOADER_OFFSET, loaderOffset);
 
         return args;
@@ -184,8 +183,8 @@ public class ItemCommentFragment extends ToolbarFragment
             mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
         }
 
-        if (args.containsKey(ARG_ITEM_POSTER_NAME)) {
-            mItemPosterName = args.getString(ARG_ITEM_POSTER_NAME);
+        if (args.containsKey(ARG_POSTER_ITEM)) {
+            mPosterItem = Parcels.unwrap(args.getParcelable(ARG_POSTER_ITEM));
         }
 
         if (args.containsKey(ARG_ITEM_LOADER_OFFSET)) {

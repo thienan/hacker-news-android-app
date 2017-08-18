@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,8 +39,8 @@ public class ItemActivity extends ToolbarActivity
     private static final String EXTRA_ROOT_CALLER_ACTIVITY = "com.marcelljee.hackernews.screen.news.item.extra.ROOT_CALLER_ACTIVITY";
     public static final String EXTRA_ITEMS = "com.marcelljee.hackernews.screen.news.item.extra.ITEMS";
     public static final String EXTRA_ITEM_POSITION = "com.marcelljee.hackernews.screen.news.item.extra.ITEM_POSITION";
-    private static final String EXTRA_ITEM_PARENT_NAME = "com.marcelljee.hackernews.screen.news.item.extra.ITEM_PARENT_NAME";
-    private static final String EXTRA_ITEM_POSTER_NAME = "com.marcelljee.hackernews.screen.news.item.extra.ITEM_POSTER_NAME";
+    private static final String EXTRA_PARENT_ITEM = "com.marcelljee.hackernews.screen.news.item.extra.PARENT_ITEM";
+    private static final String EXTRA_POSTER_ITEM = "com.marcelljee.hackernews.screen.news.item.extra.POSTER_ITEM";
 
     private static final String STATE_PARENT_ID = "com.marcelljee.hackernews.screen.news.item.state.PARENT_ID";
     private static final String STATE_PARENT_ITEM = "com.marcelljee.hackernews.screen.news.item.state.PARENT_ITEM";
@@ -56,11 +55,10 @@ public class ItemActivity extends ToolbarActivity
     private String mRootCallerActivity;
     private List<Item> mItems;
     private int mItemPosition;
-    private String mItemParentName;
-    private String mItemPosterName;
+    private Item mParentItem;
+    private Item mPosterItem;
 
     private long mParentId;
-    private Item mParentItem;
 
     private ItemPagerAdapter mItemPagerAdapter;
     private ViewPager mItemPager;
@@ -70,25 +68,25 @@ public class ItemActivity extends ToolbarActivity
     }
 
     public static void startActivity(ToolbarActivity activity, List<Item> items, int itemPosition,
-                                     String itemParentName, String itemPosterName) {
+                                     Item parentItem, Item posterItem) {
         switch (items.get(itemPosition).getType()) {
             case ITEM_TYPE_COMMENT:
                 startActivity(activity,
-                        CommentActivity.createIntent(activity), items, itemPosition, itemParentName, itemPosterName);
+                        CommentActivity.createIntent(activity), items, itemPosition, parentItem, posterItem);
                 break;
             case ITEM_TYPE_STORY:
             case ITEM_TYPE_POLL:
             case ITEM_TYPE_JOB:
             default:
                 startActivity(activity,
-                        StoryActivity.createIntent(activity), items, itemPosition, itemParentName, itemPosterName);
+                        StoryActivity.createIntent(activity), items, itemPosition, parentItem, posterItem);
                 break;
         }
     }
 
     private static void startActivity(ToolbarActivity activity, Intent intent, List<Item> items, int itemPosition,
-                                      String itemParentName, String itemPosterName) {
-        Bundle extras = createExtras(activity, items, itemPosition, itemParentName, itemPosterName);
+                                      Item parentItem, Item posterItem) {
+        Bundle extras = createExtras(activity, items, itemPosition, parentItem, posterItem);
         intent.putExtras(extras);
         activity.startActivity(intent);
     }
@@ -105,15 +103,15 @@ public class ItemActivity extends ToolbarActivity
 
         TextView tvCommentInfo = (TextView) findViewById(R.id.tv_comment_info);
 
-        if (TextUtils.isEmpty(mItemParentName) && TextUtils.isEmpty(mItemPosterName)) {
+        if (mParentItem == null && mPosterItem == null) {
             tvCommentInfo.setVisibility(View.GONE);
         } else {
             tvCommentInfo.setVisibility(View.VISIBLE);
-            tvCommentInfo.setText(ItemUtils.getCommentInfo(this, mItemParentName, mItemPosterName));
+            tvCommentInfo.setText(ItemUtils.getCommentInfo(this, mParentItem, mPosterItem));
             tvCommentInfo.setMovementMethod(LinkMovementMethod.getInstance());
         }
 
-        mItemPagerAdapter = new ItemPagerAdapter(getSupportFragmentManager(), mItems, mItemPosterName);
+        mItemPagerAdapter = new ItemPagerAdapter(getSupportFragmentManager(), mItems, mPosterItem);
 
         mItemPager = (ViewPager) findViewById(R.id.item_pager);
         mItemPager.setAdapter(mItemPagerAdapter);
@@ -216,6 +214,7 @@ public class ItemActivity extends ToolbarActivity
     }
 
     private void loadParentItem() {
+        if (mParentItem != null) return;
         mParentId = getItem().getParent();
 
         if (mParentId > 0) {
@@ -224,7 +223,7 @@ public class ItemActivity extends ToolbarActivity
     }
 
     private static Bundle createExtras(Activity activity, List<Item> items, int itemPosition,
-                                       String itemParentName, String itemPosterName) {
+                                       Item parentItem, Item posterItem) {
         Bundle extras = new Bundle();
         if (activity != null) {
             String rootCallerActivity;
@@ -236,12 +235,11 @@ public class ItemActivity extends ToolbarActivity
             }
             extras.putString(EXTRA_ROOT_CALLER_ACTIVITY, rootCallerActivity);
         }
-        if (items != null) extras.putParcelable(EXTRA_ITEMS, Parcels.wrap(items));
+
         if (itemPosition >= 0) extras.putInt(EXTRA_ITEM_POSITION, itemPosition);
-        if (!TextUtils.isEmpty(itemParentName))
-            extras.putString(EXTRA_ITEM_PARENT_NAME, itemParentName);
-        if (!TextUtils.isEmpty(itemPosterName))
-            extras.putString(EXTRA_ITEM_POSTER_NAME, itemPosterName);
+        if (items != null) extras.putParcelable(EXTRA_ITEMS, Parcels.wrap(items));
+        if (parentItem != null) extras.putParcelable(EXTRA_PARENT_ITEM, Parcels.wrap(parentItem));
+        if (posterItem != null) extras.putParcelable(EXTRA_POSTER_ITEM, Parcels.wrap(posterItem));
 
         return extras;
     }
@@ -262,12 +260,12 @@ public class ItemActivity extends ToolbarActivity
             mParentId = getItem().getParent();
         }
 
-        if (intent.hasExtra(EXTRA_ITEM_PARENT_NAME)) {
-            mItemParentName = intent.getStringExtra(EXTRA_ITEM_PARENT_NAME);
+        if (intent.hasExtra(EXTRA_PARENT_ITEM)) {
+            mParentItem = Parcels.unwrap(intent.getParcelableExtra(EXTRA_PARENT_ITEM));
         }
 
-        if (intent.hasExtra(EXTRA_ITEM_POSTER_NAME)) {
-            mItemPosterName = intent.getStringExtra(EXTRA_ITEM_POSTER_NAME);
+        if (intent.hasExtra(EXTRA_POSTER_ITEM)) {
+            mPosterItem = Parcels.unwrap(intent.getParcelableExtra(EXTRA_POSTER_ITEM));
         }
     }
 

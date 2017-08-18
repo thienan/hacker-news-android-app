@@ -34,8 +34,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     private static final String STATE_ITEMS = "com.marcelljee.hackernews.adapter.state.ITEMS";
     private static final String STATE_READ_ITEMS = "com.marcelljee.hackernews.adapter.state.READ_ITEMS";
-    private static final String STATE_ITEM_PARENT_NAME = "com.marcelljee.hackernews.adapter.state.ITEM_PARENT_NAME";
-    private static final String STATE_ITEM_POSTER_NAME = "com.marcelljee.hackernews.adapter.state.ITEM_POSTER_NAME";
+    private static final String STATE_PARENT_ITEM = "com.marcelljee.hackernews.adapter.state.PARENT_ITEM";
+    private static final String STATE_POSTER_ITEM = "com.marcelljee.hackernews.adapter.state.POSTER_ITEM";
     private static final String STATE_SHOW_ALL = "com.marcelljee.hackernews.adapter.state.SHOW_ALL";
 
     private static final int VIEW_TYPE_NEWS = 1;
@@ -52,8 +52,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     private final List<Item> mItems;
     private final Map<Integer, Item> mReadItems;
-    private String mItemParentName;
-    private String mItemPosterName;
+    private Item mParentItem;
+    private Item mPosterItem;
     private boolean isShowAll = true;
 
     private final ActionModeMenu mActionModeMenu;
@@ -63,12 +63,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         this(activity, null, null);
     }
 
-    public ItemAdapter(ToolbarActivity activity, String itemParentName, String itemPosterName) {
+    public ItemAdapter(ToolbarActivity activity, Item parentItem, Item posterItem) {
         mActivity = activity;
         mReadItems = new LinkedHashMap<>();
         mItems = new ArrayList<>();
-        mItemParentName = itemParentName;
-        mItemPosterName = itemPosterName;
+        mParentItem = parentItem;
+        mPosterItem = posterItem;
 
         mActionModeMenu = new ActionModeMenu(mActivity);
         itemNewsViewModel = new ItemViewModel(mActivity, mItems, true, null);
@@ -248,16 +248,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     public void saveState(Bundle outState) {
         outState.putParcelable(STATE_ITEMS, Parcels.wrap(mItems));
         outState.putParcelable(STATE_READ_ITEMS, Parcels.wrap(mReadItems));
-        outState.putString(STATE_ITEM_PARENT_NAME, mItemParentName);
-        outState.putString(STATE_ITEM_POSTER_NAME, mItemPosterName);
+        outState.putParcelable(STATE_PARENT_ITEM, Parcels.wrap(mParentItem));
+        outState.putParcelable(STATE_POSTER_ITEM, Parcels.wrap(mPosterItem));
         outState.putBoolean(STATE_SHOW_ALL, isShowAll);
     }
 
     public void restoreState(Bundle inState) {
         swapItems(Parcels.unwrap(inState.getParcelable(STATE_ITEMS)));
         mReadItems.putAll(Parcels.unwrap(inState.getParcelable(STATE_READ_ITEMS)));
-        mItemParentName = inState.getString(STATE_ITEM_PARENT_NAME);
-        mItemPosterName = inState.getString(STATE_ITEM_POSTER_NAME);
+        mParentItem = Parcels.unwrap(inState.getParcelable(STATE_PARENT_ITEM));
+        mPosterItem = Parcels.unwrap(inState.getParcelable(STATE_POSTER_ITEM));
         isShowAll = inState.getBoolean(STATE_SHOW_ALL);
     }
 
@@ -281,7 +281,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             itemView.setSelected(false);
             Item item = mItems.get(getAdapterPosition());
 
-            ItemActivity.startActivity(mActivity, mItems, getAdapterPosition(), mItemParentName, mItemPosterName);
+            ItemActivity.startActivity(mActivity, mItems, getAdapterPosition(), mParentItem, mPosterItem);
 
             switch (getItemViewType()) {
                 case VIEW_TYPE_NEWS:

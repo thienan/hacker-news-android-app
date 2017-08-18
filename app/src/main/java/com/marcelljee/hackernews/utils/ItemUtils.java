@@ -27,7 +27,8 @@ public final class ItemUtils {
     private static final String BRACKET_OPEN = " (";
     private static final String BRACKET_CLOSE = ")";
 
-    private ItemUtils() {}
+    private ItemUtils() {
+    }
 
     public static String getTypeAsTitle(Item item) {
         if (item == null) return "";
@@ -76,13 +77,16 @@ public final class ItemUtils {
     }
 
     public static SpannableStringBuilder getCommentInfo(final ToolbarActivity activity,
-                                                        final String itemParentName, final String itemPosterName) {
+                                                        final Item parentItem, final Item posterItem) {
         SpannableStringBuilder commentInfo = new SpannableStringBuilder();
-        if (TextUtils.isEmpty(itemParentName) && TextUtils.isEmpty(itemPosterName)) return commentInfo;
+        if (parentItem == null && posterItem == null) return commentInfo;
         commentInfo.append("Reply of ");
 
-        if (!TextUtils.isEmpty(itemParentName)) {
-            SpannableString comment = new SpannableString(String.format("%s's comment on ", itemParentName));
+        if (parentItem != null) {
+            String itemParentName = parentItem.getBy();
+            String itemType = parentItem.getType().toLowerCase();
+
+            SpannableString comment = new SpannableString(String.format("%s's %s on ", itemParentName, itemType));
             comment.setSpan(new StyleSpan(Typeface.BOLD),
                     0, itemParentName.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             comment.setSpan(new UserClickableSpan(activity, itemParentName),
@@ -90,8 +94,11 @@ public final class ItemUtils {
             commentInfo.append(comment);
         }
 
-        if (!TextUtils.isEmpty(itemPosterName)) {
-            SpannableString post = new SpannableString(String.format("%s's story", itemPosterName));
+        if (posterItem != null) {
+            String itemPosterName = posterItem.getBy();
+            String itemType = posterItem.getType().toLowerCase();
+
+            SpannableString post = new SpannableString(String.format("%s's %s", itemPosterName, itemType));
             post.setSpan(new StyleSpan(Typeface.BOLD),
                     0, itemPosterName.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             post.setSpan(new UserClickableSpan(activity, itemPosterName),
