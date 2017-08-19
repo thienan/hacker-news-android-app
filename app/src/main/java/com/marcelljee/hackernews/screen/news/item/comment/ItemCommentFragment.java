@@ -18,7 +18,7 @@ import com.marcelljee.hackernews.fragment.ToolbarFragment;
 import com.marcelljee.hackernews.loader.AppResponse;
 import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.model.Item;
-import com.marcelljee.hackernews.utils.CollectionUtils;
+import com.marcelljee.hackernews.utils.PagingUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,8 +34,6 @@ public class ItemCommentFragment extends ToolbarFragment
     private static final String ARG_ITEM_LOADER_OFFSET = "com.marcelljee.hackernews.screen.news.item.arg.ITEM_LOADER_OFFSET";
 
     private static final String STATE_CURRENT_PAGE = "com.marcelljee.hackernews.screen.news.item.state.CURRENT_PAGE";
-
-    private static final int ITEM_COUNT = 10;
 
     private Item mItem;
     private Item mPosterItem;
@@ -112,13 +110,8 @@ public class ItemCommentFragment extends ToolbarFragment
     @Override
     public Loader<AppResponse<List<Item>>> onCreateLoader(int id, Bundle args) {
         if (id == mCommentItemLoaderId) {
-            List<Long> kids = mItem.getKids();
-
-            List<Long> list = CollectionUtils.subList(kids,
-                    (mCurrentPage - 1) * ITEM_COUNT,
-                    mCurrentPage * ITEM_COUNT);
-
-            return new ItemListLoader(getContext(), list);
+            List<Long> items = PagingUtils.getItems(mItem.getKids(), mCurrentPage);
+            return new ItemListLoader(getContext(), items);
         }
 
         return null;
@@ -133,6 +126,10 @@ public class ItemCommentFragment extends ToolbarFragment
                 mBinding.rvCommentList.hideProgressBar();
             }
         } else {
+            if (loader.getId() == mCommentItemLoaderId) {
+                mCurrentPage--;
+            }
+
             SnackbarFactory.createRetrieveErrorSnackbar(mBinding.getRoot()).show();
             mBinding.rvCommentList.hideProgressBar();
         }

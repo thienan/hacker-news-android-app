@@ -25,6 +25,7 @@ import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.loader.StoriesLoader;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.utils.CollectionUtils;
+import com.marcelljee.hackernews.utils.PagingUtils;
 import com.marcelljee.hackernews.utils.SettingsUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -55,8 +56,6 @@ public class NewsFragment extends ToolbarFragment
     private static final int LOADER_ID_STORIES_JOB_ITEM = 7600;
     private static final int LOADER_ID_HISTORY_ITEM = 7700;
     private static final int LOADER_ID_BOOKMARKED_ITEM = 7800;
-
-    private static final int ITEM_COUNT = 10;
 
     private String mNewsType;
     private List<Long> mItemIds;
@@ -151,11 +150,8 @@ public class NewsFragment extends ToolbarFragment
             case LOADER_ID_STORIES_ASK_ITEM:
             case LOADER_ID_STORIES_JOB_ITEM:
             case LOADER_ID_HISTORY_ITEM:
-                List<Long> list = CollectionUtils.subList(mItemIds,
-                        (mCurrentPage - 1) * ITEM_COUNT,
-                        mCurrentPage * ITEM_COUNT);
-
-                return new ItemListLoader(getContext(), list);
+                List<Long> items = PagingUtils.getItems(mItemIds, mCurrentPage);
+                return new ItemListLoader(getContext(), items);
             case LOADER_ID_BOOKMARKED_ITEM:
                 return new BookmarkedItemLoader(getContext());
             default:
@@ -249,6 +245,20 @@ public class NewsFragment extends ToolbarFragment
                     //do nothing
             }
         } else {
+            switch (loader.getId()) {
+                case LOADER_ID_STORIES_TOP_ITEM:
+                case LOADER_ID_STORIES_BEST_ITEM:
+                case LOADER_ID_STORIES_NEW_ITEM:
+                case LOADER_ID_STORIES_SHOW_ITEM:
+                case LOADER_ID_STORIES_ASK_ITEM:
+                case LOADER_ID_STORIES_JOB_ITEM:
+                case LOADER_ID_HISTORY_ITEM:
+                    mCurrentPage--;
+                    break;
+                default:
+                    //do nothing
+            }
+
             SnackbarFactory.createRetrieveErrorSnackbar(mBinding.rvItemList).show();
         }
 

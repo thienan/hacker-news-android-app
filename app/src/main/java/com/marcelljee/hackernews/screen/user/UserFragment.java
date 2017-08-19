@@ -24,6 +24,7 @@ import com.marcelljee.hackernews.loader.UserLoader;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.model.User;
 import com.marcelljee.hackernews.utils.CollectionUtils;
+import com.marcelljee.hackernews.utils.PagingUtils;
 import com.marcelljee.hackernews.utils.SettingsUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -43,8 +44,6 @@ public class UserFragment extends ToolbarFragment
 
     private static final int LOADER_ID_USER_ITEM = 8000;
     private static final int LOADER_ID_SUBMISSIONS = 9000;
-
-    private static final int ITEM_COUNT = 10;
 
     private String mUserId;
 
@@ -134,13 +133,8 @@ public class UserFragment extends ToolbarFragment
             case LOADER_ID_USER_ITEM:
                 return new UserLoader(getContext(), mUserId);
             case LOADER_ID_SUBMISSIONS:
-                List<Long> submissions = mUser.getSubmitted();
-
-                List<Long> list = CollectionUtils.subList(submissions,
-                        (mCurrentPage - 1) * ITEM_COUNT,
-                        mCurrentPage * ITEM_COUNT);
-
-                return new ItemListLoader(getContext(), list);
+                List<Long> items = PagingUtils.getItems(mUser.getSubmitted(), mCurrentPage);
+                return new ItemListLoader(getContext(), items);
             default:
                 return null;
 
@@ -169,6 +163,14 @@ public class UserFragment extends ToolbarFragment
             }
 
         } else {
+            switch (loader.getId()) {
+                case LOADER_ID_SUBMISSIONS:
+                    mCurrentPage--;
+                    break;
+                default:
+                    //do nothing
+            }
+
             SnackbarFactory.createRetrieveErrorSnackbar(mBinding.getRoot()).show();
         }
     }
