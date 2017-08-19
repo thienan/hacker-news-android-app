@@ -38,6 +38,7 @@ public class Item extends BaseObservable {
 
     private boolean bookmarked = false;
     private boolean read = false;
+    private boolean selected = false;
 
     @Bindable
     public long getId() {
@@ -219,6 +220,16 @@ public class Item extends BaseObservable {
         notifyPropertyChanged(BR.read);
     }
 
+    @Bindable
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+        notifyPropertyChanged(BR.selected);
+    }
+
     public void update(Item item) {
         if (id != item.getId()) return;
         if (deleted != item.isDeleted()) setDeleted(item.isDeleted());
@@ -237,6 +248,7 @@ public class Item extends BaseObservable {
         if (descendants != item.getDescendants()) setDescendants(item.getDescendants());
         if (bookmarked != item.isBookmarked()) setBookmarked(item.isBookmarked());
         if (read != item.isRead()) setRead(item.isRead());
+        if (selected != item.isSelected()) setSelected(item.isSelected());
     }
 
     @Override

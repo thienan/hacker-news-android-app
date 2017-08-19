@@ -26,9 +26,7 @@ public class ActionModeMenu {
         this.activity = activity;
     }
 
-    public boolean start(ItemNewsBinding newsBinding) {
-        Item item = newsBinding.getItem();
-
+    public boolean start(Item item) {
         if (itemId == item.getId()) {
             finish();
             return false;
@@ -36,7 +34,7 @@ public class ActionModeMenu {
             finish();
         }
 
-        setSelected(newsBinding, true);
+        item.setSelected(true);
 
         itemId = item.getId();
         mActionMode = activity.startSupportActionMode(new ActionMode.Callback() {
@@ -90,7 +88,7 @@ public class ActionModeMenu {
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
-                setSelected(newsBinding, false);
+                item.setSelected(false);
 
                 itemId = Item.NO_ID;
                 mActionMode = null;
@@ -108,15 +106,5 @@ public class ActionModeMenu {
 
     public long getItemId() {
         return itemId;
-    }
-
-    private void setSelected(ItemNewsBinding newsBinding, boolean selected) {
-        if (selected) {
-            newsBinding.ivSelected.setVisibility(View.VISIBLE);
-            newsBinding.getRoot().setSelected(true);
-        } else {
-            newsBinding.ivSelected.setVisibility(View.GONE);
-            newsBinding.getRoot().setSelected(false);
-        }
     }
 }

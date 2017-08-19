@@ -111,11 +111,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             case VIEW_TYPE_NEWS:
                 ItemNewsBinding newsBinding = (ItemNewsBinding) holder.binding;
                 newsBinding.setItemPosition(position);
-                newsBinding.svScore.setOnClickListener((v) -> mActionModeMenu.start(newsBinding));
-                newsBinding.getRoot().setOnLongClickListener((v) -> mActionModeMenu.start(newsBinding));
+                newsBinding.svScore.setOnClickListener((v) -> mActionModeMenu.start(item));
+                newsBinding.getRoot().setOnLongClickListener((v) -> mActionModeMenu.start(item));
 
                 if (item.getId() == actionModeMenuItemId) {
-                    mActionModeMenu.start(newsBinding);
+                    mActionModeMenu.start(item);
                     actionModeMenuItemId = Item.NO_ID;
                 }
                 break;

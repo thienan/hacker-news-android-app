@@ -20,7 +20,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?android:selectableItemBackground">
+        android:background="?android:selectableItemBackground"
+        app:selected="@{item.selected}">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,24 +33,24 @@
             android:visibility="@{item.notDeleted &amp;&amp; item.notDead}">
 
             <FrameLayout
+                android:id="@+id/sv_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
                 <com.marcelljee.hackernews.view.ScoreView
-                    android:id="@+id/sv_score"
                     android:layout_width="@dimen/score_size"
                     android:layout_height="@dimen/score_size"
                     android:layout_margin="@dimen/view_margin"
                     android:text="@{String.valueOf(item.getScore())}"
+                    android:visibility="@{!item.selected}"
                     app:read="@{viewModel.readIndicatorEnabled &amp;&amp; item.read}" />
 
                 <com.marcelljee.hackernews.view.CheckedScoreView
-                    android:id="@+id/iv_selected"
                     android:layout_width="@dimen/score_size"
                     android:layout_height="@dimen/score_size"
                     android:layout_margin="@dimen/view_margin"
                     android:contentDescription="@string/desc_selected_item"
-                    android:visibility="gone"
+                    android:visibility="@{item.selected}"
                     app:read="@{viewModel.readIndicatorEnabled &amp;&amp; item.read}" />
             </FrameLayout>
 
@@ -95,8 +96,8 @@
                     android:paddingEnd="@dimen/view_margin"
                     android:paddingStart="@dimen/view_margin"
                     android:paddingTop="@dimen/text_spacing"
-                    app:title="@{item}"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                    app:title="@{item}" />
 
                 <TextView
                     android:layout_width="wrap_content"

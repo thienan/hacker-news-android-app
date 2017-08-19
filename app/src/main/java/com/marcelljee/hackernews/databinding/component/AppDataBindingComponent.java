@@ -35,26 +35,31 @@ public class AppDataBindingComponent implements DataBindingComponent {
         }
 
         @BindingAdapter("bind:weekRelativeDate")
-        public void getWeekDate(TextView textView, long timeInMillis) {
+        public void setWeekRelativeDate(TextView textView, long timeInMillis) {
             textView.setText(ItemUtils.getWeekRelativeDate(mActivity, timeInMillis));
         }
 
         @BindingAdapter("bind:yearRelativeDate")
-        public void getYearDate(TextView textView, long timeInMillis) {
+        public void setYearRelativeDate(TextView textView, long timeInMillis) {
             textView.setText(ItemUtils.getYearRelativeDate(mActivity, timeInMillis));
         }
 
         @BindingAdapter("bind:htmlText")
-        public void getHtmlText(TextView textView, String text) {
+        public void setHtmlText(TextView textView, String text) {
             textView.setText(ItemUtils.fromHtml(mActivity, text));
         }
 
         @BindingAdapter("bind:title")
-        public void getTitle(TextView textView, Item item) {
+        public void setTitle(TextView textView, Item item) {
             String title = item != null ? item.getTitle() : "";
             String url = item != null ? item.getUrl() : "";
 
             textView.setText(ItemUtils.getTitle(mActivity, title, url));
+        }
+
+        @BindingAdapter("bind:selected")
+        public void setSelected(View view, boolean selected) {
+            view.setSelected(selected);
         }
     }
 }
