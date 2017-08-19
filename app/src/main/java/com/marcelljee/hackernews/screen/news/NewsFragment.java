@@ -204,43 +204,59 @@ public class NewsFragment extends ToolbarFragment
                 case LOADER_ID_STORIES_TOP_ITEM:
                     if (getString(R.string.news_type_top).equals(mNewsType)) {
                         mNewsAdapter.addItems((List<Item>) response.getData());
+                        break;
+                    } else {
+                        return;
                     }
-                    break;
                 case LOADER_ID_STORIES_BEST_ITEM:
                     if (getString(R.string.news_type_best).equals(mNewsType)) {
                         mNewsAdapter.addItems((List<Item>) response.getData());
+                        break;
+                    } else {
+                        return;
                     }
-                    break;
                 case LOADER_ID_STORIES_NEW_ITEM:
                     if (getString(R.string.news_type_new).equals(mNewsType)) {
                         mNewsAdapter.addItems((List<Item>) response.getData());
+                        break;
+                    } else {
+                        return;
                     }
-                    break;
                 case LOADER_ID_STORIES_SHOW_ITEM:
                     if (getString(R.string.news_type_show).equals(mNewsType)) {
                         mNewsAdapter.addItems((List<Item>) response.getData());
+                        break;
+                    } else {
+                        return;
                     }
-                    break;
                 case LOADER_ID_STORIES_ASK_ITEM:
                     if (getString(R.string.news_type_ask).equals(mNewsType)) {
                         mNewsAdapter.addItems((List<Item>) response.getData());
+                        break;
+                    } else {
+                        return;
                     }
-                    break;
                 case LOADER_ID_STORIES_JOB_ITEM:
                     if (getString(R.string.news_type_jobs).equals(mNewsType)) {
                         mNewsAdapter.addItems((List<Item>) response.getData());
+                        break;
+                    } else {
+                        return;
                     }
-                    break;
                 case LOADER_ID_HISTORY_ITEM:
                     if (getString(R.string.news_type_history).equals(mNewsType)) {
                         mNewsAdapter.swapItems((List<Item>) response.getData());
+                        break;
+                    } else {
+                        return;
                     }
-                    break;
                 case LOADER_ID_BOOKMARKED_ITEM:
                     if (getString(R.string.news_type_bookmarked).equals(mNewsType)) {
                         mNewsAdapter.swapItems((List<Item>) response.getData());
+                        break;
+                    } else {
+                        return;
                     }
-                    break;
                 default:
                     //do nothing
             }
