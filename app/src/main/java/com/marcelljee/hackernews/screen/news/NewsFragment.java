@@ -378,4 +378,8 @@ public class NewsFragment extends ToolbarFragment
 
         getActivity().getSupportLoaderManager().restartLoader(loaderId, null, this);
     }
+
+    public boolean isItemsExist() {
+        return mNewsAdapter.getItemCount() > 0;
+    }
 }

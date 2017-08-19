@@ -33,8 +33,6 @@ public class NewsActivity extends FragmentActivity<NewsFragment>
     private String mNewsType;
     private boolean isShowAll = true;
 
-    private boolean isNewState = false;
-
     public static Intent createIntent(Context context, String newsType) {
         Intent intent = new Intent(context, NewsActivity.class);
 
@@ -53,7 +51,6 @@ public class NewsActivity extends FragmentActivity<NewsFragment>
         attachSpinner(savedInstanceState);
 
         if (savedInstanceState == null) {
-            isNewState = true;
             setFragment(NewsFragment.newInstance());
         }
 
@@ -151,8 +148,7 @@ public class NewsActivity extends FragmentActivity<NewsFragment>
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        // TODO: This is a workaround to make saveInstanceState possible for spinner.
-        if (isNewState || !parent.getSelectedItem().toString().equals(mNewsType)) {
+        if (!getFragment().isItemsExist() || !parent.getSelectedItem().toString().equals(mNewsType)) {
             mNewsType = parent.getSelectedItem().toString();
             String type = (String) parent.getItemAtPosition(pos);
             getFragment().changeNewsType(type);
