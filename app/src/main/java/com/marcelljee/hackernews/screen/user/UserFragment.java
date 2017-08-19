@@ -75,13 +75,8 @@ public class UserFragment extends ToolbarFragment
     }
 
     @Override
-    public void onStop() {
-        mUserSubmissionAdapter.closeActionModeMenu();
-        super.onStop();
-    }
-
-    @Override
     public void onDestroy() {
+        mUserSubmissionAdapter.closeActionModeMenu();
         EventBus.getDefault().unregister(this);
         PreferenceManager.getDefaultSharedPreferences(getContext())
                 .unregisterOnSharedPreferenceChangeListener(this);

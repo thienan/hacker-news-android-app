@@ -101,13 +101,8 @@ public class NewsFragment extends ToolbarFragment
     }
 
     @Override
-    public void onStop() {
-        mNewsAdapter.closeActionModeMenu();
-        super.onStop();
-    }
-
-    @Override
     public void onDestroy() {
+        mNewsAdapter.closeActionModeMenu();
         EventBus.getDefault().unregister(this);
         PreferenceManager.getDefaultSharedPreferences(getContext())
                 .unregisterOnSharedPreferenceChangeListener(this);

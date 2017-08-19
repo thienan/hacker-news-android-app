@@ -38,6 +38,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     private static final String STATE_PARENT_ITEM = "com.marcelljee.hackernews.adapter.state.PARENT_ITEM";
     private static final String STATE_POSTER_ITEM = "com.marcelljee.hackernews.adapter.state.POSTER_ITEM";
     private static final String STATE_SHOW_ALL = "com.marcelljee.hackernews.adapter.state.SHOW_ALL";
+    private static final String STATE_MENU_ITEM_ID = "com.marcelljee.hackernews.adapter.state.MENU_ITEM_ID";
 
     private static final int VIEW_TYPE_NEWS = 1;
     private static final int VIEW_TYPE_COMMENT = 2;
@@ -56,6 +57,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     private Item mParentItem;
     private Item mPosterItem;
     private boolean isShowAll = true;
+    private long actionModeMenuItemId = Item.NO_ID;
 
     private final ActionModeMenu mActionModeMenu;
     private final ItemViewModel itemNewsViewModel;
@@ -111,6 +113,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
                 newsBinding.setItemPosition(position);
                 newsBinding.svScore.setOnClickListener((v) -> mActionModeMenu.start(newsBinding));
                 newsBinding.getRoot().setOnLongClickListener((v) -> mActionModeMenu.start(newsBinding));
+
+                if (item.getId() == actionModeMenuItemId) {
+                    mActionModeMenu.start(newsBinding);
+                    actionModeMenuItemId = Item.NO_ID;
+                }
                 break;
             default:
                 //do nothing
@@ -255,6 +262,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         outState.putParcelable(STATE_PARENT_ITEM, Parcels.wrap(mParentItem));
         outState.putParcelable(STATE_POSTER_ITEM, Parcels.wrap(mPosterItem));
         outState.putBoolean(STATE_SHOW_ALL, isShowAll);
+        outState.putLong(STATE_MENU_ITEM_ID, mActionModeMenu.getItemId());
     }
 
     public void restoreState(Bundle inState) {
@@ -263,6 +271,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         mParentItem = Parcels.unwrap(inState.getParcelable(STATE_PARENT_ITEM));
         mPosterItem = Parcels.unwrap(inState.getParcelable(STATE_POSTER_ITEM));
         isShowAll = inState.getBoolean(STATE_SHOW_ALL);
+        actionModeMenuItemId = inState.getLong(STATE_MENU_ITEM_ID);
     }
 
     class ItemViewHolder<T extends ViewDataBinding>

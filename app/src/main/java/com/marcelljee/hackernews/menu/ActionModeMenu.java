@@ -106,6 +106,10 @@ public class ActionModeMenu {
         }
     }
 
+    public long getItemId() {
+        return itemId;
+    }
+
     private void setSelected(ItemNewsBinding newsBinding, boolean selected) {
         if (selected) {
             newsBinding.ivSelected.setVisibility(View.VISIBLE);
