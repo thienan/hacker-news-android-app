@@ -169,7 +169,7 @@ public class UserFragment extends ToolbarFragment
             }
 
         } else {
-            SnackbarFactory.createRetrieveErrorSnackbar(mBinding.getRoot(), UserFragment.this).show();
+            SnackbarFactory.createRetrieveErrorSnackbar(mBinding.getRoot()).show();
         }
     }
 

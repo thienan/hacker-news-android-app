@@ -3,7 +3,6 @@ package com.marcelljee.hackernews.loader;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
-import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.api.HackerNewsApi;
 import com.marcelljee.hackernews.model.Item;
 

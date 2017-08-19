@@ -15,6 +15,7 @@
 
     <string name="text_deleted">&lt;&lt;deleted&gt;&gt;</string>
     <string name="text_dead">&lt;&lt;dead&gt;&gt;</string>
+    <string name="text_no_data">No Data</string>
 
     <string name="text_user">User:</string>
     <string name="text_created">Created:</string>
@@ -23,9 +24,7 @@
     <string name="text_choose_news_type">Choose news type:</string>
     <string name="text_choose_number_of_news">Choose number of news:</string>
 
-    <string name="text_no_data">No Data</string>
-
-    <string name="action_retry">Retry</string>
+    <string name="action_dismiss">Dismiss</string>
 
     <string name="menu_item_share">Share</string>
     <string name="menu_item_copy_link">Copy Link</string>

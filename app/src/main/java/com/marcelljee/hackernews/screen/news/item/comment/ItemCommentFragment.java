@@ -133,7 +133,7 @@ public class ItemCommentFragment extends ToolbarFragment
                 mBinding.rvCommentList.hideProgressBar();
             }
         } else {
-            SnackbarFactory.createRetrieveErrorSnackbar(mBinding.getRoot(), v -> retrieveComments()).show();
+            SnackbarFactory.createRetrieveErrorSnackbar(mBinding.getRoot()).show();
             mBinding.rvCommentList.hideProgressBar();
         }
 

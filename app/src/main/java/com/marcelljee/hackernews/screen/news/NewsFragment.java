@@ -249,8 +249,7 @@ public class NewsFragment extends ToolbarFragment
                     //do nothing
             }
         } else {
-            SnackbarFactory.createRetrieveErrorSnackbar(
-                    mBinding.rvItemList, (v) -> refreshNews()).show();
+            SnackbarFactory.createRetrieveErrorSnackbar(mBinding.rvItemList).show();
         }
 
         mBinding.rvItemList.hideProgressBar();
