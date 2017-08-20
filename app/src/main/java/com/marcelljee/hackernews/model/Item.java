@@ -14,8 +14,8 @@ import org.parceler.Parcel;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("WeakerAccess")
 @Parcel(Parcel.Serialization.BEAN)
+@SuppressWarnings("WeakerAccess")
 public class Item extends BaseObservable {
 
     public static final long NO_ID = -1;

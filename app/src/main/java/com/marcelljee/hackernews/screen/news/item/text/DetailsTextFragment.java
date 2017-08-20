@@ -1,6 +1,5 @@
 package com.marcelljee.hackernews.screen.news.item.text;
 
-import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
@@ -16,8 +15,6 @@ public class DetailsTextFragment extends ToolbarFragment {
 
     private static final String ARG_TEXT = "com.marcelljee.hackernews.screen.news.item.text.arg.TEXT";
 
-    private String mText;
-
     public static DetailsTextFragment newInstance(String text) {
         DetailsTextFragment fragment = new DetailsTextFragment();
 
@@ -28,21 +25,20 @@ public class DetailsTextFragment extends ToolbarFragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        extractArguments();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Bundle args = getArguments();
+        String text = args.getString(ARG_TEXT);
+
         FragmentDetailsTextBinding binding = FragmentDetailsTextBinding.inflate(inflater, container,
                 false, new AppDataBindingComponent(getToolbarActivity()));
-        binding.setText(mText);
+        binding.setText(text);
+
         binding.sectionNewsDetails.setViewModel(new SectionNewsDetailsViewModel(getToolbarActivity()));
         binding.sectionNewsDetails.tvNewsDetails.setMaxLines(Integer.MAX_VALUE);
         binding.sectionNewsDetails.tvNewsDetails.setMovementMethod(LinkMovementMethod.getInstance());
-        binding.sectionNewsDetails.tvNewsDetails.setBackground(null);
+
+        binding.sectionNewsDetails.flNewsDetails.setBackground(null);
 
         return binding.getRoot();
     }
@@ -52,13 +48,5 @@ public class DetailsTextFragment extends ToolbarFragment {
         args.putString(ARG_TEXT, text);
 
         return args;
-    }
-
-    private void extractArguments() {
-        Bundle args = getArguments();
-
-        if (args.containsKey(ARG_TEXT)) {
-            mText = args.getString(ARG_TEXT);
-        }
     }
 }

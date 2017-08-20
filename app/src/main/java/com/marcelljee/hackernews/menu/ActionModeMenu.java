@@ -5,12 +5,10 @@ import android.support.v7.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.chrome.CustomTabsBrowser;
 import com.marcelljee.hackernews.database.DatabaseDao;
-import com.marcelljee.hackernews.databinding.ItemNewsBinding;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.utils.HackerNewsUtils;
 import com.marcelljee.hackernews.utils.MenuUtils;

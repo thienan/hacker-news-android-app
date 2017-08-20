@@ -4,7 +4,6 @@ package com.marcelljee.hackernews.screen.web;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ public class WebFragment extends ToolbarFragment {
 
     private static final String ARG_URL = "com.marcelljee.hackernews.screen.web.arg.URL";
 
-    private String mUrl;
     private WebView wvWebPage;
 
     public static WebFragment newInstance(String url) {
@@ -33,15 +31,12 @@ public class WebFragment extends ToolbarFragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        extractArguments();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_web, container, false);
-        setUpWebView(rootView, savedInstanceState);
+
+        Bundle args = getArguments();
+        String url = args.getString(ARG_URL);
+        setUpWebView(rootView, url, savedInstanceState);
 
         return rootView;
     }
@@ -59,16 +54,8 @@ public class WebFragment extends ToolbarFragment {
         return args;
     }
 
-    private void extractArguments() {
-        Bundle args = getArguments();
-
-        if (args.containsKey(ARG_URL)) {
-            mUrl = args.getString(ARG_URL);
-        }
-    }
-
     @SuppressLint("SetJavaScriptEnabled")
-    private void setUpWebView(View rootView, Bundle savedInstanceState) {
+    private void setUpWebView(View rootView, String url, Bundle savedInstanceState) {
         wvWebPage = (WebView) rootView.findViewById(R.id.wv_web_page);
 
         WebSettings webSettings = wvWebPage.getSettings();
@@ -79,7 +66,7 @@ public class WebFragment extends ToolbarFragment {
         wvWebPage.setWebViewClient(new WebActivityClient());
 
         if (savedInstanceState == null) {
-            wvWebPage.loadUrl(mUrl);
+            wvWebPage.loadUrl(url);
         } else {
             wvWebPage.restoreState(savedInstanceState);
         }

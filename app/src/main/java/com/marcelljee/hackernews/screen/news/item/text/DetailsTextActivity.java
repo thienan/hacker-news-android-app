@@ -10,8 +10,6 @@ public class DetailsTextActivity extends FragmentActivity {
 
     private static final String EXTRA_TEXT = "com.marcelljee.hackernews.screen.news.item.text.extra.TEXT";
 
-    private String mText;
-
     public static void startActivity(ToolbarActivity activity, String text) {
         Intent intent = new Intent(activity, DetailsTextActivity.class);
 
@@ -26,10 +24,11 @@ public class DetailsTextActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setDisplayHomeAsUpEnabled(true);
 
-        extractExtras();
+        Intent intent = getIntent();
+        String text = intent.getStringExtra(EXTRA_TEXT);
 
         if (savedInstanceState == null) {
-            setFragment(DetailsTextFragment.newInstance(mText));
+            setFragment(DetailsTextFragment.newInstance(text));
         }
     }
 
@@ -38,13 +37,5 @@ public class DetailsTextActivity extends FragmentActivity {
         extras.putString(EXTRA_TEXT, text);
 
         return extras;
-    }
-
-    private void extractExtras() {
-        Intent intent = getIntent();
-
-        if (intent.hasExtra(EXTRA_TEXT)) {
-            mText = intent.getStringExtra(EXTRA_TEXT);
-        }
     }
 }

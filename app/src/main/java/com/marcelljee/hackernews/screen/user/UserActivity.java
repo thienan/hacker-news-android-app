@@ -11,8 +11,6 @@ public class UserActivity extends FragmentActivity<UserFragment> {
 
     private static final String EXTRA_USER_ID = "com.marcelljee.hackernews.screen.user.extra.USER_ID";
 
-    private String mUserId;
-
     public static void startActivity(ToolbarActivity activity, String userId) {
         Intent intent = new Intent(activity, UserActivity.class);
 
@@ -27,12 +25,12 @@ public class UserActivity extends FragmentActivity<UserFragment> {
         super.onCreate(savedInstanceState);
         setDisplayHomeAsUpEnabled(true);
 
-        extractExtras();
-
-        setTitle(String.format(getString(R.string.title_activity_user), mUserId));
+        Intent intent = getIntent();
+        String userId = intent.getStringExtra(EXTRA_USER_ID);
+        setTitle(String.format(getString(R.string.title_activity_user), userId));
 
         if (savedInstanceState == null) {
-            setFragment(UserFragment.newInstance(mUserId));
+            setFragment(UserFragment.newInstance(userId));
         }
     }
 
@@ -41,13 +39,5 @@ public class UserActivity extends FragmentActivity<UserFragment> {
         extras.putString(EXTRA_USER_ID, userId);
 
         return extras;
-    }
-
-    private void extractExtras() {
-        Intent intent = getIntent();
-
-        if (intent.hasExtra(EXTRA_USER_ID)) {
-            mUserId = intent.getStringExtra(EXTRA_USER_ID);
-        }
     }
 }

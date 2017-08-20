@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Parcel(Parcel.Serialization.BEAN)
+@SuppressWarnings("WeakerAccess")
 public class User extends BaseObservable {
     private String id = "";
     private int delay = 0;

@@ -34,6 +34,8 @@ public class StoryFragment extends ItemHeadFragment
 
     private static final String ARG_ITEM = "com.marcelljee.hackernews.screen.news.item.head.arg.ITEM";
 
+    private static final String STATE_ITEM = "com.marcelljee.hackernews.screen.news.item.head.state.ITEM";
+
     private static final int LOADER_ID_STORIES_ITEM = 3000;
     private static final int LOADER_ID_POLL_OPTIONS = 4000;
 
@@ -56,9 +58,15 @@ public class StoryFragment extends ItemHeadFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        extractArguments();
 
+        Bundle args = getArguments();
+        mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
         customTabsHelper = new CustomTabsHelper();
+        mPollOptionsAdapter = new ItemAdapter(getToolbarActivity());
+
+        if (savedInstanceState != null) {
+            onRestoreInstanceState(savedInstanceState);
+        }
     }
 
     @Override
@@ -78,19 +86,13 @@ public class StoryFragment extends ItemHeadFragment
             mBinding.sectionNews.itemNews.tvNewsText.setBackground(null);
         }
 
-        mPollOptionsAdapter = new ItemAdapter(getToolbarActivity());
-
         mBinding.sectionPollOptions.rvPollOptionList.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.sectionPollOptions.rvPollOptionList.setAdapter(mPollOptionsAdapter);
         mBinding.sectionPollOptions.rvPollOptionList.showDivider();
 
         mBinding.sectionPollOptions.getRoot().setVisibility(View.GONE);
 
-        if (savedInstanceState == null) {
-            getActivity().getSupportLoaderManager().restartLoader(LOADER_ID_POLL_OPTIONS, null, this);
-        } else {
-            onRestoreInstanceState(savedInstanceState);
-        }
+        getActivity().getSupportLoaderManager().initLoader(LOADER_ID_POLL_OPTIONS, null, this);
 
         return mBinding.getRoot();
     }
@@ -112,11 +114,18 @@ public class StoryFragment extends ItemHeadFragment
     }
 
     private void onRestoreInstanceState(Bundle inState) {
+        if (mItem != null) {
+            mItem.update(Parcels.unwrap(inState.getParcelable(STATE_ITEM)));
+        } else {
+            mItem = Parcels.unwrap(inState.getParcelable(STATE_ITEM));
+        }
+
         mPollOptionsAdapter.restoreState(inState);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(STATE_ITEM, Parcels.wrap(mItem));
         mPollOptionsAdapter.saveState(outState);
         super.onSaveInstanceState(outState);
     }
@@ -174,13 +183,5 @@ public class StoryFragment extends ItemHeadFragment
         args.putParcelable(ARG_ITEM, Parcels.wrap(item));
 
         return args;
-    }
-
-    private void extractArguments() {
-        Bundle args = getArguments();
-
-        if (args.containsKey(ARG_ITEM)) {
-            mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
-        }
     }
 }

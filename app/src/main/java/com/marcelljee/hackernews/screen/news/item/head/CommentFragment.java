@@ -28,6 +28,8 @@ public class CommentFragment extends ItemHeadFragment
 
     private static final String ARG_ITEM = "com.marcelljee.hackernews.screen.news.item.head.arg.ITEM";
 
+    private static final String STATE_ITEM = "com.marcelljee.hackernews.screen.news.item.head.state.ITEM";
+
     private static final int LOADER_ID_COMMENT_HEAD = 2000;
 
     private Item mItem;
@@ -44,7 +46,13 @@ public class CommentFragment extends ItemHeadFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        extractArguments();
+
+        Bundle args = getArguments();
+        mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
+
+        if (savedInstanceState != null) {
+            onRestoreInstanceState(savedInstanceState);
+        }
     }
 
     @Override
@@ -60,6 +68,20 @@ public class CommentFragment extends ItemHeadFragment
         binding.commentHead.tvCommentText.setMovementMethod(LinkMovementMethod.getInstance());
 
         return binding.getRoot();
+    }
+
+    private void onRestoreInstanceState(Bundle inState) {
+        if (mItem != null) {
+            mItem.update(Parcels.unwrap(inState.getParcelable(STATE_ITEM)));
+        } else {
+            mItem = Parcels.unwrap(inState.getParcelable(STATE_ITEM));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(STATE_ITEM, Parcels.wrap(mItem));
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -103,13 +125,5 @@ public class CommentFragment extends ItemHeadFragment
         if (item != null) args.putParcelable(ARG_ITEM, Parcels.wrap(item));
 
         return args;
-    }
-
-    private void extractArguments() {
-        Bundle args = getArguments();
-
-        if (args.containsKey(ARG_ITEM)) {
-            mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
-        }
     }
 }

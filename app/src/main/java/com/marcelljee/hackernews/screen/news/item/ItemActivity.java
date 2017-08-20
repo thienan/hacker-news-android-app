@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
@@ -43,6 +44,7 @@ public class ItemActivity extends ToolbarActivity
     private static final String EXTRA_PARENT_ITEM = "com.marcelljee.hackernews.screen.news.item.extra.PARENT_ITEM";
     private static final String EXTRA_POSTER_ITEM = "com.marcelljee.hackernews.screen.news.item.extra.POSTER_ITEM";
 
+    private static final String STATE_ITEM_POSITION = "com.marcelljee.hackernews.screen.news.item.state.ITEM_POSITION";
     private static final String STATE_PARENT_ID = "com.marcelljee.hackernews.screen.news.item.state.PARENT_ID";
     private static final String STATE_PARENT_ITEM = "com.marcelljee.hackernews.screen.news.item.state.PARENT_ITEM";
 
@@ -55,11 +57,10 @@ public class ItemActivity extends ToolbarActivity
 
     private String mRootCallerActivity;
     private List<Item> mItems;
-    private int mItemPosition;
-    private Item mParentItem;
-    private Item mPosterItem;
 
+    private int mItemPosition;
     private long mParentId;
+    private Item mParentItem;
 
     private ItemPagerAdapter mItemPagerAdapter;
 
@@ -97,15 +98,21 @@ public class ItemActivity extends ToolbarActivity
         ActivityItemBinding binding = setContentViewBinding(R.layout.activity_item);
         setDisplayHomeAsUpEnabled(true);
 
-        extractExtras();
+        Intent intent = getIntent();
+        mRootCallerActivity = intent.getStringExtra(EXTRA_ROOT_CALLER_ACTIVITY);
+        mItemPosition = intent.getIntExtra(EXTRA_ITEM_POSITION, PagerAdapter.POSITION_NONE);
+        mItems = Parcels.unwrap(intent.getParcelableExtra(EXTRA_ITEMS));
+        mParentId = getItem().getParent();
+        mParentItem = Parcels.unwrap(intent.getParcelableExtra(EXTRA_PARENT_ITEM));
+        Item posterItem = Parcels.unwrap(intent.getParcelableExtra(EXTRA_POSTER_ITEM));
 
         setTitle(ItemUtils.getTypeAsTitle(getItem()));
 
-        if (mParentItem == null && mPosterItem == null) {
+        if (mParentItem == null && posterItem == null) {
             binding.tvCommentInfo.setVisibility(View.GONE);
         } else {
             binding.itemParent.setItem(mParentItem);
-            binding.itemPoster.setItem(mPosterItem);
+            binding.itemPoster.setItem(posterItem);
 
             binding.itemParent.commentHead.setViewModel(new ItemViewModel(this,
                     CollectionUtils.singleItemList(mParentItem)));
@@ -113,18 +120,18 @@ public class ItemActivity extends ToolbarActivity
             binding.itemParent.commentHead.tvCommentText.setMovementMethod(LinkMovementMethod.getInstance());
 
             binding.itemPoster.itemNews.setViewModel(new ItemViewModel(this,
-                    CollectionUtils.singleItemList(mPosterItem)));
+                    CollectionUtils.singleItemList(posterItem)));
             binding.itemPoster.itemNews.setItemPosition(0);
 
             binding.tvCommentInfo.setVisibility(View.VISIBLE);
             binding.tvCommentInfo.setText(ItemUtils.getCommentInfo(this,
                     mParentItem, binding.itemParent.getRoot(),
-                    mPosterItem, binding.itemPoster.getRoot()));
+                    posterItem, binding.itemPoster.getRoot()));
             binding.tvCommentInfo.setMovementMethod(LinkMovementMethod.getInstance());
         }
 
         mItemPagerAdapter = new ItemPagerAdapter(binding.itemPager,
-                getSupportFragmentManager(), mItems, mPosterItem);
+                getSupportFragmentManager(), mItems, posterItem);
 
         binding.itemPager.setAdapter(mItemPagerAdapter);
         binding.itemPager.setCurrentItem(mItemPosition);
@@ -146,6 +153,7 @@ public class ItemActivity extends ToolbarActivity
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        mItemPosition = savedInstanceState.getInt(STATE_ITEM_POSITION);
         mParentId = savedInstanceState.getLong(STATE_PARENT_ID);
         mParentItem = Parcels.unwrap(savedInstanceState.getParcelable(STATE_PARENT_ITEM));
         super.onRestoreInstanceState(savedInstanceState);
@@ -153,6 +161,7 @@ public class ItemActivity extends ToolbarActivity
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(STATE_ITEM_POSITION, PagerAdapter.POSITION_NONE);
         outState.putLong(STATE_PARENT_ID, mParentId);
         outState.putParcelable(STATE_PARENT_ITEM, Parcels.wrap(mParentItem));
         super.onSaveInstanceState(outState);
@@ -255,31 +264,6 @@ public class ItemActivity extends ToolbarActivity
         if (posterItem != null) extras.putParcelable(EXTRA_POSTER_ITEM, Parcels.wrap(posterItem));
 
         return extras;
-    }
-
-    private void extractExtras() {
-        Intent intent = getIntent();
-
-        if (intent.hasExtra(EXTRA_ROOT_CALLER_ACTIVITY)) {
-            mRootCallerActivity = intent.getStringExtra(EXTRA_ROOT_CALLER_ACTIVITY);
-        }
-
-        if (intent.hasExtra(EXTRA_ITEM_POSITION)) {
-            mItemPosition = intent.getIntExtra(EXTRA_ITEM_POSITION, -1);
-        }
-
-        if (intent.hasExtra(EXTRA_ITEMS)) {
-            mItems = Parcels.unwrap(intent.getParcelableExtra(EXTRA_ITEMS));
-            mParentId = getItem().getParent();
-        }
-
-        if (intent.hasExtra(EXTRA_PARENT_ITEM)) {
-            mParentItem = Parcels.unwrap(intent.getParcelableExtra(EXTRA_PARENT_ITEM));
-        }
-
-        if (intent.hasExtra(EXTRA_POSTER_ITEM)) {
-            mPosterItem = Parcels.unwrap(intent.getParcelableExtra(EXTRA_POSTER_ITEM));
-        }
     }
 
     private Item getItem() {

@@ -19,8 +19,6 @@ public class WebActivity extends WebToolbarActivity {
 
     private static final String EXTRA_URL = "com.marcelljee.hackernews.screen.web.extra.URL";
 
-    private String mUrl;
-
     public static void startActivity(Activity activity, String url) {
         Intent intent = new Intent(activity, WebActivity.class);
 
@@ -36,12 +34,12 @@ public class WebActivity extends WebToolbarActivity {
         setContentView(R.layout.activity_base);
         setDisplayHomeAsCloseEnabled(true);
 
-        extractExtras();
-
-        setTitle(mUrl);
+        Intent intent = getIntent();
+        String url = intent.getStringExtra(EXTRA_URL);
+        setTitle(url);
 
         if (savedInstanceState == null) {
-            setFragment(WebFragment.newInstance(mUrl));
+            setFragment(WebFragment.newInstance(url));
         }
     }
 
@@ -84,14 +82,6 @@ public class WebActivity extends WebToolbarActivity {
         extras.putString(EXTRA_URL, url);
 
         return extras;
-    }
-
-    private void extractExtras() {
-        Intent intent = getIntent();
-
-        if (intent.hasExtra(EXTRA_URL)) {
-            mUrl = intent.getStringExtra(EXTRA_URL);
-        }
     }
 
     private void setFragment(WebFragment fragment) {

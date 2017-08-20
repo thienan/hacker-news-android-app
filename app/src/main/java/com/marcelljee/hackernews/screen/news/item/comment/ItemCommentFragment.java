@@ -29,25 +29,25 @@ import java.util.List;
 public class ItemCommentFragment extends ToolbarFragment
         implements LoaderManager.LoaderCallbacks<AppResponse<List<Item>>> {
 
+    private static final String ARG_ITEM_LOADER_OFFSET = "com.marcelljee.hackernews.screen.news.item.arg.ITEM_LOADER_OFFSET";
     private static final String ARG_ITEM = "com.marcelljee.hackernews.screen.news.item.arg.ITEM";
     private static final String ARG_POSTER_ITEM = "com.marcelljee.hackernews.screen.news.item.arg.POSTER_ITEM";
-    private static final String ARG_ITEM_LOADER_OFFSET = "com.marcelljee.hackernews.screen.news.item.arg.ITEM_LOADER_OFFSET";
 
+    private static final String STATE_ITEM = "com.marcelljee.hackernews.screen.news.item.state.ITEM";
     private static final String STATE_CURRENT_PAGE = "com.marcelljee.hackernews.screen.news.item.state.CURRENT_PAGE";
 
-    private Item mItem;
-    private Item mPosterItem;
     private int mCommentItemLoaderId = 1000;
 
+    private Item mItem;
     private int mCurrentPage = 1;
     private ItemAdapter mCommentAdapter;
 
     private FragmentItemCommentBinding mBinding;
 
-    public static ItemCommentFragment newInstance(Item item, Item posterItem, int loaderOffset) {
+    public static ItemCommentFragment newInstance(int loaderOffset, Item item, Item posterItem) {
         ItemCommentFragment fragment = new ItemCommentFragment();
 
-        Bundle args = createArguments(item, posterItem, loaderOffset);
+        Bundle args = createArguments(loaderOffset, item, posterItem);
         fragment.setArguments(args);
 
         return fragment;
@@ -57,7 +57,21 @@ public class ItemCommentFragment extends ToolbarFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
-        extractArguments();
+
+        Bundle args = getArguments();
+        mCommentItemLoaderId += args.getInt(ARG_ITEM_LOADER_OFFSET);
+        mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
+        Item posterItem = Parcels.unwrap(args.getParcelable(ARG_POSTER_ITEM));
+
+        if (posterItem == null) {
+            mCommentAdapter = new ItemAdapter(getToolbarActivity(), null, mItem);
+        } else {
+            mCommentAdapter = new ItemAdapter(getToolbarActivity(), mItem, posterItem);
+        }
+
+        if (savedInstanceState != null) {
+            onRestoreInstanceState(savedInstanceState);
+        }
     }
 
     @Override
@@ -73,12 +87,6 @@ public class ItemCommentFragment extends ToolbarFragment
                 new AppDataBindingComponent(getToolbarActivity()));
         mBinding.setItem(mItem);
 
-        if (mPosterItem == null) {
-            mCommentAdapter = new ItemAdapter(getToolbarActivity(), null, mItem);
-        } else {
-            mCommentAdapter = new ItemAdapter(getToolbarActivity(), mItem, mPosterItem);
-        }
-
         mBinding.rvCommentList.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.rvCommentList.setAdapter(mCommentAdapter);
         mBinding.rvCommentList.showDivider();
@@ -86,14 +94,18 @@ public class ItemCommentFragment extends ToolbarFragment
 
         if (savedInstanceState == null) {
             refreshComments();
-        } else {
-            onRestoreInstanceState(savedInstanceState);
         }
 
         return mBinding.getRoot();
     }
 
     private void onRestoreInstanceState(Bundle inState) {
+        if (mItem != null) {
+            mItem.update(Parcels.unwrap(inState.getParcelable(STATE_ITEM)));
+        } else {
+            mItem = Parcels.unwrap(inState.getParcelable(STATE_ITEM));
+        }
+
         mCurrentPage = inState.getInt(STATE_CURRENT_PAGE);
         mCommentAdapter.restoreState(inState);
 
@@ -102,6 +114,7 @@ public class ItemCommentFragment extends ToolbarFragment
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(STATE_ITEM, Parcels.wrap(mItem));
         outState.putInt(STATE_CURRENT_PAGE, mCurrentPage);
         mCommentAdapter.saveState(outState);
         super.onSaveInstanceState(outState);
@@ -166,28 +179,12 @@ public class ItemCommentFragment extends ToolbarFragment
         getActivity().getSupportLoaderManager().restartLoader(mCommentItemLoaderId, null, this);
     }
 
-    private static Bundle createArguments(Item item, Item posterItem, int loaderOffset) {
+    private static Bundle createArguments(int loaderOffset, Item item, Item posterItem) {
         Bundle args = new Bundle();
+        if (loaderOffset >= 0) args.putInt(ARG_ITEM_LOADER_OFFSET, loaderOffset);
         if (item != null) args.putParcelable(ARG_ITEM, Parcels.wrap(item));
         if (posterItem != null) args.putParcelable(ARG_POSTER_ITEM, Parcels.wrap(posterItem));
-        if (loaderOffset >= 0) args.putInt(ARG_ITEM_LOADER_OFFSET, loaderOffset);
 
         return args;
-    }
-
-    private void extractArguments() {
-        Bundle args = getArguments();
-
-        if (args.containsKey(ARG_ITEM)) {
-            mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
-        }
-
-        if (args.containsKey(ARG_POSTER_ITEM)) {
-            mPosterItem = Parcels.unwrap(args.getParcelable(ARG_POSTER_ITEM));
-        }
-
-        if (args.containsKey(ARG_ITEM_LOADER_OFFSET)) {
-            mCommentItemLoaderId += args.getInt(ARG_ITEM_LOADER_OFFSET);
-        }
     }
 }

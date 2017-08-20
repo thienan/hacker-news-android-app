@@ -69,35 +69,17 @@ public class NewsFragment extends ToolbarFragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        mBinding = FragmentNewsBinding.inflate(inflater, container, false,
-                new AppDataBindingComponent(getToolbarActivity()));
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mNewsAdapter = new ItemAdapter(getToolbarActivity());
-
-        mBinding.rvItemList.setLayoutManager(layoutManager);
-        mBinding.rvItemList.setAdapter(mNewsAdapter);
-        mBinding.rvItemList.showDivider();
-        mBinding.rvItemList.setOnLoadMoreListener((page, totalItemsCount) -> nextPageNews());
-
-        mBinding.srlRefresh.setColorSchemeResources(R.color.colorAccent);
-        mBinding.srlRefresh.setOnRefreshListener(this::refreshNews);
-
-        if (savedInstanceState != null) {
-            onRestoreInstanceState(savedInstanceState);
-        }
-
-        return mBinding.getRoot();
-    }
-
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
         PreferenceManager.getDefaultSharedPreferences(getContext())
                 .registerOnSharedPreferenceChangeListener(this);
+
+        mNewsAdapter = new ItemAdapter(getToolbarActivity());
+
+        if (savedInstanceState != null) {
+            onRestoreInstanceState(savedInstanceState);
+        }
     }
 
     @Override
@@ -108,6 +90,23 @@ public class NewsFragment extends ToolbarFragment
                 .unregisterOnSharedPreferenceChangeListener(this);
 
         super.onDestroy();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        mBinding = FragmentNewsBinding.inflate(inflater, container, false,
+                new AppDataBindingComponent(getToolbarActivity()));
+
+        mBinding.rvItemList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mBinding.rvItemList.setAdapter(mNewsAdapter);
+        mBinding.rvItemList.showDivider();
+        mBinding.rvItemList.setOnLoadMoreListener((page, totalItemsCount) -> nextPageNews());
+
+        mBinding.srlRefresh.setColorSchemeResources(R.color.colorAccent);
+        mBinding.srlRefresh.setOnRefreshListener(this::refreshNews);
+
+        return mBinding.getRoot();
     }
 
     private void onRestoreInstanceState(Bundle inState) {

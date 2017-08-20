@@ -23,7 +23,6 @@ import com.marcelljee.hackernews.loader.ItemListLoader;
 import com.marcelljee.hackernews.loader.UserLoader;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.model.User;
-import com.marcelljee.hackernews.utils.CollectionUtils;
 import com.marcelljee.hackernews.utils.PagingUtils;
 import com.marcelljee.hackernews.utils.SettingsUtils;
 
@@ -44,8 +43,6 @@ public class UserFragment extends ToolbarFragment
 
     private static final int LOADER_ID_USER_ITEM = 8000;
     private static final int LOADER_ID_SUBMISSIONS = 9000;
-
-    private String mUserId;
 
     private User mUser;
     private int mCurrentPage = 1;
@@ -69,9 +66,15 @@ public class UserFragment extends ToolbarFragment
         PreferenceManager.getDefaultSharedPreferences(getContext())
                 .registerOnSharedPreferenceChangeListener(this);
 
-        extractArguments();
+        Bundle args = getArguments();
+        String userId = args.getString(ARG_USER_ID);
+        mUser = User.createTempUser(userId);
 
-        mUser = User.createTempUser(mUserId);
+        mUserSubmissionAdapter = new ItemAdapter(getToolbarActivity());
+
+        if (savedInstanceState != null) {
+            onRestoreInstanceState(savedInstanceState);
+        }
     }
 
     @Override
@@ -91,17 +94,10 @@ public class UserFragment extends ToolbarFragment
                 new AppDataBindingComponent(getToolbarActivity()));
         mBinding.setUser(mUser);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mUserSubmissionAdapter = new ItemAdapter(getToolbarActivity());
-
-        mBinding.rvSubmissionList.setLayoutManager(layoutManager);
+        mBinding.rvSubmissionList.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.rvSubmissionList.setAdapter(mUserSubmissionAdapter);
         mBinding.rvSubmissionList.showDivider();
         mBinding.rvSubmissionList.setOnLoadMoreListener((page, totalItemsCount) -> nextPageSubmissions());
-
-        if (savedInstanceState != null) {
-            onRestoreInstanceState(savedInstanceState);
-        }
 
         getActivity().getSupportLoaderManager().initLoader(LOADER_ID_USER_ITEM, null, this);
 
@@ -126,7 +122,7 @@ public class UserFragment extends ToolbarFragment
     public Loader onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_ID_USER_ITEM:
-                return new UserLoader(getContext(), mUserId);
+                return new UserLoader(getContext(), mUser.getId());
             case LOADER_ID_SUBMISSIONS:
                 List<Long> items = PagingUtils.getItems(mUser.getSubmitted(), mCurrentPage);
                 return new ItemListLoader(getContext(), items);
@@ -199,14 +195,6 @@ public class UserFragment extends ToolbarFragment
         args.putString(ARG_USER_ID, userId);
 
         return args;
-    }
-
-    private void extractArguments() {
-        Bundle args = getArguments();
-
-        if (args.containsKey(ARG_USER_ID)) {
-            mUserId = args.getString(ARG_USER_ID);
-        }
     }
 
     private void refreshSubmissions() {

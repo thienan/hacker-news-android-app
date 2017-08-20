@@ -26,12 +26,12 @@ public class ItemFragment extends ToolbarFragment {
     private static final String ARG_POSTER_ITEM = "com.marcelljee.hackernews.screen.news.item.arg.POSTER_ITEM";
     private static final String ARG_ITEM_LOADER_OFFSET = "com.marcelljee.hackernews.screen.news.item.arg.ITEM_LOADER_OFFSET";
 
+    private static final String STATE_ITEM = "com.marcelljee.hackernews.screen.news.item.state.ITEM";
+
     private static final String TAG_HEAD_FRAGMENT = "com.marcelljee.hackernews.screen.news.item.tag.HEAD_FRAGMENT";
     private static final String TAG_COMMENT_FRAGMENT = "com.marcelljee.hackernews.screen.news.item.tag.COMMENT_FRAGMENT";
 
     private Item mItem;
-    private Item mPosterItem;
-    private int mLoaderOffset;
 
     public static ItemFragment newInstance(Item item, Item posterItem, int loaderOffset) {
         ItemFragment fragment = new ItemFragment();
@@ -46,20 +46,26 @@ public class ItemFragment extends ToolbarFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
-        extractArguments();
+
+        Bundle args = getArguments();
+        mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
+        Item posterItem = Parcels.unwrap(args.getParcelable(ARG_POSTER_ITEM));
+        int loaderOffset = args.getInt(ARG_ITEM_LOADER_OFFSET);
 
         if (savedInstanceState == null) {
             switch (mItem.getType()) {
                 case ItemActivity.ITEM_TYPE_COMMENT:
-                    loadFragment(CommentFragment.newInstance(mItem));
+                    loadFragment(CommentFragment.newInstance(mItem), posterItem, loaderOffset);
                     break;
                 case ItemActivity.ITEM_TYPE_STORY:
                 case ItemActivity.ITEM_TYPE_POLL:
                 case ItemActivity.ITEM_TYPE_JOB:
                 default:
-                    loadFragment(StoryFragment.newInstance(mItem));
+                    loadFragment(StoryFragment.newInstance(mItem), posterItem, loaderOffset);
                     break;
             }
+        } else {
+            onRestoreInstanceState(savedInstanceState);
         }
     }
 
@@ -74,10 +80,28 @@ public class ItemFragment extends ToolbarFragment {
         super.onDestroy();
     }
 
+    private void onRestoreInstanceState(Bundle inState) {
+        if (mItem != null) {
+            mItem.update(Parcels.unwrap(inState.getParcelable(STATE_ITEM)));
+        } else {
+            mItem = Parcels.unwrap(inState.getParcelable(STATE_ITEM));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(STATE_ITEM, Parcels.wrap(mItem));
+        super.onSaveInstanceState(outState);
+    }
+
     @Subscribe()
     @SuppressWarnings({"unused"})
     public void onItemUpdateEvent(ItemUpdateEvent event) {
-        mItem.update(event.getItem());
+        if (mItem != null) {
+            mItem.update(event.getItem());
+        } else {
+            mItem = event.getItem();
+        }
     }
 
     private static Bundle createArguments(Item item, Item posterItem, int loaderOffset) {
@@ -89,24 +113,8 @@ public class ItemFragment extends ToolbarFragment {
         return args;
     }
 
-    private void extractArguments() {
-        Bundle args = getArguments();
-
-        if (args.containsKey(ARG_ITEM)) {
-            mItem = Parcels.unwrap(args.getParcelable(ARG_ITEM));
-        }
-
-        if (args.containsKey(ARG_POSTER_ITEM)) {
-            mPosterItem = Parcels.unwrap(args.getParcelable(ARG_POSTER_ITEM));
-        }
-
-        if (args.containsKey(ARG_ITEM_LOADER_OFFSET)) {
-            mLoaderOffset = args.getInt(ARG_ITEM_LOADER_OFFSET);
-        }
-    }
-
-    private void loadFragment(ItemHeadFragment headFragment) {
-        ItemCommentFragment commentFragment = ItemCommentFragment.newInstance(mItem, mPosterItem, mLoaderOffset);
+    private void loadFragment(ItemHeadFragment headFragment, Item posterItem, int loaderOffset) {
+        ItemCommentFragment commentFragment = ItemCommentFragment.newInstance(loaderOffset, mItem, posterItem);
 
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.item_head_container, headFragment, TAG_HEAD_FRAGMENT)
