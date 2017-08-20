@@ -31,7 +31,7 @@ public class WebActivity extends WebToolbarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base);
+        setContentView(NO_LAYOUT);
         setDisplayHomeAsCloseEnabled(true);
 
         Intent intent = getIntent();
@@ -86,7 +86,7 @@ public class WebActivity extends WebToolbarActivity {
 
     private void setFragment(WebFragment fragment) {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment, TAG_FRAGMENT)
+                .replace(R.id.layout_container, fragment, TAG_FRAGMENT)
                 .commit();
     }
 

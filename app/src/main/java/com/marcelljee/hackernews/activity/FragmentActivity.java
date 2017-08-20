@@ -13,12 +13,12 @@ public class FragmentActivity<T extends Fragment> extends ToolbarActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base);
+        setContentView(NO_LAYOUT);
     }
 
     protected void setFragment(T fragment) {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment, TAG_FRAGMENT)
+                .replace(R.id.layout_container, fragment, TAG_FRAGMENT)
                 .commit();
     }
 

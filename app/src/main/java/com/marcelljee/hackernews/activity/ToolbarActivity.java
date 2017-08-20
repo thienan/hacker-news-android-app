@@ -17,6 +17,8 @@ import com.marcelljee.hackernews.databinding.component.AppDataBindingComponent;
 
 public class ToolbarActivity extends AppCompatActivity {
 
+    protected static final int NO_LAYOUT = -1;
+
     private Toolbar mToolbar;
 
     public static ToolbarActivity getActivity(Activity activity) {
@@ -65,9 +67,13 @@ public class ToolbarActivity extends AppCompatActivity {
 
     <T extends ViewDataBinding> T setContentView(@LayoutRes int toolbarResID, @LayoutRes int layoutResID) {
         View toolbar = getLayoutInflater().inflate(toolbarResID, null, false);
-        FrameLayout container = (FrameLayout) toolbar.findViewById(R.id.layout_container);
-        T binding = DataBindingUtil.inflate(getLayoutInflater(),
-                layoutResID, container, true, new AppDataBindingComponent(this));
+        T binding = null;
+
+        if (layoutResID > 0) {
+            FrameLayout container = (FrameLayout) toolbar.findViewById(R.id.layout_container);
+            binding = DataBindingUtil.inflate(getLayoutInflater(), layoutResID, container, true,
+                    new AppDataBindingComponent(this));
+        }
 
         mToolbar = (Toolbar) toolbar.findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
