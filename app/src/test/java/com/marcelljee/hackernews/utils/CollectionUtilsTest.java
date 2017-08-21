@@ -10,10 +10,10 @@ import static org.junit.Assert.*;
 
 public class CollectionUtilsTest {
 
-    private List<Long> items = new ArrayList<>();
-    private List<Long> firstPages = new ArrayList<>();
-    private List<Long> fifthPages = new ArrayList<>();
-    private List<Long> tenthPages = new ArrayList<>();
+    private final List<Long> items = new ArrayList<>();
+    private final List<Long> firstPages = new ArrayList<>();
+    private final List<Long> fifthPages = new ArrayList<>();
+    private final List<Long> tenthPages = new ArrayList<>();
 
     @Before
     public void setUp() {

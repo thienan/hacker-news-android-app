@@ -2,19 +2,16 @@ package com.marcelljee.hackernews.screen.about;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.text.Html;
-import android.text.SpannableStringBuilder;
 
 import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.chrome.CustomTabsBrowser;
 import com.marcelljee.hackernews.compat.HtmlCompat;
 import com.marcelljee.hackernews.screen.web.WebActivity;
-import com.marcelljee.hackernews.utils.ItemUtils;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,10 +27,15 @@ import static org.hamcrest.core.AllOf.*;
 @RunWith(AndroidJUnit4.class)
 public class AboutActivityTest {
 
-    private Context mContext = InstrumentationRegistry.getTargetContext();
+    private Context mContext;
 
     @Rule
     public final IntentsTestRule<AboutActivity> intentsTestRule = new IntentsTestRule<>(AboutActivity.class);
+
+    @Before
+    public void setUp() {
+        mContext = InstrumentationRegistry.getTargetContext();
+    }
 
     @Test
     public void testShowAboutText() {

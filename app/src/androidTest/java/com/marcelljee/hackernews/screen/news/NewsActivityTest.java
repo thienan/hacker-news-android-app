@@ -8,13 +8,12 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.marcelljee.hackernews.R;
-import com.marcelljee.hackernews.chrome.CustomTabsBrowser;
 import com.marcelljee.hackernews.screen.about.AboutActivity;
 import com.marcelljee.hackernews.screen.espresso.CustomViewActions;
 import com.marcelljee.hackernews.screen.settings.SettingsActivity;
-import com.marcelljee.hackernews.screen.web.WebActivity;
 import com.marcelljee.hackernews.utils.SettingsUtils;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,16 +22,13 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -43,11 +39,16 @@ import static org.hamcrest.core.IsInstanceOf.*;
 @RunWith(AndroidJUnit4.class)
 public class NewsActivityTest {
 
-    private Context mContext = InstrumentationRegistry.getTargetContext();
+    private Context mContext;
 
     @Rule
     public final IntentsTestRule<NewsActivity> intentsTestRule =
             new IntentsTestRule<>(NewsActivity.class);
+
+    @Before
+    public void setUp() {
+        mContext = InstrumentationRegistry.getTargetContext();
+    }
 
     @Test
     public void testToolbarActionMenu_checkClearHistoryMenuItemIsShown() {

@@ -29,7 +29,7 @@ public class WebActivityTest {
 
     private static final String URL = "https://github.com/marcelljee/hacker-news-android-app";
 
-    private Context mContext = InstrumentationRegistry.getTargetContext();
+    private Context mContext;
 
     @Rule
     public final IntentsTestRule<WebActivity> intentsTestRule =
@@ -37,6 +37,8 @@ public class WebActivityTest {
 
     @Before
     public void setUp() {
+        mContext = InstrumentationRegistry.getTargetContext();
+
         Intent intent = new Intent();
         intent.putExtra(WebActivity.EXTRA_URL, URL);
         intentsTestRule.launchActivity(intent);

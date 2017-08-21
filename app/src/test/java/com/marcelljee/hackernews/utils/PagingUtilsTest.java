@@ -11,10 +11,9 @@ import static org.junit.Assert.*;
 
 public class PagingUtilsTest {
 
-    private List<Long> items = new ArrayList<>();
-    private List<Long> firstPages = new ArrayList<>();
-    private List<Long> fifthPages = new ArrayList<>();
-    private List<Long> tenthPages = new ArrayList<>();
+    private final List<Long> items = new ArrayList<>();
+    private final List<Long> firstPages = new ArrayList<>();
+    private final List<Long> tenthPages = new ArrayList<>();
 
     @Before
     public void setUp() {
@@ -24,10 +23,6 @@ public class PagingUtilsTest {
 
         for (long i = 1; i <= 10; i++) {
             firstPages.add(i);
-        }
-
-        for (long i = 51; i <= 60; i++) {
-            fifthPages.add(i);
         }
 
         for (long i = 91; i < 95; i++) {
