@@ -8,22 +8,22 @@ public class HackerNewsUtilsTest {
 
     @Test
     public void testGetItemUrl_itemIdEqualsMin100() {
-        String url = "https://news.ycombinator.com/item?id=-100";
+        String expected = "https://news.ycombinator.com/item?id=-100";
         String result = HackerNewsUtils.getItemUrl(-100);
-        assertEquals(result, url);
+        assertEquals(expected, result);
     }
 
     @Test
     public void testGetItemUrl_itemIdEquals1() {
-        String url = "https://news.ycombinator.com/item?id=1";
+        String expected = "https://news.ycombinator.com/item?id=1";
         String result = HackerNewsUtils.getItemUrl(1);
-        assertEquals(result, url);
+        assertEquals(expected, result);
     }
 
     @Test
     public void testGetItemUrl_itemIdEquals100() {
-        String url = "https://news.ycombinator.com/item?id=100";
+        String expected = "https://news.ycombinator.com/item?id=100";
         String result = HackerNewsUtils.getItemUrl(100);
-        assertEquals(result, url);
+        assertEquals(expected, result);
     }
 }
