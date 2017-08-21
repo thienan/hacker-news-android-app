@@ -8,7 +8,7 @@ import com.marcelljee.hackernews.activity.FragmentActivity;
 
 public class DetailsTextActivity extends FragmentActivity {
 
-    private static final String EXTRA_TEXT = "com.marcelljee.hackernews.screen.news.item.text.extra.TEXT";
+    public static final String EXTRA_TEXT = "com.marcelljee.hackernews.screen.news.item.text.extra.TEXT";
 
     public static void startActivity(ToolbarActivity activity, String text) {
         Intent intent = new Intent(activity, DetailsTextActivity.class);

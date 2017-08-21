@@ -23,7 +23,7 @@ import static org.hamcrest.core.AllOf.*;
 public class AboutActivityIntentTest {
 
     @Rule
-    public final IntentsTestRule<AboutActivity> intentsTestRule = new IntentsTestRule(AboutActivity.class);
+    public final IntentsTestRule<AboutActivity> intentsTestRule = new IntentsTestRule<>(AboutActivity.class);
 
     @Test
     public void testClickLink() {

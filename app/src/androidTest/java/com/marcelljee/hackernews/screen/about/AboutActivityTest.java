@@ -18,7 +18,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.*;
 public class AboutActivityTest {
 
     @Rule
-    public final ActivityTestRule<AboutActivity> mActivityRule = new ActivityTestRule(AboutActivity.class);
+    public final ActivityTestRule<AboutActivity> mActivityRule = new ActivityTestRule<>(AboutActivity.class);
 
     @Test
     public void testShowAboutText() {
