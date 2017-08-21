@@ -1,6 +1,8 @@
 package com.marcelljee.hackernews.screen.web;
 
+import android.content.Context;
 import android.content.Intent;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -27,6 +29,8 @@ public class WebActivityTest {
 
     private static final String URL = "https://github.com/marcelljee/hacker-news-android-app";
 
+    private Context mContext = InstrumentationRegistry.getTargetContext();
+
     @Rule
     public final IntentsTestRule<WebActivity> intentsTestRule =
             new IntentsTestRule<>(WebActivity.class, false, false);
@@ -40,7 +44,7 @@ public class WebActivityTest {
 
     @Test
     public void testToolbarActionMenu_clickShareMenuItem() {
-        openActionBarOverflowOrOptionsMenu(intentsTestRule.getActivity());
+        openActionBarOverflowOrOptionsMenu(mContext);
         onView(withText(intentsTestRule.getActivity().getString(R.string.menu_item_share)))
                 .perform(click());
 
@@ -53,7 +57,7 @@ public class WebActivityTest {
 
     @Test
     public void testToolbarActionMenu_clickOpenInBrowserMenuItem() {
-        openActionBarOverflowOrOptionsMenu(intentsTestRule.getActivity());
+        openActionBarOverflowOrOptionsMenu(mContext);
         onView(withText(intentsTestRule.getActivity().getString(R.string.menu_item_open_in_browser)))
                 .perform(click());
 

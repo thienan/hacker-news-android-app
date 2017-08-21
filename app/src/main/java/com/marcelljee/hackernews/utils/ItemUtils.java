@@ -18,6 +18,7 @@ import android.view.View;
 
 import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.activity.ToolbarActivity;
+import com.marcelljee.hackernews.compat.HtmlCompat;
 import com.marcelljee.hackernews.model.Item;
 import com.marcelljee.hackernews.span.CustomTabUrlSpan;
 import com.marcelljee.hackernews.span.RevealViewOnClickSpan;
@@ -122,12 +123,7 @@ public final class ItemUtils {
         SpannableStringBuilder spannedText = new SpannableStringBuilder();
         if (TextUtils.isEmpty(text)) return spannedText;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            spannedText = (SpannableStringBuilder) Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY);
-        } else {
-            //noinspection deprecation
-            spannedText = (SpannableStringBuilder) Html.fromHtml(text);
-        }
+        spannedText = (SpannableStringBuilder) HtmlCompat.fromHtml(text);
 
         URLSpan[] spans = spannedText.getSpans(0, spannedText.length(), URLSpan.class);
         for (URLSpan span : spans) {

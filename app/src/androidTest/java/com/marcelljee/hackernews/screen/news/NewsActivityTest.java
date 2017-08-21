@@ -1,6 +1,8 @@
 package com.marcelljee.hackernews.screen.news;
 
+import android.content.Context;
 import android.content.Intent;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -41,6 +43,8 @@ import static org.hamcrest.core.IsInstanceOf.*;
 @RunWith(AndroidJUnit4.class)
 public class NewsActivityTest {
 
+    private Context mContext = InstrumentationRegistry.getTargetContext();
+
     @Rule
     public final IntentsTestRule<NewsActivity> intentsTestRule =
             new IntentsTestRule<>(NewsActivity.class);
@@ -50,14 +54,14 @@ public class NewsActivityTest {
         onView(withId(R.id.spinner_news_type)).perform(click());
         onData(allOf(
                 is(instanceOf(String.class)),
-                is(intentsTestRule.getActivity().getString(R.string.news_type_history))
+                is(mContext.getString(R.string.news_type_history))
         )).perform(click());
         onView(withId(R.id.action_clear_history)).check(matches(isDisplayed()));
 
         onView(withId(R.id.spinner_news_type)).perform(click());
         onData(allOf(
                 is(instanceOf(String.class)),
-                is(intentsTestRule.getActivity().getString(R.string.news_type_top))
+                is(mContext.getString(R.string.news_type_top))
         )).perform(click());
         onView(withId(R.id.action_clear_history)).check(doesNotExist());
     }
@@ -67,7 +71,7 @@ public class NewsActivityTest {
         onView(withId(R.id.spinner_news_type)).perform(click());
         onData(allOf(
                 is(instanceOf(String.class)),
-                is(intentsTestRule.getActivity().getString(R.string.news_type_history))
+                is(mContext.getString(R.string.news_type_history))
         )).perform(click());
 
         onView(withId(R.id.action_show_all)).check(doesNotExist());
@@ -76,10 +80,10 @@ public class NewsActivityTest {
         onView(withId(R.id.spinner_news_type)).perform(click());
         onData(allOf(
                 is(instanceOf(String.class)),
-                is(intentsTestRule.getActivity().getString(R.string.news_type_top))
+                is(mContext.getString(R.string.news_type_top))
         )).perform(click());
 
-        if (SettingsUtils.readIndicatorEnabled(intentsTestRule.getActivity())) {
+        if (SettingsUtils.readIndicatorEnabled(mContext)) {
             onView(withId(R.id.action_show_all)).check(doesNotExist());
             onView(withId(R.id.action_show_unread)).check(matches(isDisplayed()));
 
@@ -100,8 +104,8 @@ public class NewsActivityTest {
 
     @Test
     public void testToolbarActionMenu_clickAboutMenuItem() {
-        openActionBarOverflowOrOptionsMenu(intentsTestRule.getActivity());
-        onView(withText(intentsTestRule.getActivity().getString(R.string.menu_item_about)))
+        openActionBarOverflowOrOptionsMenu(mContext);
+        onView(withText(mContext.getString(R.string.menu_item_about)))
                 .perform(click());
 
         intended(hasComponent(AboutActivity.class.getName()));
@@ -109,8 +113,8 @@ public class NewsActivityTest {
 
     @Test
     public void testToolbarActionMenu_clickSettingsMenuItem() {
-        openActionBarOverflowOrOptionsMenu(intentsTestRule.getActivity());
-        onView(withText(intentsTestRule.getActivity().getString(R.string.menu_item_settings)))
+        openActionBarOverflowOrOptionsMenu(mContext);
+        onView(withText(mContext.getString(R.string.menu_item_settings)))
                 .perform(click());
 
         intended(hasComponent(SettingsActivity.class.getName()));
@@ -126,7 +130,7 @@ public class NewsActivityTest {
 
         intended(allOf(
                 hasAction(Intent.ACTION_CHOOSER),
-                hasExtra(Intent.EXTRA_TITLE, intentsTestRule.getActivity().getString(R.string.title_share)),
+                hasExtra(Intent.EXTRA_TITLE, mContext.getString(R.string.title_share)),
                 hasExtraWithKey(Intent.EXTRA_INTENT)
         ));
     }

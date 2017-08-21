@@ -1,11 +1,17 @@
 package com.marcelljee.hackernews.screen.about;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
 
 import com.marcelljee.hackernews.R;
 import com.marcelljee.hackernews.chrome.CustomTabsBrowser;
+import com.marcelljee.hackernews.compat.HtmlCompat;
 import com.marcelljee.hackernews.screen.web.WebActivity;
 import com.marcelljee.hackernews.utils.ItemUtils;
 
@@ -24,14 +30,17 @@ import static org.hamcrest.core.AllOf.*;
 @RunWith(AndroidJUnit4.class)
 public class AboutActivityTest {
 
+    private Context mContext = InstrumentationRegistry.getTargetContext();
+
     @Rule
     public final IntentsTestRule<AboutActivity> intentsTestRule = new IntentsTestRule<>(AboutActivity.class);
 
     @Test
     public void testShowAboutText() {
+        String aboutText = HtmlCompat.fromHtml(mContext.getString(R.string.about_text)).toString();
+
         onView(withId(R.id.tv_about))
-                .check(matches(withText(ItemUtils.fromHtml(intentsTestRule.getActivity(),
-                        intentsTestRule.getActivity().getString(R.string.about_text)).toString())));
+                .check(matches(withText(aboutText)));
 
         onView(withId(R.id.tv_about))
                 .check(matches(hasLinks()));
@@ -42,7 +51,7 @@ public class AboutActivityTest {
         onView(withId(R.id.tv_about))
                 .perform(openLinkWithText("Github page"));
 
-        String packageName = CustomTabsBrowser.getCustomTabPackageName(intentsTestRule.getActivity());
+        String packageName = CustomTabsBrowser.getCustomTabPackageName(mContext);
 
         if (packageName == null) {
             intended(allOf(
