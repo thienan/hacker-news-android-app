@@ -8,7 +8,7 @@ public class HackerNewsUtils {
 
     private HackerNewsUtils() {}
 
-    public static String geItemUrl(long itemId) {
+    public static String getItemUrl(long itemId) {
         return String.format(Locale.getDefault(), URL_HACKER_NEWS_ITEM, itemId);
     }
 

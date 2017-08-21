@@ -197,7 +197,7 @@ public class ItemActivity extends ToolbarActivity
                 MenuUtils.openShareHackerNewsLinkChooser(this, getItem());
                 return true;
             case R.id.action_open_page:
-                CustomTabsBrowser.openTab(this, HackerNewsUtils.geItemUrl(getItem().getId()));
+                CustomTabsBrowser.openTab(this, HackerNewsUtils.getItemUrl(getItem().getId()));
                 return true;
             default:
                 return super.onOptionsItemSelected(menuItem);

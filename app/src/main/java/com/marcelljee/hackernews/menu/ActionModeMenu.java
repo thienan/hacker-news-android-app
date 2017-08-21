@@ -77,7 +77,7 @@ public class ActionModeMenu {
                         mode.finish();
                         return true;
                     case R.id.action_open_page:
-                        CustomTabsBrowser.openTab(activity, HackerNewsUtils.geItemUrl(itemId));
+                        CustomTabsBrowser.openTab(activity, HackerNewsUtils.getItemUrl(itemId));
                         return true;
                     default:
                         return false;
