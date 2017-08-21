@@ -9,7 +9,7 @@ import com.marcelljee.hackernews.activity.FragmentActivity;
 
 public class UserActivity extends FragmentActivity<UserFragment> {
 
-    private static final String EXTRA_USER_ID = "com.marcelljee.hackernews.screen.user.extra.USER_ID";
+    public static final String EXTRA_USER_ID = "com.marcelljee.hackernews.screen.user.extra.USER_ID";
 
     public static void startActivity(ToolbarActivity activity, String userId) {
         Intent intent = new Intent(activity, UserActivity.class);

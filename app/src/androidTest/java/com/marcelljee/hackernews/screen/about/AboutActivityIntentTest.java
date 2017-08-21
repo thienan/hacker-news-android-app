@@ -27,7 +27,8 @@ public class AboutActivityIntentTest {
 
     @Test
     public void testClickLink() {
-        onView(withId(R.id.tv_about)).perform(openLinkWithText("Github page"));
+        onView(withId(R.id.tv_about))
+                .perform(openLinkWithText("Github page"));
 
         String packageName = CustomTabsBrowser.getCustomTabPackageName(intentsTestRule.getActivity());
 

@@ -42,6 +42,7 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
                     <TextView
+                        android:id="@+id/tv_user_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
@@ -58,6 +59,7 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
                     <TextView
+                        android:id="@+id/tv_user_created"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
@@ -74,6 +76,7 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
                     <TextView
+                        android:id="@+id/tv_user_karma"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
@@ -90,6 +93,7 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
                     <TextView
+                        android:id="@+id/tv_user_about"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"

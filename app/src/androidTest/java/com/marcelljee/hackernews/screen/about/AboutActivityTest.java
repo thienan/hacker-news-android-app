@@ -22,9 +22,11 @@ public class AboutActivityTest {
 
     @Test
     public void testShowAboutText() {
-        onView(withId(R.id.tv_about)).check(matches(withText(ItemUtils.fromHtml(mActivityRule.getActivity(),
-                mActivityRule.getActivity().getString(R.string.about_text)).toString())));
+        onView(withId(R.id.tv_about))
+                .check(matches(withText(ItemUtils.fromHtml(mActivityRule.getActivity(),
+                        mActivityRule.getActivity().getString(R.string.about_text)).toString())));
 
-        onView(withId(R.id.tv_about)).check(matches(hasLinks()));
+        onView(withId(R.id.tv_about))
+                .check(matches(hasLinks()));
     }
 }
