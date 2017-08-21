@@ -1,17 +1,36 @@
 language: android
 jdk: oraclejdk8
 
-android:
-    components:
-        - tools
-        - platform-tools
-        - tools
+env:
+  matrix:
+    - ANDROID_TARGET=android-22  ANDROID_ABI=armeabi-v7a
 
-        - build-tools-25.0.2
-        - android-25
+android:
+  components:
+      # use the latest revision of Android SDK Tools
+      - tools
+      - platform-tools
+      - tools
+
+      # The BuildTools version used by your project
+      - build-tools-25.0.2
+
+      # The SDK version used to compile your project
+      - $ANDROID_TARGET
+
+      # Specify at least one system image,
+      # if you need to run emulator(s) during your tests
+      - sys-img-$ANDROID_ABI-$ANDROID_TARGET
 
 #as per http://blog.travis-ci.com/2014-12-17-faster-builds-with-container-based-infrastructure/
 sudo: false
 
 notifications:
-    email: false
+  email: false
+
+# Emulator Management: Create, Start and Wait
+before_script:
+  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
+  - emulator -avd test -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &

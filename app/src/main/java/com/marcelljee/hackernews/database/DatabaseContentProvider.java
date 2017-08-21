@@ -5,6 +5,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -141,7 +142,7 @@ public class DatabaseContentProvider extends ContentProvider {
         if (id > 0) {
             returnUri = ContentUris.withAppendedId(contentUri, id);
         } else {
-            throw new android.database.SQLException("Failed to insert row into " + uri);
+            throw new SQLException("Failed to insert row into " + uri);
         }
 
         if (getContext() != null) {

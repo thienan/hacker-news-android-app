@@ -3,7 +3,6 @@ package com.marcelljee.hackernews.adapter;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,7 +90,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
                 ItemCommentBinding commentBinding = ItemCommentBinding.inflate(inflater, parent,
                         false, new AppDataBindingComponent(mActivity));
                 commentBinding.setViewModel(new ItemViewModel(mActivity, mItems));
-                commentBinding.tvCommentText.setMovementMethod(LinkMovementMethod.getInstance());
                 return new ItemViewHolder(commentBinding, true);
             case VIEW_TYPE_POLL_OPTION:
                 ItemPollOptionBinding binding = ItemPollOptionBinding.inflate(inflater, parent,

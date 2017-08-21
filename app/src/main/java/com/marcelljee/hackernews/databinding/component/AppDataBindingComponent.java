@@ -3,6 +3,7 @@ package com.marcelljee.hackernews.databinding.component;
 import android.databinding.BindingAdapter;
 import android.databinding.BindingConversion;
 import android.databinding.DataBindingComponent;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 
@@ -47,6 +48,7 @@ public class AppDataBindingComponent implements DataBindingComponent {
         @BindingAdapter("bind:htmlText")
         public void setHtmlText(TextView textView, String text) {
             textView.setText(ItemUtils.fromHtml(mActivity, text));
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
         }
 
         @BindingAdapter("bind:title")

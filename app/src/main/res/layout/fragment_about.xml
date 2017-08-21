@@ -15,12 +15,13 @@
             android:elevation="@dimen/card_elevation"
             app:cardCornerRadius="@dimen/card_radius">
 
-            <TextView
+            <com.marcelljee.hackernews.view.LinkifiedTextView
                 android:id="@+id/tv_about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/view_margin"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:htmlText="@{@string/about_text}" />
         </android.support.v7.widget.CardView>
     </ScrollView>
 </layout>

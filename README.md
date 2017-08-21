@@ -3,11 +3,11 @@ Hacker News Android App [![Build Status](https://travis-ci.org/marcelljee/hacker
 
 Hacker News is a social news website focusing on computer science and entrepreneurship. 
 In general, the content is about "anything that gratifies one's intellectual curiosity". 
-The official website can be found at https://news.ycombinator.com.
+The official website can be found on https://news.ycombinator.com.
 
 This project is the Android app for reading Hacker News. 
 The app supports devices running Android 4.1+.
-This project is unofficial, means that this project is neither affiliated with nor endorsed by Y Combinator.
+This project is unofficial and neither affiliated with nor endorsed by Y Combinator.
 
 <h2>Features</h2>
 

@@ -4,7 +4,6 @@ import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +64,6 @@ public class CommentFragment extends ItemHeadFragment
         binding.commentHead.setViewModel(new ItemViewModel(getToolbarActivity(),
                 CollectionUtils.singleItemList(mItem)));
         binding.commentHead.tvCommentText.setMaxLines(Integer.MAX_VALUE);
-        binding.commentHead.tvCommentText.setMovementMethod(LinkMovementMethod.getInstance());
 
         return binding.getRoot();
     }

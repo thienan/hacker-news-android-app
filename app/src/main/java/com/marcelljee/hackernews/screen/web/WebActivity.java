@@ -17,7 +17,7 @@ public class WebActivity extends WebToolbarActivity {
 
     private static final String TAG_FRAGMENT = "com.marcelljee.hackernews.screen.web.tag.FRAGMENT";
 
-    private static final String EXTRA_URL = "com.marcelljee.hackernews.screen.web.extra.URL";
+    public static final String EXTRA_URL = "com.marcelljee.hackernews.screen.web.extra.URL";
 
     public static void startActivity(Activity activity, String url) {
         Intent intent = new Intent(activity, WebActivity.class);

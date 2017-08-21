@@ -117,7 +117,6 @@ public class ItemActivity extends ToolbarActivity
             binding.itemParent.commentHead.setViewModel(new ItemViewModel(this,
                     CollectionUtils.singleItemList(mParentItem)));
             binding.itemParent.commentHead.tvCommentText.setMaxLines(Integer.MAX_VALUE);
-            binding.itemParent.commentHead.tvCommentText.setMovementMethod(LinkMovementMethod.getInstance());
 
             binding.itemPoster.itemNews.setViewModel(new ItemViewModel(this,
                     CollectionUtils.singleItemList(posterItem)));

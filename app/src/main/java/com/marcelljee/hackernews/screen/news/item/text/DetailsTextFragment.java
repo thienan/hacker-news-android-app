@@ -1,7 +1,6 @@
 package com.marcelljee.hackernews.screen.news.item.text;
 
 import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +35,6 @@ public class DetailsTextFragment extends ToolbarFragment {
 
         binding.sectionNewsDetails.setViewModel(new SectionNewsDetailsViewModel(getToolbarActivity()));
         binding.sectionNewsDetails.tvNewsDetails.setMaxLines(Integer.MAX_VALUE);
-        binding.sectionNewsDetails.tvNewsDetails.setMovementMethod(LinkMovementMethod.getInstance());
 
         binding.sectionNewsDetails.flNewsDetails.setBackground(null);
 
