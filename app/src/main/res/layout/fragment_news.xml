@@ -2,6 +2,7 @@
 <layout>
 
     <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/srl_refresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -12,7 +13,8 @@
             android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:paddingEnd="@dimen/view_margin"
-            android:paddingStart="@dimen/view_margin" />
+            android:paddingStart="@dimen/view_margin"
+            app:showDivider="true" />
     </android.support.v4.widget.SwipeRefreshLayout>
 </layout>
 

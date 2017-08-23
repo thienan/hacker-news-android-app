@@ -88,7 +88,6 @@ public class ItemCommentFragment extends ToolbarFragment
         mBinding.setItem(mItem);
 
         mBinding.rvCommentList.setAdapter(mCommentAdapter);
-        mBinding.rvCommentList.showDivider();
         mBinding.rvCommentList.setOnLoadMoreListener((page, totalItemsCount) -> nextPageComments());
 
         if (savedInstanceState == null) {

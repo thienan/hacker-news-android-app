@@ -99,7 +99,6 @@ public class NewsFragment extends ToolbarFragment
                 new AppDataBindingComponent(getToolbarActivity()));
 
         mBinding.rvItemList.setAdapter(mNewsAdapter);
-        mBinding.rvItemList.showDivider();
         mBinding.rvItemList.setOnLoadMoreListener((page, totalItemsCount) -> nextPageNews());
 
         mBinding.srlRefresh.setColorSchemeResources(R.color.colorAccent);

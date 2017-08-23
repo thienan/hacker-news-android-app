@@ -87,7 +87,6 @@ public class StoryFragment extends ItemHeadFragment
         }
 
         mBinding.sectionPollOptions.rvPollOptionList.setAdapter(mPollOptionsAdapter);
-        mBinding.sectionPollOptions.rvPollOptionList.showDivider();
 
         mBinding.sectionPollOptions.getRoot().setVisibility(View.GONE);
 

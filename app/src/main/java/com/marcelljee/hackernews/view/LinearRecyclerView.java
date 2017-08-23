@@ -1,6 +1,7 @@
 package com.marcelljee.hackernews.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.AttrRes;
@@ -24,23 +25,27 @@ public class LinearRecyclerView extends FrameLayout {
     private View mEmptyView;
     private EndlessRecyclerViewScrollListener mScrollListener;
 
+    private boolean showDivider = false;
+
     public interface OnLoadMoreListener {
         void onLoadMore(int page, int totalItemsCount);
     }
 
     public LinearRecyclerView(@NonNull Context context) {
         super(context);
-        initView();
+        initView(context);
     }
 
     public LinearRecyclerView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        initView();
+        initAttr(context, attrs);
+        initView(context);
     }
 
     public LinearRecyclerView(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initView();
+        initAttr(context, attrs);
+        initView(context);
     }
 
     @Override
@@ -63,23 +68,36 @@ public class LinearRecyclerView extends FrameLayout {
         return ss;
     }
 
-    private void initView() {
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    private void initAttr(Context context, AttributeSet attrs) {
+        TypedArray a = context.getTheme().obtainStyledAttributes(
+                attrs,
+                R.styleable.LinearRecyclerView,
+                0, 0);
+
+        try {
+            showDivider = a.getBoolean(R.styleable.LinearRecyclerView_showDivider, false);
+        } finally {
+            a.recycle();
+        }
+    }
+
+    private void initView(Context context) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.simple_recycler_view, this);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         mEmptyView = view.findViewById(R.id.empty_view);
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        if (showDivider) {
+            mRecyclerView.addItemDecoration(
+                    new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+        }
     }
 
     public void setAdapter(RecyclerView.Adapter adapter) {
         mRecyclerView.setAdapter(adapter);
-    }
-
-    public void showDivider() {
-        mRecyclerView.addItemDecoration(
-                new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
 
     public void setOnLoadMoreListener(OnLoadMoreListener listener) {

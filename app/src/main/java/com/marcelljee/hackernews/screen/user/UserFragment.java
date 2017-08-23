@@ -95,7 +95,6 @@ public class UserFragment extends ToolbarFragment
         mBinding.setUser(mUser);
 
         mBinding.rvSubmissionList.setAdapter(mUserSubmissionAdapter);
-        mBinding.rvSubmissionList.showDivider();
         mBinding.rvSubmissionList.setOnLoadMoreListener((page, totalItemsCount) -> nextPageSubmissions());
 
         getActivity().getSupportLoaderManager().initLoader(LOADER_ID_USER_ITEM, null, this);
