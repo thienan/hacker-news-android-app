@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
 import com.marcelljee.hackernews.R;
+import com.marcelljee.hackernews.compat.CustomTabsIntentCompat;
 import com.marcelljee.hackernews.receiver.CopyReceiver;
 import com.marcelljee.hackernews.screen.web.WebActivity;
 
@@ -65,10 +66,7 @@ public final class CustomTabsBrowser {
             WebActivity.startActivity(activity, url);
         } else {
             customTabsIntent.intent.setPackage(packageName);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                customTabsIntent.intent.putExtra(Intent.EXTRA_REFERRER,
-                        Uri.parse(Intent.URI_ANDROID_APP_SCHEME + "//" + activity.getPackageName()));
-            }
+            CustomTabsIntentCompat.putExtraRefferer(customTabsIntent, activity);
             customTabsIntent.launchUrl(activity, Uri.parse(url));
         }
     }
