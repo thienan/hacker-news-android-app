@@ -86,7 +86,6 @@ public class StoryFragment extends ItemHeadFragment
             mBinding.sectionNews.itemNews.tvNewsText.setBackground(null);
         }
 
-        mBinding.sectionPollOptions.rvPollOptionList.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.sectionPollOptions.rvPollOptionList.setAdapter(mPollOptionsAdapter);
         mBinding.sectionPollOptions.rvPollOptionList.showDivider();
 

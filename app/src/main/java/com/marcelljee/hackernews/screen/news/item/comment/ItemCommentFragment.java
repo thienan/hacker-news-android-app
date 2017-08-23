@@ -87,7 +87,6 @@ public class ItemCommentFragment extends ToolbarFragment
                 new AppDataBindingComponent(getToolbarActivity()));
         mBinding.setItem(mItem);
 
-        mBinding.rvCommentList.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.rvCommentList.setAdapter(mCommentAdapter);
         mBinding.rvCommentList.showDivider();
         mBinding.rvCommentList.setOnLoadMoreListener((page, totalItemsCount) -> nextPageComments());

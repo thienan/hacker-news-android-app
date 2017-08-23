@@ -17,7 +17,7 @@ import android.widget.ProgressBar;
 
 import com.marcelljee.hackernews.R;
 
-public class SimpleRecyclerView extends FrameLayout {
+public class LinearRecyclerView extends FrameLayout {
 
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
@@ -28,17 +28,17 @@ public class SimpleRecyclerView extends FrameLayout {
         void onLoadMore(int page, int totalItemsCount);
     }
 
-    public SimpleRecyclerView(@NonNull Context context) {
+    public LinearRecyclerView(@NonNull Context context) {
         super(context);
         initView();
     }
 
-    public SimpleRecyclerView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public LinearRecyclerView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initView();
     }
 
-    public SimpleRecyclerView(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
+    public LinearRecyclerView(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView();
     }
@@ -69,10 +69,8 @@ public class SimpleRecyclerView extends FrameLayout {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         mEmptyView = view.findViewById(R.id.empty_view);
-    }
 
-    public void setLayoutManager(RecyclerView.LayoutManager manager) {
-        mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     public void setAdapter(RecyclerView.Adapter adapter) {

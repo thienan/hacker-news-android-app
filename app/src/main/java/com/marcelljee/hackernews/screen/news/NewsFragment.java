@@ -98,7 +98,6 @@ public class NewsFragment extends ToolbarFragment
         mBinding = FragmentNewsBinding.inflate(inflater, container, false,
                 new AppDataBindingComponent(getToolbarActivity()));
 
-        mBinding.rvItemList.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.rvItemList.setAdapter(mNewsAdapter);
         mBinding.rvItemList.showDivider();
         mBinding.rvItemList.setOnLoadMoreListener((page, totalItemsCount) -> nextPageNews());

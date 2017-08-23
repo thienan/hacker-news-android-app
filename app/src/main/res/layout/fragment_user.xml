@@ -117,7 +117,7 @@
                 android:elevation="@dimen/card_elevation"
                 app:cardCornerRadius="@dimen/card_radius">
 
-                <com.marcelljee.hackernews.view.SimpleRecyclerView
+                <com.marcelljee.hackernews.view.LinearRecyclerView
                     android:id="@+id/rv_submission_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
