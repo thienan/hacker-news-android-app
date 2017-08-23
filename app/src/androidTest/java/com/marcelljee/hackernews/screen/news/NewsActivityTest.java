@@ -39,30 +39,23 @@ import static org.hamcrest.core.IsInstanceOf.*;
 @RunWith(AndroidJUnit4.class)
 public class NewsActivityTest {
 
-    private Context mContext;
-
     @Rule
     public final IntentsTestRule<NewsActivity> intentsTestRule =
             new IntentsTestRule<>(NewsActivity.class);
-
-    @Before
-    public void setUp() {
-        mContext = InstrumentationRegistry.getTargetContext();
-    }
 
     @Test
     public void testToolbarActionMenu_checkClearHistoryMenuItemIsShown() {
         onView(withId(R.id.spinner_news_type)).perform(click());
         onData(allOf(
                 is(instanceOf(String.class)),
-                is(mContext.getString(R.string.news_type_history))
+                is(InstrumentationRegistry.getTargetContext().getString(R.string.news_type_history))
         )).perform(click());
         onView(withId(R.id.action_clear_history)).check(matches(isDisplayed()));
 
         onView(withId(R.id.spinner_news_type)).perform(click());
         onData(allOf(
                 is(instanceOf(String.class)),
-                is(mContext.getString(R.string.news_type_top))
+                is(InstrumentationRegistry.getTargetContext().getString(R.string.news_type_top))
         )).perform(click());
         onView(withId(R.id.action_clear_history)).check(doesNotExist());
     }
@@ -72,7 +65,7 @@ public class NewsActivityTest {
         onView(withId(R.id.spinner_news_type)).perform(click());
         onData(allOf(
                 is(instanceOf(String.class)),
-                is(mContext.getString(R.string.news_type_history))
+                is(InstrumentationRegistry.getTargetContext().getString(R.string.news_type_history))
         )).perform(click());
 
         onView(withId(R.id.action_show_all)).check(doesNotExist());
@@ -81,10 +74,10 @@ public class NewsActivityTest {
         onView(withId(R.id.spinner_news_type)).perform(click());
         onData(allOf(
                 is(instanceOf(String.class)),
-                is(mContext.getString(R.string.news_type_top))
+                is(InstrumentationRegistry.getTargetContext().getString(R.string.news_type_top))
         )).perform(click());
 
-        if (SettingsUtils.readIndicatorEnabled(mContext)) {
+        if (SettingsUtils.readIndicatorEnabled(InstrumentationRegistry.getTargetContext())) {
             onView(withId(R.id.action_show_all)).check(doesNotExist());
             onView(withId(R.id.action_show_unread)).check(matches(isDisplayed()));
 
@@ -105,8 +98,8 @@ public class NewsActivityTest {
 
     @Test
     public void testToolbarActionMenu_clickAboutMenuItem() {
-        openActionBarOverflowOrOptionsMenu(mContext);
-        onView(withText(mContext.getString(R.string.menu_item_about)))
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+        onView(withText(InstrumentationRegistry.getTargetContext().getString(R.string.menu_item_about)))
                 .perform(click());
 
         intended(hasComponent(AboutActivity.class.getName()));
@@ -114,8 +107,8 @@ public class NewsActivityTest {
 
     @Test
     public void testToolbarActionMenu_clickSettingsMenuItem() {
-        openActionBarOverflowOrOptionsMenu(mContext);
-        onView(withText(mContext.getString(R.string.menu_item_settings)))
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+        onView(withText(InstrumentationRegistry.getTargetContext().getString(R.string.menu_item_settings)))
                 .perform(click());
 
         intended(hasComponent(SettingsActivity.class.getName()));
@@ -131,7 +124,8 @@ public class NewsActivityTest {
 
         intended(allOf(
                 hasAction(Intent.ACTION_CHOOSER),
-                hasExtra(Intent.EXTRA_TITLE, mContext.getString(R.string.title_share)),
+                hasExtra(Intent.EXTRA_TITLE, InstrumentationRegistry.getTargetContext()
+                        .getString(R.string.title_share)),
                 hasExtraWithKey(Intent.EXTRA_INTENT)
         ));
     }

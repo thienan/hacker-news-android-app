@@ -1,6 +1,5 @@
 package com.marcelljee.hackernews.screen.about;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
@@ -11,7 +10,6 @@ import com.marcelljee.hackernews.chrome.CustomTabsBrowser;
 import com.marcelljee.hackernews.compat.HtmlCompat;
 import com.marcelljee.hackernews.screen.web.WebActivity;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,19 +25,13 @@ import static org.hamcrest.core.AllOf.*;
 @RunWith(AndroidJUnit4.class)
 public class AboutActivityTest {
 
-    private Context mContext;
-
     @Rule
     public final IntentsTestRule<AboutActivity> intentsTestRule = new IntentsTestRule<>(AboutActivity.class);
 
-    @Before
-    public void setUp() {
-        mContext = InstrumentationRegistry.getTargetContext();
-    }
-
     @Test
     public void testShowAboutText() {
-        String aboutText = HtmlCompat.fromHtml(mContext.getString(R.string.about_text)).toString();
+        String aboutText = HtmlCompat.fromHtml(InstrumentationRegistry
+                .getTargetContext().getString(R.string.about_text)).toString();
 
         onView(withId(R.id.tv_about))
                 .check(matches(withText(aboutText)));
@@ -53,7 +45,8 @@ public class AboutActivityTest {
         onView(withId(R.id.tv_about))
                 .perform(openLinkWithText("Github page"));
 
-        String packageName = CustomTabsBrowser.getCustomTabPackageName(mContext);
+        String packageName = CustomTabsBrowser
+                .getCustomTabPackageName(InstrumentationRegistry.getTargetContext());
 
         if (packageName == null) {
             intended(allOf(
