@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import timber.log.Timber;
 
 public class NewsWidgetItemService extends RemoteViewsService {
     private int mAppWidgetId;
@@ -96,7 +97,7 @@ public class NewsWidgetItemService extends RemoteViewsService {
                         .flatMap(itemId -> HackerNewsApi.getInstance().getItem(itemId))
                         .filter(item -> item.isNotDeleted() || item.isNotDead())
                         .toList()
-                        .subscribe(data -> mItems.addAll(data));
+                        .subscribe(data -> mItems.addAll(data), Timber::e);
             }
         }
 
